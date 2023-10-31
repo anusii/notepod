@@ -1,5 +1,5 @@
 name: podnotes
-description: A new Flutter project.
+description: Privacy preserving note taking app using PODs.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -12,7 +12,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_markdown: ^0.6.10
   markdown_editor_plus: ^0.2.13
-  #simple_markdown_editor: ^0.2.0
+  universal_io: ^2.2.2
+  window_manager: ^0.3.5
 
 dev_dependencies:
   flutter_test:
