@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:simple_markdown_editor/simple_markdown_editor.dart';
+import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+//import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
 
   String text = "";
@@ -26,16 +29,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         centerTitle: true,
         title: const Text("POD Note Taker"),
       ),
-      body: MarkdownFormField(
+      body: MarkdownAutoPreview(
         controller: _textController,
         enableToolBar: true,
         emojiConvert: true,
-        autoCloseAfterSelectEmoji: false,
-        onChanged: (String text) {
-          setState(() {
-            this.text = text;
-          });
-        },
+        // autoCloseAfterSelectEmoji: false,
+        // onChanged: (String text) {
+        //   setState(() {
+        //     this.text = text;
+        //   });
+        // },
       ),
     );
   }

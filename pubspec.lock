@@ -98,10 +98,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "7c4e42e66fb24bc912b64860c69806ef5cc0ad1480772aa2201ede568125a379"
+      sha256: e1fbb3f68f954eb61d1febb012fc1f5b87bef8f2a429cde2a5fda7d984ba2e75
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.9+1"
+    version: "0.6.10+6"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -111,10 +111,10 @@ packages:
     dependency: transitive
     description:
       name: font_awesome_flutter
-      sha256: "1f93e5799f0e6c882819e8393a05c6ca5226010f289190f2242ec19f3f0fdba5"
+      sha256: "52671aea66da73b58d42ec6d0912b727a42248dd9a7c76d6c20f275783c48c08"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.0"
+    version: "10.6.0"
   lints:
     dependency: transitive
     description:
@@ -127,10 +127,18 @@ packages:
     dependency: transitive
     description:
       name: markdown
-      sha256: "01512006c8429f604eb10f9848717baeaedf99e991d14a50d540d9beff08e5c6"
+      sha256: "39caf989ccc72c63e87b961851a74257141938599ed2db45fbd9403fee0db423"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "5.0.0"
+  markdown_editor_plus:
+    dependency: "direct main"
+    description:
+      name: markdown_editor_plus
+      sha256: "5e3b5a1536ca601e27ed8fc4fdd958b6a91b5c68d0bae7d273c8cd7cb4edabb8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.13"
   matcher:
     dependency: transitive
     description:
@@ -163,14 +171,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
-  simple_markdown_editor:
-    dependency: "direct main"
-    description:
-      name: simple_markdown_editor
-      sha256: "4f8d7cba8c3d9e2bada3ce18ab2f4ec0ce7152d0564a88212debeea3f3b729aa"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -242,4 +242,4 @@ packages:
     version: "0.1.4-beta"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=2.0.0"
+  flutter: ">=3.0.0"

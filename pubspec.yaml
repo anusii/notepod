@@ -4,14 +4,15 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.5 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  simple_markdown_editor: ^0.2.0
-  flutter_markdown: ^0.6.9+1
+  flutter_markdown: ^0.6.10
+  markdown_editor_plus: ^0.2.13
+  #simple_markdown_editor: ^0.2.0
 
 dev_dependencies:
   flutter_test:
