@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/src/home.dart';
+import 'package:podnotes/home.dart';
 
 void main() {
   runApp(const MyApp());
