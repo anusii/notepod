@@ -2,8 +2,9 @@
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
-/// License: GNU General Public License, Version 3 (the "License")
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
