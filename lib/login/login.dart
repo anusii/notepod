@@ -1,13 +1,13 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:podnotes/screens/home.dart';
+import 'package:podnotes/home.dart';
 
 // Package imports:
 import 'package:url_launcher/url_launcher.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 // Project imports:
-import 'package:podnotes/common/Constants.dart';
+import 'package:podnotes/common/app.dart';
 import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {

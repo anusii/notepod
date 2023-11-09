@@ -24,11 +24,8 @@
 /// Authors: Graham Williams
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/screens/LoginScreen.dart';
-
+import 'package:podnotes/login/login.dart';
 import 'package:window_manager/window_manager.dart';
-
-import 'package:podnotes/screens/Home.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
