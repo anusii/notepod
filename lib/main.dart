@@ -24,10 +24,11 @@
 /// Authors: Graham Williams
 
 import 'package:flutter/material.dart';
+import 'package:podnotes/screens/LoginScreen.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:podnotes/home.dart';
+import 'package:podnotes/screens/Home.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
@@ -52,11 +53,11 @@ void main() async {
       // best not to override it here since under windows the 950x600 is too
       // small.
 
-      // size: Size(950, 600),
+      //size: Size(750, 873),
 
       // The [title] is used for the window manager's window title.
 
-      title: "RattleNG - Data Science with R",
+      title: "PODNotes - A note taking app with PODs",
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -78,10 +79,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'POD Note Taker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      home: Home(),
+      home: LoginScreen(),
     );
   }
 }
