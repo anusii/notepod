@@ -165,8 +165,6 @@ class LoginScreen extends StatelessWidget {
                 'offline_access',
               ];
 
-              //Issuer issuer = await Issuer.discover(issuerUri);
-
               // Authentication process for the POD issuer
               var authData =
                   // ignore: use_build_context_synchronously

@@ -17,3 +17,14 @@ const kDefaultPadding = 20.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+
+// // Folders
+// const List FOLDERS = [
+//   MAIN_RES_DIR,
+//   '$MAIN_RES_DIR/$SHARING_DIR',
+//   '$MAIN_RES_DIR/$SHARED_DIR',
+//   '$MAIN_RES_DIR/$MED_DIR',
+//   '$MAIN_RES_DIR/$ENC_DIR',
+//   '$MAIN_RES_DIR/$LOGS_DIR'
+// ];
