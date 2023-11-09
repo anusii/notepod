@@ -108,8 +108,8 @@ class LoginScreen extends StatelessWidget {
   launchIssuerReg(String issuerUri) async {
     var url = '$issuerUri/register';
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }

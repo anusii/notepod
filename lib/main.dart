@@ -24,7 +24,7 @@
 /// Authors: Graham Williams
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/login/login.dart';
+import 'package:podnotes/login/login_screen.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
