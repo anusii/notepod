@@ -1,0 +1,952 @@
+// Flutter imports.
+
+import 'dart:convert';
+
+// Package imports.
+
+import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:fast_rsa/fast_rsa.dart' as frsa;
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:podnotes/common/colours.dart';
+//import 'package:indipod/models/common/common_functions.dart';
+//import 'package:indipod/models/common/common_structures.dart';
+//import 'package:indipod/models/common/common_widgets.dart';
+import 'package:podnotes/common/rest_api.dart';
+// Project imports:
+import 'package:podnotes/common/app.dart';
+//import 'package:indipod/models/main/ontology.dart';
+import 'package:podnotes/login//login_screen.dart';
+import 'package:podnotes/utils/truncate_str.dart';
+import 'package:podnotes/widgets/msg_box.dart';
+//import 'package:indipod/screens/main/main_screen.dart';
+import 'package:solid_auth/solid_auth.dart';
+import 'package:solid_encrypt/solid_encrypt.dart';
+
+Future<void> _showErrDialog(context, String errMsg) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('ERROR!'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(errMsg),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class InitialSetupDesktop extends StatefulWidget {
+  final Map resNeedToCreate;
+  final Map authData;
+  final String webId;
+  const InitialSetupDesktop({
+    Key? key,
+    required this.resNeedToCreate,
+    required this.authData,
+    required this.webId,
+  }) : super(key: key);
+
+  @override
+  State<InitialSetupDesktop> createState() {
+    return _InitialSetupDesktopState();
+  }
+}
+
+class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
+  @override
+  Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormBuilderState>();
+    List<String> genderOptions = ['Male', 'Female', 'Other'];
+    List<String> stateOptions = ['ACT', 'VIC', 'NSW', 'NT', 'QLD', 'SA', 'TAS'];
+    List<String> maritalStatusOptions = [
+      'Married',
+      'Unmarried',
+      'Devorced',
+      'Widowed',
+    ];
+    List<String> languageOptions = [
+      'English',
+      'Gunggandji',
+      'Yidinji',
+      'Other',
+    ];
+
+    void onChangedVal(dynamic val) => debugPrint(val.toString());
+    bool showPassword = true;
+
+    // print(widget.resNeedToCreate['folders']);
+
+    return Column(
+      children: [
+        Expanded(
+            child: SizedBox(
+                height: 700,
+                child: ListView(primary: false, children: [
+                  Center(
+                    child: SizedBox(
+                      //height: 300,
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 60,
+                              width: 60,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: lightGreen,
+                              ),
+                              alignment: Alignment.center,
+                              child: const Icon(
+                                Icons.playlist_add,
+                                color: Colors.white,
+                                size: 50,
+                              ),
+                            ), //CircleAvatar
+                            const SizedBox(
+                              height: 10,
+                            ), //SizedBox
+                            const Text(
+                              INITIAL_STRUC_WELCOME,
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ), //Textstyle
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: buildMsgBox(context, 'warning',
+                                  INITIAL_STRUC_TITLE, INITIAL_STRUC_MSG),
+                            ),
+                          ],
+                        ), //Column
+                      ), //Padding
+                    ),
+                  ),
+                  Center(
+                      child: SizedBox(
+                          //height: 500,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(80, 10, 80, 0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Resources that will be created!',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                    ),
+                                    for (String resLink in widget
+                                        .resNeedToCreate['folders']) ...[
+                                      Container(
+                                        child: ListTile(
+                                          title: Text(resLink),
+                                          leading: Icon(Icons.folder),
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    for (String resLink
+                                        in widget.resNeedToCreate['files']) ...[
+                                      Container(
+                                        child: ListTile(
+                                          title: Text(resLink),
+                                          leading: Icon(Icons.file_copy),
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ])))),
+                  Center(
+                      child: SizedBox(
+                          //height: 500,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(80, 10, 80, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                    //[
+
+                                    <Widget>[
+                                  FormBuilder(
+                                    key: formKey,
+                                    // enabled: false,
+                                    onChanged: () {
+                                      formKey.currentState!.save();
+                                      debugPrint(formKey.currentState!.value
+                                          .toString());
+                                    },
+                                    autovalidateMode: AutovalidateMode.disabled,
+                                    initialValue: const {
+                                      //'movie_rating': 5,
+                                      //'best_language': 'Dart',
+                                      //'age': '13',
+                                      //'gender': 'Male',
+                                      //'languages_filter': ['Dart']
+                                    },
+                                    skipDisabled: true,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        const Text(
+                                          'Please fill-up the following form (all fields are required)',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const Divider(
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        const Text(
+                                          'PERSONAL',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            letterSpacing: 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FormBuilderTextField(
+                                          name: 'name',
+                                          decoration: const InputDecoration(
+                                            labelText: 'NAME',
+                                            labelStyle: TextStyle(
+                                              color: darkBlue,
+                                              letterSpacing: 1.5,
+                                              fontSize: 13.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            //errorText: 'error',
+                                          ),
+                                          validator:
+                                              FormBuilderValidators.compose([
+                                            FormBuilderValidators.required(),
+                                          ]),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FormBuilderDropdown<String>(
+                                            name: 'gender',
+                                            decoration: InputDecoration(
+                                              labelText: 'GENDER',
+                                              labelStyle: const TextStyle(
+                                                color: darkBlue,
+                                                letterSpacing: 1.5,
+                                                fontSize: 13.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              suffix: IconButton(
+                                                icon: const Icon(Icons.close),
+                                                onPressed: () {
+                                                  formKey.currentState!
+                                                      .fields['gender']
+                                                      ?.reset();
+                                                },
+                                              ),
+                                              hintText: 'Select Gender',
+                                            ),
+                                            items: genderOptions
+                                                .map((gender) =>
+                                                    DropdownMenuItem(
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                              .center,
+                                                      value: gender,
+                                                      child: Text(gender),
+                                                    ))
+                                                .toList(),
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(),
+                                            ])),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        const Text(
+                                          REQUIRE_PWD_MSG,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FormBuilderTextField(
+                                          name: 'password',
+                                          obscureText: showPassword,
+                                          enableSuggestions: false,
+                                          autocorrect: false,
+                                          decoration: const InputDecoration(
+                                            labelText: 'PASSWORD',
+                                            labelStyle: TextStyle(
+                                              color: darkBlue,
+                                              letterSpacing: 1.5,
+                                              fontSize: 13.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            //errorText: 'error',
+                                          ),
+                                          validator:
+                                              FormBuilderValidators.compose([
+                                            FormBuilderValidators.required(),
+                                          ]),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FormBuilderTextField(
+                                          name: 'repassword',
+                                          obscureText: showPassword,
+                                          enableSuggestions: false,
+                                          autocorrect: false,
+                                          decoration: const InputDecoration(
+                                            labelText: 'RETYPE PASSWORD',
+                                            labelStyle: TextStyle(
+                                              color: darkBlue,
+                                              letterSpacing: 1.5,
+                                              fontSize: 13.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            //errorText: 'error',
+                                          ),
+                                          validator:
+                                              FormBuilderValidators.compose([
+                                            FormBuilderValidators.required(),
+                                            (val) {
+                                              if (val !=
+                                                  formKey
+                                                      .currentState!
+                                                      .fields['password']
+                                                      ?.value) {
+                                                return 'Passwords do not match';
+                                              }
+                                              return null;
+                                            },
+                                          ]),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        const Text(
+                                          PUBLIC_KEY_MSG,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FormBuilderCheckbox(
+                                          name: 'providepermission',
+                                          initialValue: false,
+                                          onChanged: onChangedVal,
+                                          title: RichText(
+                                            text: const TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text:
+                                                      'Please confirm that you agree to provide permission to create all the above resources! ',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                                //                   TextSpan(
+                                                //                     text: 'Terms and Conditions',
+                                                //                     style: TextStyle(
+                                                //                         color: Colors.blue),
+                                                //                     // Flutter doesn't allow a button inside a button
+                                                //                     // https://github.com/flutter/flutter/issues/31437#issuecomment-492411086
+                                                //                     /*
+                                                // recognizer: TapGestureRecognizer()
+                                                //   ..onTap = () {
+                                                //     print('launch url');
+                                                //   },
+                                                // */
+                                                //                   ),
+                                              ],
+                                            ),
+                                          ),
+                                          validator:
+                                              FormBuilderValidators.equal(
+                                            true,
+                                            errorText:
+                                                'You must provide permission to continue',
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            if (formKey.currentState
+                                                    ?.saveAndValidate() ??
+                                                false) {
+                                              Map formData = formKey
+                                                  .currentState?.value as Map;
+                                              //print(formData);
+
+                                              String passPlaintxt =
+                                                  formData['password'];
+
+                                              /// variable to see whether we need to update
+                                              /// the key files. Because if one file is missing
+                                              /// we need to create asymmetric key pairs again
+
+                                              /// Verify encryption master key if it is already
+                                              /// in the file
+                                              bool keyVerifyFlag = true;
+
+                                              /// Enryption master key
+                                              String? encMasterKeyVerify;
+                                              String? encMasterKey;
+
+                                              /// Asymmetric key pair
+                                              String? pubKey;
+                                              String? pubKeyStr;
+                                              String? prvKey;
+                                              String? prvKeyHash;
+                                              String? prvKeyIvz;
+
+                                              /// Create files and directories flag
+                                              bool createFileSuccess = true;
+                                              bool createDirSuccess = true;
+
+                                              if (widget.resNeedToCreate[
+                                                          'fileNames']
+                                                      .contains(ENC_KEY_FILE) ||
+                                                  widget.resNeedToCreate[
+                                                          'fileNames']
+                                                      .contains(PUB_KEY_FILE)) {
+                                                /// Generate master key
+                                                encMasterKey = sha256
+                                                    .convert(utf8
+                                                        .encode(passPlaintxt))
+                                                    .toString()
+                                                    .substring(0, 32);
+                                                encMasterKeyVerify = sha224
+                                                    .convert(utf8
+                                                        .encode(passPlaintxt))
+                                                    .toString()
+                                                    .substring(0, 32);
+
+                                                /// Generate asymmetric key pair
+                                                var rsaKeyPair = await frsa.RSA
+                                                    .generate(2048);
+                                                prvKey = rsaKeyPair.privateKey;
+                                                pubKey = rsaKeyPair.publicKey;
+
+                                                /// Encrypt private key
+                                                final key =
+                                                    encrypt.Key.fromUtf8(
+                                                        encMasterKey);
+                                                final iv =
+                                                    encrypt.IV.fromLength(16);
+                                                final encrypter =
+                                                    encrypt.Encrypter(encrypt
+                                                        .AES(key,
+                                                            mode: encrypt
+                                                                .AESMode.cbc));
+                                                final encryptVal = encrypter
+                                                    .encrypt(prvKey, iv: iv);
+                                                prvKeyHash = encryptVal.base64
+                                                    .toString();
+                                                prvKeyIvz =
+                                                    iv.base64.toString();
+
+                                                /// Get public key without start and end bit
+                                                // pubKeyStr =
+                                                //     dividePubKeyStr(pubKey);
+
+                                                // if (!widget.resNeedToCreate[
+                                                //         'fileNames']
+                                                //     .contains(ENC_KEY_FILE)) {
+                                                //   EncryptClient encryptClient =
+                                                //       EncryptClient(
+                                                //           widget.authData,
+                                                //           widget.webId);
+                                                //   keyVerifyFlag =
+                                                //       await encryptClient
+                                                //           .verifyEncKey(
+                                                //               passPlaintxt);
+
+                                                // }
+                                              }
+
+                                              // if (!keyVerifyFlag) {
+                                              //   _showErrDialog(context,
+                                              //       'Wrong encode key. Please try again!');
+                                              // } else {
+                                              //   /// Create folders
+                                              //   for (String resLink
+                                              //       in widget.resNeedToCreate[
+                                              //           'folders']) {
+                                              //     String serverUrl =
+                                              //         widget.webId.replaceAll(
+                                              //             'profile/card#me',
+                                              //             '');
+                                              //     String resNameStr =
+                                              //         resLink.replaceAll(
+                                              //             serverUrl, '');
+                                              //     String resName = resNameStr
+                                              //         .split('/')
+                                              //         .last;
+
+                                              //     /// Get resource path
+                                              //     String folderPath = resNameStr
+                                              //         .replaceAll(resName, '');
+
+                                              //     String createDirRes =
+                                              //         await createItem(
+                                              //             false,
+                                              //             resName,
+                                              //             '',
+                                              //             widget.webId,
+                                              //             widget.authData,
+                                              //             fileLoc: folderPath);
+
+                                              //     if (createDirRes != 'ok') {
+                                              //       createDirSuccess = false;
+                                              //     }
+                                              //   }
+
+                                              //   /// Create files
+                                              //   for (String resLink in widget
+                                              //       .resNeedToCreate['files']) {
+                                              //     /// Get base url
+                                              //     String serverUrl =
+                                              //         widget.webId.replaceAll(
+                                              //             'profile/card#me',
+                                              //             '');
+
+                                              //     /// Get resource path and name
+                                              //     String resNameStr =
+                                              //         resLink.replaceAll(
+                                              //             serverUrl, '');
+
+                                              //     /// Get resource name
+                                              //     String resName = resNameStr
+                                              //         .split('/')
+                                              //         .last;
+
+                                              //     /// Get resource path
+                                              //     String filePath = resNameStr
+                                              //         .replaceAll(resName, '');
+
+                                              //     String fileBody = '';
+
+                                              //     if (resName == ENC_KEY_FILE) {
+                                              //       fileBody = genEncKeyBody(
+                                              //           encMasterKeyVerify!,
+                                              //           prvKeyHash!,
+                                              //           prvKeyIvz!,
+                                              //           resLink);
+                                              //     } else if ([
+                                              //       'public-key.ttl.acl',
+                                              //       'permissions-log.ttl.acl'
+                                              //     ].contains(resName)) {
+                                              //       if (resName ==
+                                              //           'permissions-log.ttl.acl') {
+                                              //         fileBody = genLogAclBody(
+                                              //             widget.webId,
+                                              //             resName.replaceAll(
+                                              //                 '.acl', ''));
+                                              //       } else {
+                                              //         fileBody =
+                                              //             genPubFileAclBody(
+                                              //                 resName);
+                                              //       }
+                                              //     } else if (resName ==
+                                              //         '.acl') {
+                                              //       fileBody =
+                                              //           genPubDirAclBody();
+                                              //     } else if (resName ==
+                                              //         'ind-keys.ttl') {
+                                              //       fileBody =
+                                              //           genIndKeyFileBody();
+                                              //     } else if (resName ==
+                                              //         'public-key.ttl') {
+                                              //       fileBody =
+                                              //           genPubKeyFileBody(
+                                              //               resLink,
+                                              //               pubKeyStr!);
+                                              //     } else if (resName ==
+                                              //         'medical.ttl.acl') {
+                                              //       fileBody =
+                                              //           genPrvFileAclBody(
+                                              //               resName,
+                                              //               widget.webId);
+                                              //     } else if (resName ==
+                                              //         'permissions-log.ttl') {
+                                              //       fileBody = genLogFileBody();
+                                              //     }
+
+                                              //     bool aclFlag = false;
+                                              //     if (resName.split('.').last ==
+                                              //         'acl') {
+                                              //       aclFlag = true;
+                                              //     }
+
+                                              //     String createFileRes =
+                                              //         await createItem(
+                                              //             true,
+                                              //             resName,
+                                              //             fileBody,
+                                              //             widget.webId,
+                                              //             widget.authData,
+                                              //             fileLoc: filePath,
+                                              //             fileType: FILE_TYPE[
+                                              //                 resName
+                                              //                     .split('.')
+                                              //                     .last],
+                                              //             aclFlag: aclFlag);
+
+                                              //     if (createFileRes != 'ok') {
+                                              //       createFileSuccess = false;
+                                              //     }
+                                              //   }
+                                              // }
+
+                                              /// Update the profile with new information
+                                              // String profBody = genProfFileBody(
+                                              //     formData, widget.authData);
+                                              // String updateRes =
+                                              //     await initialProfileUpdate(
+                                              //         profBody,
+                                              //         widget.authData,
+                                              //         widget.webId);
+
+                                              // if (createFileSuccess &&
+                                              //     createDirSuccess &&
+                                              //     updateRes == 'ok') {
+                                              //   imageCache.clear();
+                                              //   Navigator.pushAndRemoveUntil(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             MainScreen(
+                                              //               authData:
+                                              //                   widget.authData,
+                                              //               webId: widget.webId,
+                                              //               page: 'home',
+                                              //               selectSurveyIndex:
+                                              //                   0,
+                                              //             )),
+                                              //     (Route<dynamic> route) =>
+                                              //         false, // This predicate ensures all previous routes are removed
+                                              //   );
+                                              // }
+                                            } else {
+                                              _showErrDialog(context,
+                                                  'Form validation failed! Please check your inputs.');
+                                            }
+
+                                            // if (!widget
+                                            //     .resNeedToCreate['fileNames']
+                                            //     .contains(ENC_KEY_FILE)) {
+                                            //   EncryptClient encryptClient =
+                                            //       EncryptClient(widget.authData,
+                                            //           widget.webId);
+                                            //   bool keyVerifyFlag =
+                                            //       await encryptClient
+                                            //           .verifyEncKey(
+                                            //               passPlaintxt);
+                                            //   if (!keyVerifyFlag) {
+                                            //     _showErrDialog(context,
+                                            //         'Wrong encode key. Please try again!');
+                                            //   }
+                                            // } else {
+                                            //   String sha224Result = sha224
+                                            //       .convert(
+                                            //           utf8.encode(passPlaintxt))
+                                            //       .toString()
+                                            //       .substring(0, 32);
+                                            //   String sha256Result = sha256
+                                            //       .convert(
+                                            //           utf8.encode(passPlaintxt))
+                                            //       .toString()
+                                            //       .substring(0, 32);
+                                            // }
+
+                                            // if (widget
+                                            //     .resNeedToCreate['fileNames']
+                                            //     .contains(PUB_KEY_FILE)) {
+                                            //   print('i am here');
+                                            //   final pair = generateRSAkeyPair(
+                                            //       getSecureRandom());
+                                            //   final public = pair.publicKey;
+                                            //   final private = pair.privateKey;
+
+                                            //   print(public);
+                                            //   print(private);
+
+                                            //   var rsaKeyPair =
+                                            //       await RSA.generate(2048);
+
+                                            //   print(rsaKeyPair.privateKey);
+                                            //   print(rsaKeyPair.publicKey);
+                                            // }
+
+                                            // var rsaInfo =
+                                            //     widget.authData['rsaInfo'];
+                                            // var rsaKeyPair = rsaInfo['rsa'];
+                                            // var publicKeyJwk =
+                                            //     rsaInfo['pubKeyJwk'];
+                                            // String accessToken =
+                                            //     widget.authData['accessToken'];
+
+                                            // String link =
+                                            //     'https://solid.dev.yarrabah.net/kayon-toga/sharing/public-key.ttl';
+                                            // String dPopTokenPrv = genDpopToken(
+                                            //     link,
+                                            //     rsaKeyPair,
+                                            //     publicKeyJwk,
+                                            //     'GET');
+
+                                            // String prvKeyRes =
+                                            //     await fetchPrvData(link,
+                                            //         accessToken, dPopTokenPrv);
+
+                                            // print(prvKeyRes);
+
+                                            // String aclRes =
+                                            //     'https://solid.dev.yarrabah.net/kayon-toga/sharing/public-key.ttl.acl';
+                                            // String aclBody = genPubFileAclBody(
+                                            //     'public-key.ttl.acl');
+
+                                            // updateSharedTtl(widget.authData,
+                                            //     aclRes, aclBody);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              foregroundColor: darkBlue,
+                                              backgroundColor:
+                                                  darkBlue, // foreground
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 50),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10))),
+                                          child: const Text(
+                                            'SUBMIT',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            formKey.currentState?.reset();
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              foregroundColor: darkBlue,
+                                              backgroundColor:
+                                                  darkBlue, // foreground
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 50),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10))),
+                                          // color: Theme.of(context).colorScheme.secondary,
+                                          child: const Text(
+                                            'RESET',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 40,
+                                  ),
+                                ],
+
+                                // Text(
+                                //   'Please fill-up the following form',
+                                //   style: TextStyle(
+                                //     color: Colors.black,
+                                //     fontSize: 20,
+                                //     fontWeight: FontWeight.w500,
+                                //   ),
+                                // ),
+                                // Divider(
+                                //   color: Colors.grey,
+                                // ),
+                                // SizedBox(
+                                //   height: 20,
+                                // ),
+                                // // createInputField(
+                                // //     "NAME", nameController, ''),
+                                // // createInputDateField(context,
+                                // //     "DATE OF BIRTH", dobController, ''),
+                              )))),
+                ]))),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton.icon(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.black,
+                    size: 24.0,
+                  ),
+                  label: Text(
+                    'LOGOUT',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () async {
+                    // APP_STORAGE.deleteItem('encKey');
+                    await logout(widget.authData['logoutUrl']);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildInfoRow(String profName) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          profName,
+          style: TextStyle(
+            color: Colors.grey[800],
+            letterSpacing: 2.0,
+            fontSize: 17.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildLabelRow(
+      String labelName, String profName, BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              '$labelName: ',
+              style: TextStyle(
+                color: kTitleTextColor,
+                letterSpacing: 2.0,
+                fontSize: screenWidth(context) * 0.015,
+                fontWeight: FontWeight.bold,
+                //fontFamily: 'Poppins',
+              ),
+            ),
+            profName.length > longStrLength
+                ? Tooltip(
+                    message: profName,
+                    height: 30,
+                    textStyle:
+                        const TextStyle(fontSize: 15, color: Colors.white),
+                    verticalOffset: kDefaultPadding / 2,
+                    child: Text(
+                      truncateString(profName),
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        letterSpacing: 2.0,
+                        fontSize: screenWidth(context) * 0.015,
+                        //fontFamily: 'Poppins',
+                      ),
+                    ),
+                  )
+                : Text(
+                    profName,
+                    style: TextStyle(
+                        color: Colors.grey[800],
+                        letterSpacing: 2.0,
+                        fontSize: screenWidth(context) * 0.015),
+                  ),
+          ],
+        ),
+        SizedBox(
+          height: screenHeight(context) * 0.005,
+        )
+      ],
+    );
+  }
+
+  String capitalised_first(String text) {
+    String result = "";
+    if (text.length == 1) {
+      result = text.toUpperCase();
+    } else if (text.length > 1) {
+      result = text[0].toUpperCase() + text.substring(1);
+    }
+    return result;
+  }
+}
