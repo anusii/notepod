@@ -11,46 +11,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:podnotes/common/colours.dart';
+import 'package:podnotes/common/crypto.dart';
+import 'package:podnotes/common/file_structure.dart';
+import 'package:podnotes/common/turtle_structures.dart';
 //import 'package:indipod/models/common/common_functions.dart';
 //import 'package:indipod/models/common/common_structures.dart';
 //import 'package:indipod/models/common/common_widgets.dart';
 import 'package:podnotes/common/rest_api.dart';
 // Project imports:
 import 'package:podnotes/common/app.dart';
+import 'package:podnotes/home.dart';
 //import 'package:indipod/models/main/ontology.dart';
 import 'package:podnotes/login//login_screen.dart';
 import 'package:podnotes/utils/truncate_str.dart';
+import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:podnotes/widgets/msg_box.dart';
 //import 'package:indipod/screens/main/main_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_encrypt/solid_encrypt.dart';
-
-Future<void> _showErrDialog(context, String errMsg) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('ERROR!'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text(errMsg),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
 class InitialSetupDesktop extends StatefulWidget {
   final Map resNeedToCreate;
@@ -433,31 +411,30 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                 false) {
                                               Map formData = formKey
                                                   .currentState?.value as Map;
-                                              //print(formData);
 
                                               String passPlaintxt =
                                                   formData['password'];
 
-                                              /// variable to see whether we need to update
-                                              /// the key files. Because if one file is missing
-                                              /// we need to create asymmetric key pairs again
+                                              // variable to see whether we need to update
+                                              // the key files. Because if one file is missing
+                                              // we need to create asymmetric key pairs again
 
-                                              /// Verify encryption master key if it is already
-                                              /// in the file
+                                              // Verify encryption master key if it is already
+                                              // in the file
                                               bool keyVerifyFlag = true;
 
-                                              /// Enryption master key
+                                              // Enryption master key
                                               String? encMasterKeyVerify;
                                               String? encMasterKey;
 
-                                              /// Asymmetric key pair
+                                              // Asymmetric key pair
                                               String? pubKey;
                                               String? pubKeyStr;
                                               String? prvKey;
                                               String? prvKeyHash;
                                               String? prvKeyIvz;
 
-                                              /// Create files and directories flag
+                                              // Create files and directories flag
                                               bool createFileSuccess = true;
                                               bool createDirSuccess = true;
 
@@ -467,7 +444,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                   widget.resNeedToCreate[
                                                           'fileNames']
                                                       .contains(PUB_KEY_FILE)) {
-                                                /// Generate master key
+                                                // Generate master key
                                                 encMasterKey = sha256
                                                     .convert(utf8
                                                         .encode(passPlaintxt))
@@ -479,13 +456,13 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                     .toString()
                                                     .substring(0, 32);
 
-                                                /// Generate asymmetric key pair
+                                                // Generate asymmetric key pair
                                                 var rsaKeyPair = await frsa.RSA
                                                     .generate(2048);
                                                 prvKey = rsaKeyPair.privateKey;
                                                 pubKey = rsaKeyPair.publicKey;
 
-                                                /// Encrypt private key
+                                                // Encrypt private key
                                                 final key =
                                                     encrypt.Key.fromUtf8(
                                                         encMasterKey);
@@ -503,268 +480,182 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                 prvKeyIvz =
                                                     iv.base64.toString();
 
-                                                /// Get public key without start and end bit
-                                                // pubKeyStr =
-                                                //     dividePubKeyStr(pubKey);
+                                                // Get public key without start and end bit
+                                                pubKeyStr =
+                                                    dividePubKeyStr(pubKey);
 
-                                                // if (!widget.resNeedToCreate[
-                                                //         'fileNames']
-                                                //     .contains(ENC_KEY_FILE)) {
-                                                //   EncryptClient encryptClient =
-                                                //       EncryptClient(
-                                                //           widget.authData,
-                                                //           widget.webId);
-                                                //   keyVerifyFlag =
-                                                //       await encryptClient
-                                                //           .verifyEncKey(
-                                                //               passPlaintxt);
-
-                                                // }
+                                                if (!widget.resNeedToCreate[
+                                                        'fileNames']
+                                                    .contains(ENC_KEY_FILE)) {
+                                                  EncryptClient encryptClient =
+                                                      EncryptClient(
+                                                          widget.authData,
+                                                          widget.webId);
+                                                  keyVerifyFlag =
+                                                      await encryptClient
+                                                          .verifyEncKey(
+                                                              passPlaintxt);
+                                                }
                                               }
 
-                                              // if (!keyVerifyFlag) {
-                                              //   _showErrDialog(context,
-                                              //       'Wrong encode key. Please try again!');
-                                              // } else {
-                                              //   /// Create folders
-                                              //   for (String resLink
-                                              //       in widget.resNeedToCreate[
-                                              //           'folders']) {
-                                              //     String serverUrl =
-                                              //         widget.webId.replaceAll(
-                                              //             'profile/card#me',
-                                              //             '');
-                                              //     String resNameStr =
-                                              //         resLink.replaceAll(
-                                              //             serverUrl, '');
-                                              //     String resName = resNameStr
-                                              //         .split('/')
-                                              //         .last;
+                                              if (!keyVerifyFlag) {
+                                                // ignore: use_build_context_synchronously
+                                                showErrDialog(context,
+                                                    'Wrong encode key. Please try again!');
+                                              } else {
+                                                // Create folders
+                                                for (String resLink
+                                                    in widget.resNeedToCreate[
+                                                        'folders']) {
+                                                  String serverUrl = widget
+                                                      .webId
+                                                      .replaceAll(profCard, '');
+                                                  String resNameStr =
+                                                      resLink.replaceAll(
+                                                          serverUrl, '');
+                                                  String resName = resNameStr
+                                                      .split('/')
+                                                      .last;
 
-                                              //     /// Get resource path
-                                              //     String folderPath = resNameStr
-                                              //         .replaceAll(resName, '');
+                                                  /// Get resource path
+                                                  String folderPath = resNameStr
+                                                      .replaceAll(resName, '');
 
-                                              //     String createDirRes =
-                                              //         await createItem(
-                                              //             false,
-                                              //             resName,
-                                              //             '',
-                                              //             widget.webId,
-                                              //             widget.authData,
-                                              //             fileLoc: folderPath);
+                                                  String createDirRes =
+                                                      await createItem(
+                                                          false,
+                                                          resName,
+                                                          '',
+                                                          widget.webId,
+                                                          widget.authData,
+                                                          fileLoc: folderPath);
 
-                                              //     if (createDirRes != 'ok') {
-                                              //       createDirSuccess = false;
-                                              //     }
-                                              //   }
+                                                  if (createDirRes != 'ok') {
+                                                    createDirSuccess = false;
+                                                  }
+                                                }
 
-                                              //   /// Create files
-                                              //   for (String resLink in widget
-                                              //       .resNeedToCreate['files']) {
-                                              //     /// Get base url
-                                              //     String serverUrl =
-                                              //         widget.webId.replaceAll(
-                                              //             'profile/card#me',
-                                              //             '');
+                                                // Create files
+                                                for (String resLink in widget
+                                                    .resNeedToCreate['files']) {
+                                                  // Get base url
+                                                  String serverUrl = widget
+                                                      .webId
+                                                      .replaceAll(profCard, '');
 
-                                              //     /// Get resource path and name
-                                              //     String resNameStr =
-                                              //         resLink.replaceAll(
-                                              //             serverUrl, '');
+                                                  // Get resource path and name
+                                                  String resNameStr =
+                                                      resLink.replaceAll(
+                                                          serverUrl, '');
 
-                                              //     /// Get resource name
-                                              //     String resName = resNameStr
-                                              //         .split('/')
-                                              //         .last;
+                                                  // Get resource name
+                                                  String resName = resNameStr
+                                                      .split('/')
+                                                      .last;
 
-                                              //     /// Get resource path
-                                              //     String filePath = resNameStr
-                                              //         .replaceAll(resName, '');
+                                                  // Get resource path
+                                                  String filePath = resNameStr
+                                                      .replaceAll(resName, '');
 
-                                              //     String fileBody = '';
+                                                  String fileBody = '';
 
-                                              //     if (resName == ENC_KEY_FILE) {
-                                              //       fileBody = genEncKeyBody(
-                                              //           encMasterKeyVerify!,
-                                              //           prvKeyHash!,
-                                              //           prvKeyIvz!,
-                                              //           resLink);
-                                              //     } else if ([
-                                              //       'public-key.ttl.acl',
-                                              //       'permissions-log.ttl.acl'
-                                              //     ].contains(resName)) {
-                                              //       if (resName ==
-                                              //           'permissions-log.ttl.acl') {
-                                              //         fileBody = genLogAclBody(
-                                              //             widget.webId,
-                                              //             resName.replaceAll(
-                                              //                 '.acl', ''));
-                                              //       } else {
-                                              //         fileBody =
-                                              //             genPubFileAclBody(
-                                              //                 resName);
-                                              //       }
-                                              //     } else if (resName ==
-                                              //         '.acl') {
-                                              //       fileBody =
-                                              //           genPubDirAclBody();
-                                              //     } else if (resName ==
-                                              //         'ind-keys.ttl') {
-                                              //       fileBody =
-                                              //           genIndKeyFileBody();
-                                              //     } else if (resName ==
-                                              //         'public-key.ttl') {
-                                              //       fileBody =
-                                              //           genPubKeyFileBody(
-                                              //               resLink,
-                                              //               pubKeyStr!);
-                                              //     } else if (resName ==
-                                              //         'medical.ttl.acl') {
-                                              //       fileBody =
-                                              //           genPrvFileAclBody(
-                                              //               resName,
-                                              //               widget.webId);
-                                              //     } else if (resName ==
-                                              //         'permissions-log.ttl') {
-                                              //       fileBody = genLogFileBody();
-                                              //     }
+                                                  if (resName == ENC_KEY_FILE) {
+                                                    fileBody = genEncKeyBody(
+                                                        encMasterKeyVerify!,
+                                                        prvKeyHash!,
+                                                        prvKeyIvz!,
+                                                        resLink);
+                                                  } else if ([
+                                                    '$PUB_KEY_FILE.acl',
+                                                    '$PERM_LOG_FILE.acl'
+                                                  ].contains(resName)) {
+                                                    if (resName ==
+                                                        '$PERM_LOG_FILE.acl') {
+                                                      fileBody = genLogAclBody(
+                                                          widget.webId,
+                                                          resName.replaceAll(
+                                                              '.acl', ''));
+                                                    } else {
+                                                      fileBody =
+                                                          genPubFileAclBody(
+                                                              resName);
+                                                    }
+                                                  } else if (resName ==
+                                                      '.acl') {
+                                                    fileBody =
+                                                        genPubDirAclBody();
+                                                  } else if (resName ==
+                                                      IND_KEY_FILE) {
+                                                    fileBody =
+                                                        genIndKeyFileBody();
+                                                  } else if (resName ==
+                                                      PUB_KEY_FILE) {
+                                                    fileBody =
+                                                        genPubKeyFileBody(
+                                                            resLink,
+                                                            pubKeyStr!);
+                                                  } else if (resName ==
+                                                      PERM_LOG_FILE) {
+                                                    fileBody = genLogFileBody();
+                                                  }
 
-                                              //     bool aclFlag = false;
-                                              //     if (resName.split('.').last ==
-                                              //         'acl') {
-                                              //       aclFlag = true;
-                                              //     }
+                                                  bool aclFlag = false;
+                                                  if (resName.split('.').last ==
+                                                      'acl') {
+                                                    aclFlag = true;
+                                                  }
 
-                                              //     String createFileRes =
-                                              //         await createItem(
-                                              //             true,
-                                              //             resName,
-                                              //             fileBody,
-                                              //             widget.webId,
-                                              //             widget.authData,
-                                              //             fileLoc: filePath,
-                                              //             fileType: FILE_TYPE[
-                                              //                 resName
-                                              //                     .split('.')
-                                              //                     .last],
-                                              //             aclFlag: aclFlag);
+                                                  String createFileRes =
+                                                      await createItem(
+                                                          true,
+                                                          resName,
+                                                          fileBody,
+                                                          widget.webId,
+                                                          widget.authData,
+                                                          fileLoc: filePath,
+                                                          fileType: FILE_TYPE[
+                                                              resName
+                                                                  .split('.')
+                                                                  .last],
+                                                          aclFlag: aclFlag);
 
-                                              //     if (createFileRes != 'ok') {
-                                              //       createFileSuccess = false;
-                                              //     }
-                                              //   }
-                                              // }
+                                                  if (createFileRes != 'ok') {
+                                                    createFileSuccess = false;
+                                                  }
+                                                }
+                                              }
 
-                                              /// Update the profile with new information
-                                              // String profBody = genProfFileBody(
-                                              //     formData, widget.authData);
-                                              // String updateRes =
-                                              //     await initialProfileUpdate(
-                                              //         profBody,
-                                              //         widget.authData,
-                                              //         widget.webId);
+                                              // Update the profile with new information
+                                              String profBody = genProfFileBody(
+                                                  formData, widget.authData);
+                                              String updateRes =
+                                                  await initialProfileUpdate(
+                                                      profBody,
+                                                      widget.authData,
+                                                      widget.webId);
 
-                                              // if (createFileSuccess &&
-                                              //     createDirSuccess &&
-                                              //     updateRes == 'ok') {
-                                              //   imageCache.clear();
-                                              //   Navigator.pushAndRemoveUntil(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //         builder: (context) =>
-                                              //             MainScreen(
-                                              //               authData:
-                                              //                   widget.authData,
-                                              //               webId: widget.webId,
-                                              //               page: 'home',
-                                              //               selectSurveyIndex:
-                                              //                   0,
-                                              //             )),
-                                              //     (Route<dynamic> route) =>
-                                              //         false, // This predicate ensures all previous routes are removed
-                                              //   );
-                                              // }
+                                              if (createFileSuccess &&
+                                                  createDirSuccess &&
+                                                  updateRes == 'ok') {
+                                                imageCache.clear();
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Home(
+                                                            webId: widget.webId,
+                                                            authData:
+                                                                widget.authData,
+                                                          )),
+                                                  (Route<dynamic> route) =>
+                                                      false, // This predicate ensures all previous routes are removed
+                                                );
+                                              }
                                             } else {
-                                              _showErrDialog(context,
+                                              showErrDialog(context,
                                                   'Form validation failed! Please check your inputs.');
                                             }
-
-                                            // if (!widget
-                                            //     .resNeedToCreate['fileNames']
-                                            //     .contains(ENC_KEY_FILE)) {
-                                            //   EncryptClient encryptClient =
-                                            //       EncryptClient(widget.authData,
-                                            //           widget.webId);
-                                            //   bool keyVerifyFlag =
-                                            //       await encryptClient
-                                            //           .verifyEncKey(
-                                            //               passPlaintxt);
-                                            //   if (!keyVerifyFlag) {
-                                            //     _showErrDialog(context,
-                                            //         'Wrong encode key. Please try again!');
-                                            //   }
-                                            // } else {
-                                            //   String sha224Result = sha224
-                                            //       .convert(
-                                            //           utf8.encode(passPlaintxt))
-                                            //       .toString()
-                                            //       .substring(0, 32);
-                                            //   String sha256Result = sha256
-                                            //       .convert(
-                                            //           utf8.encode(passPlaintxt))
-                                            //       .toString()
-                                            //       .substring(0, 32);
-                                            // }
-
-                                            // if (widget
-                                            //     .resNeedToCreate['fileNames']
-                                            //     .contains(PUB_KEY_FILE)) {
-                                            //   print('i am here');
-                                            //   final pair = generateRSAkeyPair(
-                                            //       getSecureRandom());
-                                            //   final public = pair.publicKey;
-                                            //   final private = pair.privateKey;
-
-                                            //   print(public);
-                                            //   print(private);
-
-                                            //   var rsaKeyPair =
-                                            //       await RSA.generate(2048);
-
-                                            //   print(rsaKeyPair.privateKey);
-                                            //   print(rsaKeyPair.publicKey);
-                                            // }
-
-                                            // var rsaInfo =
-                                            //     widget.authData['rsaInfo'];
-                                            // var rsaKeyPair = rsaInfo['rsa'];
-                                            // var publicKeyJwk =
-                                            //     rsaInfo['pubKeyJwk'];
-                                            // String accessToken =
-                                            //     widget.authData['accessToken'];
-
-                                            // String link =
-                                            //     'https://solid.dev.yarrabah.net/kayon-toga/sharing/public-key.ttl';
-                                            // String dPopTokenPrv = genDpopToken(
-                                            //     link,
-                                            //     rsaKeyPair,
-                                            //     publicKeyJwk,
-                                            //     'GET');
-
-                                            // String prvKeyRes =
-                                            //     await fetchPrvData(link,
-                                            //         accessToken, dPopTokenPrv);
-
-                                            // print(prvKeyRes);
-
-                                            // String aclRes =
-                                            //     'https://solid.dev.yarrabah.net/kayon-toga/sharing/public-key.ttl.acl';
-                                            // String aclBody = genPubFileAclBody(
-                                            //     'public-key.ttl.acl');
-
-                                            // updateSharedTtl(widget.authData,
-                                            //     aclRes, aclBody);
                                           },
                                           style: ElevatedButton.styleFrom(
                                               foregroundColor: darkBlue,

@@ -2,6 +2,7 @@
 import 'dart:async';
 
 // Package imports.
+import 'package:podnotes/common/file_structure.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:http/http.dart' as http;
@@ -93,5 +94,125 @@ Future<String> checkResourceExists(
     return 'not-exist';
   } else {
     return 'other-error';
+  }
+}
+
+// Create a directory or a file
+Future<String> createItem(
+    bool fileFlag, String itemName, String itemBody, String webId, Map authData,
+    {required String fileLoc, String? fileType, bool aclFlag = false}) async {
+  String? itemLoc = '';
+  String itemSlug = '';
+  String itemType = '';
+  String contentType = '';
+
+  // Get authentication info
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  // Set up directory or file parameters
+  if (fileFlag) {
+    // This is a file (resource)
+    itemLoc = fileLoc;
+    itemSlug = itemName;
+    contentType = fileType!;
+    itemType = '<http://www.w3.org/ns/ldp#Resource>; rel="type"';
+  } else {
+    // This is a directory (container)
+    itemLoc = fileLoc;
+    itemSlug = itemName;
+    contentType = 'application/octet-stream';
+    itemType = '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"';
+  }
+
+  String encDataUrl = webId.replaceAll('profile/card#me', '$itemLoc');
+  String dPopToken = genDpopToken(encDataUrl, rsaKeyPair, publicKeyJwk, 'POST');
+
+  final createResponse;
+
+  if (aclFlag) {
+    String aclFileUrl =
+        webId.replaceAll('profile/card#me', '$itemLoc$itemName');
+    String dPopToken =
+        genDpopToken(aclFileUrl, rsaKeyPair, publicKeyJwk, 'PUT');
+
+    // The PUT request will create the acl item in the server
+    createResponse = await http.put(
+      Uri.parse(aclFileUrl),
+      headers: <String, String>{
+        'Accept': '*/*',
+        'Authorization': 'DPoP $accessToken',
+        'Connection': 'keep-alive',
+        'Content-Type': 'text/turtle',
+        'Content-Length': itemBody.length.toString(),
+        'DPoP': dPopToken,
+      },
+      body: itemBody,
+    );
+  } else {
+    // The POST request will create the item in the server
+    createResponse = await http.post(
+      Uri.parse(encDataUrl),
+      headers: <String, String>{
+        'Accept': '*/*',
+        'Authorization': 'DPoP $accessToken',
+        'Connection': 'keep-alive',
+        'Content-Type': contentType,
+        'Link': itemType,
+        'Slug': itemSlug,
+        'DPoP': dPopToken,
+      },
+      body: itemBody,
+    );
+  }
+
+  if (createResponse.statusCode == 200 || createResponse.statusCode == 201) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return 'ok';
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to create resource! Try again in a while.');
+  }
+}
+
+Future<String> initialProfileUpdate(
+  String profBody,
+  Map authData,
+  String webId,
+) async {
+  // Get authentication info
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  String profUrl = webId.replaceAll('#me', '');
+  String dPopToken = genDpopToken(profUrl, rsaKeyPair, publicKeyJwk, 'PUT');
+
+  // The PUT request will create the acl item in the server
+  final updateResponse = await http.put(
+    Uri.parse(profUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'Content-Type': 'text/turtle',
+      'Content-Length': profBody.length.toString(),
+      'DPoP': dPopToken,
+    },
+    body: profBody,
+  );
+
+  if (updateResponse.statusCode == 200 || updateResponse.statusCode == 205) {
+    // If the server did return a 205 Reset response,
+    return 'ok';
+  } else {
+    // If the server did not return a 205 response,
+    // then throw an exception.
+    throw Exception('Failed to update resource! Try again in a while.');
   }
 }
