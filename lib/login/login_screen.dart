@@ -1,10 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:podnotes/common/colours.dart';
+import 'package:podnotes/common/rdf_functions.dart';
 import 'package:podnotes/common/rest_api.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
+import 'package:podnotes/nav_screen.dart';
 
 // Package imports:
 import 'package:url_launcher/url_launcher.dart';
@@ -175,28 +177,34 @@ class LoginScreen extends StatelessWidget {
 
               if (allExists) {
                 imageCache.clear();
+
+                // Get profile information
+                var rsaInfo = authData['rsaInfo'];
+                var rsaKeyPair = rsaInfo['rsa'];
+                var publicKeyJwk = rsaInfo['pubKeyJwk'];
+                String accessToken = authData['accessToken'];
+                String profCardUrl = webId.replaceAll('#me', '');
+                String dPopToken =
+                    genDpopToken(profCardUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+                String profData =
+                    await fetchPrvFile(profCardUrl, accessToken, dPopToken);
+
+                Map profInfo = getFileContent(profData);
+                authData['name'] = profInfo['fn'][1];
+
                 // Navigate to the profile through main screen
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Home(
+                      builder: (context) => NavigationScreen(
                             webId: webId,
                             authData: authData,
+                            page: 'home',
                           )),
                 );
               } else {
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => MainScreen(
-                //             authData: authData,
-                //             webId: webId,
-                //             page: 'initialSetup',
-                //             selectSurveyIndex: 0,
-                //           )),
-                // );
-
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,

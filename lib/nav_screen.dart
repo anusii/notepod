@@ -27,43 +27,61 @@ import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/common/colours.dart';
+import 'package:podnotes/home.dart';
 import 'package:podnotes/nav_drawer.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
-class Home extends StatefulWidget {
+class NavigationScreen extends StatefulWidget {
   String webId;
   Map authData;
+  String page;
 
-  Home({Key? key, required this.webId, required this.authData})
+  NavigationScreen(
+      {Key? key,
+      required this.webId,
+      required this.authData,
+      required this.page})
       : super(key: key);
 
   @override
   HomeState createState() => HomeState();
 }
 
-class HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  TextEditingController? _textController;
-
-  String text = "";
-
+class HomeState extends State<NavigationScreen>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownAutoPreview(
-      controller: _textController,
-      enableToolBar: true,
-      emojiConvert: true,
-      // autoCloseAfterSelectEmoji: false,
-      // onChanged: (String text) {
-      //   setState(() {
-      //     this.text = text;
-      //   });
-      // },
+    dynamic loadingScreen;
+    String page = widget.page;
+    String webId = widget.webId;
+    Map authData = widget.authData;
+
+    if (page == 'home') {
+      loadingScreen = Home(webId: webId, authData: authData);
+    }
+    // else if (page == 'settings') {
+    //   loadingScreen = ParticipantProfileScreen(
+    //     profData: profileData!,
+    //     authData: authData,
+    //     webId: webId,
+    //   );
+    // }
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: lightGreen,
+        centerTitle: true,
+        title: const Text("POD Note Taker"),
+      ),
+      drawer: NavDrawer(
+        webId: widget.webId,
+        authData: widget.authData,
+      ),
+      body: loadingScreen,
     );
   }
 }
