@@ -27,7 +27,6 @@ import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/common/colours.dart';
-import 'package:podnotes/nav_drawer.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {
@@ -54,16 +53,86 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownAutoPreview(
-      controller: _textController,
-      enableToolBar: true,
-      emojiConvert: true,
-      // autoCloseAfterSelectEmoji: false,
-      // onChanged: (String text) {
-      //   setState(() {
-      //     this.text = text;
-      //   });
-      // },
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: SplittedMarkdownFormField(
+            controller: _textController,
+            markdownSyntax: '## Headline',
+            decoration: const InputDecoration(
+              hintText: 'Editable text',
+            ),
+            emojiConvert: true,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () async {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: darkBlue,
+                  backgroundColor: lightBlue, // foreground
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
+                  'SAVE NOTE',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
+    // Column(
+    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //   children: [
+    //     // const MarkdownAutoPreview(
+    //     //   decoration: InputDecoration(
+    //     //     hintText: 'Markdown Auto Preview',
+    //     //   ),
+    //     //   emojiConvert: true,
+    //     //   // maxLines: 10,
+    //     //   // minLines: 1,
+    //     //   // expands: true,
+    //     // ),
+    //     SplittedMarkdownFormField(
+    //       controller: _textController,
+    //       markdownSyntax: '## Headline',
+    //       decoration: const InputDecoration(
+    //         hintText: 'Splitted Markdown FormField',
+    //       ),
+    //       emojiConvert: true,
+    //     ),
+    //   ],
+    // );
+    // Container(
+    //   padding: const EdgeInsets.all(10),
+    //   child: SafeArea(
+    //     child: MarkdownAutoPreview(
+    //       controller: _textController,
+    //       enableToolBar: true,
+    //       emojiConvert: true,
+    //       // autoCloseAfterSelectEmoji: false,
+    //       // onChanged: (String text) {
+    //       //   setState(() {
+    //       //     this.text = text;
+    //       //   });
+    //       // },
+    //     ),
+    //   ),
+    // );
   }
 }
