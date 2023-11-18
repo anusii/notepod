@@ -21,13 +21,14 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams
+/// Authors: Graham Williams, Anushka Vidanage
+library;
 
 import 'package:flutter/material.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:podnotes/home.dart';
+import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
@@ -52,11 +53,11 @@ void main() async {
       // best not to override it here since under windows the 950x600 is too
       // small.
 
-      // size: Size(950, 600),
+      //size: Size(750, 873),
 
       // The [title] is used for the window manager's window title.
 
-      title: "RattleNG - Data Science with R",
+      title: "PODNotes - A note taking app with PODs",
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -67,21 +68,23 @@ void main() async {
   }
 
   // The runApp() function takes the given Widget and makes it the root of the
+  // widget tree.
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'POD Note Taker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      home: const Home(),
+      home: LoginScreen(),
     );
   }
 }
