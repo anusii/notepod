@@ -1,23 +1,48 @@
-// Flutter imports:
+/// Login screen for the app.
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: Anushka Vidanage, Graham Williams
+
+library;
+
 import 'package:flutter/material.dart';
-import 'package:podnotes/common/colours.dart';
-import 'package:podnotes/common/rest_api.dart';
+
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:solid_auth/solid_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/rest_api.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
-import 'package:podnotes/login/pod_reg.dart';
-
-// Package imports:
-import 'package:url_launcher/url_launcher.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-
-// Project imports:
-import 'package:podnotes/common/app.dart';
-import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
   var webIdController = TextEditingController()
     ..text = 'https://pods.solidcommunity.au';
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +133,23 @@ class LoginScreen extends StatelessWidget {
     )));
   }
 
+  // POD issuer registration page launch.
+
+  launchIssuerReg(String issuerUri) async {
+    // 20231110 gjw Currently on solidcommunity.au the register page is at
+    // https://pods.solidcommunity.au/idp/register/.
+
+    var url = '$issuerUri/idp/register';
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   // Create login row for SOLID POD issuer
+
   Row createSolidLoginRow(
       BuildContext context, TextEditingController webIdTextController) {
     return Row(

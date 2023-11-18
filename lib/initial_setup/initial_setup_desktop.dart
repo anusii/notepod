@@ -1,45 +1,64 @@
-// Flutter imports.
+/// DESCRIPTION
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: AUTHORS
+
+library;
 
 import 'dart:convert';
 
-// Package imports.
+import 'package:flutter/material.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_rsa/fast_rsa.dart' as frsa;
-import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:podnotes/common/colours.dart';
-import 'package:podnotes/common/crypto.dart';
-import 'package:podnotes/common/file_structure.dart';
-import 'package:podnotes/common/turtle_structures.dart';
-//import 'package:indipod/models/common/common_functions.dart';
-//import 'package:indipod/models/common/common_structures.dart';
-//import 'package:indipod/models/common/common_widgets.dart';
-import 'package:podnotes/common/rest_api.dart';
-// Project imports:
-import 'package:podnotes/common/app.dart';
+import 'package:solid_auth/solid_auth.dart';
+import 'package:solid_encrypt/solid_encrypt.dart';
+
+import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/crypto.dart';
+import 'package:podnotes/constants/file_structure.dart';
+import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/home.dart';
-//import 'package:indipod/models/main/ontology.dart';
-import 'package:podnotes/login//login_screen.dart';
+import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/truncate_str.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:podnotes/widgets/msg_box.dart';
-//import 'package:indipod/screens/main/main_screen.dart';
-import 'package:solid_auth/solid_auth.dart';
-import 'package:solid_encrypt/solid_encrypt.dart';
 
 class InitialSetupDesktop extends StatefulWidget {
   final Map resNeedToCreate;
   final Map authData;
   final String webId;
   const InitialSetupDesktop({
-    Key? key,
+    super.key,
     required this.resNeedToCreate,
     required this.authData,
     required this.webId,
-  }) : super(key: key);
+  });
 
   @override
   State<InitialSetupDesktop> createState() {
@@ -145,7 +164,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                       Container(
                                         child: ListTile(
                                           title: Text(resLink),
-                                          leading: Icon(Icons.folder),
+                                          leading: const Icon(Icons.folder),
                                         ),
                                       ),
                                     ],
@@ -157,7 +176,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                       Container(
                                         child: ListTile(
                                           title: Text(resLink),
-                                          leading: Icon(Icons.file_copy),
+                                          leading: const Icon(Icons.file_copy),
                                         ),
                                       ),
                                     ],
@@ -734,12 +753,12 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.logout,
                     color: Colors.black,
                     size: 24.0,
                   ),
-                  label: Text(
+                  label: const Text(
                     'LOGOUT',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,

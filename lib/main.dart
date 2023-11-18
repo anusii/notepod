@@ -21,11 +21,14 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams
+/// Authors: Graham Williams, Anushka Vidanage
+library;
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/login/login_screen.dart';
+
 import 'package:window_manager/window_manager.dart';
+
+import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
@@ -65,12 +68,13 @@ void main() async {
   }
 
   // The runApp() function takes the given Widget and makes it the root of the
+  // widget tree.
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
