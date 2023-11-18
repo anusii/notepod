@@ -23,6 +23,8 @@
 ///
 /// Authors: Anushka Vidanage
 
+library;
+
 import 'package:flutter/material.dart';
 
 const darkGold = Color(0xFFBE830E);

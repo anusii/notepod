@@ -23,6 +23,8 @@
 ///
 /// Authors: Graham Williams
 
+library;
+
 import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
@@ -31,8 +33,7 @@ class Home extends StatefulWidget {
   String webId;
   Map authData;
 
-  Home({Key? key, required this.webId, required this.authData})
-      : super(key: key);
+  Home({super.key, required this.webId, required this.authData});
 
   @override
   HomeState createState() => HomeState();

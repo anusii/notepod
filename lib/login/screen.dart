@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage
+library;
 
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,8 @@ class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
   var webIdController = TextEditingController()
     ..text = 'https://pods.solidcommunity.au';
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

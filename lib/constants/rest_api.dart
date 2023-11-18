@@ -23,6 +23,8 @@
 ///
 /// Authors: AUTHORS
 
+library;
+
 // import 'dart:async';
 
 // import 'package:solid_auth/solid_auth.dart';
