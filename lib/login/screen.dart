@@ -1,4 +1,29 @@
-// Flutter imports:
+/// Login screen for the app.
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: Anushka Vidanage
+library;
+
 import 'package:flutter/material.dart';
 import 'package:podnotes/common/colours.dart';
 import 'package:podnotes/common/rdf_functions.dart';
@@ -9,10 +34,11 @@ import 'package:podnotes/nav_screen.dart';
 
 // Package imports:
 import 'package:jwt_decoder/jwt_decoder.dart';
-
-// Project imports:
-import 'package:podnotes/common/app.dart';
 import 'package:solid_auth/solid_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:podnotes/home.dart';
+import 'package:podnotes/constants/app.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
@@ -111,6 +137,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   // Create login row for SOLID POD issuer
+
   Row createSolidLoginRow(
       BuildContext context, TextEditingController webIdTextController) {
     return Row(

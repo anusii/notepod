@@ -23,6 +23,8 @@
 ///
 /// Authors: Graham Williams
 
+library;
+
 import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
