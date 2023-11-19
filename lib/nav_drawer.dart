@@ -32,11 +32,11 @@ class NavDrawer extends StatelessWidget {
                 ),
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: const TextStyle(color: backgroundWhite, fontSize: 25),
                 ),
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  style: const TextStyle(color: backgroundWhite, fontSize: 15),
                 ),
               ],
             ),

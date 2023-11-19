@@ -16,8 +16,10 @@ import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
-  var webIdController = TextEditingController()
+  final webIdController = TextEditingController()
     ..text = 'https://pods.solidcommunity.au';
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

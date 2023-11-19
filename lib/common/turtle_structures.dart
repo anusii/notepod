@@ -39,10 +39,7 @@ String genEncKeyBody(
     String encMasterKey, String prvKey, String prvKeyIvz, String resUrl) {
   // Create a ttl file body
   String keyFileBody =
-      '<$resUrl> <http://purl.org/dc/terms/title> "Encryption keys";' +
-          '\n    <$ivzPred> "$prvKeyIvz";' +
-          '\n    <$encKeyPred> "$encMasterKey";' +
-          '\n    <$prvKeyPred> "$prvKey".';
+      '<$resUrl> <http://purl.org/dc/terms/title> "Encryption keys";\n    <$ivzPred> "$prvKeyIvz";\n    <$encKeyPred> "$encMasterKey";\n    <$prvKeyPred> "$prvKey".';
 
   return keyFileBody;
 }
@@ -51,20 +48,8 @@ String genEncKeyBody(
 String genPubFileAclBody(String fileName) {
   // Create file body
   String resName = fileName.replaceAll('.acl', '');
-  String pubFileBody = '@prefix : <#>.' +
-      '\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix c: <card#>.' +
-      '\n\n:owner' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo <$resName>;' +
-      '\n    acl:agent c:me;' +
-      '\n    acl:mode acl:Control, acl:Read, acl:Write.' +
-      '\n\n:public' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo <$resName>;' +
-      '\n    acl:agentClass foaf:Agent;' +
-      '\n    acl:mode acl:Read, acl:Write.';
+  String pubFileBody =
+      '@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix c: <card#>.\n\n:owner\n    a acl:Authorization;\n    acl:accessTo <$resName>;\n    acl:agent c:me;\n    acl:mode acl:Control, acl:Read, acl:Write.\n\n:public\n    a acl:Authorization;\n    acl:accessTo <$resName>;\n    acl:agentClass foaf:Agent;\n    acl:mode acl:Read, acl:Write.';
 
   return pubFileBody;
 }
@@ -73,14 +58,8 @@ String genPubFileAclBody(String fileName) {
 String genPrvFileAclBody(String fileName, String webId) {
   String webIdStr = webId.replaceAll('me', '');
   String resName = fileName.replaceAll('.acl', '');
-  String prvFileBody = '@prefix : <#>.' +
-      '\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.' +
-      '\n@prefix p: <$webIdStr>.' +
-      '\n\n:ControlReadWrite' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo <$resName>;' +
-      '\n    acl:agent p:me;' +
-      '\n    acl:mode acl:Control, acl:Read, acl:Write.';
+  String prvFileBody =
+      '@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix p: <$webIdStr>.\n\n:ControlReadWrite\n    a acl:Authorization;\n    acl:accessTo <$resName>;\n    acl:agent p:me;\n    acl:mode acl:Control, acl:Read, acl:Write.';
 
   return prvFileBody;
 }
@@ -88,36 +67,16 @@ String genPrvFileAclBody(String fileName, String webId) {
 // Set up public directory acl content
 String genPubDirAclBody() {
   // Create file body
-  String pubFileBody = '@prefix : <#>.' +
-      '\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix shrd: <./>.' +
-      '\n@prefix c: </profile/card#>.' +
-      '\n\n:owner' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo shrd:;' +
-      '\n    acl:agent c:me;' +
-      '\n    acl:mode acl:Control, acl:Read, acl:Write.' +
-      '\n\n:public' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo shrd:;' +
-      '\n    acl:default shrd:;' +
-      '\n    acl:agentClass foaf:Agent;' +
-      '\n    acl:mode acl:Read, acl:Write.';
+  String pubFileBody =
+      '@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix shrd: <./>.\n@prefix c: </profile/card#>.\n\n:owner\n    a acl:Authorization;\n    acl:accessTo shrd:;\n    acl:agent c:me;\n    acl:mode acl:Control, acl:Read, acl:Write.\n\n:public\n    a acl:Authorization;\n    acl:accessTo shrd:;\n    acl:default shrd:;\n    acl:agentClass foaf:Agent;\n    acl:mode acl:Read, acl:Write.';
 
   return pubFileBody;
 }
 
 // Set up individual key file content
 String genIndKeyFileBody() {
-  String keyFileBody = '@prefix : <#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix terms: <http://purl.org/dc/terms/>.' +
-      '\n@prefix file: <$filePred>.' +
-      '\n@prefix data: <$dataPred>.' +
-      '\n:me' +
-      '\n    a foaf:PersonalProfileDocument;' +
-      '\n    terms:title "Individual Encryption Keys".';
+  String keyFileBody =
+      '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix terms: <http://purl.org/dc/terms/>.\n@prefix file: <$filePred>.\n@prefix data: <$dataPred>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Individual Encryption Keys".';
 
   return keyFileBody;
 }
@@ -125,8 +84,7 @@ String genIndKeyFileBody() {
 // Set up public key file content
 String genPubKeyFileBody(String resUrl, String pubKeyStr) {
   String keyFileBody =
-      '<$resUrl> <http://purl.org/dc/terms/title> "Public key";' +
-          '\n    <$pubKeyPred> "$pubKeyStr";';
+      '<$resUrl> <http://purl.org/dc/terms/title> "Public key";\n    <$pubKeyPred> "$pubKeyStr";';
 
   return keyFileBody;
 }
@@ -140,18 +98,8 @@ String genProfFileBody(Map profData, Map authData) {
   var name = profData['name'];
   var gender = profData['gender'];
 
-  String fileBody = '@prefix : <#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix solid: <http://www.w3.org/ns/solid/terms#>.' +
-      '\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.' +
-      '\n@prefix pro: <./>.' +
-      '\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.' +
-      '\n\n:me' +
-      '\n    solid:oidcIssuer <$issuerUri>;' +
-      '\n    a foaf:Person;' +
-      '\n    vcard:fn "$name";' +
-      '\n    vcard:Gender "$genderPred-$gender";' +
-      '\n    foaf:name "$name".';
+  String fileBody =
+      '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix solid: <http://www.w3.org/ns/solid/terms#>.\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.\n@prefix pro: <./>.\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.\n\n:me\n    solid:oidcIssuer <$issuerUri>;\n    a foaf:Person;\n    vcard:fn "$name";\n    vcard:Gender "$genderPred-$gender";\n    foaf:name "$name".';
 
   return fileBody;
 }
@@ -163,14 +111,8 @@ String genProfFileBody(Map profData, Map authData) {
 
 // Set up log file content
 String genLogFileBody() {
-  String logFileBody = '@prefix : <#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix terms: <http://purl.org/dc/terms/>.' +
-      '\n@prefix logid: <$logIdPred>.' +
-      '\n@prefix data: <$dataPred>.' +
-      '\n:me' +
-      '\n    a foaf:PersonalProfileDocument;' +
-      '\n    terms:title "Permissions Log".';
+  String logFileBody =
+      '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix terms: <http://purl.org/dc/terms/>.\n@prefix logid: <$logIdPred>.\n@prefix data: <$dataPred>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Permissions Log".';
 
   return logFileBody;
 }
@@ -178,20 +120,8 @@ String genLogFileBody() {
 // Set up log acl file content
 String genLogAclBody(String webId, String permFileName) {
   String webIdStr = webId.replaceAll('me', '');
-  String logAclFileBody = '@prefix : <#>.' +
-      '\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.' +
-      '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-      '\n@prefix c: <$webIdStr>.' +
-      '\n\n:owner' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo <$permFileName>;' +
-      '\n    acl:agent c:me;' +
-      '\n    acl:mode acl:Control, acl:Read, acl:Write.' +
-      '\n\n:public' +
-      '\n    a acl:Authorization;' +
-      '\n    acl:accessTo <$permFileName>;' +
-      '\n    acl:agentClass foaf:Agent;' +
-      '\n    acl:mode acl:Append.';
+  String logAclFileBody =
+      '@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix c: <$webIdStr>.\n\n:owner\n    a acl:Authorization;\n    acl:accessTo <$permFileName>;\n    acl:agent c:me;\n    acl:mode acl:Control, acl:Read, acl:Write.\n\n:public\n    a acl:Authorization;\n    acl:accessTo <$permFileName>;\n    acl:agentClass foaf:Agent;\n    acl:mode acl:Append.';
 
   return logAclFileBody;
 }
