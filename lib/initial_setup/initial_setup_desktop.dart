@@ -1,9 +1,7 @@
 // Flutter imports.
-
 import 'dart:convert';
 
 // Package imports.
-
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_rsa/fast_rsa.dart' as frsa;
@@ -14,19 +12,15 @@ import 'package:podnotes/common/colours.dart';
 import 'package:podnotes/common/crypto.dart';
 import 'package:podnotes/common/file_structure.dart';
 import 'package:podnotes/common/turtle_structures.dart';
-//import 'package:indipod/models/common/common_functions.dart';
-//import 'package:indipod/models/common/common_structures.dart';
-//import 'package:indipod/models/common/common_widgets.dart';
 import 'package:podnotes/common/rest_api.dart';
+
 // Project imports:
 import 'package:podnotes/common/app.dart';
-import 'package:podnotes/home.dart';
-//import 'package:indipod/models/main/ontology.dart';
 import 'package:podnotes/login//login_screen.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/utils/truncate_str.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:podnotes/widgets/msg_box.dart';
-//import 'package:indipod/screens/main/main_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_encrypt/solid_encrypt.dart';
 
@@ -626,10 +620,11 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          Home(
+                                                          NavigationScreen(
                                                             webId: widget.webId,
                                                             authData:
                                                                 widget.authData,
+                                                            page: 'home',
                                                           )),
                                                   (Route<dynamic> route) =>
                                                       false, // This predicate ensures all previous routes are removed

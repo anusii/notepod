@@ -32,7 +32,6 @@ String filePred = 'https://solidcommunity.au/predicates/file#';
 String logIdPred = 'https://solidcommunity.au/predicates/logid#';
 String ivzPred = 'https://solidcommunity.au/predicates/terms#iv';
 String dataPred = 'https://solidcommunity.au/predicates/data#';
-String genderPred = 'https://solidcommunity.au/predicates/personal#Gender';
 
 // Set up encryption key file content
 String genEncKeyBody(
@@ -99,7 +98,7 @@ String genProfFileBody(Map profData, Map authData) {
   var gender = profData['gender'];
 
   String fileBody =
-      '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix solid: <http://www.w3.org/ns/solid/terms#>.\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.\n@prefix pro: <./>.\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.\n\n:me\n    solid:oidcIssuer <$issuerUri>;\n    a foaf:Person;\n    vcard:fn "$name";\n    vcard:Gender "$genderPred-$gender";\n    foaf:name "$name".';
+      '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix solid: <http://www.w3.org/ns/solid/terms#>.\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.\n@prefix pro: <./>.\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.\n\n:me\n    solid:oidcIssuer <$issuerUri>;\n    a foaf:Person;\n    vcard:fn "$name";\n    vcard:Gender "$gender";\n    foaf:name "$name".';
 
   return fileBody;
 }
