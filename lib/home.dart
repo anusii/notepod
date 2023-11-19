@@ -28,7 +28,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:podnotes/common/colours.dart';
+import 'package:podnotes/constants/colours.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {

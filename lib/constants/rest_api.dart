@@ -24,7 +24,7 @@
 /// Authors: AUTHORS
 
 // Package imports.
-import 'package:podnotes/common/file_structure.dart';
+import 'package:podnotes/constants/file_structure.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:http/http.dart' as http;
