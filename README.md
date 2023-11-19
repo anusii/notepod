@@ -19,7 +19,7 @@ device. The device does not get to know your login details.
 
 <div align="center">
 	<img
-	src="https://github.com/anusii/podnotes/blob/main/images/login.png"
+	src="images/login.png"
 	alt="Login Screen" width="400">
 </div>
 
