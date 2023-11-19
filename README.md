@@ -15,10 +15,11 @@ WebID is to be entered. It will be remembered for future app
 activity. To obtain a WebID for yourself, visit our experimental
 [Australian Solid Community Pod
 Server](https://pods.solidcommunity.au/.account/login/password/register/)
-or any one of the available Solid servers world wide. On clicking the
-Login button your browser will popup to authenticate you on the Solid
-server of choice, not on the device. The device does not get to know
-your login details.
+or any one of the available [Pod
+Providers](https://solidproject.org/users/get-a-pod) world wide. On
+clicking the Login button your browser will popup to authenticate you
+on the Solid server of choice, not on the device. The device does not
+get to know your login details.
 
 <div align="center">
 	<img
