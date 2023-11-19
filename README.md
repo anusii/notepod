@@ -1,16 +1,25 @@
-# podnotes
+# PodNotes Markdown Note Taking App with Private PODs
 
-A new Flutter project.
+**An ANU Software Innovation Institute demo project for Solid PODs**.
 
-## Getting Started
+*Authors: Anushka Vidanage, Graham Williams*
 
-This project is a starting point for a Flutter application.
+*[ANU Software Innovation Institute](https://sii.anu.edu.au)*
 
-A few resources to get you started if this is your first Flutter project:
+*License: GNU GPL V3*
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## App Startup
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+On starting up the app you will see the login screen where a user's
+WebID is to be entered. It will be remembered for future app
+activity. To obtain a WebID for yourself, visit
+https://solidcommunity.net/register. On clicking the Login button your
+browser will popup to authenticate you on the Solid server, not on the
+device. The device does not get to know your login details.
+
+<div align="center">
+	<img
+	src="https://github.com/anusii/podnotes/blob/main/images/login.png"
+	alt="Login Screen" width="400">
+</div>
+
