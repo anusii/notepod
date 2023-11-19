@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:podnotes/common/colours.dart';
 
 class NavDrawer extends StatelessWidget {
-  String webId;
-  Map authData;
+  final String webId;
+  final Map authData;
 
-  NavDrawer({Key? key, required this.webId, required this.authData})
+  const NavDrawer({Key? key, required this.webId, required this.authData})
       : super(key: key);
 
   @override

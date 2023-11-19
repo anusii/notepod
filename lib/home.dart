@@ -30,10 +30,10 @@ import 'package:podnotes/common/colours.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {
-  String webId;
-  Map authData;
+  final String webId;
+  final Map authData;
 
-  Home({Key? key, required this.webId, required this.authData})
+  const Home({Key? key, required this.webId, required this.authData})
       : super(key: key);
 
   @override

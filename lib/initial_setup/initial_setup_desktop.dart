@@ -52,19 +52,6 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormBuilderState>();
     List<String> genderOptions = ['Male', 'Female', 'Other'];
-    List<String> stateOptions = ['ACT', 'VIC', 'NSW', 'NT', 'QLD', 'SA', 'TAS'];
-    List<String> maritalStatusOptions = [
-      'Married',
-      'Unmarried',
-      'Devorced',
-      'Widowed',
-    ];
-    List<String> languageOptions = [
-      'English',
-      'Gunggandji',
-      'Yidinji',
-      'Other',
-    ];
 
     void onChangedVal(dynamic val) => debugPrint(val.toString());
     bool showPassword = true;
@@ -102,7 +89,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                               height: 10,
                             ), //SizedBox
                             const Text(
-                              INITIAL_STRUC_WELCOME,
+                              initialStructureWelcome,
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.black,
@@ -114,7 +101,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                             ),
                             Center(
                               child: buildMsgBox(context, 'warning',
-                                  INITIAL_STRUC_TITLE, INITIAL_STRUC_MSG),
+                                  initialStructureTitle, initialStructureMsg),
                             ),
                           ],
                         ), //Column
@@ -142,11 +129,9 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                     ),
                                     for (String resLink in widget
                                         .resNeedToCreate['folders']) ...[
-                                      Container(
-                                        child: ListTile(
-                                          title: Text(resLink),
-                                          leading: Icon(Icons.folder),
-                                        ),
+                                      ListTile(
+                                        title: Text(resLink),
+                                        leading: const Icon(Icons.folder),
                                       ),
                                     ],
                                     const SizedBox(
@@ -154,11 +139,9 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                     ),
                                     for (String resLink
                                         in widget.resNeedToCreate['files']) ...[
-                                      Container(
-                                        child: ListTile(
-                                          title: Text(resLink),
-                                          leading: Icon(Icons.file_copy),
-                                        ),
+                                      ListTile(
+                                        title: Text(resLink),
+                                        leading: const Icon(Icons.file_copy),
                                       ),
                                     ],
                                     const SizedBox(
@@ -282,7 +265,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                           height: 30,
                                         ),
                                         const Text(
-                                          REQUIRE_PWD_MSG,
+                                          requiredPwdMsg,
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -349,7 +332,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                           height: 30,
                                         ),
                                         const Text(
-                                          PUBLIC_KEY_MSG,
+                                          publicKeyMsg,
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -440,10 +423,10 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
 
                                               if (widget.resNeedToCreate[
                                                           'fileNames']
-                                                      .contains(ENC_KEY_FILE) ||
+                                                      .contains(encKeyFile) ||
                                                   widget.resNeedToCreate[
                                                           'fileNames']
-                                                      .contains(PUB_KEY_FILE)) {
+                                                      .contains(pubKeyFile)) {
                                                 // Generate master key
                                                 encMasterKey = sha256
                                                     .convert(utf8
@@ -486,7 +469,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
 
                                                 if (!widget.resNeedToCreate[
                                                         'fileNames']
-                                                    .contains(ENC_KEY_FILE)) {
+                                                    .contains(encKeyFile)) {
                                                   EncryptClient encryptClient =
                                                       EncryptClient(
                                                           widget.authData,
@@ -559,18 +542,18 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
 
                                                   String fileBody = '';
 
-                                                  if (resName == ENC_KEY_FILE) {
+                                                  if (resName == encKeyFile) {
                                                     fileBody = genEncKeyBody(
                                                         encMasterKeyVerify!,
                                                         prvKeyHash!,
                                                         prvKeyIvz!,
                                                         resLink);
                                                   } else if ([
-                                                    '$PUB_KEY_FILE.acl',
-                                                    '$PERM_LOG_FILE.acl'
+                                                    '$pubKeyFile.acl',
+                                                    '$permLogFile.acl'
                                                   ].contains(resName)) {
                                                     if (resName ==
-                                                        '$PERM_LOG_FILE.acl') {
+                                                        '$permLogFile.acl') {
                                                       fileBody = genLogAclBody(
                                                           widget.webId,
                                                           resName.replaceAll(
@@ -585,17 +568,17 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                     fileBody =
                                                         genPubDirAclBody();
                                                   } else if (resName ==
-                                                      IND_KEY_FILE) {
+                                                      indKeyFile) {
                                                     fileBody =
                                                         genIndKeyFileBody();
                                                   } else if (resName ==
-                                                      PUB_KEY_FILE) {
+                                                      pubKeyFile) {
                                                     fileBody =
                                                         genPubKeyFileBody(
                                                             resLink,
                                                             pubKeyStr!);
                                                   } else if (resName ==
-                                                      PERM_LOG_FILE) {
+                                                      permLogFile) {
                                                     fileBody = genLogFileBody();
                                                   }
 
@@ -613,7 +596,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                           widget.webId,
                                                           widget.authData,
                                                           fileLoc: filePath,
-                                                          fileType: FILE_TYPE[
+                                                          fileType: fileType[
                                                               resName
                                                                   .split('.')
                                                                   .last],
@@ -734,12 +717,12 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.logout,
                     color: Colors.black,
                     size: 24.0,
                   ),
-                  label: Text(
+                  label: const Text(
                     'LOGOUT',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -749,6 +732,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                   onPressed: () async {
                     // APP_STORAGE.deleteItem('encKey');
                     await logout(widget.authData['logoutUrl']);
+                    // ignore: use_build_context_synchronously
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -831,7 +815,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
     );
   }
 
-  String capitalised_first(String text) {
+  String capitalisedFirst(String text) {
     String result = "";
     if (text.length == 1) {
       result = text.toUpperCase();

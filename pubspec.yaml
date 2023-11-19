@@ -19,10 +19,13 @@ dependencies:
   intl: ^0.18.0
   dart_jsonwebtoken: ^2.3.2
   fast_rsa: ^3.4.7
-  solid_auth: ^0.1.11
-  solid_encrypt: ^0.1.8
+  solid_auth: ^0.1.12
+  solid_encrypt: ^0.1.9
   openid_client: ^0.4.8
   rdflib: ^0.2.4
+  crypto: ^3.0.3
+  encrypt: ^5.0.3
+  http: ^1.1.0
 
   # Form builder
   flutter_form_builder: ^9.1.0

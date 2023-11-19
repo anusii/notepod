@@ -7,9 +7,6 @@ import 'package:solid_auth/solid_auth.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:http/http.dart' as http;
 
-// Project imports.
-import 'package:podnotes/common/app.dart';
-
 Future<List> initialStructureTest(Map authData) async {
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
@@ -27,7 +24,7 @@ Future<List> initialStructureTest(Map authData) async {
     'fileNames': []
   };
 
-  for (String containerName in FOLDERS) {
+  for (String containerName in folders) {
     String resourceUrl = webId.replaceAll('profile/card#me', '$containerName/');
     String dPopToken =
         genDpopToken(resourceUrl, rsaKeyPair, publicKeyJwk, 'GET');
@@ -35,14 +32,14 @@ Future<List> initialStructureTest(Map authData) async {
         'not-exist') {
       allExists = false;
       String resourceUrlStr =
-          webId.replaceAll('profile/card#me', '$containerName');
+          webId.replaceAll('profile/card#me', containerName);
       resNotExist['folders'].add(resourceUrlStr);
       resNotExist['folderNames'].add(containerName);
     }
   }
 
-  for (var containerName in FILES.keys) {
-    List fileNameList = FILES[containerName];
+  for (var containerName in files.keys) {
+    List fileNameList = files[containerName];
     for (String fileName in fileNameList) {
       String resourceUrl =
           webId.replaceAll('profile/card#me', '$containerName/$fileName');
@@ -80,7 +77,7 @@ Future<String> checkResourceExists(
       'Content-Type': contentType,
       'Authorization': 'DPoP $accessToken',
       'Link': itemType,
-      'DPoP': '$dPopToken',
+      'DPoP': dPopToken,
     },
   );
 
@@ -127,10 +124,10 @@ Future<String> createItem(
     itemType = '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"';
   }
 
-  String encDataUrl = webId.replaceAll('profile/card#me', '$itemLoc');
+  String encDataUrl = webId.replaceAll('profile/card#me', itemLoc);
   String dPopToken = genDpopToken(encDataUrl, rsaKeyPair, publicKeyJwk, 'POST');
 
-  final createResponse;
+  final http.Response createResponse;
 
   if (aclFlag) {
     String aclFileUrl =
@@ -229,7 +226,7 @@ Future<String> fetchPrvFile(
       'Accept': '*/*',
       'Authorization': 'DPoP $accessToken',
       'Connection': 'keep-alive',
-      'DPoP': '$dPopToken',
+      'DPoP': dPopToken,
     },
   );
 
