@@ -50,7 +50,7 @@ Future<List> initialStructureTest(Map authData) async {
     'fileNames': []
   };
 
-  for (String containerName in FOLDERS) {
+  for (String containerName in folders) {
     String resourceUrl = webId.replaceAll('profile/card#me', '$containerName/');
     String dPopToken =
         genDpopToken(resourceUrl, rsaKeyPair, publicKeyJwk, 'GET');
@@ -64,8 +64,8 @@ Future<List> initialStructureTest(Map authData) async {
     }
   }
 
-  for (var containerName in FILES.keys) {
-    List fileNameList = FILES[containerName];
+  for (var containerName in files.keys) {
+    List fileNameList = files[containerName];
     for (String fileName in fileNameList) {
       String resourceUrl =
           webId.replaceAll('profile/card#me', '$containerName/$fileName');
@@ -252,7 +252,7 @@ Future<String> fetchPrvFile(
       'Accept': '*/*',
       'Authorization': 'DPoP $accessToken',
       'Connection': 'keep-alive',
-      'DPoP': '$dPopToken',
+      'DPoP': dPopToken,
     },
   );
 

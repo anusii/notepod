@@ -23,25 +23,25 @@
 ///
 /// Authors: Graham Williams
 
+library;
+
 import 'package:flutter/material.dart';
 
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/nav_drawer.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {
-  String webId;
-  Map authData;
-  String page;
+  final String webId;
+  final Map authData;
+  final String page;
 
-  NavigationScreen(
-      {Key? key,
+  const NavigationScreen(
+      {super.key,
       required this.webId,
       required this.authData,
-      required this.page})
-      : super(key: key);
+      required this.page});
 
   @override
   HomeState createState() => HomeState();

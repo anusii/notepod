@@ -29,13 +29,11 @@ import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/rest_api.dart';
-import 'package:podnotes/home.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
 
 // Package imports:
-import 'package:url_launcher/url_launcher.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 // Project imports:
@@ -44,7 +42,7 @@ import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
-  var webIdController = TextEditingController()
+  final webIdController = TextEditingController()
     ..text = 'https://pods.solidcommunity.au';
 
   LoginScreen({super.key});
@@ -138,21 +136,6 @@ class LoginScreen extends StatelessWidget {
     )));
   }
 
-  // POD issuer registration page launch.
-
-  launchIssuerReg(String issuerUri) async {
-    // 20231110 gjw Currently on solidcommunity.au the register page is at
-    // https://pods.solidcommunity.au/.account/login/password/register/.
-
-    var url = issuerUri;
-
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   // Create login row for SOLID POD issuer
 
   Row createSolidLoginRow(
@@ -164,7 +147,7 @@ class LoginScreen extends StatelessWidget {
             child: TextButton(
           style: TextButton.styleFrom(
             padding: const EdgeInsets.all(20),
-            backgroundColor: exLightBlue,
+            backgroundColor: lightBlue,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
 
 class NavDrawer extends StatelessWidget {
-  String webId;
-  Map authData;
+  final String webId;
+  final Map authData;
 
-  NavDrawer({Key? key, required this.webId, required this.authData})
-      : super(key: key);
+  const NavDrawer({super.key, required this.webId, required this.authData});
 
   @override
   Widget build(BuildContext context) {
     String name = authData['name'];
+    print(name);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -32,11 +32,11 @@ class NavDrawer extends StatelessWidget {
                 ),
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: const TextStyle(color: backgroundWhite, fontSize: 25),
                 ),
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  style: const TextStyle(color: backgroundWhite, fontSize: 15),
                 ),
               ],
             ),
