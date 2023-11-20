@@ -19,7 +19,7 @@ class NavDrawer extends StatelessWidget {
             padding: EdgeInsets.only(
                 top: 24 + MediaQuery.of(context).padding.top, bottom: 24),
             decoration: const BoxDecoration(
-              color: darkBlue,
+              color: darkGreen,
             ),
             child: Column(
               children: [
