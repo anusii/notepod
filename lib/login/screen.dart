@@ -29,13 +29,11 @@ import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/rest_api.dart';
-import 'package:podnotes/home.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
 
 // Package imports:
-import 'package:url_launcher/url_launcher.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 // Project imports:

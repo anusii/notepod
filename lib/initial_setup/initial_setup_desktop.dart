@@ -34,6 +34,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_rsa/fast_rsa.dart' as frsa;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_encrypt/solid_encrypt.dart';
 
@@ -147,11 +148,9 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                     ),
                                     for (String resLink in widget
                                         .resNeedToCreate['folders']) ...[
-                                      Container(
-                                        child: ListTile(
-                                          title: Text(resLink),
-                                          leading: const Icon(Icons.folder),
-                                        ),
+                                      ListTile(
+                                        title: Text(resLink),
+                                        leading: const Icon(Icons.folder),
                                       ),
                                     ],
                                     const SizedBox(
@@ -159,11 +158,9 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                     ),
                                     for (String resLink
                                         in widget.resNeedToCreate['files']) ...[
-                                      Container(
-                                        child: ListTile(
-                                          title: Text(resLink),
-                                          leading: const Icon(Icons.file_copy),
-                                        ),
+                                      ListTile(
+                                        title: Text(resLink),
+                                        leading: const Icon(Icons.file_copy),
                                       ),
                                     ],
                                     const SizedBox(
@@ -643,6 +640,9 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                   createDirSuccess &&
                                                   updateRes == 'ok') {
                                                 imageCache.clear();
+                                                // Add name to the authData
+                                                widget.authData['name'] =
+                                                    formData['name'];
                                                 // ignore: use_build_context_synchronously
                                                 Navigator.pushAndRemoveUntil(
                                                   context,

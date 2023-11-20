@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 // Flutter imports.
 
->>>>>>> main
 // Package imports.
 import 'package:flutter/material.dart';
 

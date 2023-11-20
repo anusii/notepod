@@ -23,9 +23,10 @@
 ///
 /// Authors: Graham Williams
 
+library;
+
 import 'package:flutter/material.dart';
 
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/nav_drawer.dart';
@@ -37,11 +38,10 @@ class NavigationScreen extends StatefulWidget {
   final String page;
 
   const NavigationScreen(
-      {Key? key,
+      {super.key,
       required this.webId,
       required this.authData,
-      required this.page})
-      : super(key: key);
+      required this.page});
 
   @override
   HomeState createState() => HomeState();

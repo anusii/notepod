@@ -5,12 +5,12 @@ class NavDrawer extends StatelessWidget {
   final String webId;
   final Map authData;
 
-  const NavDrawer({Key? key, required this.webId, required this.authData})
-      : super(key: key);
+  const NavDrawer({super.key, required this.webId, required this.authData});
 
   @override
   Widget build(BuildContext context) {
     String name = authData['name'];
+    print(name);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),

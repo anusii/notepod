@@ -23,6 +23,8 @@
 ///
 /// Authors: Anushka Vidanage, Graham Williams
 
+library;
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 

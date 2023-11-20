@@ -35,8 +35,7 @@ class Home extends StatefulWidget {
   final String webId;
   final Map authData;
 
-  const Home({Key? key, required this.webId, required this.authData})
-      : super(key: key);
+  const Home({super.key, required this.webId, required this.authData});
 
   @override
   HomeState createState() => HomeState();
@@ -58,16 +57,15 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
-          child: SplittedMarkdownFormField(
-            controller: _textController,
-            markdownSyntax: '## Headline',
-            decoration: const InputDecoration(
-              hintText: 'Editable text',
-            ),
-            emojiConvert: true,
-          ),
-        ),
+            padding: const EdgeInsets.all(10),
+            child: SplittedMarkdownFormField(
+              controller: _textController,
+              markdownSyntax: '## Headline',
+              decoration: const InputDecoration(
+                hintText: 'Editable text',
+              ),
+              emojiConvert: true,
+            )),
         const SizedBox(
           height: 20,
         ),
