@@ -31,6 +31,7 @@ const darkGold = Color(0xFFBE830E);
 const darkBlue = Color.fromARGB(255, 7, 87, 153);
 const brickRed = Color(0xFFD89E7A);
 const lightGreen = Color.fromARGB(255, 120, 219, 137);
+const darkGreen = Color.fromARGB(255, 64, 163, 81);
 const lightBlue = Color(0xFF61B2CE);
 const exLightBlue = Color(0xFFD8ECF3);
 const darkCopper = Color(0xFFBE4E0E);

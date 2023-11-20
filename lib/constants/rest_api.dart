@@ -239,3 +239,31 @@ Future<String> initialProfileUpdate(
     throw Exception('Failed to update resource! Try again in a while.');
   }
 }
+
+Future<String> fetchPrvFile(
+  String profCardUrl,
+  String accessToken,
+  String dPopToken,
+) async {
+  //return 'This is async function demo';
+  final profResponse = await http.get(
+    Uri.parse(profCardUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'DPoP': '$dPopToken',
+    },
+  );
+
+  if (profResponse.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return profResponse.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    //print(profResponse.body);
+    throw Exception('Failed to load profile data! Try again in a while.');
+  }
+}
