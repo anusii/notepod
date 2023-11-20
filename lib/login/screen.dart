@@ -142,9 +142,9 @@ class LoginScreen extends StatelessWidget {
 
   launchIssuerReg(String issuerUri) async {
     // 20231110 gjw Currently on solidcommunity.au the register page is at
-    // https://pods.solidcommunity.au/idp/register/.
+    // https://pods.solidcommunity.au/.account/login/password/register/.
 
-    var url = '$issuerUri/idp/register';
+    var url = issuerUri;
 
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
