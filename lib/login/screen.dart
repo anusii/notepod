@@ -21,7 +21,8 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Graham Williams
+
 library;
 
 import 'package:flutter/material.dart';
@@ -30,8 +31,11 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:podnotes/home.dart';
 import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/home.dart';
+import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
@@ -206,16 +210,44 @@ class LoginScreen extends StatelessWidget {
                   JwtDecoder.decode(accessToken);
               String webId = decodedToken['webid'];
 
-              // Navigate to the profile through main screen
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Home(
-                          webId: webId,
-                          authData: authData,
-                        )),
-              );
+              // Perform check to see whether all required resources exists
+              List resCheckList = await initialStructureTest(authData);
+              bool allExists = resCheckList.first;
+
+              if (allExists) {
+                imageCache.clear();
+                // Navigate to the profile through main screen
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Home(
+                            webId: webId,
+                            authData: authData,
+                          )),
+                );
+              } else {
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => MainScreen(
+                //             authData: authData,
+                //             webId: webId,
+                //             page: 'initialSetup',
+                //             selectSurveyIndex: 0,
+                //           )),
+                // );
+
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InitialSetupScreen(
+                            authData: authData,
+                            webId: webId,
+                          )),
+                );
+              }
             },
             child: const Text(
               'LOGIN',
