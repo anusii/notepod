@@ -1,14 +1,37 @@
-// Flutter imports.
-import 'dart:async';
+/// DESCRIPTION
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: AUTHORS
 
-// Package imports.
-import 'package:podnotes/common/file_structure.dart';
-import 'package:solid_auth/solid_auth.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+library;
+
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:solid_auth/solid_auth.dart';
 
-// Project imports.
-import 'package:podnotes/common/app.dart';
+import 'package:podnotes/constants/file_structure.dart';
+
+// import 'dart:async';
 
 Future<List> initialStructureTest(Map authData) async {
   var rsaInfo = authData['rsaInfo'];
@@ -35,7 +58,7 @@ Future<List> initialStructureTest(Map authData) async {
         'not-exist') {
       allExists = false;
       String resourceUrlStr =
-          webId.replaceAll('profile/card#me', '$containerName');
+          webId.replaceAll('profile/card#me', containerName);
       resNotExist['folders'].add(resourceUrlStr);
       resNotExist['folderNames'].add(containerName);
     }
@@ -80,7 +103,7 @@ Future<String> checkResourceExists(
       'Content-Type': contentType,
       'Authorization': 'DPoP $accessToken',
       'Link': itemType,
-      'DPoP': '$dPopToken',
+      'DPoP': dPopToken,
     },
   );
 
@@ -127,10 +150,10 @@ Future<String> createItem(
     itemType = '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"';
   }
 
-  String encDataUrl = webId.replaceAll('profile/card#me', '$itemLoc');
+  String encDataUrl = webId.replaceAll('profile/card#me', itemLoc);
   String dPopToken = genDpopToken(encDataUrl, rsaKeyPair, publicKeyJwk, 'POST');
 
-  final createResponse;
+  final http.Response createResponse;
 
   if (aclFlag) {
     String aclFileUrl =

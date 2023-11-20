@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podnotes/common/colours.dart';
+import 'package:podnotes/constants/colours.dart';
 
 class NavDrawer extends StatelessWidget {
   String webId;
@@ -19,7 +19,7 @@ class NavDrawer extends StatelessWidget {
             padding: EdgeInsets.only(
                 top: 24 + MediaQuery.of(context).padding.top, bottom: 24),
             decoration: const BoxDecoration(
-              color: darkGreen,
+              color: darkBlue,
             ),
             child: Column(
               children: [

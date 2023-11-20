@@ -105,7 +105,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: checks tests docs
+prep: format analyze ignore license tests docs
 
 .PHONY: docs
 docs::
@@ -120,7 +120,7 @@ format:
 tests:: test qtest
 
 .PHONY: checks
-checks: format nullable unused_code unused_files metrics analyze ignore license
+checks: nullable unused_code unused_files metrics
 
 .PHONY: nullable
 nullable:
