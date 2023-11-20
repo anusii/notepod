@@ -19,6 +19,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Zheyuan Xu
+library;
 
 import 'package:jwt_decoder/jwt_decoder.dart';
 //import 'package:indipod/home/profile_data.dart';

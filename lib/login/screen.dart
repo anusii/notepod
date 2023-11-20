@@ -21,20 +21,26 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Graham Williams
+
+library;
 
 import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/home.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
 
 // Package imports:
+import 'package:url_launcher/url_launcher.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
+// Project imports:
+import 'package:podnotes/constants/app.dart';
 import 'package:solid_auth/solid_auth.dart';
-import 'package:podnotes/common/app.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality

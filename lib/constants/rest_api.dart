@@ -23,11 +23,15 @@
 ///
 /// Authors: AUTHORS
 
-// Package imports.
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:solid_auth/solid_auth.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+library;
+
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:solid_auth/solid_auth.dart';
+
+import 'package:podnotes/constants/file_structure.dart';
+
+// import 'dart:async';
 
 Future<List> initialStructureTest(Map authData) async {
   var rsaInfo = authData['rsaInfo'];

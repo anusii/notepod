@@ -19,18 +19,18 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Zheyuan Xu, Graham Williams
+library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/app.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rest_api.dart';
 import 'package:podnotes/initial_setup/initial_setup_desktop.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
 class InitialSetupScreen extends StatefulWidget {
   const InitialSetupScreen(
-      {Key? key, required this.authData, required this.webId})
-      : super(key: key);
+      {super.key, required this.authData, required this.webId});
 
   final Map authData;
   final String webId;

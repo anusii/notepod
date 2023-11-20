@@ -25,6 +25,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/nav_drawer.dart';
