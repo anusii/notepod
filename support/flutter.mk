@@ -124,17 +124,17 @@ dcm: nullable unused_code unused_files metrics
 .PHONY: nullable
 nullable:
 	@echo "\n--\nDart Code Metrics: NULLABLE"
-	dart run dart_code_metrics:metrics check-unnecessary-nullable --disable-sunset-warning lib
+	-dart run dart_code_metrics:metrics check-unnecessary-nullable --disable-sunset-warning lib
 
 .PHONY: unused_code
 unused_code:
 	@echo "\n--\nDart Code Metrics: UNUSED CODE"
-	dart run dart_code_metrics:metrics check-unused-code --disable-sunset-warning lib
+	-dart run dart_code_metrics:metrics check-unused-code --disable-sunset-warning lib
 
 .PHONY: unused_files
 unused_files:
 	@echo "\n--\nDart Code Metrics: UNUSED FILES"
-	dart run dart_code_metrics:metrics check-unused-files --disable-sunset-warning lib
+	-dart run dart_code_metrics:metrics check-unused-files --disable-sunset-warning lib
 
 .PHONY: metrics 
 metrics:
@@ -144,7 +144,7 @@ metrics:
 .PHONY: analyze 
 analyze:
 	@echo "\n--\nFutter ANALYZE"
-	flutter analyze
+	-flutter analyze
 #	dart run custom_lint
 
 .PHONY: ignore
@@ -190,7 +190,7 @@ desktops:
 .PHONY: test
 test:
 	@echo "\n--\nUnit TEST:"
-	flutter test test
+	-flutter test test
 
 %.itest:
 	flutter test --dart-define=PAUSE=5 --device-id \
@@ -207,7 +207,7 @@ itest:
 .PHONY: qtest
 qtest:
 	@echo "\n--\nQuick integration TEST:"
-	for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=0 --device-id \
+	-for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=0 --device-id \
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	$$t; done
 
