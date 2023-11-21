@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/nav_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
@@ -10,7 +11,7 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String name = authData['name'];
-    print(name);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -49,7 +50,19 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.home_outlined),
                   title: const Text('Home'),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationScreen(
+                                webId: webId,
+                                authData: authData,
+                                page: 'home',
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.border_color),
@@ -72,7 +85,26 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Settings'),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.lock_outline),
+                  title: const Text('Setup Encryption Key'),
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationScreen(
+                                webId: webId,
+                                authData: authData,
+                                page: 'encKeyInput',
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),

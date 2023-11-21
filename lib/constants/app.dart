@@ -27,12 +27,17 @@ library;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
+const double buttonBorderRadius = 5;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+// Local secure storage instance.
+FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
 // Const text labels
 const loginTimeoutTitle = 'Login Timeout!';
