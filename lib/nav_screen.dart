@@ -63,11 +63,17 @@ class HomeState extends State<NavigationScreen>
     String webId = widget.webId;
     Map authData = widget.authData;
 
+    bool isKeyExist =
+        authData['keyExist'] ? authData.containsKey('keyExist') : false;
+    if (!isKeyExist) {
+      page = 'encKeyInput';
+    }
+
     if (page == 'home') {
       loadingScreen = Home(webId: webId, authData: authData);
     } else if (page == 'encKeyInput') {
       loadingScreen = EncryptionKeyInput(
-        validEncKey: ValueNotifier(false),
+        validEncKey: ValueNotifier(isKeyExist),
         storage: secureStorage,
         webId: webId,
         authData: authData,

@@ -19,6 +19,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,6 +27,7 @@ import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/crypto.dart';
+import 'package:podnotes/widgets/err_dialogs.dart';
 
 class EncryptionKeyInput extends StatefulWidget {
   final ValueNotifier<bool?> validEncKey;
@@ -33,21 +35,22 @@ class EncryptionKeyInput extends StatefulWidget {
   final String webId;
   final Map authData;
 
-  EncryptionKeyInput({
-    Key? key,
+  const EncryptionKeyInput({
+    super.key,
     required this.validEncKey,
     required this.storage,
     required this.webId,
     required this.authData,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _EncryptionKeyInputState createState() => _EncryptionKeyInputState();
 }
 
 class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
   bool _obscureText = true;
-  TextEditingController _keyController = TextEditingController();
+  final TextEditingController _keyController = TextEditingController();
 
   void _toggle() {
     setState(() {
@@ -59,23 +62,23 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20.0),
-        Text("Encryption Key",
+        const SizedBox(height: 20.0),
+        const Text("Encryption Key",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-        SizedBox(height: 20.0),
+        const SizedBox(height: 20.0),
         ValueListenableBuilder<bool?>(
           valueListenable: widget.validEncKey,
           builder: (context, validKey, child) {
             if (validKey == null) {
-              return Text('Please enter encryption key to encrypt your data.',
+              return const Text(encKeyInputMsg,
                   style: TextStyle(color: warningRed));
             } else if (validKey) {
-              return Text(
-                'Your encryption key is valid.',
+              return const Text(
+                encKeySuccess,
                 style: TextStyle(fontSize: 15, color: confirmGreen),
               );
             } else {
-              return Text('Your encryption key is invalid.',
+              return const Text(encKeyInputMsg,
                   style: TextStyle(fontSize: 15, color: warningRed));
             }
           },
@@ -90,8 +93,8 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
                   controller: _keyController,
                   decoration: InputDecoration(
                     hintText: widget.validEncKey.value == null
-                        ? 'Please enter encryption key'
-                        : 'Update encryption key',
+                        ? encKeyInputMsg
+                        : encKeyUpdate,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureText ? Icons.visibility : Icons.visibility_off,
@@ -123,55 +126,39 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
                     // Since write() method does not automatically overwrite an existing value.
                     // To overwrite an existing value, call delete() first.
 
-                    if (isKeyExist) {
-                      await widget.storage.delete(
-                        key: widget.webId,
-                      );
-                    }
+                    String secureKey = _keyController.text;
+                    bool keyCheck =
+                        await verifyEncKey(secureKey, widget.authData);
 
-                    await widget.storage.write(
-                      key: widget.webId,
-                      value: _keyController.text,
-                    );
-
-                    await secureStorage.write(
-                      key: widget.webId,
-                      value: _keyController.text,
-                    );
-
-                    String secureKey =
-                        await widget.storage.read(key: widget.webId) ?? '';
-
-                    // av:20231109 - following part is temporary code. Remove that
-                    // after we figure out how to work with secure data storage without
-                    // async
-                    // String enc_key = sha256
-                    //     .convert(
-                    //       utf8.encode(
-                    //         secureKey,
-                    //       ),
-                    //     )
-                    //     .toString()
-                    //     .substring(0, 32);
-
-                    //APP_STORAGE.setItem('encKey', enc_key);
-                    // Remove upto here
-
-                    verifyEncKey(secureKey, widget.authData).then((value) {
-                      widget.validEncKey.value =
-                          value; // Update the ValueNotifier
-                      if (value) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NavigationScreen(
-                                    webId: widget.webId,
-                                    authData: widget.authData,
-                                    page: 'home',
-                                  )),
+                    if (keyCheck) {
+                      if (isKeyExist) {
+                        await widget.storage.delete(
+                          key: widget.webId,
                         );
-                      } else {}
-                    });
+                      }
+
+                      await secureStorage.write(
+                        key: widget.webId,
+                        value: secureKey,
+                      );
+
+                      widget.authData['keyExist'] = true;
+
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NavigationScreen(
+                                  webId: widget.webId,
+                                  authData: widget.authData,
+                                  page: 'home',
+                                )),
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      showErrDialog(
+                          context, 'Wrong encode key. Please try again!');
+                    }
                   }
                 },
                 child: const Text(

@@ -76,7 +76,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  String noteText = _textController!.text;
+                  //String noteText = _textController!.text;
 
                   // By default all notes will be encrypted before storing in
                   // a POD
