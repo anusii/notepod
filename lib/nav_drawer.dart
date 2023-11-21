@@ -11,7 +11,6 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String name = authData['name'];
-
     return Drawer(
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
