@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Wednesday 2023-11-01 05:34:17 +1100 Graham Williams>
+# Time-stamp: <Tuesday 2023-11-21 15:33:05 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -20,6 +20,8 @@
 APP=$(shell pwd | xargs basename)
 VER=0.0.1
 DATE=$(shell date +%Y-%m-%d)
+
+DEST=/var/www/html/$(APP)
 
 ########################################################################
 # Supported Makefile modules.
