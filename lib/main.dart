@@ -32,7 +32,9 @@ import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
-  // debugPrint = (String? message, {int? wrapWidth}) {null;};
+  debugPrint = (String? message, {int? wrapWidth}) {
+    null;
+  };
 
   if (isDesktop) {
     WidgetsFlutterBinding.ensureInitialized();
