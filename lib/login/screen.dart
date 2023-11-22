@@ -220,6 +220,12 @@ class LoginScreen extends StatelessWidget {
                 Map profInfo = getFileContent(profData);
                 authData['name'] = profInfo['fn'][1];
 
+                // Check if master key is set in the local storage
+                bool isKeyExist = await secureStorage.containsKey(
+                  key: webId,
+                );
+                authData['keyExist'] = isKeyExist;
+
                 // Navigate to the profile through main screen
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(

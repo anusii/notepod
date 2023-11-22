@@ -27,12 +27,17 @@ library;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
+const double buttonBorderRadius = 5;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+// Local secure storage instance.
+FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
 // Const text labels
 const loginTimeoutTitle = 'Login Timeout!';
@@ -40,9 +45,9 @@ const loginTimeoutError =
     'Your login session has expired! Please login again to continue.';
 
 const initialStructureWelcome =
-    '''Welcome to PODNotes initial structure setup wizard!''';
+    'Welcome to PODNotes initial structure setup wizard!';
 
-const initialStructureTitle = '''Structure setup wizard!''';
+const initialStructureTitle = 'Structure setup wizard!';
 
 const initialStructureMsg =
     'You are being re-directed to this page because you have either created a completely new POD and you will need to setup the initial resource structure to start using the app OR we have detected some missing files and/or folders in your POD that will prevent you from using some functionalities of the app, and therefore need to be re-created.';
@@ -52,3 +57,9 @@ const requiredPwdMsg =
 
 const publicKeyMsg =
     'We will also create a random public/private key pair for secure data sharing with other PODs.';
+
+const encKeyInputMsg = 'Please enter encryption key to encrypt your data.';
+
+const encKeySuccess = 'Your encryption key is already setup.';
+
+const encKeyUpdate = 'Please update your encryption key';

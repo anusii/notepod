@@ -7,7 +7,7 @@ launchIssuerReg(String issuerUri) async {
   Issuer issuer = await Issuer.discover(Uri.parse(issuerUri));
 
   // Get end point URIs
-  String regEndPoint = issuer.metadata['registration_endpoint'];
+  String regEndPoint = issuer.metadata['issuer'];
 
   if (await canLaunchUrl(Uri.parse(regEndPoint))) {
     await launchUrl(Uri.parse(regEndPoint));

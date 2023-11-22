@@ -75,7 +75,14 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  //String noteText = _textController!.text;
+
+                  // By default all notes will be encrypted before storing in
+                  // a POD
+
+                  // Get the master key
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: darkBlue,
                   backgroundColor: lightBlue, // foreground

@@ -26,9 +26,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:podnotes/constants/app.dart';
 
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
+import 'package:podnotes/master_key_setup/enc_key_input.dart';
 import 'package:podnotes/nav_drawer.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
@@ -61,16 +63,22 @@ class HomeState extends State<NavigationScreen>
     String webId = widget.webId;
     Map authData = widget.authData;
 
+    bool isKeyExist =
+        authData['keyExist'] ? authData.containsKey('keyExist') : false;
+    if (!isKeyExist) {
+      page = 'encKeyInput';
+    }
+
     if (page == 'home') {
       loadingScreen = Home(webId: webId, authData: authData);
+    } else if (page == 'encKeyInput') {
+      loadingScreen = EncryptionKeyInput(
+        validEncKey: ValueNotifier(isKeyExist),
+        storage: secureStorage,
+        webId: webId,
+        authData: authData,
+      );
     }
-    // else if (page == 'settings') {
-    //   loadingScreen = ParticipantProfileScreen(
-    //     profData: profileData!,
-    //     authData: authData,
-    //     webId: webId,
-    //   );
-    // }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: lightGreen,
