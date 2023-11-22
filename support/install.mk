@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Friday 2023-11-17 11:19:23 +1100 >
+# Time-stamp: <Wednesday 2023-11-22 13:20:13 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -14,6 +14,16 @@
 
 PROD ?= $(DEST)
 MINE ?= $(DEST:$(APP)=$(USER))
+
+# Only allow prod if in main branch.
+
+BRANCH := $(shell git branch --show-current)
+
+ifeq ($(BRANCH),main)
+  PROD ?= $(DEST)
+else
+  PROD ?= $(MINE)
+endif
 
 define INSTALL_HELP
 installs:
