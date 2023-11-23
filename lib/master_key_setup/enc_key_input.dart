@@ -22,7 +22,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
@@ -31,14 +30,12 @@ import 'package:podnotes/widgets/err_dialogs.dart';
 
 class EncryptionKeyInput extends StatefulWidget {
   final ValueNotifier<bool?> validEncKey;
-  final FlutterSecureStorage storage;
   final String webId;
   final Map authData;
 
   const EncryptionKeyInput({
     super.key,
     required this.validEncKey,
-    required this.storage,
     required this.webId,
     required this.authData,
   });
@@ -119,7 +116,7 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
                   if (_keyController.text.isEmpty) {
                     return;
                   } else {
-                    bool isKeyExist = await widget.storage.containsKey(
+                    bool isKeyExist = await secureStorage.containsKey(
                       key: widget.webId,
                     );
 
@@ -132,7 +129,7 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
 
                     if (keyCheck) {
                       if (isKeyExist) {
-                        await widget.storage.delete(
+                        await secureStorage.delete(
                           key: widget.webId,
                         );
                       }

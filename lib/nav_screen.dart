@@ -26,7 +26,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/constants/app.dart';
 
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
@@ -74,7 +73,6 @@ class HomeState extends State<NavigationScreen>
     } else if (page == 'encKeyInput') {
       loadingScreen = EncryptionKeyInput(
         validEncKey: ValueNotifier(isKeyExist),
-        storage: secureStorage,
         webId: webId,
         authData: authData,
       );
