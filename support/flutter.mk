@@ -216,6 +216,6 @@ qtest:
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	integration_test/$*_test.dart
 
-clean::
+realclean::
 	flutter clean
 	flutter pub get

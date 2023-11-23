@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Wednesday 2023-11-22 13:20:13 +1100 Graham Williams>
+# Time-stamp: <Thursday 2023-11-23 17:16:47 +1100 >
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -41,7 +41,12 @@ help::
 # LOCAL TARGETS
 
 install: $(USER).install
+
+ifeq ($(BRANCH),main)
 prod: $(APP).install
+else
+prod: $(USER).install
+endif
 
 %.install:
 	cp web/index.html web/index.html.bak
