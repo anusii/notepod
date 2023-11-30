@@ -25,10 +25,21 @@
 
 library;
 
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/file_structure.dart';
+import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:podnotes/nav_screen.dart';
+import 'package:podnotes/widgets/err_dialogs.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {
@@ -76,12 +87,128 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  //String noteText = _textController!.text;
+                  String noteText = _textController!.text;
 
                   // By default all notes will be encrypted before storing in
                   // a POD
 
                   // Get the master key
+                  String masterKey = await secureStorage.read(
+                        key: widget.webId,
+                      ) ??
+                      '';
+
+                  // Hash plaintext master key to get hashed master key
+                  String encKey = sha256
+                      .convert(utf8.encode(masterKey))
+                      .toString()
+                      .substring(0, 32);
+
+                  // Get date and time
+                  String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
+                      .format(DateTime.now())
+                      .toString();
+
+                  // Create a random session key
+                  final indKey = encrypt.Key.fromSecureRandom(32);
+
+                  // Encrypt markdown text using random session key
+                  final dataEncryptIv = encrypt.IV.fromLength(16);
+                  final dataEncrypter = encrypt.Encrypter(
+                      encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
+                  final dataEncryptVal =
+                      dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
+                  String dataEncryptValStr = dataEncryptVal.base64.toString();
+
+                  // Encrypt random key using the master key
+                  final keyEncrypt = encrypt.Key.fromUtf8(encKey);
+                  final keyEncryptIv = encrypt.IV.fromLength(16);
+                  final keyEncryptEncrypter1 = encrypt.Encrypter(
+                      encrypt.AES(keyEncrypt, mode: encrypt.AESMode.cbc));
+                  final keyEncryptVal = keyEncryptEncrypter1
+                      .encrypt(indKey.base64, iv: keyEncryptIv);
+                  String keyEncryptValStr = keyEncryptVal.base64.toString();
+
+                  // Create encrypted data ttl file body
+                  String encNoteFileBody = genEncryptedNoteFileBody(
+                      dateTimeStr, dataEncryptValStr, dataEncryptIv.base64);
+
+                  // print(keyEncryptValStr);
+                  // print('');
+                  // print(encNoteFileBody);
+
+                  // Create note file name
+                  String noteFileName = '$noteFileNamePrefix$dateTimeStr.ttl';
+                  String noteAclFileName = '$noteFileName.acl';
+
+                  // Create ACL file body for the note file
+                  String noteFileAclBody =
+                      genPrvFileAclBody(noteAclFileName, widget.webId);
+
+                  // Create ttl file to store encrypted note data on the POD
+                  String createNoteFileRes = await createItem(
+                      true,
+                      noteFileName,
+                      encNoteFileBody,
+                      widget.webId,
+                      widget.authData,
+                      fileLoc: '$myNotesDirLoc/',
+                      fileType: fileType[noteFileName.split('.').last],
+                      aclFlag: false);
+
+                  if (createNoteFileRes == 'ok') {
+                    // Create acl file to store acl file data on the POD
+                    String createAclFileRes = await createItem(
+                        true,
+                        noteAclFileName,
+                        noteFileAclBody,
+                        widget.webId,
+                        widget.authData,
+                        fileLoc: '$myNotesDirLoc/',
+                        fileType: fileType[noteAclFileName.split('.').last],
+                        aclFlag: true);
+
+                    if (createAclFileRes == 'ok') {
+                      // Store the encrypted session key on the POD
+                      String updateIndKeyFileRes = await updateIndKeyFile(
+                        widget.webId,
+                        widget.authData,
+                        noteFileName,
+                        keyEncryptValStr,
+                        '$myNotesDirLoc/$noteFileName',
+                        keyEncryptIv.base64,
+                      );
+
+                      if (updateIndKeyFileRes == 'ok') {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NavigationScreen(
+                                    webId: widget.webId,
+                                    authData: widget.authData,
+                                    page: 'home',
+                                  )),
+                          (Route<dynamic> route) =>
+                              false, // This predicate ensures all previous routes are removed
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showErrDialog(context,
+                            'Failed to update the individual key. Try again!');
+                      }
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      showErrDialog(context,
+                          'Failed to create the ACL resoruce. Try again!');
+                    }
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    showErrDialog(context,
+                        'Failed to store the note file in your POD. Try again!');
+                  }
+
+                  // Redirect to the home page
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: darkBlue,

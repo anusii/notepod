@@ -27,6 +27,8 @@ library;
 
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:podnotes/constants/rdf_functions.dart';
+import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:solid_auth/solid_auth.dart';
 
 import 'package:podnotes/constants/file_structure.dart';
@@ -128,6 +130,17 @@ Future<String> createItem(
   String itemSlug = '';
   String itemType = '';
   String contentType = '';
+
+  /*
+  - fileFlag -> flag to identify whether the resouce is a file or a directory (eg: true/false)
+  - itemName -> name of the creating resource (eg: logs (directory), permissions-log.ttl, permissions-log.ttl.acl)
+  - itemBody -> body of the creating resource. String value
+  - webId    -> webId of the POD owner
+  - authData -> authentication data map
+  - fileLoc  -> location of the file or directory (mynotes/newset (for a directory), mynotes/newset/ (for a file))
+  - fileType -> type of the file (eg: text/html)
+  - aclFlag  -> whether the file is an acl file or not (eg: true/false)
+  */
 
   // Get authentication info
   var rsaInfo = authData['rsaInfo'];
@@ -265,5 +278,117 @@ Future<String> fetchPrvFile(
     // then throw an exception.
     //print(profResponse.body);
     throw Exception('Failed to load profile data! Try again in a while.');
+  }
+}
+
+Future<String> updateIndKeyFile(String webId, Map authData, String resName,
+    String encSessionKey, String encNoteFilePath, String encNoteIv) async {
+  String createUpdateRes = '';
+
+  // Get indi key file url
+  String keyFileUrl =
+      webId.replaceAll('profile/card#me', '$encDirLoc/$indKeyFile');
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  // Update the file
+  // First check if the file already contain the same value
+  String dPopTokenKeyFile =
+      genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+  String keyFileContent =
+      await fetchPrvFile(keyFileUrl, accessToken, dPopTokenKeyFile);
+  Map keyFileDataMap = getFileContent(keyFileContent);
+
+  // Define query parameters
+  String prefix1 = 'file: <$podnotesFile>';
+  String prefix2 = 'terms: <$podnotesTerms>';
+
+  String subject = 'file:$resName';
+  String predObjPath = 'terms:$pathPred "$encNoteFilePath";';
+  String predObjIv = 'terms:$ivPred "$encNoteIv";';
+  String predObjKey = 'terms:$sessionKeyPred "$encSessionKey".';
+
+  // Check if the resource is previously added or not
+  if (keyFileDataMap.containsKey(resName)) {
+    String existPath = keyFileDataMap[resName][pathPred];
+    String existIv = keyFileDataMap[resName][ivPred];
+    String existKey = keyFileDataMap[resName][sessionKeyPred];
+
+    // If file does not contain the same encrypted value then delete and update
+    // the file
+    // NOTE: Public key encryption generates different hashes different time for same plaintext value
+    // Therefore this always ends up deleting the previous and adding a new hash
+    if (existKey != encSessionKey ||
+        existPath != encNoteFilePath ||
+        existIv != encNoteIv) {
+      String predObjPathPrev = 'data:path "$existPath";';
+      String predObjIvPrev = 'data:accessList "$existIv";';
+      String predObjKeyPrev = 'data:sharedKey "$existKey".';
+
+      // Generate update sparql query
+      String query =
+          'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjPathPrev $predObjIvPrev $predObjKeyPrev}; INSERT DATA {$subject $predObjPath $predObjIv $predObjKey};';
+
+      // Generate DPoP token
+      String dPopTokenKeyFilePatch =
+          genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
+
+      // Run the query
+      createUpdateRes = await sparqlUpdate(
+          keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
+    } else {
+      // If the file contain same values, then no need to run anything
+      createUpdateRes = 'ok';
+    }
+  } else {
+    // Generate insert only sparql query
+    String query =
+        'PREFIX $prefix1 PREFIX $prefix2 INSERT DATA {$subject $predObjPath $predObjIv $predObjKey};';
+
+    // Generate DPoP token
+    String dPopTokenKeyFilePatch =
+        genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
+
+    // Run the query
+    createUpdateRes = await sparqlUpdate(
+        keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
+  }
+
+  if (createUpdateRes == 'ok') {
+    return createUpdateRes;
+  } else {
+    throw Exception('Failed to create/update the shared file.');
+  }
+}
+
+Future<String> sparqlUpdate(
+  String profCardUrl,
+  String accessToken,
+  String dPopToken,
+  String query,
+) async {
+  final editResponse = await http.patch(
+    Uri.parse(profCardUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'Content-Type': 'application/sparql-update',
+      'Content-Length': query.length.toString(),
+      'DPoP': dPopToken,
+    },
+    body: query,
+  );
+
+  if (editResponse.statusCode == 200 || editResponse.statusCode == 205) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return 'ok';
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to write profile data! Try again in a while.');
   }
 }

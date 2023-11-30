@@ -519,7 +519,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                       .split('/')
                                                       .last;
 
-                                                  /// Get resource path
+                                                  // Get resource path
                                                   String folderPath = resNameStr
                                                       .replaceAll(resName, '');
 
@@ -643,6 +643,29 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                                 // Add name to the authData
                                                 widget.authData['name'] =
                                                     formData['name'];
+
+                                                // Add encryption key to the local secure storage
+                                                bool isKeyExist =
+                                                    await secureStorage
+                                                        .containsKey(
+                                                  key: widget.webId,
+                                                );
+
+                                                // Since write() method does not automatically overwrite an existing value.
+                                                // To overwrite an existing value, call delete() first.
+                                                if (isKeyExist) {
+                                                  await secureStorage.delete(
+                                                    key: widget.webId,
+                                                  );
+                                                }
+
+                                                await secureStorage.write(
+                                                  key: widget.webId,
+                                                  value: passPlaintxt,
+                                                );
+
+                                                widget.authData['keyExist'] =
+                                                    true;
                                                 // ignore: use_build_context_synchronously
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
