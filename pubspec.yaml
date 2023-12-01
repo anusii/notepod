@@ -29,9 +29,6 @@ dependencies:
   solid_encrypt: ^0.1.8
   universal_io: ^2.2.2
   window_manager: ^0.3.5
-  crypto: ^3.0.3
-  encrypt: ^5.0.3
-  flutter_secure_storage: ^9.0.0
   url_launcher: ^6.2.1
 
 dev_dependencies:
