@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Friday 2023-11-17 11:19:23 +1100 >
+# Time-stamp: <Thursday 2023-11-23 17:16:47 +1100 >
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -14,6 +14,16 @@
 
 PROD ?= $(DEST)
 MINE ?= $(DEST:$(APP)=$(USER))
+
+# Only allow prod if in main branch.
+
+BRANCH := $(shell git branch --show-current)
+
+ifeq ($(BRANCH),main)
+  PROD ?= $(DEST)
+else
+  PROD ?= $(MINE)
+endif
 
 define INSTALL_HELP
 installs:
@@ -31,7 +41,12 @@ help::
 # LOCAL TARGETS
 
 install: $(USER).install
+
+ifeq ($(BRANCH),main)
 prod: $(APP).install
+else
+prod: $(USER).install
+endif
 
 %.install:
 	cp web/index.html web/index.html.bak

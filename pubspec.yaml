@@ -10,13 +10,16 @@ dependencies:
   flutter:
     sdk: flutter
 
+  crypto: ^3.0.3
   cupertino_icons: ^1.0.2
   dart_jsonwebtoken: ^2.3.2
+  encrypt: ^5.0.3
   fast_rsa: ^3.4.7
   flutter_form_builder: ^9.1.0
+  flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.5
   form_builder_validators: ^9.0.0
-  http: ^1.0.0
+  http: ^1.1.0
   intl: ^0.18.0
   jwt_decoder: ^2.0.1
   markdown_editor_plus: ^0.2.13
