@@ -59,6 +59,7 @@ String prvKeyPred = 'prvKey';
 String pubKeyPred = 'pubKey';
 String noteDateTimePred = 'noteDateTime';
 String encNoteContentPred = 'encNoteContent';
+String noteTitlePred = 'noteTitle';
 String ivPred = 'iv';
 
 // Set up encryption key file content
@@ -154,10 +155,10 @@ String genLogAclBody(String webId, String permFileName) {
 }
 
 // Set up encrypted note file content
-String genEncryptedNoteFileBody(
-    String dateTimeStr, String encNoteContent, String encNoteIv) {
+String genEncryptedNoteFileBody(String dateTimeStr, String noteTitle,
+    String encNoteContent, String encNoteIv) {
   String encNoteFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    podnotesTerms:$noteDateTimePred "$dateTimeStr";\n    podnotesTerms:$ivPred "$encNoteIv";\n    podnotesTerms:$encNoteContentPred "$encNoteContent".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    podnotesTerms:$noteDateTimePred "$dateTimeStr";\n    podnotesTerms:$ivPred "$encNoteIv";\n    podnotesTerms:$noteTitlePred "$noteTitle";\n    podnotesTerms:$encNoteContentPred "$encNoteContent".';
 
   return encNoteFileBody;
 }

@@ -204,6 +204,9 @@ Future<String> createItem(
     );
   }
 
+  print(createResponse.statusCode);
+  print(createResponse.body);
+
   if (createResponse.statusCode == 200 || createResponse.statusCode == 201) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
