@@ -28,7 +28,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/initial_setup/initial_setup_screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';

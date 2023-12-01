@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:podnotes/common/logout.dart';
 import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/nav_screen.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -108,7 +110,15 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Logout'),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () async {
+                    if (await logoutUser(authData['logoutUrl'])) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    }
+                  },
                 ),
                 const Divider(
                   color: titleAsh,

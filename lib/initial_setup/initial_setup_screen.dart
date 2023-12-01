@@ -24,7 +24,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/initial_setup/initial_setup_desktop.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 

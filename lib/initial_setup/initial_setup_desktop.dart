@@ -42,7 +42,7 @@ import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/crypto.dart';
 import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/constants/rest_api.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/truncate_str.dart';
