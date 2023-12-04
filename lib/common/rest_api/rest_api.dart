@@ -395,3 +395,105 @@ Future<String> sparqlUpdate(
     throw Exception('Failed to write profile data! Try again in a while.');
   }
 }
+
+// Get the list of resources (folders and files) in a specific location
+Future<List> getResourceList(
+  Map authData,
+  String resourceUrl,
+) async {
+  List<String> foldersList = [];
+  List<String> filesList = [];
+  String homePage;
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+
+  String accessToken = authData['accessToken'];
+
+  // Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+
+  String dPopTokenHome =
+      genDpopToken(resourceUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  final profResponse = await http.get(
+    Uri.parse(resourceUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'DPoP': dPopTokenHome,
+    },
+  );
+
+  if (profResponse.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    homePage = profResponse.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load profile data! Try again in a while.');
+  }
+
+  PodProfile homePageFile = PodProfile(homePage);
+
+  List rdfDataPrefixList = homePageFile.dividePrvRdfData();
+  List rdfDataList = rdfDataPrefixList.first;
+
+  for (var i = 0; i < rdfDataList.length; i++) {
+    if (rdfDataList[i].contains('ldp:contains')) {
+      var itemList = rdfDataList[i].split('<');
+
+      for (var j = 0; j < itemList.length; j++) {
+        // if (containerList.length >= 200) {
+        //   break;
+        // }
+        if (itemList[j].contains('/>')) {
+          var item = itemList[j].replaceAll('/>,', '');
+          item = item.replaceAll('/>.', '');
+          item = item.replaceAll(' ', '');
+          // if((item.contains('H')) | (item.contains('R'))){
+          //   containerList.add(item);
+          // }
+          foldersList.add(item);
+        } else if (itemList[j].contains('>')) {
+          var item = itemList[j].replaceAll('>,', '');
+          item = item.replaceAll('>.', '');
+          item = item.replaceAll(' ', '');
+          filesList.add(item);
+        }
+      }
+    }
+  }
+
+  // Check every patient whether the permission is granted to the admin user or not.
+
+  // if (checkPatientShared) {
+  //   for (var i = 0; i < containerList.length; i++) {
+  //     String patientURL = containerList[i];
+  //     String sharedKeyFileUrl = patientURL + '/' + SHARED_KEY_FILE;
+
+  //     String dPopToken =
+  //         genDpopToken(sharedKeyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  //     String res = await fetchPrvData(sharedKeyFileUrl, accessToken, dPopToken);
+
+  //     if (res == 'not found') {
+  //       containerList.removeAt(i);
+  //       i--;
+  //     } else {
+  //       // Check [MED_FILE] is shared or not.
+  //       // If not, then remove the patient from the list.
+
+  //       Map sharedKeyFileMap = getEncFileContent(res);
+  //       if (!sharedKeyFileMap.containsKey(MED_FILE)) {
+  //         containerList.removeAt(i);
+  //         i--;
+  //       }
+  //     }
+  //   }
+  // }
+
+  return [foldersList, filesList];
+}
