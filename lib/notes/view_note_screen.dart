@@ -22,27 +22,28 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/initial_setup/initial_setup_desktop.dart';
-import 'package:podnotes/view_notes/view_notes.dart';
+import 'package:podnotes/notes/view_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
-class ViewNotesScreen extends StatefulWidget {
-  const ViewNotesScreen(
-      {super.key, required this.authData, required this.webId});
+class ViewNoteScreen extends StatefulWidget {
+  const ViewNoteScreen(
+      {super.key,
+      required this.noteFileName,
+      required this.authData,
+      required this.webId});
 
+  final String noteFileName;
   final Map authData;
   final String webId;
 
   @override
-  State<ViewNotesScreen> createState() => _ViewNotesScreenState();
+  State<ViewNoteScreen> createState() => _ViewNoteScreenState();
 }
 
-class _ViewNotesScreenState extends State<ViewNotesScreen> {
+class _ViewNoteScreenState extends State<ViewNoteScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
@@ -51,40 +52,21 @@ class _ViewNotesScreenState extends State<ViewNotesScreen> {
   void initState() {
     Map authData = widget.authData;
     String webId = widget.webId;
-    String notesrUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getResourceList(
+    String noteFileName = widget.noteFileName;
+
+    _asyncDataFetch = getNoteContent(
       authData,
-      notesrUrl,
+      webId,
+      noteFileName,
     );
     super.initState();
   }
 
-  Widget _loadedScreen(List resourceList, String webId, Map authData) {
-    List filesList = [];
-
-    for (var i = 0; i < resourceList[1].length; i++) {
-      String fileItem = resourceList[1][i];
-      String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-      var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-          .format(DateTime.parse(fileDateStr));
-      String fileName = '';
-      if (fileItem.split('-').length == 3) {
-        fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-      } else if (fileItem.split('-').length > 3) {
-        var fileNameList =
-            fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-        fileName = fileNameList.join(' ').replaceAll('_', ' ');
-      } else {
-        throw Exception('Cannot happen!');
-      }
-
-      filesList.add([fileName, fileDate]);
-    }
-
+  Widget _loadedScreen(Map noteData, String webId, Map authData) {
     return Container(
       color: Colors.white,
-      child: ViewNotes(
-        fileList: filesList,
+      child: ViewNote(
+        noteData: noteData,
         webId: webId,
         authData: authData,
       ),
@@ -105,7 +87,7 @@ class _ViewNotesScreenState extends State<ViewNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 returnVal = _loadedScreen(
-                  snapshot.data! as List,
+                  snapshot.data! as Map,
                   webId,
                   authData,
                 );

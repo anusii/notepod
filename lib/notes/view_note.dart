@@ -22,52 +22,80 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/nav_screen.dart';
+import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/crypto.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
 
-class ViewNotes extends StatefulWidget {
-  final List fileList;
+class ViewNote extends StatefulWidget {
+  final Map noteData;
   final String webId;
   final Map authData;
 
-  const ViewNotes({
+  const ViewNote({
     super.key,
-    required this.fileList,
+    required this.noteData,
     required this.webId,
     required this.authData,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _ViewNotesState createState() => _ViewNotesState();
+  _ViewNoteState createState() => _ViewNoteState();
 }
 
-class _ViewNotesState extends State<ViewNotes> {
+class _ViewNoteState extends State<ViewNote> {
   @override
   Widget build(BuildContext context) {
-    List fileList = widget.fileList;
-    return SizedBox(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: fileList.length,
-          itemBuilder: (context, index) => Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    radius: 26,
-                    backgroundImage: AssetImage('assets/images/note-icon.png'),
-                  ),
-                  //const Icon(Icons.text_snippet_outlined),
-                  title: Text(fileList[index][0]),
-                  subtitle: Text('Created on: ' + fileList[index][1]),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () => {},
+    Map noteData = widget.noteData;
+
+    return Column(
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+              child: Text(
+                noteData['noteTitle'],
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
                 ),
-              )),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
+              child: Text(
+                'Created on: ' + noteData['noteDateTime'],
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: SizedBox(
+            child: Container(
+                padding: const EdgeInsets.all(10),
+                child: MarkdownParse(
+                  data: noteData['noteContent'],
+                  // onTapHastag: (String name, String match) {
+                  //   // name => hashtag
+                  //   // match => #hashtag
+                  // },
+                  // onTapMention: (String name, String match) {
+                  //   // name => mention
+                  //   // match => #mention
+                  // },
+                )),
+          ),
+        ),
+      ],
     );
     // Column(
     //   children: [

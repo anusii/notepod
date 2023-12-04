@@ -25,11 +25,17 @@
 
 library;
 
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:solid_auth/solid_auth.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:podnotes/constants/file_structure.dart';
 
@@ -204,9 +210,6 @@ Future<String> createItem(
     );
   }
 
-  print(createResponse.statusCode);
-  print(createResponse.body);
-
   if (createResponse.statusCode == 200 || createResponse.statusCode == 201) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -289,8 +292,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   String createUpdateRes = '';
 
   // Get indi key file url
-  String keyFileUrl =
-      webId.replaceAll('profile/card#me', '$encDirLoc/$indKeyFile');
+  String keyFileUrl = webId.replaceAll(profCard, '$encDirLoc/$indKeyFile');
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -467,33 +469,93 @@ Future<List> getResourceList(
     }
   }
 
-  // Check every patient whether the permission is granted to the admin user or not.
-
-  // if (checkPatientShared) {
-  //   for (var i = 0; i < containerList.length; i++) {
-  //     String patientURL = containerList[i];
-  //     String sharedKeyFileUrl = patientURL + '/' + SHARED_KEY_FILE;
-
-  //     String dPopToken =
-  //         genDpopToken(sharedKeyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
-
-  //     String res = await fetchPrvData(sharedKeyFileUrl, accessToken, dPopToken);
-
-  //     if (res == 'not found') {
-  //       containerList.removeAt(i);
-  //       i--;
-  //     } else {
-  //       // Check [MED_FILE] is shared or not.
-  //       // If not, then remove the patient from the list.
-
-  //       Map sharedKeyFileMap = getEncFileContent(res);
-  //       if (!sharedKeyFileMap.containsKey(MED_FILE)) {
-  //         containerList.removeAt(i);
-  //         i--;
-  //       }
-  //     }
-  //   }
-  // }
-
   return [foldersList, filesList];
+}
+
+// Get the note content, derypt and return it
+Future<Map> getNoteContent(
+  Map authData,
+  String webId,
+  String noteFileName,
+) async {
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+  String noteUrl = webId.replaceAll(profCard, '$myNotesDirLoc/$noteFileName');
+  String dPopTokenNote = genDpopToken(noteUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  String fileContent = await fetchPrvFile(
+    noteUrl,
+    accessToken,
+    dPopTokenNote,
+  );
+
+  Map noteData = {};
+  Map noteContent = getFileContent(fileContent);
+
+  // Decrypt the note content
+  // Get the master key
+  String secureKey = await secureStorage.read(key: webId) ?? '';
+  String masterKeyStr =
+      sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+
+  // Get the individual key
+  String indFileUrl = webId.replaceAll(
+    profCard,
+    '$encDirLoc/$indKeyFile',
+  );
+
+  String indKeysPopToken = genDpopToken(
+    indFileUrl,
+    rsaKeyPair,
+    publicKeyJwk,
+    'GET',
+  );
+  String indKeysFileInfo = await fetchPrvFile(
+    indFileUrl,
+    accessToken,
+    indKeysPopToken,
+  );
+
+  Map indKeysFileMap = getEncFileContent(indKeysFileInfo);
+  String indKeyEncVal = '';
+  String indKeyIvz = '';
+  if (indKeysFileMap.containsKey(noteFileName)) {
+    indKeyEncVal = indKeysFileMap[noteFileName][sessionKeyPred];
+    indKeyIvz = indKeysFileMap[noteFileName][ivPred];
+  } else {
+    throw Exception(
+      'No individual key recorded for the aggregated data file',
+    );
+  }
+
+  // Setup AES encrypter
+  final key = encrypt.Key.fromUtf8(masterKeyStr);
+  final iv = encrypt.IV.fromBase64(indKeyIvz);
+  final encrypter =
+      encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+  // Decrypt individual key
+  final ecc = encrypt.Encrypted.from64(indKeyEncVal);
+  String indKeyStr = encrypter.decrypt(ecc, iv: iv);
+
+  // Now use decrypted individual key to decrypt note data
+  String noteIv = noteContent[ivPred][1];
+  String noteEncVal = noteContent[encNoteContentPred][1];
+  final keyInd = encrypt.Key.fromBase64(indKeyStr);
+  final ivInd = encrypt.IV.fromBase64(noteIv);
+  final encrypterInd =
+      encrypt.Encrypter(encrypt.AES(keyInd, mode: encrypt.AESMode.cbc));
+
+  // Decrypt data
+  final eccInd = encrypt.Encrypted.from64(noteEncVal);
+  final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
+
+  noteData['noteTitle'] = noteContent['noteTitle'][1].replaceAll('_', ' ');
+  noteData['noteDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['noteDateTime'][1]));
+  noteData['noteContent'] = noteContentStr;
+
+  return noteData;
 }

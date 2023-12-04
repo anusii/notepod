@@ -28,6 +28,37 @@ Map getFileContent(String fileInfo) {
   return fileContentMap;
 }
 
+Map getEncFileContent(String fileInfo) {
+  Graph g = Graph();
+  g.parseTurtle(fileInfo);
+  Map fileContentMap = {};
+
+  for (Triple t in g.triples) {
+    /**
+     * Use
+     *  - t.sub -> Subject
+     *  - t.pre -> Predicate
+     *  - t.obj -> Object
+     */
+    String predicate = t.pre.value;
+    if (predicate.contains('#')) {
+      String subject = t.sub.value;
+      String fileName = subject.split('#')[1];
+      String attributeName = predicate.split('#')[1];
+      String attrVal = t.obj.value;
+      if (attributeName != 'type') {
+        if (fileContentMap.containsKey(fileName)) {
+          fileContentMap[fileName][attributeName] = attrVal;
+        } else {
+          fileContentMap[fileName] = {attributeName: attrVal};
+        }
+      }
+    }
+  }
+
+  return fileContentMap;
+}
+
 class PodProfile {
   String profileRdfStr = '';
 
