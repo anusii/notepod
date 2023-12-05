@@ -88,7 +88,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     FormBuilderTextField(
                       name: 'noteTitle',
                       decoration: const InputDecoration(
-                        labelText: 'Note Title',
+                        labelText:
+                            'Note Title (Do not use underscores (_) in title)',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,

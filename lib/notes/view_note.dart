@@ -23,7 +23,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/rdf_functions.dart';
+import 'package:podnotes/nav_screen.dart';
+import 'package:podnotes/notes/share_note.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -94,6 +98,161 @@ class _ViewNoteState extends State<ViewNote> {
                   // },
                 )),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.share,
+                  color: Colors.white,
+                ),
+                onPressed: () async {
+                  // Get the permission info of the note
+                  Map filePermMap = await getPermission(
+                    widget.authData,
+                    noteData['noteFileName'],
+                    noteData['noteFileUrl'],
+                  );
+
+                  Map resInfo = {};
+                  resInfo['resName'] = noteData['noteFileName'];
+                  resInfo['resType'] = 'File';
+                  resInfo['resUrl'] = noteData['noteFileUrl'];
+
+                  // The [userPerMap] is empty, which means the user have no access
+                  // to the folder/file. In this case, the lock_open button will not work.
+
+                  // if (filePermInfo.isEmpty) {
+                  //   setState(() {
+                  //     widget.isSharedFolderList[index] = false;
+                  //   });
+
+                  //   return;
+                  // }
+
+                  Map permNameMap = {};
+                  for (var permWebId in filePermMap.keys) {
+                    String permWebIdUrl = permWebId.replaceAll('<', '');
+                    permWebIdUrl = permWebIdUrl.replaceAll('>', '');
+
+                    String profInfo = await fetchPubFile(permWebIdUrl);
+                    PodProfile podProfile = PodProfile(profInfo.toString());
+                    String profName = podProfile.getProfName();
+                    permNameMap[permWebId] = profName;
+                  }
+
+                  resInfo['resPerm'] = filePermMap;
+                  resInfo['resUsername'] = permNameMap;
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShareNote(
+                              webId: widget.webId,
+                              authData: widget.authData,
+                              currPath: 'listNotes',
+                              resInfo: resInfo,
+                            )),
+                    (Route<dynamic> route) =>
+                        false, // This predicate ensures all previous routes are removed
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: darkBlue,
+                  backgroundColor: lightBlue, // foreground
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                label: const Text(
+                  'SHARE',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                onPressed: () async {
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => NavigationScreen(
+                  //             webId: widget.webId,
+                  //             authData: widget.authData,
+                  //             page: 'listNotes',
+                  //           )),
+                  //   (Route<dynamic> route) =>
+                  //       false, // This predicate ensures all previous routes are removed
+                  // );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: darkGreen,
+                  backgroundColor: lightGreen, // foreground
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                label: const Text(
+                  'EDIT',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.keyboard_backspace,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationScreen(
+                              webId: widget.webId,
+                              authData: widget.authData,
+                              page: 'listNotes',
+                            )),
+                    (Route<dynamic> route) =>
+                        false, // This predicate ensures all previous routes are removed
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: titleAsh,
+                  backgroundColor: lightGray, // foreground
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                label: const Text(
+                  'GO BACK',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
         ),
       ],
     );

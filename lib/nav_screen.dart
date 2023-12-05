@@ -31,7 +31,6 @@ import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
 import 'package:podnotes/master_key_setup/enc_key_input.dart';
 import 'package:podnotes/nav_drawer.dart';
-import 'package:podnotes/notes/list_notes.dart';
 import 'package:podnotes/notes/list_notes_screen.dart';
 import 'package:podnotes/notes/view_note_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
