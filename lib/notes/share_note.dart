@@ -21,11 +21,16 @@
 /// Authors: Anushka Vidanage
 
 import 'package:flutter/material.dart';
+import 'package:podnotes/common/rest_api/res_permission.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/data_cell.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import 'package:solid_auth/solid_auth.dart';
 import 'package:intl/intl.dart';
@@ -34,10 +39,9 @@ bool isNamePattern(String pattern) {
   // Check if the pattern contains the solid server url or profile card hashtag
   // We don't want to show suggestions for these cases.
 
-  // if (SOLID_SERVER_URL.contains(pattern) ||
-  //     '/profile/card#'.contains(pattern)) {
-  //   return false;
-  // }
+  if (solidServerUrl.contains(pattern) || '/profile/card#'.contains(pattern)) {
+    return false;
+  }
 
   // Use a regular expression to check if pattern only contains
   // letters a-z or A-Z and dashes '-'.
@@ -232,9 +236,9 @@ DataRow permissionRow(
   ]);
 }
 
-// String webIdAutoFilledStr(String userName) {
-//   return '$SOLID_SERVER_URL$userName/profile/card#';
-// }
+String webIdAutoFilledStr(String userName) {
+  return '$solidServerUrl$userName/profile/card#';
+}
 
 class ShareNote extends StatefulWidget {
   final Map authData; // Authentication data
@@ -495,70 +499,70 @@ class _ShareNoteState extends State<ShareNote> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Enter the Web ID of the person'),
-          content: const SizedBox(
+          content: SizedBox(
             height: 280,
             child: Column(
               children: [
-                // TypeAheadFormField(
-                //   textFieldConfiguration: TextFieldConfiguration(
-                //     controller: _permissionInputController,
-                //     decoration: InputDecoration(hintText: "Web ID value"),
-                //   ),
-                //   suggestionsCallback: (inputPattern) async {
-                //     // Textfield only gives suggestions when the
-                //     // [inputPattern] satisfies the name-pattern.
+                TypeAheadFormField(
+                  textFieldConfiguration: TextFieldConfiguration(
+                    controller: _permissionInputController,
+                    decoration: const InputDecoration(hintText: "Web ID value"),
+                  ),
+                  suggestionsCallback: (inputPattern) async {
+                    // Textfield only gives suggestions when the
+                    // [inputPattern] satisfies the name-pattern.
 
-                //     if (isNamePattern(inputPattern)) {
-                //       return [webIdAutoFilledStr(inputPattern)];
-                //     } else {
-                //       return [];
-                //     }
-                //   },
-                //   itemBuilder: (context, suggestion) {
-                //     return ListTile(
-                //       title: Text(suggestion),
-                //     );
-                //   },
-                //   onSuggestionSelected: (suggestion) {
-                //     // Set the text of the text field to the selected suggestion.
+                    if (isNamePattern(inputPattern)) {
+                      return [webIdAutoFilledStr(inputPattern)];
+                    } else {
+                      return [];
+                    }
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion),
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    // Set the text of the text field to the selected suggestion.
 
-                //     _permissionInputController.text = suggestion;
-                //   },
-                //   noItemsFoundBuilder: (context) => Padding(
-                //     padding: EdgeInsets.all(8.0),
-                //     child: Text('No suggestions'),
-                //   ),
-                // ),
-                //standardHeight(),
-                // MultiSelectDialogField(
-                //   items: permissionItems,
-                //   title: Text("Select the permissions"),
-                //   decoration: BoxDecoration(
-                //     color: anuLightGold.withOpacity(0.15),
-                //     borderRadius: BorderRadius.all(Radius.circular(40)),
-                //     border: Border.all(
-                //       color: anuGold,
-                //       width: 2,
-                //     ),
-                //   ),
-                //   buttonIcon: Icon(
-                //     Icons.security,
-                //     color: anuGold,
-                //   ),
-                //   buttonText: Text(
-                //     "Select the permissions",
-                //     style: TextStyle(
-                //       color: anuGold,
-                //       fontSize: 16,
-                //     ),
-                //   ),
-                //   onConfirm: (values) {
-                //     selectedItems = [];
-                //     for (final value in values) {
-                //       selectedItems.add(permMap[value]);
-                //     }
-                //   },
-                // )
+                    _permissionInputController.text = suggestion;
+                  },
+                  noItemsFoundBuilder: (context) => const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('No suggestions'),
+                  ),
+                ),
+                standardHeight(),
+                MultiSelectDialogField(
+                  items: permissionItems,
+                  title: const Text("Select the permissions"),
+                  decoration: BoxDecoration(
+                    color: lightGreen.withOpacity(0.15),
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    border: Border.all(
+                      color: darkGreen,
+                      width: 2,
+                    ),
+                  ),
+                  buttonIcon: const Icon(
+                    Icons.security,
+                    color: darkBlue,
+                  ),
+                  buttonText: const Text(
+                    "Select the permissions",
+                    style: TextStyle(
+                      color: darkBlue,
+                      fontSize: 16,
+                    ),
+                  ),
+                  onConfirm: (values) {
+                    selectedItems = [];
+                    for (final value in values) {
+                      selectedItems.add(permMap[value]);
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -572,17 +576,17 @@ class _ShareNoteState extends State<ShareNote> {
             TextButton(
               child: const Text('ADD PERMISSION'),
               onPressed: () async {
-                // await addPermission(
-                //   context,
-                //   _permissionInputController,
-                //   accessToken,
-                //   widget.authData,
-                //   resourceName,
-                //   resourceUrl,
-                //   widget.currPath,
-                //   selectedItems,
-                //   widget.webId,
-                // );
+                await addPermission(
+                  context,
+                  _permissionInputController,
+                  accessToken,
+                  widget.authData,
+                  resourceName,
+                  resourceUrl,
+                  widget.currPath,
+                  selectedItems,
+                  widget.webId,
+                );
               },
             ),
           ],

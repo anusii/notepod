@@ -28,10 +28,14 @@ library;
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+
+const solidServerUrl = "https://pods.solidcommunity.au/";
 
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
 const double buttonBorderRadius = 5;
+const double standardSpace = 20.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
@@ -63,3 +67,20 @@ const encKeyInputMsg = 'Please enter encryption key to encrypt your data.';
 const encKeySuccess = 'Your encryption key is already setup.';
 
 const encKeyUpdate = 'Please update your encryption key';
+
+List<MultiSelectItem> permissionItems = [
+  MultiSelectItem(
+      1, 'Read (The recipient will be able to read the content of your file)'),
+  MultiSelectItem(
+      2, 'Write (The recipient will be able to add new content to your file)'),
+  MultiSelectItem(3,
+      'Control (The recipient will be able to alter the access permission to your file)')
+];
+
+Map permMap = {1: 'Read', 2: 'Write', 3: 'Control'};
+
+SizedBox standardHeight() {
+  return const SizedBox(
+    height: standardSpace / 2,
+  );
+}

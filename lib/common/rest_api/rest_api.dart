@@ -21,19 +21,22 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: Anushka Vidanage
 
 library;
 
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -580,51 +583,4 @@ Future<Map> getNoteContent(
   noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
 
   return noteData;
-}
-
-Future<Map> getPermission(
-    Map authData, String resourceName, String resourseUrl) async {
-  var rsaInfo = authData['rsaInfo'];
-  var rsaKeyPair = rsaInfo['rsa'];
-  var publicKeyJwk = rsaInfo['pubKeyJwk'];
-  String accessToken = authData['accessToken'];
-
-  String resourceAcl = '$resourseUrl$resourceName.acl';
-
-  String dPopToken = genDpopToken(resourceAcl, rsaKeyPair, publicKeyJwk, 'GET');
-
-  String fileInfo = '';
-
-  // [fileInfo] is set as an empty string if the file is not shared.
-  // [fileInfo] is set as an empty string if [resourceAcl] is the
-  // address of the folder.
-  try {
-    fileInfo = await fetchPrvFile(resourceAcl, accessToken, dPopToken);
-  } catch (e) {
-    fileInfo = '';
-  }
-
-  AclResource aclResFile = AclResource(fileInfo);
-
-  List userPermRes = aclResFile.divideAclData();
-  Map userNameMap = userPermRes.first;
-  Map permMap = userPermRes[1];
-  Map userPermMap = {};
-
-  for (var accessStr in permMap.keys) {
-    List resourceList = permMap[accessStr];
-    Set resourceSet = resourceList.first;
-    Set userSet = resourceList[1];
-    Set accessSet = resourceList[2];
-
-    if (resourceSet.contains('<$resourceName>')) {
-      for (String userStr in userSet) {
-        String userWebId = userNameMap[userStr];
-        String accessStr = accessSet.join(', ').replaceAll('acl:', '');
-        userPermMap[userWebId] = accessStr;
-      }
-    }
-  }
-
-  return userPermMap;
 }
