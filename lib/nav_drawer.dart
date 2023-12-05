@@ -75,7 +75,7 @@ class NavDrawer extends StatelessWidget {
                           builder: (context) => NavigationScreen(
                                 webId: webId,
                                 authData: authData,
-                                page: 'viewNotes',
+                                page: 'listNotes',
                               )),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
