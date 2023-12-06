@@ -21,15 +21,24 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: Anushka Vidanage
 
 library;
 
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:podnotes/constants/file_structure.dart';
 
@@ -204,9 +213,6 @@ Future<String> createItem(
     );
   }
 
-  print(createResponse.statusCode);
-  print(createResponse.body);
-
   if (createResponse.statusCode == 200 || createResponse.statusCode == 201) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -256,6 +262,26 @@ Future<String> initialProfileUpdate(
   }
 }
 
+// Get public profile information from webId
+Future<String> fetchPubFile(String fileUrl) async {
+  final response = await http.get(
+    Uri.parse(fileUrl),
+    headers: <String, String>{
+      'Content-Type': 'text/turtle',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    /// If the server did return a 200 OK response,
+    /// then parse the JSON.
+    return response.body;
+  } else {
+    /// If the server did not return a 200 OK response,
+    /// then throw an exception.
+    throw Exception('Failed to load data! Try again in a while.');
+  }
+}
+
 Future<String> fetchPrvFile(
   String profCardUrl,
   String accessToken,
@@ -289,8 +315,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   String createUpdateRes = '';
 
   // Get indi key file url
-  String keyFileUrl =
-      webId.replaceAll('profile/card#me', '$encDirLoc/$indKeyFile');
+  String keyFileUrl = webId.replaceAll(profCard, '$encDirLoc/$indKeyFile');
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -394,4 +419,168 @@ Future<String> sparqlUpdate(
     // then throw an exception.
     throw Exception('Failed to write profile data! Try again in a while.');
   }
+}
+
+// Get the list of resources (folders and files) in a specific location
+Future<List> getResourceList(
+  Map authData,
+  String resourceUrl,
+) async {
+  List<String> foldersList = [];
+  List<String> filesList = [];
+  String homePage;
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+
+  String accessToken = authData['accessToken'];
+
+  // Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+
+  String dPopTokenHome =
+      genDpopToken(resourceUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  final profResponse = await http.get(
+    Uri.parse(resourceUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'DPoP': dPopTokenHome,
+    },
+  );
+
+  if (profResponse.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    homePage = profResponse.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load profile data! Try again in a while.');
+  }
+
+  PodProfile homePageFile = PodProfile(homePage);
+
+  List rdfDataPrefixList = homePageFile.dividePrvRdfData();
+  List rdfDataList = rdfDataPrefixList.first;
+
+  for (var i = 0; i < rdfDataList.length; i++) {
+    if (rdfDataList[i].contains('ldp:contains')) {
+      var itemList = rdfDataList[i].split('<');
+
+      for (var j = 0; j < itemList.length; j++) {
+        // if (containerList.length >= 200) {
+        //   break;
+        // }
+        if (itemList[j].contains('/>')) {
+          var item = itemList[j].replaceAll('/>,', '');
+          item = item.replaceAll('/>.', '');
+          item = item.replaceAll(' ', '');
+          // if((item.contains('H')) | (item.contains('R'))){
+          //   containerList.add(item);
+          // }
+          foldersList.add(item);
+        } else if (itemList[j].contains('>')) {
+          var item = itemList[j].replaceAll('>,', '');
+          item = item.replaceAll('>.', '');
+          item = item.replaceAll(' ', '');
+          filesList.add(item);
+        }
+      }
+    }
+  }
+
+  return [foldersList, filesList];
+}
+
+// Get the note content, derypt and return it
+Future<Map> getNoteContent(
+  Map authData,
+  String webId,
+  String noteFileName,
+) async {
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+  String noteUrl = webId.replaceAll(profCard, '$myNotesDirLoc/$noteFileName');
+  String dPopTokenNote = genDpopToken(noteUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  String fileContent = await fetchPrvFile(
+    noteUrl,
+    accessToken,
+    dPopTokenNote,
+  );
+
+  Map noteData = {};
+  Map noteContent = getFileContent(fileContent);
+
+  // Decrypt the note content
+  // Get the master key
+  String secureKey = await secureStorage.read(key: webId) ?? '';
+  String masterKeyStr =
+      sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+
+  // Get the individual key
+  String indFileUrl = webId.replaceAll(
+    profCard,
+    '$encDirLoc/$indKeyFile',
+  );
+
+  String indKeysPopToken = genDpopToken(
+    indFileUrl,
+    rsaKeyPair,
+    publicKeyJwk,
+    'GET',
+  );
+  String indKeysFileInfo = await fetchPrvFile(
+    indFileUrl,
+    accessToken,
+    indKeysPopToken,
+  );
+
+  Map indKeysFileMap = getEncFileContent(indKeysFileInfo);
+  String indKeyEncVal = '';
+  String indKeyIvz = '';
+  if (indKeysFileMap.containsKey(noteFileName)) {
+    indKeyEncVal = indKeysFileMap[noteFileName][sessionKeyPred];
+    indKeyIvz = indKeysFileMap[noteFileName][ivPred];
+  } else {
+    throw Exception(
+      'No individual key recorded for the aggregated data file',
+    );
+  }
+
+  // Setup AES encrypter
+  final key = encrypt.Key.fromUtf8(masterKeyStr);
+  final iv = encrypt.IV.fromBase64(indKeyIvz);
+  final encrypter =
+      encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+  // Decrypt individual key
+  final ecc = encrypt.Encrypted.from64(indKeyEncVal);
+  String indKeyStr = encrypter.decrypt(ecc, iv: iv);
+
+  // Now use decrypted individual key to decrypt note data
+  String noteIv = noteContent[ivPred][1];
+  String noteEncVal = noteContent[encNoteContentPred][1];
+  final keyInd = encrypt.Key.fromBase64(indKeyStr);
+  final ivInd = encrypt.IV.fromBase64(noteIv);
+  final encrypterInd =
+      encrypt.Encrypter(encrypt.AES(keyInd, mode: encrypt.AESMode.cbc));
+
+  // Decrypt data
+  final eccInd = encrypt.Encrypted.from64(noteEncVal);
+  final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
+
+  noteData['noteTitle'] = noteContent['noteTitle'][1].replaceAll('_', ' ');
+  noteData['noteDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['noteDateTime'][1]));
+  noteData['noteContent'] = noteContentStr;
+  noteData['noteFileName'] = noteFileName;
+  noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
+
+  return noteData;
 }

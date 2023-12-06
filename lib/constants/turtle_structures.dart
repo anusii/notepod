@@ -62,6 +62,8 @@ String encNoteContentPred = 'encNoteContent';
 String noteTitlePred = 'noteTitle';
 String ivPred = 'iv';
 
+String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
+
 // Set up encryption key file content
 String genEncKeyBody(
     String encMasterKey, String prvKey, String prvKeyIvz, String resUrl) {

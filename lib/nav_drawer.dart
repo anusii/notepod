@@ -68,7 +68,19 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.border_color),
                   title: const Text('My Notes'),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationScreen(
+                                webId: webId,
+                                authData: authData,
+                                page: 'listNotes',
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.share_rounded),
