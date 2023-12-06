@@ -155,7 +155,6 @@ class _ViewNoteState extends State<ViewNote> {
                         builder: (context) => ShareNote(
                               webId: widget.webId,
                               authData: widget.authData,
-                              currPath: 'listNotes',
                               resInfo: resInfo,
                             )),
                     (Route<dynamic> route) =>

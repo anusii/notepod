@@ -29,15 +29,14 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/crypto.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
@@ -94,24 +93,20 @@ Future<Map> getPermission(
 
 Future<void> addPermission(
   BuildContext context,
-  TextEditingController _permissionInputController,
+  TextEditingController permissionInputController,
   String accessToken,
   Map authData,
   String resourceName,
   String resourceUrl,
-  String currUrl,
   List selectedItems,
   String webId,
 ) async {
-  String permissionWebId = _permissionInputController.text;
+  String permissionWebId = permissionInputController.text;
 
   if (permissionWebId.isNotEmpty && permissionWebId.contains("https://")) {
     if (await checkPublicProf(permissionWebId)) {
       String res = await setPermission(accessToken, authData, resourceName,
           resourceUrl, permissionWebId, selectedItems);
-
-      // If the file is encrypted copy file content to the
-      // POD of the person who you are sharing it with
 
       // Get the file content and check if the file is encrypted
       var rsaInfo = authData['rsaInfo'];
@@ -125,7 +120,7 @@ Future<void> addPermission(
 
       bool encryptedFlag = false;
       Map prvDataMap = getFileContent(encFileContent);
-      if (prvDataMap.containsKey('encryptVal')) {
+      if (prvDataMap.containsKey(encNoteContentPred)) {
         encryptedFlag = true;
       }
 
@@ -146,25 +141,23 @@ Future<void> addPermission(
         String keyFileContent =
             await fetchPrvFile(indKeyFileLoc, accessToken, dPopTokenKeyFile);
         Map keyFileDataMap = getEncFileContent(keyFileContent);
+        String fileKeyInd = keyFileDataMap[resourceName][sessionKeyPred];
 
-        //String filePath = keyFileDataMap[resourceName]['path'];
-        String fileKeyInd = keyFileDataMap[resourceName]['encKey'];
-
-        /// Decrypt the individual key using master key
+        // Decrypt the individual key using master key
         final masterKey = encrypt.Key.fromUtf8(encKey);
         final ivInd =
-            encrypt.IV.fromBase64(keyFileDataMap[resourceName]['ivz']);
+            encrypt.IV.fromBase64(keyFileDataMap[resourceName][ivPred]);
         final encrypterInd = encrypt.Encrypter(
             encrypt.AES(masterKey, mode: encrypt.AESMode.cbc));
         final eccInd = encrypt.Encrypted.from64(fileKeyInd);
         String plainKeyInd = encrypterInd.decrypt(eccInd, iv: ivInd);
 
-        /// Get recipient's public key
+        // Get recipient's public key
         var otherPubKey = await fetchOtherPubKey(authData, permissionWebId);
         otherPubKey = otherPubKey.replaceAll('"', '');
         otherPubKey = genPubKeyStr(otherPubKey);
 
-        /// Encrypt individual key, file path, and access list using recipient's public key
+        // Encrypt individual key, file path, and access list using recipient's public key
         final parser = encrypt.RSAKeyParser();
         final pubKey = parser.parse(otherPubKey) as RSAPublicKey;
         final encrypterPub = encrypt.Encrypter(encrypt.RSA(publicKey: pubKey));
@@ -252,13 +245,22 @@ Future<void> addPermission(
               false, // This predicate ensures all previous routes are removed
         );
       } else {
-        debugPrint('Error occurred. Please try again in a while');
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        showErrDialog(context, 'Error occurred. Please try again in a while');
       }
     } else {
-      debugPrint('Error: Please enter a valid webID');
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+      showErrDialog(context, 'Error: Please enter a valid webID');
     }
   } else {
-    debugPrint('Error: Please enter a valid webID');
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
+    // ignore: use_build_context_synchronously
+    showErrDialog(context, 'Error: Please enter a valid webID');
   }
 }
 
@@ -295,19 +297,19 @@ Future<String> setPermission(
 
   List userUrlList = [];
   String newUserPrefix = '';
-  if (userNameMap.length != 0) {
+  if (userNameMap.isNotEmpty) {
     userNameMap.forEach((key, val) => userUrlList.add(userNameMap[key]));
-    String permissionWebIdStr = '<' + permissionWebId.trim() + '>';
+    String permissionWebIdStr = '<${permissionWebId.trim()}>';
     permissionWebIdStr = permissionWebIdStr.replaceAll('#me', '#');
     if (!userUrlList.contains(permissionWebIdStr)) {
-      newUserPrefix = 'c' + (userPrefixList.length - 1).toString() + ':';
+      newUserPrefix = 'c${userPrefixList.length - 1}:';
       int i = (userPrefixList.length - 1);
       while (userPrefixList.contains(newUserPrefix)) {
         i += 1;
-        newUserPrefix = 'c' + i.toString() + ':';
+        newUserPrefix = 'c$i:';
       }
     }
-    if (newUserPrefix.length != 0) {
+    if (newUserPrefix.isNotEmpty) {
       userNameMap[newUserPrefix] = permissionWebIdStr;
     }
   } else {
@@ -430,7 +432,7 @@ Future<String> fetchOtherPubKey(Map authData, String otherWebId) async {
 
   // Get profile
   String pubKeyUrl =
-      otherWebId.replaceAll('profile/card#me', '$sharingDirLoc/$indKeyFile');
+      otherWebId.replaceAll('profile/card#me', '$sharingDirLoc/$pubKeyFile');
   String dPopTokenPub =
       genDpopToken(pubKeyUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
@@ -468,10 +470,10 @@ Future<String> copySharedKey(
   String dirUrl =
       webId.replaceAll('profile/card#me', '$sharedDirLoc/$dirName/');
 
-  String dPopTokenDirFile =
+  String dPopTokenDir =
       genDpopToken(dirUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
-  if (await checkResourceExists(dirUrl, accessToken, dPopTokenDirFile, false) ==
+  if (await checkResourceExists(dirUrl, accessToken, dPopTokenDir, false) ==
       'not-exist') {
     var dirCreateRes = await createItem(
         false, dirName, dirBody, webId, authData,
@@ -484,51 +486,54 @@ Future<String> copySharedKey(
 
   /// Get shared key file url.
   String keyFileUrl = webId.replaceAll(
-      'profile/card#me', '$SHARED_DIR_LOC/$dirName/$SHARED_KEY_FILE');
+      'profile/card#me', '$sharedDirLoc/$dirName/$sharedKeyFile');
+
+  String dPopTokenKeyFile =
+      genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   /// Create file if not exists
   var createUpdateRes;
-  if (await checkResourceExists(keyFileUrl, false) == 'not-exist') {
+  if (await checkResourceExists(keyFileUrl, accessToken, dPopTokenKeyFile, false) == 'not-exist') {
     String keyFileBody = '@prefix : <#>.' +
         '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
         '\n@prefix terms: <http://purl.org/dc/terms/>.' +
-        '\n@prefix file: <http://yarrabah.net/predicates/file#>.' +
-        '\n@prefix data: <http://yarrabah.net/predicates/data#>.' +
+        '\n@prefix file: <$podnotesFile>.' +
+        '\n@prefix podnotesTerms: <$podnotesTerms>.' +
         '\n:me' +
         '\n    a foaf:PersonalProfileDocument;' +
         '\n    terms:title "Shared Encryption Keys".' +
         '\nfile:$resName' +
-        '\n    data:path "$encSharedPath";' +
-        '\n    data:accessList "$encSharedAccess";' +
-        '\n    data:sharedKey "$encSharedKey".';
+        '\n    podnotesTerms:$pathPred "$encSharedPath";' +
+        '\n    podnotesTerms:$accessListPred "$encSharedAccess";' +
+        '\n    podnotesTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Update the ttl file with the shared info
     createUpdateRes = await createItem(
-        true, SHARED_KEY_FILE, keyFileBody, webId, authData,
-        fileLoc: '$SHARED_DIR_LOC/$dirName', fileType: 'text/turtle');
+        true, sharedKeyFile, keyFileBody, webId, authData,
+        fileLoc: '$sharedDirLoc/$dirName', fileType: 'text/turtle');
   } else {
     /// Update the file
     /// First check if the file already contain the same value
     String dPopTokenKeyFile =
         genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
     String keyFileContent =
-        await fetchPrvData(keyFileUrl, accessToken, dPopTokenKeyFile);
+        await fetchPrvFile(keyFileUrl, accessToken, dPopTokenKeyFile);
     Map keyFileDataMap = getEncFileContent(keyFileContent);
 
     /// Define query parameters
-    String prefix1 = 'file: <http://yarrabah.net/predicates/file#>';
-    String prefix2 = 'data: <http://yarrabah.net/predicates/data#>';
+    String prefix1 = 'file: <$podnotesFile>';
+    String prefix2 = 'podnotesTerms: <$podnotesTerms>';
 
     String subject = 'file:$resName';
-    String predObjPath = 'data:path "$encSharedPath";';
-    String predObjAcc = 'data:accessList "$encSharedAccess";';
-    String predObjKey = 'data:sharedKey "$encSharedKey".';
+    String predObjPath = 'podnotesTerms:$pathPred "$encSharedPath";';
+    String predObjAcc = 'podnotesTerms:$accessListPred "$encSharedAccess";';
+    String predObjKey = 'podnotesTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Check if the resource is previously added or not
     if (keyFileDataMap.containsKey(resName)) {
-      String existKey = keyFileDataMap[resName]['sharedKey'];
-      String existPath = keyFileDataMap[resName]['path'];
-      String existAcc = keyFileDataMap[resName]['accessList'];
+      String existKey = keyFileDataMap[resName][sharedKeyPred];
+      String existPath = keyFileDataMap[resName][pathPred];
+      String existAcc = keyFileDataMap[resName][accessListPred];
 
       /// If file does not contain the same encrypted value then delete and update
       /// the file
@@ -550,11 +555,11 @@ Future<String> copySharedKey(
             genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
         /// Run the query
-        createUpdateRes = await updateProfile(
+        createUpdateRes = await updateFileByQuery(
             keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
       } else {
         /// If the file contain same values, then no need to run anything
-        developer.log('Existing key is the same as new one');
+        debugPrint('Existing key is the same as new one');
         createUpdateRes = 'ok';
       }
     } else {
@@ -567,11 +572,11 @@ Future<String> copySharedKey(
           genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
       /// Run the query
-      createUpdateRes = await updateProfile(
+      createUpdateRes = await updateFileByQuery(
           keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
     }
 
-    developer.log(createUpdateRes);
+    //developer.log(createUpdateRes);
   }
 
   if (createUpdateRes == 'ok') {
@@ -595,7 +600,7 @@ Future<String> addPermLogLine(
       genDpopToken(permFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
   String dataQuery =
-      'INSERT DATA {<http://yarrabah.net/predicates/logid#$dateTimeStr> <http://yarrabah.net/predicates/data#log> "<$permLineStr>"};';
+      'INSERT DATA {<$podnotesLogId$dateTimeStr> <$podnotesTerms#log> "<$permLineStr>"};';
 
   final editResponse = await http.patch(
     Uri.parse(permFileUrl),
@@ -620,5 +625,203 @@ Future<String> addPermLogLine(
     debugPrint(editResponse.statusCode.toString());
     debugPrint(editResponse.body);
     throw Exception('Failed to write log data! Try again in a while.');
+  }
+}
+
+Future<String> deletePermission(
+  String accessToken,
+  Map authData,
+  String resourseUrl,
+  String deleteWebId,
+  List deletePermItems,
+) async {
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+
+  String resourceAcl = resourseUrl + '.acl';
+
+  String dPopToken = genDpopToken(resourceAcl, rsaKeyPair, publicKeyJwk, 'GET');
+  String fileInfo = await fetchPrvFile(resourceAcl, accessToken, dPopToken);
+
+  AclResource aclResFile = AclResource(fileInfo);
+
+  List userPermRes = aclResFile.divideAclData();
+  Map userNameMap = userPermRes.first;
+  Map userPermMap = userPermRes[1];
+
+  Map newUserNameMap = {};
+  String delUserPrefix = '';
+  if (userNameMap.length != 0) {
+    for (var userPrefix in userNameMap.keys) {
+      var userWebId = userNameMap[userPrefix];
+      if (deleteWebId != userWebId) {
+        newUserNameMap[userPrefix] = userWebId;
+      } else {
+        delUserPrefix = userPrefix;
+      }
+    }
+  }
+
+  deletePermItems.sort();
+  String delAccessStr = deletePermItems.join('');
+  Map newUserPermMap = {};
+  for (var accessStr in userPermMap.keys) {
+    List resouceList = userPermMap[accessStr];
+
+    if (accessStr == delAccessStr) {
+      Set resourceSet = resouceList.first;
+      Set userSet = resouceList[1];
+      Set accessSet = resouceList[2];
+
+      if (delUserPrefix.length != 0) {
+        userSet.remove(delUserPrefix);
+      } else {
+        userSet.remove(deleteWebId);
+      }
+
+      if (userSet.length != 0) {
+        newUserPermMap[accessStr] = [resourceSet, userSet, accessSet];
+      }
+    } else {
+      newUserPermMap[accessStr] = resouceList;
+    }
+  }
+
+  String aclPrefixTemp =
+      """@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n""";
+
+  if (newUserNameMap.length != 0) {
+    for (var userPrefix in newUserNameMap.keys) {
+      var userWebId = newUserNameMap[userPrefix];
+      String prefixLineStr = '@prefix ' + userPrefix + ' ' + userWebId + '.\n';
+      aclPrefixTemp += prefixLineStr;
+    }
+  }
+
+  String aclBodyTemp = '';
+
+  for (var accessStr in newUserPermMap.keys) {
+    List resouceList = newUserPermMap[accessStr];
+    Set resourceSet = resouceList.first;
+    Set userSet = resouceList[1];
+    Set accessSet = resouceList[2];
+
+    String resourceStr = resourceSet.join(', ');
+    Set userStrSet = {};
+    for (var user in userSet) {
+      userStrSet.add(user + 'me');
+    }
+    String userStr = userStrSet.join(', ');
+    String accessModeStr = accessSet.join(', ');
+
+    String accessBlock = ':$accessStr\n    ' +
+        'a acl:Authorization;\n    ' +
+        'acl:accessTo $resourceStr;\n    ' +
+        'acl:agent $userStr;\n    ' +
+        'acl:mode $accessModeStr.\n';
+    aclBodyTemp += accessBlock;
+  }
+
+  String aclNewStr = '$aclPrefixTemp\n$aclBodyTemp';
+
+  String dPopTokenPut =
+      genDpopToken(resourceAcl, rsaKeyPair, publicKeyJwk, 'PUT');
+
+  final editResponse = await http.put(
+    Uri.parse(resourceAcl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'Content-Type': 'text/turtle',
+      'Content-Length': aclNewStr.length.toString(),
+      'DPoP': dPopTokenPut,
+    },
+    body: aclNewStr,
+  );
+
+  if (editResponse.statusCode == 201 || editResponse.statusCode == 205) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return 'ok';
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to write profile data! Try again in a while.');
+  }
+}
+
+Future<String> removeSharedKey(
+  String webId,
+  String dirName,
+  Map authData,
+  String resName,
+) async {
+  // Get shared key file url
+  String keyFileUrl = webId.replaceAll(
+    profCard,
+    '$sharedDirLoc/$dirName/$sharedKeyFile',
+  );
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  String dPopTokenKeyFile =
+        genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  var createUpdateRes;
+  if (await checkResourceExists(keyFileUrl, accessToken, dPopTokenKeyFile, false) == 'exist') {
+    // Get the file content first
+    
+    String keyFileContent =
+        await fetchPrvFile(keyFileUrl, accessToken, dPopTokenKeyFile);
+    Map keyFileDataMap = getEncFileContent(keyFileContent);
+
+    // Check if the resource is previously added or not
+    if (keyFileDataMap.containsKey(resName)) {
+      // Define query parameters
+      String prefix1 = 'file: <$podnotesFile>';
+      String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+
+      String subject = 'file:$resName';
+      String existKey = keyFileDataMap[resName][sharedKeyPred];
+      String existPath = keyFileDataMap[resName][pathPred];
+      String existAcc = keyFileDataMap[resName][accessListPred];
+
+      String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
+      String predObjAccPrev = 'podnotesTerms:$accessListPred "$existAcc";';
+      String predObjKeyPrev = 'podnotesTerms:$sharedKeyPred "$existKey".';
+
+      // Generate update sparql query
+      String query =
+          'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjPathPrev $predObjAccPrev $predObjKeyPrev};';
+
+      // Generate DPoP token
+      String dPopTokenKeyFilePatch =
+          genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
+
+      // Run the query
+      createUpdateRes = await updateFileByQuery(
+        keyFileUrl,
+        accessToken,
+        dPopTokenKeyFilePatch,
+        query,
+      );
+
+      // if (existKey != encSharedKey || existPath != encSharedPath) {
+      //   print(
+      //       'Either shared key or path is not the same as actually key or path');
+      // }
+    }
+  } else {
+    createUpdateRes = 'ok';
+  }
+
+  if (createUpdateRes == 'ok') {
+    return createUpdateRes;
+  } else {
+    throw Exception('Failed to create/update the shared file.');
   }
 }

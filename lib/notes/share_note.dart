@@ -25,6 +25,9 @@ import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/constants/file_structure.dart';
+import 'package:podnotes/constants/rdf_functions.dart';
+import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/data_cell.dart';
@@ -57,7 +60,7 @@ DataRow permissionRow(
     Map authData,
     String resourceName,
     String userWebId,
-    String currUrl,
+    String resLocUrl,
     String resUser,
     BuildContext context) {
   String webIdCheck = userWebId.replaceAll('#me', '#');
@@ -86,147 +89,148 @@ DataRow permissionRow(
             color: Colors.red,
           ),
           onPressed: () {
-            // showDialog(
-            //     context: context,
-            //     builder: (BuildContext ctx) {
-            // return AlertDialog(
-            //   title: const Text('Please Confirm'),
-            //   content: const Text(
-            //       'Are you sure you want to remove this permission?'),
-            //   actions: [
-            //     // The "Yes" button
-            //     TextButton(
-            //         onPressed: () async {
-            //           // Loading animation
-            //           showAnimationDialog(
-            //             context,
-            //             17,
-            //             'Removing access!',
-            //             false,
-            //           );
+            showDialog(
+                context: context,
+                builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: const Text('Please Confirm'),
+              content: const Text(
+                  'Are you sure you want to remove this permission?'),
+              actions: [
+                // The "Yes" button
+                TextButton(
+                    onPressed: () async {
+                      // Loading animation
+                      showAnimationDialog(
+                        context,
+                        17,
+                        'Removing access!',
+                        false,
+                      );
 
-            //           List delPermList = permissionStr.split(', ');
-            //           String accessToken = authData['accessToken'];
-            //           String permWebIdStr =
-            //               permWebId.replaceAll('#', '#me');
-            //           permWebIdStr = permWebIdStr.replaceAll('>', '');
-            //           permWebIdStr = permWebIdStr.replaceAll('<', '');
-            //           String delRes = await deletePermission(
-            //               accessToken,
-            //               authData,
-            //               currUrl + resourceName,
-            //               permWebId,
-            //               delPermList);
+                      List delPermList = permissionStr.split(', ');
+                      String accessToken = authData['accessToken'];
+                      String permWebIdStr =
+                          permWebId.replaceAll('#', '#me');
+                      permWebIdStr = permWebIdStr.replaceAll('>', '');
+                      permWebIdStr = permWebIdStr.replaceAll('<', '');
+                      String delRes = await deletePermission(
+                          accessToken,
+                          authData,
+                          resLocUrl + resourceName,
+                          permWebId,
+                          delPermList);
 
-            //           // If the file is encrypted and therefore a copy of the
-            //           // encryption key is stored in recipient's POD
-            //           // Delete that entry
-            //           var rsaInfo = authData['rsaInfo'];
-            //           var rsaKeyPair = rsaInfo['rsa'];
-            //           var publicKeyJwk = rsaInfo['pubKeyJwk'];
+                      // If the file is encrypted and therefore a copy of the
+                      // encryption key is stored in recipient's POD
+                      // Delete that entry
+                      var rsaInfo = authData['rsaInfo'];
+                      var rsaKeyPair = rsaInfo['rsa'];
+                      var publicKeyJwk = rsaInfo['pubKeyJwk'];
 
-            //           // Get the file content
-            //           String dPopToken = genDpopToken(
-            //               currUrl + resourceName,
-            //               rsaKeyPair,
-            //               publicKeyJwk,
-            //               'GET');
-            //           String encFileContent = await fetchPrvData(
-            //               currUrl + resourceName, accessToken, dPopToken);
-            //           bool encrypted_flag = false;
-            //           Map prvDataMap = getFileContent(encFileContent);
-            //           if (prvDataMap.containsKey('encryptVal')) {
-            //             encrypted_flag = true;
-            //           }
+                      // Get the file content
+                      String dPopToken = genDpopToken(
+                          resLocUrl + resourceName,
+                          rsaKeyPair,
+                          publicKeyJwk,
+                          'GET');
+                      String encFileContent = await fetchPrvFile(
+                          resLocUrl + resourceName, accessToken, dPopToken);
+                      bool encryptedFlag = false;
+                      Map prvDataMap = getFileContent(encFileContent);
+                      if (prvDataMap.containsKey(encNoteContentPred)) {
+                        encryptedFlag = true;
+                      }
 
-            //           // If the file is encrypted
-            //           if (encrypted_flag) {
-            //             List webIdContent = userWebId.split("/");
-            //             String dirName = webIdContent[3];
+                      // If the file is encrypted
+                      if (encryptedFlag) {
+                        List webIdContent = userWebId.split("/");
+                        String dirName = webIdContent[3];
 
-            //             String remSharedRes = await removeSharedKey(
-            //                 permWebIdStr,
-            //                 dirName,
-            //                 authData,
-            //                 resourceName);
-            //             //String remSharedRes = 'ok';
+                        String remSharedRes = await removeSharedKey(
+                            permWebIdStr,
+                            dirName,
+                            authData,
+                            resourceName);
+                        //String remSharedRes = 'ok';
 
-            //             if (remSharedRes != 'ok') {
-            //               debugPrint('Could not delete shared key.');
-            //             }
-            //           }
+                        if (remSharedRes != 'ok') {
+                          debugPrint('Could not delete shared key.');
+                        }
+                      }
 
-            //           if (delRes == 'ok') {
-            //             /// Update log files of the relevant PODs
-            //             /// Here we need to update two log files
-            //             /// File owner and permission recipient
-            //             String accessListStr =
-            //                 permissionStr.replaceAll(' ', '');
-            //             String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
-            //                 .format(DateTime.now())
-            //                 .toString();
-            //             String logStr =
-            //                 '${dateTimeStr};${currUrl}${resourceName};${userWebId};revoke;${userWebId};${permWebIdStr};${accessListStr.toLowerCase()}';
+                      if (delRes == 'ok') {
+                        /// Update log files of the relevant PODs
+                        /// Here we need to update two log files
+                        /// File owner and permission recipient
+                        String accessListStr =
+                            permissionStr.replaceAll(' ', '');
+                        String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
+                            .format(DateTime.now())
+                            .toString();
+                        String logStr =
+                            '${dateTimeStr};${resLocUrl}${resourceName};${userWebId};revoke;${userWebId};${permWebIdStr};${accessListStr.toLowerCase()}';
 
-            //             // Write to log files of all actors in the permission
-            //             // action
-            //             String permLogUrlOwner = userWebId.replaceAll(
-            //               'profile/card#me',
-            //               PERM_LOG_FILE_LOC,
-            //             );
+                        // Write to log files of all actors in the permission
+                        // action
+                        String permLogUrlOwner = userWebId.replaceAll(
+                          'profile/card#me',
+                          '$logDirLoc/$permLogFile',
+                        );
 
-            //             String permLogUrlReceiver =
-            //                 permWebIdStr.replaceAll(
-            //               'profile/card#me',
-            //               PERM_LOG_FILE_LOC,
-            //             );
+                        String permLogUrlReceiver =
+                            permWebIdStr.replaceAll(
+                          'profile/card#me',
+                          '$logDirLoc/$permLogFile',
+                        );
 
-            //             String permAppendRes1 = await addPermLogLine(
-            //               permLogUrlOwner,
-            //               authData,
-            //               logStr,
-            //               dateTimeStr,
-            //             );
+                        String permAppendRes1 = await addPermLogLine(
+                          permLogUrlOwner,
+                          authData,
+                          logStr,
+                          dateTimeStr,
+                        );
 
-            //             String permAppendRes2 = await addPermLogLine(
-            //               permLogUrlReceiver,
-            //               authData,
-            //               logStr,
-            //               dateTimeStr,
-            //             );
+                        String permAppendRes2 = await addPermLogLine(
+                          permLogUrlReceiver,
+                          authData,
+                          logStr,
+                          dateTimeStr,
+                        );
 
-            //             if (permAppendRes1 != 'ok' ||
-            //                 permAppendRes2 != 'ok') {
-            //               debugPrint(
-            //                   'Something went wrong with logging your permission!');
-            //             }
+                        if (permAppendRes1 != 'ok' ||
+                            permAppendRes2 != 'ok') {
+                          debugPrint(
+                              'Something went wrong with logging your permission!');
+                        }
 
-            //             Navigator.pushReplacement(
-            //               context,
-            //               MaterialPageRoute(
-            //                   builder: (context) => MainScreen(
-            //                         authData: authData,
-            //                         webId: userWebId,
-            //                         page: 'setPermission',
-            //                         selectSurveyIndex: 0,
-            //                         currPath: currUrl,
-            //                       )),
-            //             );
-            //           } else {
-            //             debugPrint(
-            //                 'Error occurred. Please try again in a while');
-            //           }
-            //         },
-            //         child: const Text('Yes')),
-            //     TextButton(
-            //         onPressed: () {
-            //           // Close the dialog
-            //           Navigator.of(context).pop();
-            //         },
-            //         child: const Text('No'))
-            //   ],
-            // );
-            //});
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NavigationScreen(
+                              webId: userWebId,
+                              authData: authData,
+                              page: 'listNotes',
+                            )),
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                        );
+                      } else {
+                        debugPrint(
+                            'Error occurred. Please try again in a while');
+                      }
+                    },
+                    child: const Text('Yes')),
+                TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('No'))
+              ],
+            );
+            });
           },
         ),
       ),
@@ -243,14 +247,14 @@ String webIdAutoFilledStr(String userName) {
 class ShareNote extends StatefulWidget {
   final Map authData; // Authentication data
   final String webId;
-  final String currPath;
+  //final String currPath;
   final Map resInfo;
 
   const ShareNote({
     super.key,
     required this.authData,
     required this.webId,
-    required this.currPath,
+    //required this.currPath,
     required this.resInfo,
   });
 
@@ -389,7 +393,7 @@ class _ShareNoteState extends State<ShareNote> {
                                     widget.authData,
                                     widget.resInfo['resName'],
                                     widget.webId,
-                                    widget.currPath,
+                                    widget.resInfo['resUrl'],
                                     widget.resInfo['resUsername'][resWebId],
                                     context),
                             ],
@@ -409,14 +413,13 @@ class _ShareNoteState extends State<ShareNote> {
                                     onPressed: () async {
                                       String accessToken =
                                           widget.authData['accessToken'];
-                                      String fileUrl = widget.currPath +
+                                      String fileUrl = widget.resInfo['resUrl'] +
                                           widget.resInfo['resName'];
                                       _displayPermissionInputDialog(
                                           context,
                                           accessToken,
                                           fileUrl,
-                                          widget.resInfo['resName'],
-                                          widget.currPath);
+                                          widget.resInfo['resName'],);
                                     },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: darkBlue, // background
@@ -491,8 +494,7 @@ class _ShareNoteState extends State<ShareNote> {
       BuildContext context,
       String accessToken,
       String resourceUrl,
-      String resourceName,
-      String currPath) async {
+      String resourceName) async {
     List selectedItems = [];
     return showDialog(
       context: context,
@@ -576,6 +578,12 @@ class _ShareNoteState extends State<ShareNote> {
             TextButton(
               child: const Text('ADD PERMISSION'),
               onPressed: () async {
+                showAnimationDialog(
+                  context,
+                  17,
+                  'Granting access!',
+                  false,
+                );
                 await addPermission(
                   context,
                   _permissionInputController,
@@ -583,7 +591,6 @@ class _ShareNoteState extends State<ShareNote> {
                   widget.authData,
                   resourceName,
                   resourceUrl,
-                  widget.currPath,
                   selectedItems,
                   widget.webId,
                 );

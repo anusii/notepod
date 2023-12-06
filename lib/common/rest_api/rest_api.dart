@@ -28,15 +28,12 @@ library;
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
-import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -364,7 +361,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
           genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
       // Run the query
-      createUpdateRes = await sparqlUpdate(
+      createUpdateRes = await updateFileByQuery(
           keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
     } else {
       // If the file contain same values, then no need to run anything
@@ -380,7 +377,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
         genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
     // Run the query
-    createUpdateRes = await sparqlUpdate(
+    createUpdateRes = await updateFileByQuery(
         keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
   }
 
@@ -391,14 +388,14 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   }
 }
 
-Future<String> sparqlUpdate(
-  String profCardUrl,
+Future<String> updateFileByQuery(
+  String fileUrl,
   String accessToken,
   String dPopToken,
   String query,
 ) async {
   final editResponse = await http.patch(
-    Uri.parse(profCardUrl),
+    Uri.parse(fileUrl),
     headers: <String, String>{
       'Accept': '*/*',
       'Authorization': 'DPoP $accessToken',
