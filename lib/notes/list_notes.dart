@@ -19,9 +19,11 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage
+
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:podnotes/nav_screen.dart';
 
 class ListNotes extends StatefulWidget {
@@ -59,7 +61,7 @@ class _ListNotesState extends State<ListNotes> {
                   ),
                   //const Icon(Icons.text_snippet_outlined),
                   title: Text(fileList[index][0]),
-                  subtitle: Text('Created on: ' + fileList[index][1]),
+                  subtitle: Text('Created on: ${fileList[index][1]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
