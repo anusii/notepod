@@ -1,4 +1,4 @@
-/// DESCRIPTION
+/// Constants relating to the file structure for storing the notes.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: Anushka Vidanage
 
 library;
 
@@ -33,31 +33,35 @@ const Map fileType = {
 
 const String profCard = 'profile/card#me';
 
-// Directory name constants
+// Directory name constants.
+
 const mainResDir = "podnotes";
 const myNotesDir = 'mynotes';
 const sharingDir = "sharing";
 const sharedDir = "shared";
 const encDir = "encryption";
 const logsDir = "logs";
-const cardMe = "card#me";
+// const cardMe = "card#me";
 const noteFileNamePrefix = 'note-';
 
-// File name constants
-const sharedKeyFile = "shared-keys.ttl";
+// File name constants.
+
+// const sharedKeyFile = "shared-keys.ttl";
 const encKeyFile = "enc-keys.ttl";
 const pubKeyFile = "public-key.ttl";
 const indKeyFile = "ind-keys.ttl";
 const permLogFile = "permissions-log.ttl";
 
-// Directory path constants
+// Directory path constants.
+
 const myNotesDirLoc = '$mainResDir/$myNotesDir';
 const sharingDirLoc = '$mainResDir/$sharingDir';
 const sharedDirLoc = '$mainResDir/$sharedDir';
 const encDirLoc = '$mainResDir/$encDir';
 const logDirLoc = '$mainResDir/$logsDir';
 
-// Folders
+// Folders.
+
 const List folders = [
   mainResDir,
   sharingDirLoc,
@@ -67,7 +71,8 @@ const List folders = [
   logDirLoc
 ];
 
-// Files
+// Files.
+
 const Map files = {
   sharingDirLoc: [
     pubKeyFile,

@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Tuesday 2023-11-21 15:33:05 +1100 Graham Williams>
+# Time-stamp: <Wednesday 2023-12-06 09:03:46 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -67,3 +67,7 @@ help::
 
 locals:
 	@echo "This might be the instructions to install $(APP)"
+
+.PHONY: docs
+docs::
+	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/podnotes/

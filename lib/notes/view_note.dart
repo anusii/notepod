@@ -19,16 +19,21 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage
+
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+<<<<<<< HEAD
 import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/notes/share_note.dart';
+=======
+>>>>>>> main
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -75,7 +80,7 @@ class _ViewNoteState extends State<ViewNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
               child: Text(
-                'Created on: ' + noteData['createdDateTime'],
+                "Created on: ${noteData['createdDateTime']}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),

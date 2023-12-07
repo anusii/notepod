@@ -1,4 +1,30 @@
-// Project import
+/// DESCRIPTION
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: Anushka Vidanage
+
+library;
+
 import 'package:rdflib/rdflib.dart';
 
 Map getFileContent(String fileInfo) {
@@ -62,9 +88,7 @@ Map getEncFileContent(String fileInfo) {
 class PodProfile {
   String profileRdfStr = '';
 
-  PodProfile(String profileRdfStr) {
-    this.profileRdfStr = profileRdfStr;
-  }
+  PodProfile(this.profileRdfStr);
 
   // the method is for the new yarrabah server
   List divideFolderData() {
@@ -76,7 +100,7 @@ class PodProfile {
       String dataItem = profileDataList[i];
       if (dataItem.contains('ldp:contains')) {
         var itemList = dataItem
-            .replaceAll(new RegExp(r'[.</>]'), '')
+            .replaceAll(RegExp(r'[.</>]'), '')
             .replaceAll(' ', '')
             .replaceAll('ldp:contains', '')
             .split(',');
@@ -234,9 +258,9 @@ class PodProfile {
     //String foafPrefix = rdfRes[2];
     for (var i = 0; i < rdfDataList.length; i++) {
       String dataItem = rdfDataList[i];
-      if (dataItem.contains(vcardPrefix + 'fn')) {
+      if (dataItem.contains('${vcardPrefix}fn')) {
         var itemList = dataItem.split('"');
-        profName = itemList.length > 0 ? itemList[1] : itemList.first;
+        profName = itemList.isNotEmpty ? itemList[1] : itemList.first;
       }
       // else if (dataItem.contains(foafPrefix+'name')) {
       //   var itemList = dataItem.split('"');
@@ -259,11 +283,11 @@ class PodProfile {
     String optionalPictureUrl = '';
     for (var i = 0; i < rdfDataList.length; i++) {
       String dataItem = rdfDataList[i];
-      if (dataItem.contains(vcardPrefix + 'hasPhoto')) {
+      if (dataItem.contains('${vcardPrefix}hasPhoto')) {
         var itemList = dataItem.split('<');
         pictureUrl = itemList[1].replaceAll('>', '');
       }
-      if (dataItem.contains(foafPrefix + 'img')) {
+      if (dataItem.contains('${foafPrefix}img')) {
         var itemList = dataItem.split('<');
         optionalPictureUrl = itemList[1].replaceAll('>', '');
       }
