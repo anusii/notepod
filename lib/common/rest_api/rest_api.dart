@@ -34,6 +34,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -511,6 +512,116 @@ Future<List> getNoteList(Map authData, String notesUrl) async {
   }
   
   return fileList;
+
+}
+
+Future<List> getSharedNotesList(Map authData, String webId) async {
+
+  List sharedFileList = [];
+
+  String sharedNotesDirLoc = webId.replaceAll(profCard, '$sharedDirLoc/');
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  var resList = await getResourceList(
+      authData,
+      sharedNotesDirLoc,
+    );
+  
+  List sharedNotesDirList = resList[0];
+
+  for (var i = 0; i < sharedNotesDirList.length; i++) {
+      String sharedDir = sharedNotesDirList[i];
+
+      String sharedNotesFileLoc = '$sharedNotesDirLoc$sharedDir/$sharedKeyFile';
+
+      // Generate DPoP token
+      String dPopTokenSharedNoteFile =
+          genDpopToken(sharedNotesFileLoc, rsaKeyPair, publicKeyJwk, 'GET');
+      
+      // Get note file content
+      String shredNoteFileContent = await fetchPrvFile(sharedNotesFileLoc, accessToken, dPopTokenSharedNoteFile);
+      Map sharedNoteFileContentMap = getEncFileContent(shredNoteFileContent);
+
+      if(sharedNoteFileContentMap.isNotEmpty){
+        for (var fileName in sharedNoteFileContentMap.keys) {
+          // Get shared file information (all encrypted using receipient's public key)
+          String ownerWebIdEnc = sharedNoteFileContentMap[fileName][webIdPred];
+          String filePathEnc = sharedNoteFileContentMap[fileName][pathPred];
+          String fileSessionKeyEnc = sharedNoteFileContentMap[fileName][sharedKeyPred];
+          String fileAccListEnc = sharedNoteFileContentMap[fileName][accessListPred]; 
+
+          // Decrypt the data
+
+          // Get encryption key and private key
+          String keyFileUrl =
+              webId.replaceAll(profCard, '$encDirLoc/$encKeyFile');
+          String keydPopToken =
+              genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+          String keyFileInfo =
+              await fetchPrvFile(keyFileUrl, accessToken, keydPopToken);
+
+          // Read file content using RDFlib
+          Map keyFileMap = getFileContent(keyFileInfo);
+
+          // Get the master key from secure storage
+          String secureKey = await secureStorage.read(key: webId) ?? '';
+          String masterKeyStr =
+              sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+
+          // Setup AES encrypter
+          final key = encrypt.Key.fromUtf8(masterKeyStr);
+          final iv = encrypt.IV.fromBase64(
+            keyFileMap[ivPred][1],
+          );
+
+          final encrypter =
+              encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+          // Decrypt private key
+          final ecc = encrypt.Encrypted.from64(keyFileMap[prvKeyPred][1]);
+          final prvKeyStr = encrypter.decrypt(ecc, iv: iv);
+
+          // Use POD's private key to decrypt shared file data
+          final parser = encrypt.RSAKeyParser();
+          final prvKey = parser.parse(prvKeyStr) as RSAPrivateKey;
+          final encrypterPrv = encrypt.Encrypter(
+            encrypt.RSA(privateKey: prvKey),
+          );
+
+          final sharedWebId = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              ownerWebIdEnc,
+            ),
+          );
+
+          final sharedFilePath = encrypterPrv.decrypt(
+            encrypt.IV.fromBase64(
+              filePathEnc,
+            ),
+          );
+
+          final sharedKey = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileSessionKeyEnc,
+            ),
+          );
+
+          final sharedAccList = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileAccListEnc,
+            ),
+          );
+
+          sharedFileList.add([fileName, sharedWebId, sharedFilePath, sharedAccList, sharedKey]);
+        }
+      }
+  }
+  
+  return sharedFileList;
 
 }
 

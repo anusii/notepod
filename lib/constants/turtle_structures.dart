@@ -64,6 +64,7 @@ String noteTitlePred = 'noteTitle';
 String ivPred = 'iv';
 String accessListPred = 'accessList';
 String sharedKeyPred = 'sharedKey';
+String webIdPred = 'webId';
 
 String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
 

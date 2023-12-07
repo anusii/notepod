@@ -25,19 +25,13 @@
 
 library;
 
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

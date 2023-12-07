@@ -33,6 +33,7 @@ import 'package:podnotes/master_key_setup/enc_key_input.dart';
 import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/notes/list_notes_screen.dart';
 import 'package:podnotes/notes/view_edit_note_screen.dart';
+import 'package:podnotes/shared_notes/list_shared_notes_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -98,6 +99,11 @@ class HomeState extends State<NavigationScreen>
         webId: webId,
         authData: authData,
         action: 'edit',
+      );
+    } else if (page == 'sharedNotes') {
+      loadingScreen = ListSharedNotesScreen(
+        webId: webId,
+        authData: authData,
       );
     }
     return Scaffold(
