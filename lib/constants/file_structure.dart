@@ -41,12 +41,12 @@ const sharingDir = "sharing";
 const sharedDir = "shared";
 const encDir = "encryption";
 const logsDir = "logs";
-// const cardMe = "card#me";
+const cardMe = "card#me";
 const noteFileNamePrefix = 'note-';
 
 // File name constants.
 
-// const sharedKeyFile = "shared-keys.ttl";
+const sharedKeyFile = "shared-keys.ttl";
 const encKeyFile = "enc-keys.ttl";
 const pubKeyFile = "public-key.ttl";
 const indKeyFile = "ind-keys.ttl";
