@@ -42,6 +42,7 @@ import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:podnotes/widgets/loading_animation.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class Home extends StatefulWidget {
@@ -57,7 +58,7 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
-  String text = "";
+  String sampleText = "";
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       name: 'noteTitle',
                       decoration: const InputDecoration(
                         labelText:
-                            'Note Title (Do not use underscores (_) in title)',
+                            'Note Title',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,
@@ -129,12 +130,24 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
+
+                      // Loading animation
+                      showAnimationDialog(
+                        context,
+                        17,
+                        'Saving the note!',
+                        false,
+                      );
+                      
                       Map formData = formKey.currentState?.value as Map;
                       String noteText = _textController!.text;
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
+                      // String noteTitle =
+                      //     formData['noteTitle'].split(' ').join('_');
+                      
                       String noteTitle =
-                          formData['noteTitle'].split(' ').join('_');
+                          formData['noteTitle'].replaceAll('\n', '');
 
                       // By default all notes will be encrypted before storing in
                       // a POD
@@ -189,8 +202,10 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       // print(encNoteFileBody);
 
                       // Create note file name
+                      // String noteFileName =
+                      //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
                       String noteFileName =
-                          '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
+                          '$noteFileNamePrefix$dateTimeStr.ttl';
                       String noteAclFileName = '$noteFileName.acl';
 
                       // Create ACL file body for the note file
@@ -246,15 +261,21 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             );
                           } else {
                             // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
                             showErrDialog(context,
                                 'Failed to update the individual key. Try again!');
                           }
                         } else {
                           // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
+                          // ignore: use_build_context_synchronously
                           showErrDialog(context,
                               'Failed to create the ACL resoruce. Try again!');
                         }
                       } else {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
                         // ignore: use_build_context_synchronously
                         showErrDialog(context,
                             'Failed to store the note file in your POD. Try again!');

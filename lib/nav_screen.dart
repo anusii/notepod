@@ -32,7 +32,7 @@ import 'package:podnotes/home.dart';
 import 'package:podnotes/master_key_setup/enc_key_input.dart';
 import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/notes/list_notes_screen.dart';
-import 'package:podnotes/notes/view_note_screen.dart';
+import 'package:podnotes/notes/view_edit_note_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -86,10 +86,18 @@ class HomeState extends State<NavigationScreen>
         authData: authData,
       );
     } else if (page == 'viewNote') {
-      loadingScreen = ViewNoteScreen(
+      loadingScreen = ViewEditNoteScreen(
         noteFileName: widget.noteFileName!,
         webId: webId,
         authData: authData,
+        action: 'view',
+      );
+    } else if (page == 'editNote') {
+      loadingScreen = ViewEditNoteScreen(
+        noteFileName: widget.noteFileName!,
+        webId: webId,
+        authData: authData,
+        action: 'edit',
       );
     }
     return Scaffold(

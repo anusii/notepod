@@ -328,12 +328,12 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
 
   // Define query parameters
   String prefix1 = 'file: <$podnotesFile>';
-  String prefix2 = 'terms: <$podnotesTerms>';
+  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
 
   String subject = 'file:$resName';
-  String predObjPath = 'terms:$pathPred "$encNoteFilePath";';
-  String predObjIv = 'terms:$ivPred "$encNoteIv";';
-  String predObjKey = 'terms:$sessionKeyPred "$encSessionKey".';
+  String predObjPath = 'podnotesTerms:$pathPred "$encNoteFilePath";';
+  String predObjIv = 'podnotesTerms:$ivPred "$encNoteIv";';
+  String predObjKey = 'podnotesTerms:$sessionKeyPred "$encSessionKey".';
 
   // Check if the resource is previously added or not
   if (keyFileDataMap.containsKey(resName)) {
@@ -348,9 +348,9 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
     if (existKey != encSessionKey ||
         existPath != encNoteFilePath ||
         existIv != encNoteIv) {
-      String predObjPathPrev = 'data:path "$existPath";';
-      String predObjIvPrev = 'data:accessList "$existIv";';
-      String predObjKeyPrev = 'data:sharedKey "$existKey".';
+      String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
+      String predObjIvPrev = 'podnotesTerms:$ivPred "$existIv";';
+      String predObjKeyPrev = 'podnotesTerms:$sessionKeyPred "$existKey".';
 
       // Generate update sparql query
       String query =
@@ -388,6 +388,64 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   }
 }
 
+Future<String> updateNoteFile(Map authData, Map notePrevData, Map noteNewData) async {
+
+  // Get indi key file url
+  String noteFileUrl = notePrevData['noteFileUrl'] + notePrevData['noteFileName'];
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  // Define previous note data
+  String noteTitlePrev = notePrevData['noteTitle'];
+  String modifiedDateTimePrev = notePrevData['modifiedDateTime'];
+  String encNoteContentPrev = notePrevData['encContent'];
+  String encIvPrev = notePrevData['encIv'];
+
+  // Define new note data
+  String noteTitleNew = noteNewData['noteTitle'];
+  String modifiedDateTimeNew = noteNewData['modifiedDateTime'];
+  String encNoteContentNew = noteNewData['encContent'];
+  String encIvNew = noteNewData['encIv'];
+
+  // Define query parameters
+  String prefix1 = ': <#>';
+  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+
+  String subject = ':me';
+
+  // Previous data
+  String predObjModifiedTimePrev = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
+  String predObjIvPrev = 'podnotesTerms:$ivPred "$encIvPrev";';
+  String predObjNoteTitlePrev = 'podnotesTerms:$noteTitlePred "$noteTitlePrev";';
+  String predObjEncNoteContentPrev = 'podnotesTerms:$encNoteContentPred "$encNoteContentPrev".';
+
+  // New data
+  String predObjModifiedTime = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
+  String predObjIv = 'podnotesTerms:$ivPred "$encIvNew";';
+  String predObjNoteTitle = 'podnotesTerms:$noteTitlePred "$noteTitleNew";';
+  String predObjEncNoteContent = 'podnotesTerms:$encNoteContentPred "$encNoteContentNew".';
+
+  // Generate update sparql query
+  String query =
+      'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjModifiedTimePrev $predObjIvPrev $predObjNoteTitlePrev $predObjEncNoteContentPrev}; INSERT DATA {$subject $predObjModifiedTime $predObjIv $predObjNoteTitle $predObjEncNoteContent};';
+
+  // Generate DPoP token
+  String dPopTokenKeyFilePatch =
+      genDpopToken(noteFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
+
+  // Run the query
+  String fileUpdateRes = await updateFileByQuery(
+      noteFileUrl, accessToken, dPopTokenKeyFilePatch, query);
+
+  if (fileUpdateRes == 'ok') {
+    return fileUpdateRes;
+  } else {
+    throw Exception('Failed to create/update the shared file.');
+  }
+}
+
 Future<String> updateFileByQuery(
   String fileUrl,
   String accessToken,
@@ -416,6 +474,44 @@ Future<String> updateFileByQuery(
     // then throw an exception.
     throw Exception('Failed to write profile data! Try again in a while.');
   }
+}
+
+Future<List> getNoteList(Map authData, String notesUrl) async {
+
+  List fileList = [];
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  var resList = await getResourceList(
+      authData,
+      notesUrl,
+    );
+  
+  List noteList = resList[1];
+
+  for (var i = 0; i < noteList.length; i++) {
+      String fileItem = noteList[i];
+      String fileItemUrl = notesUrl + fileItem;
+
+      // Generate DPoP token
+      String dPopTokenNoteFile =
+          genDpopToken(fileItemUrl, rsaKeyPair, publicKeyJwk, 'GET');
+      
+      // Get note file content
+      String noteFileContent = await fetchPrvFile(fileItemUrl, accessToken, dPopTokenNoteFile);
+      Map noteFileContentMap = getFileContent(noteFileContent);
+
+      String noteTitle = noteFileContentMap['noteTitle'][1];
+      String noteDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['createdDateTime'][1]));
+
+      fileList.add([noteTitle, noteDateTime, fileItem]);
+  }
+  
+  return fileList;
+
 }
 
 // Get the list of resources (folders and files) in a specific location
@@ -573,11 +669,15 @@ Future<Map> getNoteContent(
   final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
 
   noteData['noteTitle'] = noteContent['noteTitle'][1].replaceAll('_', ' ');
-  noteData['noteDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
-      .format(DateTime.parse(noteContent['noteDateTime'][1]));
+  noteData['createdDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['createdDateTime'][1]));
+  noteData['modifiedDateTime'] = noteContent['modifiedDateTime'][1];
   noteData['noteContent'] = noteContentStr;
   noteData['noteFileName'] = noteFileName;
   noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
+  noteData['encSessionKey'] = indKeyStr;
+  noteData['encContent'] = noteEncVal;
+  noteData['encIv'] = noteIv;
 
   return noteData;
 }

@@ -22,7 +22,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
@@ -50,40 +49,39 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     Map authData = widget.authData;
     String webId = widget.webId;
-    String notesrUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getResourceList(
+    String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
+    _asyncDataFetch = getNoteList(
       authData,
-      notesrUrl,
+      notesUrl,
     );
     super.initState();
   }
 
-  Widget _loadedScreen(List resourceList, String webId, Map authData) {
-    List filesList = [];
+  Widget _loadedScreen(List notesList, String webId, Map authData) {
+    // List filesList = [];
+    // for (var i = 0; i < resourceList[1].length; i++) {
+    //   String fileItem = resourceList[1][i];
+    //   String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
+    //   var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
+    //       .format(DateTime.parse(fileDateStr));
+    //   String fileName = '';
+    //   if (fileItem.split('-').length == 3) {
+    //     fileName = fileItem.split('-')[1].replaceAll('_', ' ');
+    //   } else if (fileItem.split('-').length > 3) {
+    //     var fileNameList =
+    //         fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
+    //     fileName = fileNameList.join(' ').replaceAll('_', ' ');
+    //   } else {
+    //     throw Exception('Cannot happen!');
+    //   }
 
-    for (var i = 0; i < resourceList[1].length; i++) {
-      String fileItem = resourceList[1][i];
-      String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-      var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-          .format(DateTime.parse(fileDateStr));
-      String fileName = '';
-      if (fileItem.split('-').length == 3) {
-        fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-      } else if (fileItem.split('-').length > 3) {
-        var fileNameList =
-            fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-        fileName = fileNameList.join(' ').replaceAll('_', ' ');
-      } else {
-        throw Exception('Cannot happen!');
-      }
-
-      filesList.add([fileName, fileDate, fileItem]);
-    }
+    //   filesList.add([fileName, fileDate, fileItem]);
+    // }
 
     return Container(
       color: Colors.white,
       child: ListNotes(
-        fileList: filesList,
+        fileList: notesList,
         webId: webId,
         authData: authData,
       ),

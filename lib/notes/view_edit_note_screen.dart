@@ -25,25 +25,28 @@ import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/notes/edit_note.dart';
 import 'package:podnotes/notes/view_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
-class ViewNoteScreen extends StatefulWidget {
-  const ViewNoteScreen(
+class ViewEditNoteScreen extends StatefulWidget {
+  const ViewEditNoteScreen(
       {super.key,
       required this.noteFileName,
       required this.authData,
-      required this.webId});
+      required this.webId,
+      required this.action,});
 
   final String noteFileName;
   final Map authData;
   final String webId;
+  final String action;
 
   @override
-  State<ViewNoteScreen> createState() => _ViewNoteScreenState();
+  State<ViewEditNoteScreen> createState() => _ViewEditNoteScreenState();
 }
 
-class _ViewNoteScreenState extends State<ViewNoteScreen> {
+class _ViewEditNoteScreenState extends State<ViewEditNoteScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
@@ -63,13 +66,23 @@ class _ViewNoteScreenState extends State<ViewNoteScreen> {
   }
 
   Widget _loadedScreen(Map noteData, String webId, Map authData) {
-    return Container(
-      color: Colors.white,
-      child: ViewNote(
+    Widget nextScreen;
+    if(widget.action == 'view'){
+      nextScreen = ViewNote(
         noteData: noteData,
         webId: webId,
         authData: authData,
-      ),
+      );
+    } else {
+      nextScreen = EditNote(
+        noteData: noteData,
+        webId: webId,
+        authData: authData,
+      );
+    }
+    return Container(
+      color: Colors.white,
+      child: nextScreen,
     );
   }
 
