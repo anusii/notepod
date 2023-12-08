@@ -68,6 +68,8 @@ const encKeySuccess = 'Your encryption key is already setup.';
 
 const encKeyUpdate = 'Please update your encryption key';
 
+const nonReadableNoteMsg = 'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
+
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(
       1, 'Read (The recipient will be able to read the content of your file)'),

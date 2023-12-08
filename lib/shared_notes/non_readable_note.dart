@@ -23,38 +23,33 @@
 library;
 
 import 'package:flutter/material.dart';
-
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:podnotes/common/rest_api/res_permission.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/notes/share_note.dart';
-import 'package:podnotes/shared_notes/shared_note_controls.dart';
+import 'package:podnotes/widgets/msg_card.dart';
 
-class ViewSharedNote extends StatefulWidget {
-  final Map noteData;
+
+class NonReadableNote extends StatefulWidget {
+  final List noteMetaData;
   final String webId;
   final Map authData;
 
-  const ViewSharedNote({
+  const NonReadableNote({
     super.key,
-    required this.noteData,
+    required this.noteMetaData,
     required this.webId,
     required this.authData,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _ViewSharedNoteState createState() => _ViewSharedNoteState();
+  _NonReadableNoteState createState() => _NonReadableNoteState();
 }
 
-class _ViewSharedNoteState extends State<ViewSharedNote> {
+class _NonReadableNoteState extends State<NonReadableNote> {
   @override
   Widget build(BuildContext context) {
-    Map noteData = widget.noteData;
-    List accessList = noteData['noteAccessList'].split(',');
+    List noteMetaData = widget.noteMetaData;
 
     return Column(
       children: <Widget>[
@@ -64,7 +59,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
               child: Text(
-                noteData['noteTitle'],
+                "Note file name: ${noteMetaData[0]}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
@@ -79,7 +74,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
               child: Text(
-                "Created on: ${noteData['createdDateTime']}",
+                "Sharedy by: ${noteMetaData[1]}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -93,35 +88,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
               child: Text(
-                "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-              child: Text(
-                "Owner: ${noteData['noteOwner']}",
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-              child: Text(
-                "Shared by: ${noteData['noteSharedBy']}",
+                "Note path: ${noteMetaData[2]}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -135,7 +102,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
               child: Text(
-                "Permissions: ${noteData['noteAccessList']}",
+                "Permissions: ${noteMetaData[3]}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -143,21 +110,22 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             ),
           ],
         ),
+        buildMsgCard(
+          context,
+          Icons.info,
+          Colors.amber,
+          'Access Permission!',
+          nonReadableNoteMsg,
+        ),
+        
         Expanded(
           child: SizedBox(
             child: Container(
                 padding: const EdgeInsets.all(10),
-                child: MarkdownParse(
-                  data: noteData['noteContent'],
-                  // onTapHastag: (String name, String match) {
-                  //   // name => hashtag
-                  //   // match => #hashtag
-                  // },
-                  // onTapMention: (String name, String match) {
-                  //   // name => mention
-                  //   // match => #mention
-                  // },
-                )),
+                child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  )),
           ),
         ),
         Padding(
@@ -165,19 +133,52 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if(accessList.contains('Control')) ... [
-                shareNote(noteData, context, widget.authData, widget.webId),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
+              // if(accessList.contains('Control')) ... [
+              //   shareNote(noteData, context, widget.authData, widget.webId),
+              //   const SizedBox(
+              //     width: 5,
+              //   ),
+              // ],
               
-              if(accessList.contains('Write')) ... [
-                editNote(context, noteData, widget.authData, widget.webId),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
+              // if(accessList.contains('Write') && accessList.contains('Read')) ... [
+              //   ElevatedButton.icon(
+              //     icon: const Icon(
+              //       Icons.edit,
+              //       color: Colors.white,
+              //     ),
+              //     onPressed: () async {
+              //       Navigator.pushAndRemoveUntil(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => NavigationScreen(
+              //                     webId: widget.webId,
+              //                     authData: widget.authData,
+              //                     page: 'editSharedNote',
+              //                     sharedNoteData: noteData['noteMetadata'],
+              //                   )),
+              //           (Route<dynamic> route) =>
+              //               false, // This predicate ensures all previous routes are removed
+              //         );
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       foregroundColor: darkGreen,
+              //       backgroundColor: lightGreen, // foreground
+              //       padding: const EdgeInsets.symmetric(
+              //         horizontal: 15,
+              //       ),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //       ),
+              //     ),
+              //     label: const Text(
+              //       'EDIT',
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //   ),
+              //   const SizedBox(
+              //     width: 5,
+              //   ),
+              // ],
               
               ElevatedButton.icon(
                 icon: const Icon(
@@ -220,51 +221,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
         ),
       ],
     );
-    // Column(
-    //   children: [
-    //     const SizedBox(height: 20.0),
-    //     const Text("Encryption Key",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(height: 20.0),
-
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-    //     const Text("WebID",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-
-    //     // Spacer(),
-
-    //     // // Only show version text in mobile version.
-
-    //     // !Responsive.isDesktop(context)
-    //     //     ? Row(
-    //     //         mainAxisAlignment: MainAxisAlignment.end,
-    //     //         children: [
-    //     //           SelectableText(
-    //     //             APP_VERSION,
-    //     //             style: TextStyle(
-    //     //               fontSize: versionTextSize,
-    //     //               color: Colors.black,
-    //     //             ),
-    //     //           ),
-    //     //         ],
-    //     //       )
-    //     //     : Container(),
-
-    //     // // Avoid the APP_VERSION disappear at the bottom.
-
-    //     SizedBox(
-    //       height: screenHeight(context) * 0.1,
-    //     )
-    //   ],
-    // );
   }
-
-  
 
   
 }
