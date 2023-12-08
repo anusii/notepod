@@ -34,6 +34,7 @@ import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/notes/list_notes_screen.dart';
 import 'package:podnotes/notes/view_edit_note_screen.dart';
 import 'package:podnotes/shared_notes/list_shared_notes_screen.dart';
+import 'package:podnotes/shared_notes/view_edit_shared_note_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -41,13 +42,15 @@ class NavigationScreen extends StatefulWidget {
   final Map authData;
   final String page;
   final String? noteFileName;
+  final List? sharedNoteData;
 
   const NavigationScreen(
       {super.key,
       required this.webId,
       required this.authData,
       required this.page,
-      this.noteFileName});
+      this.noteFileName,
+      this.sharedNoteData,});
 
   @override
   HomeState createState() => HomeState();
@@ -104,6 +107,20 @@ class HomeState extends State<NavigationScreen>
       loadingScreen = ListSharedNotesScreen(
         webId: webId,
         authData: authData,
+      );
+    } else if (page == 'viewSharedNote') {
+      loadingScreen = ViewEditSharedNoteScreen(
+        sharedNoteData: widget.sharedNoteData!,
+        webId: webId,
+        authData: authData,
+        action: 'view',
+      );
+    } else if (page == 'editSharedNote') {
+      loadingScreen = ViewEditSharedNoteScreen(
+        sharedNoteData: widget.sharedNoteData!,
+        webId: webId,
+        authData: authData,
+        action: 'edit',
       );
     }
     return Scaffold(

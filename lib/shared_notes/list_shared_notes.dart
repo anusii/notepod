@@ -63,18 +63,18 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                   subtitle: Text('Shared by: ${sharedNotesList[index][1]} \nPermissions: ${sharedNotesList[index][3]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
-                    // Navigator.pushAndRemoveUntil(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => NavigationScreen(
-                    //             webId: widget.webId,
-                    //             authData: widget.authData,
-                    //             page: 'viewNote',
-                    //             noteFileName: fileList[index][2],
-                    //           )),
-                    //   (Route<dynamic> route) =>
-                    //       false, // This predicate ensures all previous routes are removed
-                    // );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationScreen(
+                                webId: widget.webId,
+                                authData: widget.authData,
+                                page: 'viewSharedNote',
+                                sharedNoteData: sharedNotesList[index],
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
                   },
                 ),
               )),
