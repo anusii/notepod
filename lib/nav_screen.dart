@@ -26,9 +26,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/home.dart';
+import 'package:podnotes/login/token_expiry.dart';
 import 'package:podnotes/master_key_setup/enc_key_input.dart';
 import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/notes/list_notes_screen.dart';
@@ -71,66 +73,86 @@ class HomeState extends State<NavigationScreen>
     String webId = widget.webId;
     Map authData = widget.authData;
 
-    bool isKeyExist =
-        authData['keyExist'] ? authData.containsKey('keyExist') : false;
-    if (!isKeyExist) {
-      page = 'encKeyInput';
+    /// Check whether token is expired or not.
+    /// If expired redirect to the login page
+    String accessToken = authData['accessToken'];
+    bool hasExpired = JwtDecoder.isExpired(accessToken);
+    
+    if(hasExpired) {
+      loadingScreen = TokenExpiry(authData: authData, webId: webId,);
+    } else {
+      bool isKeyExist =
+          authData['keyExist'] ? authData.containsKey('keyExist') : false;
+      if (!isKeyExist) {
+        page = 'encKeyInput';
+      }
+
+      if (page == 'home') {
+        loadingScreen = Home(webId: webId, authData: authData);
+      } else if (page == 'encKeyInput') {
+        loadingScreen = EncryptionKeyInput(
+          validEncKey: ValueNotifier(isKeyExist),
+          webId: webId,
+          authData: authData,
+        );
+      } else if (page == 'listNotes') {
+        loadingScreen = ListNotesScreen(
+          webId: webId,
+          authData: authData,
+        );
+      } else if (page == 'viewNote') {
+        loadingScreen = ViewEditNoteScreen(
+          noteFileName: widget.noteFileName!,
+          webId: webId,
+          authData: authData,
+          action: 'view',
+        );
+      } else if (page == 'editNote') {
+        loadingScreen = ViewEditNoteScreen(
+          noteFileName: widget.noteFileName!,
+          webId: webId,
+          authData: authData,
+          action: 'edit',
+        );
+      } else if (page == 'sharedNotes') {
+        loadingScreen = ListSharedNotesScreen(
+          webId: webId,
+          authData: authData,
+        );
+      } else if (page == 'viewSharedNote') {
+        loadingScreen = ViewEditSharedNoteScreen(
+          sharedNoteData: widget.sharedNoteData!,
+          webId: webId,
+          authData: authData,
+          action: 'view',
+        );
+      } else if (page == 'editSharedNote') {
+        loadingScreen = ViewEditSharedNoteScreen(
+          sharedNoteData: widget.sharedNoteData!,
+          webId: webId,
+          authData: authData,
+          action: 'edit',
+        );
+      } else if (page == 'nonReadNote') {
+        loadingScreen = NonReadableNote(
+          noteMetaData: widget.sharedNoteData!,
+          webId: webId,
+          authData: authData,
+        );
+      }
     }
 
-    if (page == 'home') {
-      loadingScreen = Home(webId: webId, authData: authData);
-    } else if (page == 'encKeyInput') {
-      loadingScreen = EncryptionKeyInput(
-        validEncKey: ValueNotifier(isKeyExist),
-        webId: webId,
-        authData: authData,
-      );
-    } else if (page == 'listNotes') {
-      loadingScreen = ListNotesScreen(
-        webId: webId,
-        authData: authData,
-      );
-    } else if (page == 'viewNote') {
-      loadingScreen = ViewEditNoteScreen(
-        noteFileName: widget.noteFileName!,
-        webId: webId,
-        authData: authData,
-        action: 'view',
-      );
-    } else if (page == 'editNote') {
-      loadingScreen = ViewEditNoteScreen(
-        noteFileName: widget.noteFileName!,
-        webId: webId,
-        authData: authData,
-        action: 'edit',
-      );
-    } else if (page == 'sharedNotes') {
-      loadingScreen = ListSharedNotesScreen(
-        webId: webId,
-        authData: authData,
-      );
-    } else if (page == 'viewSharedNote') {
-      loadingScreen = ViewEditSharedNoteScreen(
-        sharedNoteData: widget.sharedNoteData!,
-        webId: webId,
-        authData: authData,
-        action: 'view',
-      );
-    } else if (page == 'editSharedNote') {
-      loadingScreen = ViewEditSharedNoteScreen(
-        sharedNoteData: widget.sharedNoteData!,
-        webId: webId,
-        authData: authData,
-        action: 'edit',
-      );
-    } else if (page == 'nonReadNote') {
-      loadingScreen = NonReadableNote(
-        noteMetaData: widget.sharedNoteData!,
-        webId: webId,
-        authData: authData,
-      );
-    }
-    return Scaffold(
+    if(hasExpired) {
+      return Scaffold(
+      appBar: AppBar(
+        backgroundColor: lightGreen,
+        centerTitle: true,
+        title: const Text("POD Note Taker"),
+      ),
+      body: loadingScreen,
+    );
+    } else {
+      return Scaffold(
       appBar: AppBar(
         backgroundColor: lightGreen,
         centerTitle: true,
@@ -142,5 +164,8 @@ class HomeState extends State<NavigationScreen>
       ),
       body: loadingScreen,
     );
+    }
+    
+    
   }
 }

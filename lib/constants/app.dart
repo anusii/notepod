@@ -70,6 +70,12 @@ const encKeyUpdate = 'Please update your encryption key';
 
 const nonReadableNoteMsg = 'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
 
+const tokenTimeOutErr =
+    'Your login session has expired! Please login again to continue.';
+
+const tokenTimeOutTitle = 'Login Timeout!';
+
+
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(
       1, 'Read (The recipient will be able to read the content of your file)'),
@@ -86,3 +92,5 @@ SizedBox standardHeight() {
     height: standardSpace / 2,
   );
 }
+
+const double desktopWidthThreshold = 830;
