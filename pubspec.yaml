@@ -32,7 +32,6 @@ dependencies:
   solid_auth: ^0.1.13
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
-  window_manager: ^0.3.5
   url_launcher: ^6.2.1
 
 dev_dependencies:
