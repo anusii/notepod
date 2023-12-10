@@ -42,3 +42,11 @@ const bgOffWhite = Color(0xFFF2F4FC);
 const kTitleTextColor = Color(0xFF30384D);
 const warningRed = Colors.red;
 const confirmGreen = Colors.green;
+
+List<Color> defaultPodnotesColors = const [
+  darkBlue,
+  darkGreen,
+  darkCopper,
+  titleAsh,
+  lightBlue,
+];

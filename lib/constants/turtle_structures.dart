@@ -61,6 +61,10 @@ String noteDateTimePred = 'noteDateTime';
 String encNoteContentPred = 'encNoteContent';
 String noteTitlePred = 'noteTitle';
 String ivPred = 'iv';
+String accessListPred = 'accessList';
+String sharedKeyPred = 'sharedKey';
+
+String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
 
 // Set up encryption key file content
 String genEncKeyBody(

@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: Anushka Vidanage
 
 library;
 
@@ -259,6 +259,26 @@ Future<String> initialProfileUpdate(
   }
 }
 
+// Get public profile information from webId
+Future<String> fetchPubFile(String fileUrl) async {
+  final response = await http.get(
+    Uri.parse(fileUrl),
+    headers: <String, String>{
+      'Content-Type': 'text/turtle',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    /// If the server did return a 200 OK response,
+    /// then parse the JSON.
+    return response.body;
+  } else {
+    /// If the server did not return a 200 OK response,
+    /// then throw an exception.
+    throw Exception('Failed to load data! Try again in a while.');
+  }
+}
+
 Future<String> fetchPrvFile(
   String profCardUrl,
   String accessToken,
@@ -341,7 +361,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
           genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
       // Run the query
-      createUpdateRes = await sparqlUpdate(
+      createUpdateRes = await updateFileByQuery(
           keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
     } else {
       // If the file contain same values, then no need to run anything
@@ -357,7 +377,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
         genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
     // Run the query
-    createUpdateRes = await sparqlUpdate(
+    createUpdateRes = await updateFileByQuery(
         keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
   }
 
@@ -368,14 +388,14 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   }
 }
 
-Future<String> sparqlUpdate(
-  String profCardUrl,
+Future<String> updateFileByQuery(
+  String fileUrl,
   String accessToken,
   String dPopToken,
   String query,
 ) async {
   final editResponse = await http.patch(
-    Uri.parse(profCardUrl),
+    Uri.parse(fileUrl),
     headers: <String, String>{
       'Accept': '*/*',
       'Authorization': 'DPoP $accessToken',
@@ -556,6 +576,8 @@ Future<Map> getNoteContent(
   noteData['noteDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
       .format(DateTime.parse(noteContent['noteDateTime'][1]));
   noteData['noteContent'] = noteContentStr;
+  noteData['noteFileName'] = noteFileName;
+  noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
 
   return noteData;
 }
