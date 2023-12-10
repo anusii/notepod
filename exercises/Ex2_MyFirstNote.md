@@ -32,9 +32,11 @@ After saving, you wil see an empty new note page.
 
 Open the menu and click `My Notes` to view your saved notes.
 
-![Note in Progress](../assets/images/my_notes_list.png)
+![Menu](../assets/images/podnotes_menu.png)
 
 Congratulations, you have successfully saved your first note in a POD!
+
+![My Notes list](../assets/images/my_notes_list.png)
 
 You can open your note, by clicking on your note in the list.
 
