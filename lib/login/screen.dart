@@ -38,6 +38,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 // Project imports:
 import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/widgets/loading_animation.dart';
 import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -177,6 +178,13 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             onPressed: () async {
+
+              showAnimationDialog(
+                context,
+                7,
+                'Logging in...',
+                false,
+              );
               // Get issuer URI
               String issuerUri = await getIssuer(webIdTextController.text);
 
