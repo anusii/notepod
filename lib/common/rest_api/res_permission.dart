@@ -475,8 +475,7 @@ Future<String> copySharedKey(
   String dirUrl =
       webId.replaceAll('profile/card#me', '$sharedDirLoc/$dirName/');
 
-  String dPopTokenDir =
-      genDpopToken(dirUrl, rsaKeyPair, publicKeyJwk, 'GET');
+  String dPopTokenDir = genDpopToken(dirUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   if (await checkResourceExists(dirUrl, accessToken, dPopTokenDir, false) ==
       'not-exist') {
@@ -498,7 +497,9 @@ Future<String> copySharedKey(
 
   /// Create file if not exists
   var createUpdateRes;
-  if (await checkResourceExists(keyFileUrl, accessToken, dPopTokenKeyFile, false) == 'not-exist') {
+  if (await checkResourceExists(
+          keyFileUrl, accessToken, dPopTokenKeyFile, false) ==
+      'not-exist') {
     String keyFileBody = '@prefix : <#>.' +
         '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
         '\n@prefix terms: <http://purl.org/dc/terms/>.' +
@@ -779,12 +780,14 @@ Future<String> removeSharedKey(
   String accessToken = authData['accessToken'];
 
   String dPopTokenKeyFile =
-        genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+      genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   var createUpdateRes;
-  if (await checkResourceExists(keyFileUrl, accessToken, dPopTokenKeyFile, false) == 'exist') {
+  if (await checkResourceExists(
+          keyFileUrl, accessToken, dPopTokenKeyFile, false) ==
+      'exist') {
     // Get the file content first
-    
+
     String keyFileContent =
         await fetchPrvFile(keyFileUrl, accessToken, dPopTokenKeyFile);
     Map keyFileDataMap = getEncFileContent(keyFileContent);

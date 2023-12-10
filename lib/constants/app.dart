@@ -62,7 +62,8 @@ const requiredPwdMsg =
 const publicKeyMsg =
     'We will also create a random public/private key pair for secure data sharing with other PODs.';
 
-const encKeyInputMsg = 'Please enter encryption key to encrypt your data.';
+const encKeyInputMsg =
+    'Please enter encryption key to encrypt/decrypt your data.';
 
 const encKeySuccess = 'Your encryption key is already setup.';
 
