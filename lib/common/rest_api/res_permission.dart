@@ -802,14 +802,16 @@ Future<String> removeSharedKey(
       String existKey = keyFileDataMap[resName][sharedKeyPred];
       String existPath = keyFileDataMap[resName][pathPred];
       String existAcc = keyFileDataMap[resName][accessListPred];
+      String existWebId = keyFileDataMap[resName][webIdPred];
 
+      String predObjWebIdPrev = 'podnotesTerms:$webIdPred "$existWebId";';
       String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
       String predObjAccPrev = 'podnotesTerms:$accessListPred "$existAcc";';
       String predObjKeyPrev = 'podnotesTerms:$sharedKeyPred "$existKey".';
 
       // Generate update sparql query
       String query =
-          'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjPathPrev $predObjAccPrev $predObjKeyPrev};';
+          'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjWebIdPrev $predObjPathPrev $predObjAccPrev $predObjKeyPrev};';
 
       // Generate DPoP token
       String dPopTokenKeyFilePatch =

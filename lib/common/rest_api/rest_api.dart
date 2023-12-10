@@ -31,6 +31,7 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
@@ -851,4 +852,121 @@ Future<Map> getSharedNoteContent(
   noteData['noteMetadata'] = sharedNoteData;
 
   return noteData;
+}
+
+// Delete a note with all the shared keys
+Future<String> deleteNote (
+  String webId,
+  Map authData,
+  String noteUrl,
+  String noteName,) async {
+
+    // First get the acl data of the note and check if the note
+    // is shared with others
+    var rsaInfo = authData['rsaInfo'];
+    var rsaKeyPair = rsaInfo['rsa'];
+    var publicKeyJwk = rsaInfo['pubKeyJwk'];
+    String accessToken = authData['accessToken'];
+
+    String noteAclUrl = '$noteUrl.acl';
+    String dPopToken = genDpopToken(noteAclUrl, rsaKeyPair, publicKeyJwk, 'GET');
+    String fileInfo = await fetchPrvFile(noteAclUrl, accessToken, dPopToken);
+
+    AclResource aclResFile = AclResource(fileInfo);
+
+    List userPermRes = aclResFile.divideAclData();
+    Map userNameMap = userPermRes.first;
+
+    bool allSharedKeysDel = true;
+
+    for (var userAlias in userNameMap.keys) {
+      String userWebId = userNameMap[userAlias];
+      userWebId = userWebId.replaceAll('<', '');
+      userWebId = userWebId.replaceAll('>', '');
+
+      // If the note is shared with others first remove the
+      // shared keys
+      if(!webId.contains(userWebId)){
+
+        List webIdContent = webId.split("/");
+        String dirName = webIdContent[3];
+
+        String remSharedRes = await removeSharedKey(
+                              '${userWebId}me',
+                              dirName,
+                              authData,
+                              noteName);
+        
+        if(remSharedRes != 'ok') {
+          allSharedKeysDel = false;
+        }
+      }
+    }
+
+    // Now delete the note itself
+    if(allSharedKeysDel){
+      String resDel = await deleteItem(true, webId, authData, noteUrl);
+
+      if(resDel == 'ok'){
+        return 'ok';
+      }
+      else {
+        throw Exception('Failed to delete resource! Try again in a while.');
+      }
+    } else {
+      throw Exception('Failed to delete resource! Try again in a while.');
+    }
+  }
+
+// Delete a directory or a file
+Future<String> deleteItem(
+  bool fileFlag,
+  String webId,
+  Map authData,
+  String delItemUrl,
+) async {
+  String itemType = '';
+  String contentType = '';
+
+  // Get authentication info
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  // Set up directory or file parameters
+  if (fileFlag) {
+    // This is a file (resource)
+    contentType = 'text/turtle';
+    itemType = '<http://www.w3.org/ns/ldp#Resource>; rel="type"';
+  } else {
+    // This is a directory (container)
+    contentType = 'application/octet-stream';
+    itemType = '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"';
+  }
+
+  String dPopToken =
+      genDpopToken(delItemUrl, rsaKeyPair, publicKeyJwk, 'DELETE');
+
+  // The DELETE request will create the item in the server
+  final delResponse = await http.delete(
+    Uri.parse(delItemUrl),
+    headers: <String, String>{
+      'Accept': '*/*',
+      'Authorization': 'DPoP $accessToken',
+      'Connection': 'keep-alive',
+      'Content-Type': contentType,
+      'Link': itemType,
+      'DPoP': dPopToken,
+    },
+  );
+
+  if (delResponse.statusCode == 205) {
+    // If the server did return a 205 Reset response,
+    return 'ok';
+  } else {
+    // If the server did not return a 205 response,
+    // then throw an exception.
+    throw Exception('Failed to delete resource! Try again in a while.');
+  }
 }

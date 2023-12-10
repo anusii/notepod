@@ -88,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     child: Container(
-                      height: 710,
+                      height: 650,
                       padding: const EdgeInsets.all(30),
                       child: Column(
                         children: [
