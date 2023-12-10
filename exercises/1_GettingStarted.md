@@ -64,7 +64,7 @@ Click `Authorize` to login to your POD in the Podnotes app.
 
 This will take you to the Podnotes Setup Wizard to finish setting up your POD. This shows the resources (files) being created in your POD on the Solid Community AU solid server, and ask you to set an master encryption key which will be used to encrypt the notes on your POD.
 
-![Podnotes Setup Wizard](../assets/images/pod_setup_wizard.png)
+![Podnotes Setup Wizard](../assets/images/pod_wizard.png)
 
 Enter your name and gender.
 
