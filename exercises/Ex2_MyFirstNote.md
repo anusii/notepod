@@ -4,9 +4,15 @@ This exercise will show you how to create a note in the Podnotes app.
 
 ## Login
 
-Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and login with your webID.
+Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and click `Login`. If you have not logged in recently, you will probably see a login window, enter the email address and password that you used to create your POD.
 
-(If you have flutter installed, you could also build and run the app locally on your machine.)
+![POD login](../assets/images/server_login_popup.png)
+
+This will open an popup with your POD webID. Click `Authorize` to login to your POD in the Podnotes app.
+
+![POD authorization](../assets/images/server_pod_auth_popup.png)
+
+(Note: If you have flutter installed, you could also build and run the app locally on your machine.)
 
 
 
