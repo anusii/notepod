@@ -31,18 +31,25 @@ Open [Podnotes app](https://Podnotes.solidcommunity.au/) and click `Get a POD`.
 
 This will take you to https://pods.solidcommunity.au, click `Sign up for an account`
 
-Enter an email address, and the password you want to use to access  your POD.
+Enter an email address, and the password you want to use to access your POD and click `Register`.
 
+![Enter POD email and password](../assets/images/server_create_account.png)
 
-Click `Create POD` to start creating a POD on the host https://solidcommunity.au.
+This will take you to an POD account view window, click `Create pod`.
+
+![POD account view](../assets/images/server_get_a_pod.png)
 
 In the `Name` field, enter a name for your POD, eg the username of your email address.
 
 If you already have a Solid webID, you can link your webID to your new POD on Solid Community AU, by selecting `Use an external webID`.
 
+Click `Create POD` to start creating a POD on the host https://solidcommunity.au.
+
 If you don't yet have a Solid webID, select `Use the webID in POD and register it to your account`.
 
 Confirm by clicking `Create POD`.
+
+![POD account view](../assets/images/server_choose_pod_name.png)
 
 You should see a window, with the URL of your POD and your webID.
 
