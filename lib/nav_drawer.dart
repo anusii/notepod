@@ -82,11 +82,11 @@ class NavDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.share_rounded),
-                  title: const Text('Note Sharing'),
-                  onTap: () => {Navigator.of(context).pop()},
-                ),
+                // ListTile(
+                //   leading: const Icon(Icons.share_rounded),
+                //   title: const Text('Note Sharing'),
+                //   onTap: () => {Navigator.of(context).pop()},
+                // ),
                 ListTile(
                   leading: const Icon(Icons.file_open_outlined),
                   title: const Text('Shared Notes'),

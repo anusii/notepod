@@ -77,7 +77,7 @@ class _ViewNoteState extends State<ViewNote> {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
               child: Text(
-                'Created on: ${noteData["noteDateTime"]}',
+                "Created on: ${noteData['createdDateTime']}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -187,17 +187,18 @@ class _ViewNoteState extends State<ViewNote> {
                   color: Colors.white,
                 ),
                 onPressed: () async {
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => NavigationScreen(
-                  //             webId: widget.webId,
-                  //             authData: widget.authData,
-                  //             page: 'listNotes',
-                  //           )),
-                  //   (Route<dynamic> route) =>
-                  //       false, // This predicate ensures all previous routes are removed
-                  // );
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationScreen(
+                                webId: widget.webId,
+                                authData: widget.authData,
+                                page: 'editNote',
+                                noteFileName: noteData['noteFileName'],
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: darkGreen,

@@ -46,7 +46,7 @@ const noteFileNamePrefix = 'note-';
 
 // File name constants.
 
-// const sharedKeyFile = "shared-keys.ttl";
+const sharedKeyFile = "shared-keys.ttl";
 const encKeyFile = "enc-keys.ttl";
 const pubKeyFile = "public-key.ttl";
 const indKeyFile = "ind-keys.ttl";

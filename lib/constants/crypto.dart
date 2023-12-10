@@ -48,9 +48,9 @@ String dividePubKeyStr(String keyStr) {
   return keyStrTrimmed;
 }
 
-// String genPubKeyStr(String keyStr) {
-//  return '''-----BEGIN RSA PUBLIC KEY-----\n$keyStr\n-----END RSA PUBLIC KEY-----''';
-// }
+String genPubKeyStr(String keyStr) {
+ return '''-----BEGIN RSA PUBLIC KEY-----\n$keyStr\n-----END RSA PUBLIC KEY-----''';
+}
 
 Future<bool> verifyEncKey(String plaintextEncKey, Map authData) async {
   String sha224Result =
