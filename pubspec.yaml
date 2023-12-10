@@ -16,6 +16,7 @@ dependencies:
   encrypt: ^5.0.3
   fast_rsa: ^3.4.7
   flutter_form_builder: ^9.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.5
   flutter_typeahead: ^4.6.2
@@ -34,6 +35,26 @@ dependencies:
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   window_manager: ^0.3.7
+
+flutter_launcher_icons:
+  image_path: "assets/images/podnotes.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+  background_color_ios: "#ffffff"
+  web:
+    generate: true
+    image_path: "assets/images/podnotes.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/images/podnotes.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/podnotes.png"
 
 dev_dependencies:
   flutter_test:
