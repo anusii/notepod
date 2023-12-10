@@ -57,10 +57,16 @@ String encKeyPred = 'encKey';
 String sessionKeyPred = 'sessionKey';
 String prvKeyPred = 'prvKey';
 String pubKeyPred = 'pubKey';
-String noteDateTimePred = 'noteDateTime';
+String createdDateTimePred = 'createdDateTime';
+String modifiedDateTimePred = 'modifiedDateTime';
 String encNoteContentPred = 'encNoteContent';
 String noteTitlePred = 'noteTitle';
 String ivPred = 'iv';
+String accessListPred = 'accessList';
+String sharedKeyPred = 'sharedKey';
+String webIdPred = 'webId';
+
+String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
 
 // Set up encryption key file content
 String genEncKeyBody(
@@ -158,7 +164,7 @@ String genLogAclBody(String webId, String permFileName) {
 String genEncryptedNoteFileBody(String dateTimeStr, String noteTitle,
     String encNoteContent, String encNoteIv) {
   String encNoteFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    podnotesTerms:$noteDateTimePred "$dateTimeStr";\n    podnotesTerms:$ivPred "$encNoteIv";\n    podnotesTerms:$noteTitlePred "$noteTitle";\n    podnotesTerms:$encNoteContentPred "$encNoteContent".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    podnotesTerms:$createdDateTimePred "$dateTimeStr";\n    podnotesTerms:$modifiedDateTimePred "$dateTimeStr";\n    podnotesTerms:$ivPred "$encNoteIv";\n    podnotesTerms:$noteTitlePred "$noteTitle";\n    podnotesTerms:$encNoteContentPred "$encNoteContent".';
 
   return encNoteFileBody;
 }

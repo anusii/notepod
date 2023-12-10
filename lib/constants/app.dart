@@ -28,10 +28,14 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+
+const solidServerUrl = "https://pods.solidcommunity.au/";
 
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
 const double buttonBorderRadius = 5;
+const double standardSpace = 20.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
@@ -58,8 +62,36 @@ const requiredPwdMsg =
 const publicKeyMsg =
     'We will also create a random public/private key pair for secure data sharing with other PODs.';
 
-const encKeyInputMsg = 'Please enter encryption key to encrypt your data.';
+const encKeyInputMsg =
+    'Please enter encryption key to encrypt/decrypt your data.';
 
 const encKeySuccess = 'Your encryption key is already setup.';
 
 const encKeyUpdate = 'Please update your encryption key';
+
+const nonReadableNoteMsg = 'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
+
+const tokenTimeOutErr =
+    'Your login session has expired! Please login again to continue.';
+
+const tokenTimeOutTitle = 'Login Timeout!';
+
+
+List<MultiSelectItem> permissionItems = [
+  MultiSelectItem(
+      1, 'Read (The recipient will be able to read the content of your file)'),
+  MultiSelectItem(
+      2, 'Write (The recipient will be able to add new content to your file)'),
+  MultiSelectItem(3,
+      'Control (The recipient will be able to alter the access permission to your file)')
+];
+
+Map permMap = {1: 'Read', 2: 'Write', 3: 'Control'};
+
+SizedBox standardHeight() {
+  return const SizedBox(
+    height: standardSpace / 2,
+  );
+}
+
+const double desktopWidthThreshold = 830;

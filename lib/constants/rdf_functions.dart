@@ -299,3 +299,124 @@ class PodProfile {
     return pictureUrl;
   }
 }
+
+class AclResource {
+  String aclResStr = '';
+
+  AclResource(String aclResStr) {
+    this.aclResStr = aclResStr;
+  }
+
+  // ignore: long-method
+  List divideAclData() {
+    Map<String, String> userNameMap = {};
+    Map<String, List> userPermMap = {};
+
+    RegExp prefixRegExp = new RegExp(
+      r"@prefix ([a-zA-Z0-9: <>#].*)",
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    RegExp accessGroupRegExp = new RegExp(
+      r"(?<=^:[a-zA-Z]+\n)(?:^\s+.*;$\n)*(?:^\s+.*\.\n?)",
+      caseSensitive: false,
+      multiLine: true,
+    );
+
+    Iterable<RegExpMatch> accessGroupList =
+        accessGroupRegExp.allMatches(aclResStr);
+    Iterable<RegExpMatch> prefixList = prefixRegExp.allMatches(aclResStr);
+
+    for (final prefixItem in prefixList) {
+      String prefixLine = prefixItem[0].toString();
+      if (prefixLine.contains('/card#>')) {
+        var itemList = prefixLine.split(' ');
+        userNameMap[itemList[1]] =
+            itemList[2].substring(0, itemList[2].length - 1);
+      }
+    }
+
+    for (final accessGroup in accessGroupList) {
+      String accessGroupStr = accessGroup[0].toString();
+
+      RegExp accessRegExp = new RegExp(
+        r"acl:access[T|t]o (?<resource><[a-zA-Z0-9_-]*.[a-z]*>)",
+        caseSensitive: false,
+        multiLine: false,
+      );
+
+      RegExp modeRegExp = new RegExp(
+        r"acl:mode ([^.]*)",
+        caseSensitive: false,
+        multiLine: false,
+      );
+
+      RegExp agentRegExp = new RegExp(
+        r"acl:agent[a-zA-Z]*? ([^;]*);",
+        caseSensitive: false,
+        multiLine: false,
+      );
+
+      Iterable<RegExpMatch> accessPers = agentRegExp.allMatches(accessGroupStr);
+      Iterable<RegExpMatch> accessRes = accessRegExp.allMatches(accessGroupStr);
+      Iterable<RegExpMatch> accessModes = modeRegExp.allMatches(accessGroupStr);
+
+      for (final accessModesItem in accessModes) {
+        List accessList = accessModesItem[1].toString().split(',');
+        List accessItemList = [];
+        Set accessItemSet = {};
+        for (String accessItem in accessList) {
+          accessItemList.add(accessItem.replaceAll('acl:', '').trim());
+          accessItemSet.add((accessItem).trim());
+        }
+        accessItemList.sort();
+        String accessStr = accessItemList.join('');
+
+        Set accessResItemSet = {};
+        for (final accessResItem in accessRes) {
+          List accessResList = accessResItem[1].toString().split(',');
+          for (String accessItem in accessResList) {
+            accessResItemSet.add(accessItem.trim());
+          }
+        }
+
+        Set accessPersItemSet = {};
+        for (final accessPersItem in accessPers) {
+          List accessPersList = accessPersItem[1].toString().split(',');
+          for (String accessItem in accessPersList) {
+            accessPersItemSet.add(accessItem.replaceAll('me', '').trim());
+          }
+        }
+        userPermMap[accessStr] = [
+          accessResItemSet,
+          accessPersItemSet,
+          accessItemSet,
+        ];
+      }
+    }
+
+    return [userNameMap, userPermMap];
+  }
+
+  List<List<String>> divideRdfData(String aclResStr) {
+    List<String> rdfDataList = [];
+
+    var aclDataList = aclResStr.split('\n');
+
+    for (var i = 0; i < aclDataList.length; i++) {
+      String dataItem = aclDataList[i];
+      if (dataItem.contains(';')) {
+        var itemList = dataItem.split(';');
+        for (var j = 0; j < itemList.length; j++) {
+          String item = itemList[j];
+          rdfDataList.add(item);
+        }
+      } else {
+        rdfDataList.add(dataItem);
+      }
+    }
+
+    return [rdfDataList];
+  }
+}

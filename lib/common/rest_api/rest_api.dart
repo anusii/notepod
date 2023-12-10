@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: Anushka Vidanage
 
 library;
 
@@ -34,6 +34,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -259,6 +260,26 @@ Future<String> initialProfileUpdate(
   }
 }
 
+// Get public profile information from webId
+Future<String> fetchPubFile(String fileUrl) async {
+  final response = await http.get(
+    Uri.parse(fileUrl),
+    headers: <String, String>{
+      'Content-Type': 'text/turtle',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    /// If the server did return a 200 OK response,
+    /// then parse the JSON.
+    return response.body;
+  } else {
+    /// If the server did not return a 200 OK response,
+    /// then throw an exception.
+    throw Exception('Failed to load data! Try again in a while.');
+  }
+}
+
 Future<String> fetchPrvFile(
   String profCardUrl,
   String accessToken,
@@ -308,12 +329,12 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
 
   // Define query parameters
   String prefix1 = 'file: <$podnotesFile>';
-  String prefix2 = 'terms: <$podnotesTerms>';
+  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
 
   String subject = 'file:$resName';
-  String predObjPath = 'terms:$pathPred "$encNoteFilePath";';
-  String predObjIv = 'terms:$ivPred "$encNoteIv";';
-  String predObjKey = 'terms:$sessionKeyPred "$encSessionKey".';
+  String predObjPath = 'podnotesTerms:$pathPred "$encNoteFilePath";';
+  String predObjIv = 'podnotesTerms:$ivPred "$encNoteIv";';
+  String predObjKey = 'podnotesTerms:$sessionKeyPred "$encSessionKey".';
 
   // Check if the resource is previously added or not
   if (keyFileDataMap.containsKey(resName)) {
@@ -328,9 +349,9 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
     if (existKey != encSessionKey ||
         existPath != encNoteFilePath ||
         existIv != encNoteIv) {
-      String predObjPathPrev = 'data:path "$existPath";';
-      String predObjIvPrev = 'data:accessList "$existIv";';
-      String predObjKeyPrev = 'data:sharedKey "$existKey".';
+      String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
+      String predObjIvPrev = 'podnotesTerms:$ivPred "$existIv";';
+      String predObjKeyPrev = 'podnotesTerms:$sessionKeyPred "$existKey".';
 
       // Generate update sparql query
       String query =
@@ -341,7 +362,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
           genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
       // Run the query
-      createUpdateRes = await sparqlUpdate(
+      createUpdateRes = await updateFileByQuery(
           keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
     } else {
       // If the file contain same values, then no need to run anything
@@ -357,7 +378,7 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
         genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
     // Run the query
-    createUpdateRes = await sparqlUpdate(
+    createUpdateRes = await updateFileByQuery(
         keyFileUrl, accessToken, dPopTokenKeyFilePatch, query);
   }
 
@@ -368,14 +389,72 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   }
 }
 
-Future<String> sparqlUpdate(
-  String profCardUrl,
+Future<String> updateNoteFile(Map authData, Map notePrevData, Map noteNewData) async {
+
+  // Get indi key file url
+  String noteFileUrl = notePrevData['noteFileUrl'] + notePrevData['noteFileName'];
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  // Define previous note data
+  String noteTitlePrev = notePrevData['noteTitle'];
+  String modifiedDateTimePrev = notePrevData['modifiedDateTime'];
+  String encNoteContentPrev = notePrevData['encContent'];
+  String encIvPrev = notePrevData['encIv'];
+
+  // Define new note data
+  String noteTitleNew = noteNewData['noteTitle'];
+  String modifiedDateTimeNew = noteNewData['modifiedDateTime'];
+  String encNoteContentNew = noteNewData['encContent'];
+  String encIvNew = noteNewData['encIv'];
+
+  // Define query parameters
+  String prefix1 = ': <#>';
+  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+
+  String subject = ':me';
+
+  // Previous data
+  String predObjModifiedTimePrev = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
+  String predObjIvPrev = 'podnotesTerms:$ivPred "$encIvPrev";';
+  String predObjNoteTitlePrev = 'podnotesTerms:$noteTitlePred "$noteTitlePrev";';
+  String predObjEncNoteContentPrev = 'podnotesTerms:$encNoteContentPred "$encNoteContentPrev".';
+
+  // New data
+  String predObjModifiedTime = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
+  String predObjIv = 'podnotesTerms:$ivPred "$encIvNew";';
+  String predObjNoteTitle = 'podnotesTerms:$noteTitlePred "$noteTitleNew";';
+  String predObjEncNoteContent = 'podnotesTerms:$encNoteContentPred "$encNoteContentNew".';
+
+  // Generate update sparql query
+  String query =
+      'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjModifiedTimePrev $predObjIvPrev $predObjNoteTitlePrev $predObjEncNoteContentPrev}; INSERT DATA {$subject $predObjModifiedTime $predObjIv $predObjNoteTitle $predObjEncNoteContent};';
+
+  // Generate DPoP token
+  String dPopTokenKeyFilePatch =
+      genDpopToken(noteFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
+
+  // Run the query
+  String fileUpdateRes = await updateFileByQuery(
+      noteFileUrl, accessToken, dPopTokenKeyFilePatch, query);
+
+  if (fileUpdateRes == 'ok') {
+    return fileUpdateRes;
+  } else {
+    throw Exception('Failed to create/update the shared file.');
+  }
+}
+
+Future<String> updateFileByQuery(
+  String fileUrl,
   String accessToken,
   String dPopToken,
   String query,
 ) async {
   final editResponse = await http.patch(
-    Uri.parse(profCardUrl),
+    Uri.parse(fileUrl),
     headers: <String, String>{
       'Accept': '*/*',
       'Authorization': 'DPoP $accessToken',
@@ -396,6 +475,155 @@ Future<String> sparqlUpdate(
     // then throw an exception.
     throw Exception('Failed to write profile data! Try again in a while.');
   }
+}
+
+Future<List> getNoteList(Map authData, String notesUrl) async {
+
+  List fileList = [];
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  var resList = await getResourceList(
+      authData,
+      notesUrl,
+    );
+  
+  List noteList = resList[1];
+
+  for (var i = 0; i < noteList.length; i++) {
+      String fileItem = noteList[i];
+      String fileItemUrl = notesUrl + fileItem;
+
+      // Generate DPoP token
+      String dPopTokenNoteFile =
+          genDpopToken(fileItemUrl, rsaKeyPair, publicKeyJwk, 'GET');
+      
+      // Get note file content
+      String noteFileContent = await fetchPrvFile(fileItemUrl, accessToken, dPopTokenNoteFile);
+      Map noteFileContentMap = getFileContent(noteFileContent);
+
+      String noteTitle = noteFileContentMap['noteTitle'][1];
+      String noteDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['createdDateTime'][1]));
+      String modifiedDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['modifiedDateTime'][1]));
+
+      fileList.add([noteTitle, noteDateTime, fileItem, modifiedDateTime]);
+  }
+  
+  return fileList;
+
+}
+
+Future<List> getSharedNotesList(Map authData, String webId) async {
+
+  List sharedFileList = [];
+
+  String sharedNotesDirLoc = webId.replaceAll(profCard, '$sharedDirLoc/');
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  var resList = await getResourceList(
+      authData,
+      sharedNotesDirLoc,
+    );
+  
+  List sharedNotesDirList = resList[0];
+
+  for (var i = 0; i < sharedNotesDirList.length; i++) {
+      String sharedDir = sharedNotesDirList[i];
+
+      String sharedNotesFileLoc = '$sharedNotesDirLoc$sharedDir/$sharedKeyFile';
+
+      // Generate DPoP token
+      String dPopTokenSharedNoteFile =
+          genDpopToken(sharedNotesFileLoc, rsaKeyPair, publicKeyJwk, 'GET');
+      
+      // Get note file content
+      String shredNoteFileContent = await fetchPrvFile(sharedNotesFileLoc, accessToken, dPopTokenSharedNoteFile);
+      Map sharedNoteFileContentMap = getEncFileContent(shredNoteFileContent);
+
+      if(sharedNoteFileContentMap.isNotEmpty){
+        for (var fileName in sharedNoteFileContentMap.keys) {
+          // Get shared file information (all encrypted using receipient's public key)
+          String ownerWebIdEnc = sharedNoteFileContentMap[fileName][webIdPred];
+          String filePathEnc = sharedNoteFileContentMap[fileName][pathPred];
+          String fileSessionKeyEnc = sharedNoteFileContentMap[fileName][sharedKeyPred];
+          String fileAccListEnc = sharedNoteFileContentMap[fileName][accessListPred]; 
+
+          // Decrypt the data
+
+          // Get encryption key and private key
+          String keyFileUrl =
+              webId.replaceAll(profCard, '$encDirLoc/$encKeyFile');
+          String keydPopToken =
+              genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+          String keyFileInfo =
+              await fetchPrvFile(keyFileUrl, accessToken, keydPopToken);
+
+          // Read file content using RDFlib
+          Map keyFileMap = getFileContent(keyFileInfo);
+
+          // Get the master key from secure storage
+          String secureKey = await secureStorage.read(key: webId) ?? '';
+          String masterKeyStr =
+              sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+
+          // Setup AES encrypter
+          final key = encrypt.Key.fromUtf8(masterKeyStr);
+          final iv = encrypt.IV.fromBase64(
+            keyFileMap[ivPred][1],
+          );
+
+          final encrypter =
+              encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+          // Decrypt private key
+          final ecc = encrypt.Encrypted.from64(keyFileMap[prvKeyPred][1]);
+          final prvKeyStr = encrypter.decrypt(ecc, iv: iv);
+
+          // Use POD's private key to decrypt shared file data
+          final parser = encrypt.RSAKeyParser();
+          final prvKey = parser.parse(prvKeyStr) as RSAPrivateKey;
+          final encrypterPrv = encrypt.Encrypter(
+            encrypt.RSA(privateKey: prvKey),
+          );
+
+          final sharedWebId = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              ownerWebIdEnc,
+            ),
+          );
+
+          final sharedFilePath = encrypterPrv.decrypt(
+            encrypt.IV.fromBase64(
+              filePathEnc,
+            ),
+          );
+
+          final sharedKey = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileSessionKeyEnc,
+            ),
+          );
+
+          final sharedAccList = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileAccListEnc,
+            ),
+          );
+
+          sharedFileList.add([fileName, sharedWebId, sharedFilePath, sharedAccList, sharedKey]);
+        }
+      }
+  }
+  
+  return sharedFileList;
+
 }
 
 // Get the list of resources (folders and files) in a specific location
@@ -552,10 +780,75 @@ Future<Map> getNoteContent(
   final eccInd = encrypt.Encrypted.from64(noteEncVal);
   final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
 
-  noteData['noteTitle'] = noteContent['noteTitle'][1].replaceAll('_', ' ');
-  noteData['noteDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
-      .format(DateTime.parse(noteContent['noteDateTime'][1]));
+  noteData['noteTitle'] = noteContent['noteTitle'][1];
+  noteData['createdDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['createdDateTime'][1]));
+  noteData['modifiedDateTime'] = noteContent['modifiedDateTime'][1];
+  noteData['modifiedDateTimeFormatted'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['modifiedDateTime'][1]));
   noteData['noteContent'] = noteContentStr;
+  noteData['noteFileName'] = noteFileName;
+  noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
+  noteData['encSessionKey'] = indKeyStr;
+  noteData['encContent'] = noteEncVal;
+  noteData['encIv'] = noteIv;
+
+  return noteData;
+}
+
+// Get the note content, derypt and return it
+Future<Map> getSharedNoteContent(
+  Map authData,
+  String webId,
+  List sharedNoteData,
+) async {
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+  String sharedNoteUrl = sharedNoteData[2];
+  String dPopTokenNote = genDpopToken(sharedNoteUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  String fileContent = await fetchPrvFile(
+    sharedNoteUrl,
+    accessToken,
+    dPopTokenNote,
+  );
+
+  Map noteData = {};
+  Map noteContent = getFileContent(fileContent);
+
+  // Decrypt the note content
+  String indKeyStr = sharedNoteData[4];
+
+  // Now use decrypted individual key to decrypt note data
+  String noteIv = noteContent[ivPred][1];
+  String noteEncVal = noteContent[encNoteContentPred][1];
+  final keyInd = encrypt.Key.fromBase64(indKeyStr);
+  final ivInd = encrypt.IV.fromBase64(noteIv);
+  final encrypterInd =
+      encrypt.Encrypter(encrypt.AES(keyInd, mode: encrypt.AESMode.cbc));
+
+  // Decrypt data
+  final eccInd = encrypt.Encrypted.from64(noteEncVal);
+  final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
+
+  noteData['noteTitle'] = noteContent['noteTitle'][1];
+  noteData['createdDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['createdDateTime'][1]));
+  noteData['modifiedDateTime'] = noteContent['modifiedDateTime'][1];
+  noteData['modifiedDateTimeFormatted'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['modifiedDateTime'][1]));
+  noteData['noteContent'] = noteContentStr;
+  noteData['noteFileName'] = sharedNoteData[0];
+  noteData['noteFileUrl'] = sharedNoteUrl.replaceAll(sharedNoteData[0], '');
+  noteData['noteOwner'] = sharedNoteData[1];
+  noteData['noteSharedBy'] = sharedNoteData[1];
+  noteData['noteAccessList'] = sharedNoteData[3];
+  noteData['encSessionKey'] = indKeyStr;
+  noteData['encContent'] = noteEncVal;
+  noteData['encIv'] = noteIv;
+  noteData['noteMetadata'] = sharedNoteData;
 
   return noteData;
 }

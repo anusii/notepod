@@ -25,22 +25,28 @@ import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/notes/list_notes.dart';
+import 'package:podnotes/shared_notes/edit_shared_note.dart';
+import 'package:podnotes/shared_notes/view_shared_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
-class ListNotesScreen extends StatefulWidget {
-  const ListNotesScreen(
-      {super.key, required this.authData, required this.webId});
+class ViewEditSharedNoteScreen extends StatefulWidget {
+  const ViewEditSharedNoteScreen(
+      {super.key,
+      required this.sharedNoteData,
+      required this.authData,
+      required this.webId,
+      required this.action,});
 
+  final List sharedNoteData;
   final Map authData;
   final String webId;
+  final String action;
 
   @override
-  State<ListNotesScreen> createState() => _ListNotesScreenState();
+  State<ViewEditSharedNoteScreen> createState() => _ViewEditSharedNoteScreenState();
 }
 
-class _ListNotesScreenState extends State<ListNotesScreen> {
+class _ViewEditSharedNoteScreenState extends State<ViewEditSharedNoteScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
@@ -49,42 +55,34 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     Map authData = widget.authData;
     String webId = widget.webId;
-    String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getNoteList(
+    List sharedNoteData = widget.sharedNoteData;
+
+    _asyncDataFetch = getSharedNoteContent(
       authData,
-      notesUrl,
+      webId,
+      sharedNoteData,
     );
     super.initState();
   }
 
-  Widget _loadedScreen(List notesList, String webId, Map authData) {
-    // List filesList = [];
-    // for (var i = 0; i < resourceList[1].length; i++) {
-    //   String fileItem = resourceList[1][i];
-    //   String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-    //   var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-    //       .format(DateTime.parse(fileDateStr));
-    //   String fileName = '';
-    //   if (fileItem.split('-').length == 3) {
-    //     fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-    //   } else if (fileItem.split('-').length > 3) {
-    //     var fileNameList =
-    //         fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-    //     fileName = fileNameList.join(' ').replaceAll('_', ' ');
-    //   } else {
-    //     throw Exception('Cannot happen!');
-    //   }
-
-    //   filesList.add([fileName, fileDate, fileItem]);
-    // }
-
-    return Container(
-      color: Colors.white,
-      child: ListNotes(
-        fileList: notesList,
+  Widget _loadedScreen(Map noteData, String webId, Map authData) {
+    Widget nextScreen;
+    if(widget.action == 'view'){
+      nextScreen = ViewSharedNote(
+        noteData: noteData,
         webId: webId,
         authData: authData,
-      ),
+      );
+    } else {
+      nextScreen = EditSharedNote(
+        noteData: noteData,
+        webId: webId,
+        authData: authData,
+      );
+    }
+    return Container(
+      color: Colors.white,
+      child: nextScreen,
     );
   }
 
@@ -102,7 +100,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 returnVal = _loadedScreen(
-                  snapshot.data! as List,
+                  snapshot.data! as Map,
                   webId,
                   authData,
                 );

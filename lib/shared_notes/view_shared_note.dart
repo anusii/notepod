@@ -31,13 +31,14 @@ import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/notes/share_note.dart';
+import 'package:podnotes/shared_notes/shared_note_controls.dart';
 
-class ViewNote extends StatefulWidget {
+class ViewSharedNote extends StatefulWidget {
   final Map noteData;
   final String webId;
   final Map authData;
 
-  const ViewNote({
+  const ViewSharedNote({
     super.key,
     required this.noteData,
     required this.webId,
@@ -46,13 +47,14 @@ class ViewNote extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _ViewNoteState createState() => _ViewNoteState();
+  _ViewSharedNoteState createState() => _ViewSharedNoteState();
 }
 
-class _ViewNoteState extends State<ViewNote> {
+class _ViewSharedNoteState extends State<ViewSharedNote> {
   @override
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
+    List accessList = noteData['noteAccessList'].split(',');
 
     return Column(
       children: <Widget>[
@@ -89,9 +91,51 @@ class _ViewNoteState extends State<ViewNote> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
+              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
               child: Text(
                 "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
+              child: Text(
+                "Owner: ${noteData['noteOwner']}",
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
+              child: Text(
+                "Shared by: ${noteData['noteSharedBy']}",
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
+              child: Text(
+                "Permissions: ${noteData['noteAccessList']}",
                 style: const TextStyle(
                   fontSize: 14,
                 ),
@@ -121,117 +165,20 @@ class _ViewNoteState extends State<ViewNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.share,
-                  color: Colors.white,
+              if(accessList.contains('Control')) ... [
+                shareNote(noteData, context, widget.authData, widget.webId),
+                const SizedBox(
+                  width: 5,
                 ),
-                onPressed: () async {
-                  // Get the permission info of the note
-                  Map filePermMap = await getPermission(
-                    widget.authData,
-                    noteData['noteFileName'],
-                    noteData['noteFileUrl'],
-                  );
-
-                  Map resInfo = {};
-                  resInfo['resName'] = noteData['noteFileName'];
-                  resInfo['resType'] = 'File';
-                  resInfo['resUrl'] = noteData['noteFileUrl'];
-
-                  // The [userPerMap] is empty, which means the user have no access
-                  // to the folder/file. In this case, the lock_open button will not work.
-
-                  // if (filePermInfo.isEmpty) {
-                  //   setState(() {
-                  //     widget.isSharedFolderList[index] = false;
-                  //   });
-
-                  //   return;
-                  // }
-
-                  Map permNameMap = {};
-                  for (var permWebId in filePermMap.keys) {
-                    String permWebIdUrl = permWebId.replaceAll('<', '');
-                    permWebIdUrl = permWebIdUrl.replaceAll('>', '');
-
-                    String profInfo = await fetchPubFile(permWebIdUrl);
-                    PodProfile podProfile = PodProfile(profInfo.toString());
-                    String profName = podProfile.getProfName();
-                    permNameMap[permWebId] = profName;
-                  }
-
-                  resInfo['resPerm'] = filePermMap;
-                  resInfo['resUsername'] = permNameMap;
-
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ShareNote(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              resInfo: resInfo,
-                            )),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkBlue,
-                  backgroundColor: lightBlue, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+              ],
+              
+              if(accessList.contains('Write')) ... [
+                editNote(context, noteData, widget.authData, widget.webId),
+                const SizedBox(
+                  width: 5,
                 ),
-                label: const Text(
-                  'SHARE',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: widget.webId,
-                                authData: widget.authData,
-                                page: 'editNote',
-                                noteFileName: noteData['noteFileName'],
-                              )),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkGreen,
-                  backgroundColor: lightGreen, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'EDIT',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
+              ],
+              
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.keyboard_backspace,
@@ -244,7 +191,7 @@ class _ViewNoteState extends State<ViewNote> {
                         builder: (context) => NavigationScreen(
                               webId: widget.webId,
                               authData: widget.authData,
-                              page: 'listNotes',
+                              page: 'sharedNotes',
                             )),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed
@@ -316,4 +263,8 @@ class _ViewNoteState extends State<ViewNote> {
     //   ],
     // );
   }
+
+  
+
+  
 }

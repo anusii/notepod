@@ -25,22 +25,23 @@ import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/notes/list_notes.dart';
+import 'package:podnotes/shared_notes/list_shared_notes.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
-class ListNotesScreen extends StatefulWidget {
-  const ListNotesScreen(
-      {super.key, required this.authData, required this.webId});
+class ListSharedNotesScreen extends StatefulWidget {
+  const ListSharedNotesScreen(
+      {super.key,
+      required this.authData,
+      required this.webId,});
 
   final Map authData;
   final String webId;
 
   @override
-  State<ListNotesScreen> createState() => _ListNotesScreenState();
+  State<ListSharedNotesScreen> createState() => _ListSharedNotesScreenState();
 }
 
-class _ListNotesScreenState extends State<ListNotesScreen> {
+class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
@@ -49,42 +50,24 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     Map authData = widget.authData;
     String webId = widget.webId;
-    String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getNoteList(
+
+    _asyncDataFetch = getSharedNotesList(
       authData,
-      notesUrl,
+      webId,
     );
     super.initState();
   }
 
-  Widget _loadedScreen(List notesList, String webId, Map authData) {
-    // List filesList = [];
-    // for (var i = 0; i < resourceList[1].length; i++) {
-    //   String fileItem = resourceList[1][i];
-    //   String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-    //   var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-    //       .format(DateTime.parse(fileDateStr));
-    //   String fileName = '';
-    //   if (fileItem.split('-').length == 3) {
-    //     fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-    //   } else if (fileItem.split('-').length > 3) {
-    //     var fileNameList =
-    //         fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-    //     fileName = fileNameList.join(' ').replaceAll('_', ' ');
-    //   } else {
-    //     throw Exception('Cannot happen!');
-    //   }
-
-    //   filesList.add([fileName, fileDate, fileItem]);
-    // }
-
-    return Container(
-      color: Colors.white,
-      child: ListNotes(
-        fileList: notesList,
+  Widget _loadedScreen(List sharedNotesList, String webId, Map authData) {
+    Widget nextScreen;
+    nextScreen = ListSharedNotes(
+        sharedNotesList: sharedNotesList,
         webId: webId,
         authData: authData,
-      ),
+      );
+    return Container(
+      color: Colors.white,
+      child: nextScreen,
     );
   }
 

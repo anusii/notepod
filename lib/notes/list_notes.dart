@@ -61,7 +61,7 @@ class _ListNotesState extends State<ListNotes> {
                   ),
                   //const Icon(Icons.text_snippet_outlined),
                   title: Text(fileList[index][0]),
-                  subtitle: Text('Created on: ${fileList[index][1]}'),
+                  subtitle: Text('Created on: ${fileList[index][1]} \nLast modified: ${fileList[index][3]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
