@@ -25,8 +25,8 @@
 
 library;
 
-// Flutter imports:
 import 'package:flutter/material.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
@@ -40,13 +40,13 @@ const double standardSpace = 20.0;
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
-// Local secure storage instance.
+/// Local secure storage instance.
+
 FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
-// Const text labels
-const loginTimeoutTitle = 'Login Timeout!';
-const loginTimeoutError =
-    'Your login session has expired! Please login again to continue.';
+// const loginTimeoutTitle = 'Login Timeout!';
+// const loginTimeoutError =
+//     'Your login session has expired! Please login again to continue.';
 
 const initialStructureWelcome =
     'Welcome to PODNotes initial structure setup wizard!';
