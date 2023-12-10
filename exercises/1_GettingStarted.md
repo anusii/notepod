@@ -1,4 +1,4 @@
-# Exercise 1: Getting Started using PODs with the Podnotes app
+# Exercise 1: Get a POD and Login to Podnotes app
 
 This exercise will show you how to create a POD on the solid server host https://solidcommunity.au/ and how to use the Podnotes app to create and save notes to your POD.
 
@@ -75,6 +75,3 @@ Click the confirm checkbox and click `Submit`.
 You are now setup and logged in the Podnotes app.
 
 Repeat login to the Podnotes app will typically remember your pod webID in the Authorize window.
-
-
-## Create a note
