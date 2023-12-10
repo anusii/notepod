@@ -39,18 +39,18 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
-class EditNote extends StatefulWidget {
+class EditSharedNote extends StatefulWidget {
   final String webId;
   final Map authData;
   final Map noteData;
 
-  const EditNote({super.key, required this.webId, required this.authData, required this.noteData});
+  const EditSharedNote({super.key, required this.webId, required this.authData, required this.noteData});
 
   @override
-  EditNoteState createState() => EditNoteState();
+  EditSharedNoteState createState() => EditSharedNoteState();
 }
 
-class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin {
+class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
 
@@ -86,7 +86,7 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                       initialValue: widget.noteData['noteTitle'],
                       decoration: const InputDecoration(
                         labelText:
-                            'Note Title (Do not use underscores (_) in title)',
+                            'Note Title',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,
@@ -145,19 +145,7 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                           17,
                           'Saving the changes!',
                           false,
-                        );                  
-
-                        // Get the master key
-                        // String masterKey = await secureStorage.read(
-                        //       key: widget.webId,
-                        //     ) ??
-                        //     '';
-
-                        // Hash plaintext master key to get hashed master key
-                        // String encKey = sha256
-                        //     .convert(utf8.encode(masterKey))
-                        //     .toString()
-                        //     .substring(0, 32);
+                        );
 
                         // Get date and time
                         String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
@@ -194,7 +182,7 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                                 builder: (context) => NavigationScreen(
                                       webId: widget.webId,
                                       authData: widget.authData,
-                                      page: 'listNotes',
+                                      page: 'sharedNotes',
                                     )),
                             (Route<dynamic> route) =>
                                 false, // This predicate ensures all previous routes are removed

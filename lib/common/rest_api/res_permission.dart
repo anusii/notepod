@@ -157,7 +157,7 @@ Future<void> addPermission(
         otherPubKey = otherPubKey.replaceAll('"', '');
         otherPubKey = genPubKeyStr(otherPubKey);
 
-        // Encrypt individual key, file path, and access list using recipient's public key
+        // Encrypt individual key, file path, access list, and sender's webId using recipient's public key
         final parser = encrypt.RSAKeyParser();
         final pubKey = parser.parse(otherPubKey) as RSAPublicKey;
         final encrypterPub = encrypt.Encrypter(encrypt.RSA(publicKey: pubKey));
@@ -170,11 +170,14 @@ Future<void> addPermission(
         final encSharedAccess =
             encrypterPub.encrypt(accessListStr).base64.toString();
 
-        /// Get username to create a directory
+        final encSharedWebId =
+            encrypterPub.encrypt(webId).base64.toString();
+
+        // Get username to create a directory
         List webIdContent = webId.split("/");
         String dirName = webIdContent[3];
 
-        /// Copying shared key to recipient's POD
+        // Copying shared key to recipient's POD
         String shareRes = await copySharedKey(
             permissionWebId,
             dirName,
@@ -183,7 +186,8 @@ Future<void> addPermission(
             resourceUrl,
             encShareKey,
             encSharePath,
-            encSharedAccess);
+            encSharedAccess,
+            encSharedWebId);
 
         if (shareRes != 'ok') {
           debugPrint('Something went wrong!');
@@ -193,9 +197,9 @@ Future<void> addPermission(
       //String res = 'ok';
 
       if (res == 'ok') {
-        /// Update log files of the relevant PODs
-        /// Here we need to update two log files
-        /// File owner and permission recipient
+        // Update log files of the relevant PODs
+        // Here we need to update two log files
+        // File owner and permission recipient
         String accessListStr = selectedItems.join(',');
         String dateTimeStr =
             DateFormat("yyyyMMddTHHmmss").format(DateTime.now()).toString();
@@ -460,7 +464,8 @@ Future<String> copySharedKey(
     String resUrl,
     String encSharedKey,
     String encSharedPath,
-    String encSharedAccess) async {
+    String encSharedAccess,
+    String encSharedWebId,) async {
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -504,6 +509,7 @@ Future<String> copySharedKey(
         '\n    a foaf:PersonalProfileDocument;' +
         '\n    terms:title "Shared Encryption Keys".' +
         '\nfile:$resName' +
+        '\n    podnotesTerms:$webIdPred "$encSharedWebId";' +
         '\n    podnotesTerms:$pathPred "$encSharedPath";' +
         '\n    podnotesTerms:$accessListPred "$encSharedAccess";' +
         '\n    podnotesTerms:$sharedKeyPred "$encSharedKey".';
@@ -526,12 +532,14 @@ Future<String> copySharedKey(
     String prefix2 = 'podnotesTerms: <$podnotesTerms>';
 
     String subject = 'file:$resName';
+    String predObjWebId = 'podnotesTerms:$webIdPred "$encSharedWebId";';
     String predObjPath = 'podnotesTerms:$pathPred "$encSharedPath";';
     String predObjAcc = 'podnotesTerms:$accessListPred "$encSharedAccess";';
     String predObjKey = 'podnotesTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Check if the resource is previously added or not
     if (keyFileDataMap.containsKey(resName)) {
+      String existWebId = keyFileDataMap[resName][webIdPred];
       String existKey = keyFileDataMap[resName][sharedKeyPred];
       String existPath = keyFileDataMap[resName][pathPred];
       String existAcc = keyFileDataMap[resName][accessListPred];
@@ -542,14 +550,16 @@ Future<String> copySharedKey(
       /// Therefore this always ends up deleting the previous and adding a new hash
       if (existKey != encSharedKey ||
           existPath != encSharedPath ||
-          existAcc != encSharedAccess) {
-        String predObjPathPrev = 'data:path "$existPath";';
-        String predObjAccPrev = 'data:accessList "$existAcc";';
-        String predObjKeyPrev = 'data:sharedKey "$existKey".';
+          existAcc != encSharedAccess ||
+          existWebId != encSharedWebId) {
+        String predObjWebIdPrev = 'data:$webIdPred "$existWebId";';    
+        String predObjPathPrev = 'data:$pathPred "$existPath";';
+        String predObjAccPrev = 'data:$accessListPred "$existAcc";';
+        String predObjKeyPrev = 'data:$sharedKeyPred "$existKey".';
 
         /// Generate update sparql query
         String query =
-            'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjPathPrev $predObjAccPrev $predObjKeyPrev}; INSERT DATA {$subject $predObjPath $predObjAcc $predObjKey};';
+            'PREFIX $prefix1 PREFIX $prefix2 DELETE DATA {$subject $predObjWebIdPrev $predObjPathPrev $predObjAccPrev $predObjKeyPrev}; INSERT DATA {$subject $predObjWebId $predObjPath $predObjAcc $predObjKey};';
 
         /// Generate DPoP token
         String dPopTokenKeyFilePatch =
@@ -566,7 +576,7 @@ Future<String> copySharedKey(
     } else {
       /// Generate insert only sparql query
       String query =
-          'PREFIX $prefix1 PREFIX $prefix2 INSERT DATA {$subject $predObjPath $predObjAcc $predObjKey};';
+          'PREFIX $prefix1 PREFIX $prefix2 INSERT DATA {$subject $predObjWebId $predObjPath $predObjAcc $predObjKey};';
 
       /// Generate DPoP token
       String dPopTokenKeyFilePatch =

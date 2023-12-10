@@ -25,23 +25,28 @@ import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/shared_notes/list_shared_notes.dart';
+import 'package:podnotes/shared_notes/edit_shared_note.dart';
+import 'package:podnotes/shared_notes/view_shared_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
-class ListSharedNotesScreen extends StatefulWidget {
-  const ListSharedNotesScreen(
+class ViewEditSharedNoteScreen extends StatefulWidget {
+  const ViewEditSharedNoteScreen(
       {super.key,
+      required this.sharedNoteData,
       required this.authData,
-      required this.webId,});
+      required this.webId,
+      required this.action,});
 
+  final List sharedNoteData;
   final Map authData;
   final String webId;
+  final String action;
 
   @override
-  State<ListSharedNotesScreen> createState() => _ListSharedNotesScreenState();
+  State<ViewEditSharedNoteScreen> createState() => _ViewEditSharedNoteScreenState();
 }
 
-class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
+class _ViewEditSharedNoteScreenState extends State<ViewEditSharedNoteScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
@@ -50,21 +55,31 @@ class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
   void initState() {
     Map authData = widget.authData;
     String webId = widget.webId;
+    List sharedNoteData = widget.sharedNoteData;
 
-    _asyncDataFetch = getSharedNotesList(
+    _asyncDataFetch = getSharedNoteContent(
       authData,
       webId,
+      sharedNoteData,
     );
     super.initState();
   }
 
-  Widget _loadedScreen(List sharedNotesList, String webId, Map authData) {
+  Widget _loadedScreen(Map noteData, String webId, Map authData) {
     Widget nextScreen;
-    nextScreen = ListSharedNotes(
-        sharedNotesList: sharedNotesList,
+    if(widget.action == 'view'){
+      nextScreen = ViewSharedNote(
+        noteData: noteData,
         webId: webId,
         authData: authData,
       );
+    } else {
+      nextScreen = EditSharedNote(
+        noteData: noteData,
+        webId: webId,
+        authData: authData,
+      );
+    }
     return Container(
       color: Colors.white,
       child: nextScreen,
@@ -85,7 +100,7 @@ class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 returnVal = _loadedScreen(
-                  snapshot.data! as List,
+                  snapshot.data! as Map,
                   webId,
                   authData,
                 );

@@ -34,6 +34,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -506,11 +507,122 @@ Future<List> getNoteList(Map authData, String notesUrl) async {
 
       String noteTitle = noteFileContentMap['noteTitle'][1];
       String noteDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['createdDateTime'][1]));
+      String modifiedDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['modifiedDateTime'][1]));
 
-      fileList.add([noteTitle, noteDateTime, fileItem]);
+      fileList.add([noteTitle, noteDateTime, fileItem, modifiedDateTime]);
   }
   
   return fileList;
+
+}
+
+Future<List> getSharedNotesList(Map authData, String webId) async {
+
+  List sharedFileList = [];
+
+  String sharedNotesDirLoc = webId.replaceAll(profCard, '$sharedDirLoc/');
+
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+
+  var resList = await getResourceList(
+      authData,
+      sharedNotesDirLoc,
+    );
+  
+  List sharedNotesDirList = resList[0];
+
+  for (var i = 0; i < sharedNotesDirList.length; i++) {
+      String sharedDir = sharedNotesDirList[i];
+
+      String sharedNotesFileLoc = '$sharedNotesDirLoc$sharedDir/$sharedKeyFile';
+
+      // Generate DPoP token
+      String dPopTokenSharedNoteFile =
+          genDpopToken(sharedNotesFileLoc, rsaKeyPair, publicKeyJwk, 'GET');
+      
+      // Get note file content
+      String shredNoteFileContent = await fetchPrvFile(sharedNotesFileLoc, accessToken, dPopTokenSharedNoteFile);
+      Map sharedNoteFileContentMap = getEncFileContent(shredNoteFileContent);
+
+      if(sharedNoteFileContentMap.isNotEmpty){
+        for (var fileName in sharedNoteFileContentMap.keys) {
+          // Get shared file information (all encrypted using receipient's public key)
+          String ownerWebIdEnc = sharedNoteFileContentMap[fileName][webIdPred];
+          String filePathEnc = sharedNoteFileContentMap[fileName][pathPred];
+          String fileSessionKeyEnc = sharedNoteFileContentMap[fileName][sharedKeyPred];
+          String fileAccListEnc = sharedNoteFileContentMap[fileName][accessListPred]; 
+
+          // Decrypt the data
+
+          // Get encryption key and private key
+          String keyFileUrl =
+              webId.replaceAll(profCard, '$encDirLoc/$encKeyFile');
+          String keydPopToken =
+              genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+          String keyFileInfo =
+              await fetchPrvFile(keyFileUrl, accessToken, keydPopToken);
+
+          // Read file content using RDFlib
+          Map keyFileMap = getFileContent(keyFileInfo);
+
+          // Get the master key from secure storage
+          String secureKey = await secureStorage.read(key: webId) ?? '';
+          String masterKeyStr =
+              sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+
+          // Setup AES encrypter
+          final key = encrypt.Key.fromUtf8(masterKeyStr);
+          final iv = encrypt.IV.fromBase64(
+            keyFileMap[ivPred][1],
+          );
+
+          final encrypter =
+              encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+          // Decrypt private key
+          final ecc = encrypt.Encrypted.from64(keyFileMap[prvKeyPred][1]);
+          final prvKeyStr = encrypter.decrypt(ecc, iv: iv);
+
+          // Use POD's private key to decrypt shared file data
+          final parser = encrypt.RSAKeyParser();
+          final prvKey = parser.parse(prvKeyStr) as RSAPrivateKey;
+          final encrypterPrv = encrypt.Encrypter(
+            encrypt.RSA(privateKey: prvKey),
+          );
+
+          final sharedWebId = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              ownerWebIdEnc,
+            ),
+          );
+
+          final sharedFilePath = encrypterPrv.decrypt(
+            encrypt.IV.fromBase64(
+              filePathEnc,
+            ),
+          );
+
+          final sharedKey = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileSessionKeyEnc,
+            ),
+          );
+
+          final sharedAccList = encrypterPrv.decrypt(
+            encrypt.Key.fromBase64(
+              fileAccListEnc,
+            ),
+          );
+
+          sharedFileList.add([fileName, sharedWebId, sharedFilePath, sharedAccList, sharedKey]);
+        }
+      }
+  }
+  
+  return sharedFileList;
 
 }
 
@@ -668,16 +780,75 @@ Future<Map> getNoteContent(
   final eccInd = encrypt.Encrypted.from64(noteEncVal);
   final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
 
-  noteData['noteTitle'] = noteContent['noteTitle'][1].replaceAll('_', ' ');
+  noteData['noteTitle'] = noteContent['noteTitle'][1];
   noteData['createdDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
       .format(DateTime.parse(noteContent['createdDateTime'][1]));
   noteData['modifiedDateTime'] = noteContent['modifiedDateTime'][1];
+  noteData['modifiedDateTimeFormatted'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['modifiedDateTime'][1]));
   noteData['noteContent'] = noteContentStr;
   noteData['noteFileName'] = noteFileName;
   noteData['noteFileUrl'] = webId.replaceAll(profCard, '$myNotesDirLoc/');
   noteData['encSessionKey'] = indKeyStr;
   noteData['encContent'] = noteEncVal;
   noteData['encIv'] = noteIv;
+
+  return noteData;
+}
+
+// Get the note content, derypt and return it
+Future<Map> getSharedNoteContent(
+  Map authData,
+  String webId,
+  List sharedNoteData,
+) async {
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
+  String sharedNoteUrl = sharedNoteData[2];
+  String dPopTokenNote = genDpopToken(sharedNoteUrl, rsaKeyPair, publicKeyJwk, 'GET');
+
+  String fileContent = await fetchPrvFile(
+    sharedNoteUrl,
+    accessToken,
+    dPopTokenNote,
+  );
+
+  Map noteData = {};
+  Map noteContent = getFileContent(fileContent);
+
+  // Decrypt the note content
+  String indKeyStr = sharedNoteData[4];
+
+  // Now use decrypted individual key to decrypt note data
+  String noteIv = noteContent[ivPred][1];
+  String noteEncVal = noteContent[encNoteContentPred][1];
+  final keyInd = encrypt.Key.fromBase64(indKeyStr);
+  final ivInd = encrypt.IV.fromBase64(noteIv);
+  final encrypterInd =
+      encrypt.Encrypter(encrypt.AES(keyInd, mode: encrypt.AESMode.cbc));
+
+  // Decrypt data
+  final eccInd = encrypt.Encrypted.from64(noteEncVal);
+  final noteContentStr = encrypterInd.decrypt(eccInd, iv: ivInd);
+
+  noteData['noteTitle'] = noteContent['noteTitle'][1];
+  noteData['createdDateTime'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['createdDateTime'][1]));
+  noteData['modifiedDateTime'] = noteContent['modifiedDateTime'][1];
+  noteData['modifiedDateTimeFormatted'] = DateFormat('yyyy-MM-dd hh:mm:ssa')
+      .format(DateTime.parse(noteContent['modifiedDateTime'][1]));
+  noteData['noteContent'] = noteContentStr;
+  noteData['noteFileName'] = sharedNoteData[0];
+  noteData['noteFileUrl'] = sharedNoteUrl.replaceAll(sharedNoteData[0], '');
+  noteData['noteOwner'] = sharedNoteData[1];
+  noteData['noteSharedBy'] = sharedNoteData[1];
+  noteData['noteAccessList'] = sharedNoteData[3];
+  noteData['encSessionKey'] = indKeyStr;
+  noteData['encContent'] = noteEncVal;
+  noteData['encIv'] = noteIv;
+  noteData['noteMetadata'] = sharedNoteData;
 
   return noteData;
 }
