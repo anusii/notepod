@@ -29,6 +29,8 @@ The Podnotes app requires you to have a POD hosted on any solid server, which is
 
 Open [Podnotes app](https://Podnotes.solidcommunity.au/) and click `Get a POD`.
 
+![Get a POD](../assets/images/podnotes_get_a_pod.png)
+
 This will take you to https://pods.solidcommunity.au, click `Sign up for an account`
 
 Enter an email address, and the password you want to use to access your POD and click `Register`.
@@ -49,7 +51,7 @@ If you don't yet have a Solid webID, select `Use the webID in POD and register i
 
 Confirm by clicking `Create POD`.
 
-![POD account view](../assets/images/server_choose_pod_name.png)
+![Choose POD name and webID](../assets/images/server_choose_pod_name.png)
 
 You should see a window, with the URL of your POD and your webID.
 
@@ -64,13 +66,19 @@ The first time you login in to the Podnotes app, you need to set the master encr
 
 Open [Podnotes app](https://Podnotes.solidcommunity.au/) and click `Login`.
 
-A Community Solid Server authorization window will pop up with the last credentials which you've used on the Solid Community AU host.
+This may show you a Community Solid Server login pop up if you are not already logged in to your POD on https://pods.solidcommunity.au.
+
+![POD log](../assets/images/server_login_popup.png)
+
+If you have recently logged in to your POD on this Solid servier, you will see a  Community Solid Server authorization pop up with the last credentials which you've used on the Solid Community AU host.
 
 Click `Authorize` to login to your POD in the Podnotes app.
 
+![POD authorization](../assets/images/server_pod_auth_popup.png)
+
 This will take you to the Podnotes Setup Wizard to finish setting up your POD. This shows the resources (files) being created in your POD on the Solid Community AU solid server, and ask you to set an master encryption key which will be used to encrypt the notes on your POD.
 
-![Podnotes Setup Wizard](../assets/images/pod_wizard.png)
+![PODnotes setup wizard](../assets/images/pod_wizard.png)
 
 Enter your name and gender.
 
