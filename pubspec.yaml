@@ -33,7 +33,7 @@ dependencies:
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
-  window_manager: ^0.3.5
+  window_manager: ^0.3.7
 
 dev_dependencies:
   flutter_test:
