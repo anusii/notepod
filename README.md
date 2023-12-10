@@ -51,7 +51,7 @@ Run the podnotes app in debug mode on your chosen device by specifying enough of
 flutter run -d chrome
 ```
 
-When you have completed the setup of your platform, you are ready for the [Getting Started](exercises/1_GettingStarted.md) section.
+When you have completed the setup of your platform, you are ready for the [Getting Started](exercises/README.md) exercises where you can create a POD, make and share notes.
 
 ### Extra setup for MacOS
 
