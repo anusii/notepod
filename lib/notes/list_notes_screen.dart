@@ -101,11 +101,24 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
             builder: (context, snapshot) {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
-                returnVal = _loadedScreen(
-                  snapshot.data! as List,
-                  webId,
-                  authData,
-                );
+                return snapshot.data == null ||
+                        snapshot.data.toString() == "null"
+                    ? const Center(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: Text("No notes yet.")),
+                            ),
+                          ],
+                        ),
+                      )
+                    : returnVal = _loadedScreen(
+                        snapshot.data! as List,
+                        webId,
+                        authData,
+                      );
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);
               }
