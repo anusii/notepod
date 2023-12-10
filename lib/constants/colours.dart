@@ -42,6 +42,8 @@ const lighterGray = Color.fromARGB(255, 243, 243, 243);
 const bgOffWhite = Color(0xFFF2F4FC);
 const kTitleTextColor = Color(0xFF30384D);
 const warningRed = Colors.red;
+const lightRed = Color.fromARGB(255, 255, 88, 77);
+const darkRed = Color.fromARGB(255, 139, 38, 30);
 const confirmGreen = Colors.green;
 
 List<Color> defaultPodnotesColors = const [

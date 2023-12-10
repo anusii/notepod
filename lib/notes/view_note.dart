@@ -31,6 +31,7 @@ import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/notes/share_note.dart';
+import 'package:podnotes/widgets/loading_animation.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -232,6 +233,82 @@ class _ViewNoteState extends State<ViewNote> {
               const SizedBox(
                 width: 5,
               ),
+              /// Delete function: Following function is commented out
+              // ElevatedButton.icon(
+              //   icon: const Icon(
+              //     Icons.delete,
+              //     color: Colors.white,
+              //   ),
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext ctx) {
+              //         return AlertDialog(
+              //           title: const Text('Please Confirm'),
+              //           content: const Text(
+              //             'Are you sure you want to delete this note?',
+              //           ),
+              //           actions: [
+              //             // The "Yes" button
+              //             TextButton(
+              //               onPressed: () async {
+              //                 showAnimationDialog(
+              //                   context,
+              //                   17,
+              //                   'Deleting the note!',
+              //                   false,
+              //                 );
+              //                 String noteUrl = noteData['noteFileUrl'] + noteData['noteFileName'];
+              //                 String delNoteRes = await deleteNote(widget.webId, widget.authData, noteUrl, noteData['noteFileName']);
+
+              //                 if(delNoteRes == 'ok'){
+              //                   // ignore: use_build_context_synchronously
+              //                   Navigator.pushAndRemoveUntil(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                       builder: (context) => NavigationScreen(
+              //                             webId: widget.webId,
+              //                             authData: widget.authData,
+              //                             page: 'listNotes',
+              //                           )),
+              //                     (Route<dynamic> route) =>
+              //                         false, // This predicate ensures all previous routes are removed
+              //                   );
+              //                 }
+              //               },
+              //               child: const Text('Yes'),
+              //             ),
+              //             TextButton(
+              //               onPressed: () {
+              //                 // Close the dialog
+              //                 Navigator.of(context).pop();
+              //               },
+              //               child: const Text('No'),
+              //             ),
+              //           ],
+              //         );
+              //       },
+              //     );
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     foregroundColor: darkRed,
+              //     backgroundColor: lightRed, // foreground
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: 15,
+              //     ),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(20),
+              //     ),
+              //   ),
+              //   label: const Text(
+              //     'DELETE',
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ),
+              // const SizedBox(
+              //   width: 5,
+              // ),
+              /// uncomment upto here
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.keyboard_backspace,
