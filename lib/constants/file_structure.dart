@@ -41,7 +41,7 @@ const sharingDir = "sharing";
 const sharedDir = "shared";
 const encDir = "encryption";
 const logsDir = "logs";
-const cardMe = "card#me";
+// const cardMe = "card#me";
 const noteFileNamePrefix = 'note-';
 
 // File name constants.
