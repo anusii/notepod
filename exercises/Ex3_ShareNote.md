@@ -38,7 +38,7 @@ From the sharing view of a note file, click `Add New Permission`.
 
 You specify the person you are granting access to using their webID.
 
-Ask the person you are granting access to what their webID is. A POD created on the Solid Community AU solid server https://pods.solidcommunity.au will have a webID
+Ask the person you are granting access to what their webID is. A POD created on the Solid Community AU solid server https://pods.solidcommunity.au will have a webID of the form:
 
 ```
 https://pods.solidcommunity.au/[pod_name]/profile/card#me
@@ -47,17 +47,21 @@ where `pod_name` is the name of their pod, and `profile/card#me` is the public c
 
 ### Testing read access
 
+From the sharing view of a note file, click `Add New Permission`.
+
 Enter their `webID` in the `web ID value` text field.
 
 Press the `Select the Permissions` button to select permisisons.
 
-![Select permissions](../assets/images/select_permissions.png)
+![Select permissions](../assets/images/enter_webid_and_permissions.png)
 
 Click the checkbox to give the recipient `Read` access, and submit by pressing `OK`.
 
-![Read granted](../assets/images/read_granted.png)
+![Select permissions](../assets/images/select_permissions.png)
 
 Click `Add permission` to grant the recipient this access to your note file.
+
+![Read granted](../assets/images/read_granted.png)
 
 You have now granted the recipient access to your note file!
 
