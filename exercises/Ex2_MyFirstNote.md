@@ -1,8 +1,15 @@
 # Exercise 2: My First Note
 
+**Table of Contents**
+
+- [Login](#login)
+- [Make a note](#make_note)
+
+
 This exercise will show you how to create a note in the Podnotes app.
 
-## Login
+
+## Login<a name="login"></a>
 
 Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and click `Login`. If you have not logged in recently, you will probably see a login window, enter the email address and password that you used to create your POD.
 
@@ -18,7 +25,7 @@ Note: If you have flutter installed, you could also build and run the app locall
 
 
 
-## Make a Note
+## Make a note<a name="make_note"></a>
 
 By default, the Podnotes app opens on the create new note page, or you can get to this page by selecting `Home` in the menu.
 
