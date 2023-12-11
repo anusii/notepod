@@ -10,17 +10,20 @@ This exercise will show you how to create a POD on the solid server host https:/
 
 ## Setup<a name="setup"></a>
 
-Option 1: Open the Podnotes app using the web app or download links for the binary for your OS:
+**Option 1:** Open the Podnotes app using the web app or download links for the binary for your OS:
 
 - [Podnotes web app](https://Podnotes.solidcommunity.au/)
-<!--- Podnotes Windows app (.exe)
-- Podnotes MacOS app (.app)
-- Podnotes Linux app
-- Podnotes Android app (.apk) -->
+
+See [Downloads](https://github.com/anusii/podnotes/tree/main/installers) for Podnotes app downloads for:
+
+<!-- - Podnotes.app (MacOS)
+- Podnotes Linux app -->
+- Podnotes.exe (Windows)
+- Podnotes.apk (Android)
 
 
 
-Option 2: If you already have `flutter` installed and setup to build to `chrome` or desired platform (Linux, MacOS, Windows, Android, iOS), you may build and run the Podnotes app locally on your machine.
+**Option 2:** If you already have `flutter` installed and setup to build to `chrome` or desired platform (Linux, MacOS, Windows, Android, iOS), you may build and run the Podnotes app locally on your machine.
 
 ```
 flutter devices
