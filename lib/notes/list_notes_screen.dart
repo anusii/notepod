@@ -28,6 +28,7 @@ import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/notes/list_notes.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
+import 'package:podnotes/widgets/msg_card.dart';
 
 class ListNotesScreen extends StatefulWidget {
   const ListNotesScreen(
@@ -102,14 +103,18 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 return snapshot.data == null ||
-                        snapshot.data.toString() == "null"
-                    ? const Center(
+                        snapshot.data.toString() == "null" || snapshot.data.length == 0
+                    ? Center(
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("No notes yet.")),
+                              child: buildMsgCard(
+                                context,
+                                Icons.info,
+                                Colors.amber,
+                                'No notes yet!',
+                                noNotesMsg,
+                              ),
                             ),
                           ],
                         ),

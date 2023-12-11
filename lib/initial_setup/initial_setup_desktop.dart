@@ -35,6 +35,7 @@ import 'package:fast_rsa/fast_rsa.dart' as frsa;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:podnotes/nav_screen.dart';
+import 'package:podnotes/widgets/loading_animation.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_encrypt/solid_encrypt.dart';
 
@@ -411,6 +412,13 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                             if (formKey.currentState
                                                     ?.saveAndValidate() ??
                                                 false) {
+                                              
+                                              showAnimationDialog(
+                                                context,
+                                                17,
+                                                'Creating resources!',
+                                                false,
+                                              );
                                               Map formData = formKey
                                                   .currentState?.value as Map;
 

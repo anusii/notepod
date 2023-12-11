@@ -76,6 +76,10 @@ const tokenTimeOutErr =
 
 const tokenTimeOutTitle = 'Login Timeout!';
 
+const noNotesMsg = 'You do not have any notes yet!';
+
+const noSharedNotesMsg = 'You do not have any shared notes yet!';
+
 
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(
