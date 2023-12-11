@@ -1,12 +1,19 @@
-# Exercise 4: Install Flutter and get started with PODs app development
+# Exercise 4: Install Flutter and get started with PODs app development with Flutter
 
 **Table of Contents**
 
-- [Install Flutter and Podnotes](#install)
-- [Test run Flutter](#test_flutter)
-- [Make changes to the Podnotes app](#edit_podnotes)
-  + [Tackle a Podnotes issue](#podnotes_issue)
-- [More resources](#more)
+
+- [Exercise 4: Install Flutter and get started with PODs app development with Flutter](#exercise-4-install-flutter-and-get-started-with-pods-app-development-with-flutter)
+  - [Install Flutter](#install-flutter)
+    - [Flutter SDK](#flutter-sdk)
+    - [VS Code](#vs-code)
+    - [Android Studio](#android-studio)
+    - [Visual Studio](#visual-studio)
+  - [Test run Flutter](#test-run-flutter)
+  - [Get Podnotes code](#get-podnotes-code)
+  - [Make changes to the Podnotes app](#make-changes-to-the-podnotes-app)
+    - [Tackle a Podnotes issue](#tackle-a-podnotes-issue)
+  - [More resources](#more-resources)
 
 
 This exercise provides resources to install Flutter and get started developing PODs based apps with Flutter.
@@ -16,29 +23,114 @@ You will have the opportunity to build and run the Podnotes app on your local ma
 You do not need to run a Solid server, as the Podnotes app uses the Community Solid Server open source software running on the Solid Community AU server https://pods.solidcommunity.au
 
 
-## Install Flutter and Podnotes<a name="install"></a>
+## Install Flutter<a name="install_flutter"></a>
 
-To get setup, you will need to install Flutter, including setting up flutter for your development platform, and install the Podnotes app (follow the [Install Flutter and Podnotes in repo README](../README.md#install)).
+To get setup, you will first need to install Flutter. Installing Flutter for app development is a lengthy process. You will need to install the following:
 
+### Flutter SDK
+- Follow the Flutter Dev instructions to install flutter for your preferred platform at [Flutter Dev Getting Started](https://docs.flutter.dev/get-started/install)
+- Flutter can be installed on Windows, MacOS, Linux, and ChromeOS
+- With Flutter SDK installation Dart SDK will also get automatically installed
+- After installing FLutter SDK you will also need to add the `<path to Flutter bin>` to your environment variables
+
+
+### VS Code 
+- Go to the [VS Code Download](https://code.visualstudio.com/Download) section and download and install VS Code to your respective platform 
+- VS Code is the recommended IDE for flutter development
+- After installing, run VS Code and go to extensions. Search for `Flutter` and install the first extension in the search results
+- Installing this extension will also automatically install Dart extension for VS Code
+
+### Android Studio
+- Go to [Android studio web page](https://developer.android.com/studio) and download the installation file
+- Install and run Android studio
+- Complete the initial setup which will also install a few other required items
+- After setup, in the first welcome screen you will see `More Actions` link. Click on it and select `SDK Manager`
+- In the opened Settings window select the `SDK Tools tab`
+- In the long list of tools select the one that says `Android SDK Command-line Tools (latest)` and click Apply. This will install the command line tools for Android
+- Before you can use Flutter, you must agree to the licenses of the Android SDK platform. FOr that do the following
+- Open a command line and enter the following line and press enter
+  ```flutter doctor --android-licenses``` 
+
+### Visual Studio
+- You will also need to install Visual Studio if you are developing Windows apps
+- Install [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Build Tools 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
+- When installing Visual Studio or only the Build Tools, you need the `Desktop development with C++` workload installed for building windows, including all of its default components.
+
+
+After the above setup, you should now have all the required software and tools installed for Flutter development.
+
+Open a command line and enter the following command to check your setup.
+
+```
+flutter doctor
+```
+This will then perform checks on all the installed components and will give you an output like the following.
+
+```
+[√] Flutter (Channel stable, 3.16.2, on Microsoft Windows [Version 10.0.22621.2715], locale en-US)
+[√] Windows Version (Installed version of Windows is version 10 or higher)
+[√] Android toolchain - develop for Android devices (Android SDK version 31.0.0)
+[√] Chrome - develop for the web
+[√] Visual Studio - develop Windows apps (Visual Studio Community 2022 17.2.3)
+[√] Android Studio (version 4.2)
+[√] VS Code (version 1.84.2)
+[√] Connected device (3 available)
+[√] Network resources
+```
+If you have any errors in any of the above components, follow the given instructions to fix those issues.
+
+You can also run `flutter --version` to check the installed version of the Flutter and `flutter devices` to list the configured devices for running apps.
+
+*You are now ready to develop apps with Flutter.*
 
 ## Test run Flutter<a name="test_flutter"></a>
 
-Check your flutter install by running the flutter demo app on your preferred device - see [Test drive flutter]
-(https://docs.flutter.dev/get-started/test-drive?tab=terminal)
+You can also check your flutter install by running the flutter demo app on your preferred device - see [Test drive flutter](https://docs.flutter.dev/get-started/test-drive?tab=terminal)
 
+
+## Get Podnotes code<a name="get_podnotes"></a>
+
+Now lets get the Podnotes project setup in your flutter development environment. 
+
+Go to [Podnotes repo](https://github.com/anusii/podnotes). You can either Clone the repo by 
+```
+git clone https://github.com/anusii/podnotes.git
+``` 
+or you can fork it to your own GitHub account.
+
+Now open your VS Code IDE. Go to `File -> Open Folder` and select the local podnotes directory.
+
+*You are now ready to make changes to the Podnotes app with Flutter.*
 
 ## Make changes to the Podnotes app<a name="edit_podnotes"></a>
 
-Now run the Podnotes app.
+There are a couple of options you can use to run the Podnotes app. 
+
+**Option 1**
+Open the Terminal in the VS Code (if not open by default at the bottom of the window) by going to `Terminal -> New Terminal` in the top menu bar.
+
+Go to the `podnotes` directory and run the following command.
 
 ```
 flutter run -d [your_device]
 ```
+Add the name of the device you want the app to run on. For instance, if you want to run the app as a Windows app use the command
+```
+flutter run -d Windows
+```
+When running for the first time it will ask to setup Windows device for the app. Simply follow the steps to set that up.
 
-Open the Podnotes repo in your favourite editor.
+**Option 2**
+
+In the VS Code Explorer bar open the file `podnotes -> lib -> main.dart`. A play button will apear on the top right had coner of your window. Click that button and select either one of the options and the app will then run.
+
+For the first time it will again ask for you to setup the preferred device for the app to run on. 
+
+**Making changes to the app**
+
+Open the Podnotes repo in your favourite editor. You can use any editor you like.
 
 Edit some text in the app, by searching and changing that text in your editor. Press `R` to hot restart the app to see your changes.
-
 
 ### Tackle a Podnotes issue<a name="podnotes_issue"></a>
 
