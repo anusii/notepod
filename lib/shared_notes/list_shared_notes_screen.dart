@@ -27,6 +27,7 @@ import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/shared_notes/list_shared_notes.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
+import 'package:podnotes/widgets/msg_card.dart';
 
 class ListSharedNotesScreen extends StatefulWidget {
   const ListSharedNotesScreen(
@@ -84,11 +85,28 @@ class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
             builder: (context, snapshot) {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
-                returnVal = _loadedScreen(
-                  snapshot.data! as List,
-                  webId,
-                  authData,
-                );
+                return snapshot.data == null ||
+                      snapshot.data.toString() == "null" || snapshot.data.length == 0
+                  ? Center(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: buildMsgCard(
+                              context,
+                              Icons.info,
+                              Colors.amber,
+                              'No shared notes!',
+                              noSharedNotesMsg,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : returnVal = _loadedScreen(
+                    snapshot.data! as List,
+                    webId,
+                    authData,
+                  );                
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);
               }
