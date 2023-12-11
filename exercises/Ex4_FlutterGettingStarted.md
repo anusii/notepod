@@ -41,7 +41,9 @@ Edit some text in the app, by searching and changing that text in your editor. P
 
 ### Tackle a Podnotes issue<a name="podnotes_issue"></a>
 
-Now you can have a go at contributing to an issue in the Podnotes repo. Create a branch, make your changes, and submit a pull request.
+Now you can have a go at contributing to an [issue in the Podnotes repo](https://github.com/anusii/podnotes/issues).
+
+Pick an issue, create a branch, make your changes, and submit a pull request - we're excited to see your contributions!
 
 Feel free to also log an issue, providing details of your platform and how to replicate the problem.
 
