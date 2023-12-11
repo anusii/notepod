@@ -19,8 +19,8 @@ class Responsive extends StatelessWidget {
   static bool isMobile(BuildContext context) =>
       screenWidth(context) < desktopWidthThreshold;
 
-  //static bool isTablet(BuildContext context) =>
-  //    screenWidth(context) < 1100 && screenWidth(context) >= 650;
+  static bool isTablet(BuildContext context) =>
+     screenWidth(context) < 1100 && screenWidth(context) >= 960;
 
   static bool isDesktop(BuildContext context) =>
       screenWidth(context) >= desktopWidthThreshold;

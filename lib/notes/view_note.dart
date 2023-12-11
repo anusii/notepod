@@ -60,13 +60,15 @@ class _ViewNoteState extends State<ViewNote> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-              child: Text(
-                noteData['noteTitle'],
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                child: Text(
+                  noteData['noteTitle'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
                 ),
               ),
             ),
@@ -75,12 +77,14 @@ class _ViewNoteState extends State<ViewNote> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-              child: Text(
-                "Created on: ${noteData['createdDateTime']}",
-                style: const TextStyle(
-                  fontSize: 14,
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
+                child: Text(
+                  "Created on: ${noteData['createdDateTime']}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
@@ -89,12 +93,14 @@ class _ViewNoteState extends State<ViewNote> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
-              child: Text(
-                "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
-                style: const TextStyle(
-                  fontSize: 14,
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
+                child: Text(
+                  "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
@@ -121,7 +127,8 @@ class _ViewNoteState extends State<ViewNote> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+            children: 
+            [
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.share,

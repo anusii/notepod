@@ -94,4 +94,4 @@ SizedBox standardHeight() {
   );
 }
 
-const double desktopWidthThreshold = 830;
+const double desktopWidthThreshold = 960;
