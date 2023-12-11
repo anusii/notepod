@@ -2,9 +2,9 @@
 
 This exercise will show you how to share a note in the Podnotes app.
 
-Is Solid, sharing a note to another person is the act of editing the access control list of a resource which you control to make that resource accessible to the other person's webID. It does not mean they have accessed the resource, only that they could have done so, if they attempted to read the URI of the shared resource.
+Is Solid, sharing a note to another person is the act of editing the access control list of a resource which you control to make that resource accessible to the other person's webID. It does not show whether they have accessed the resource, it only makes the resource accessible to the recipient via the resource URI.
 
-The access permissions of a note file describe which other people (as described by their webID) have access to your note file. Each note file is a turtle (.ttl) file, describing the contents using Resource Description Framework triples.
+The access permissions of a note file describe which other people (identified by their webID) have access to your note file.
 
 ## View the Sharing of a Note
 
@@ -36,7 +36,7 @@ A newly created note which you have not yet shared will have the file access per
 
 First we will test granting read access to a note.
 
-### Test granting read access
+### Granting read access
 
 From the sharing view of a note file, click `Add New Permission`.
 
@@ -77,12 +77,16 @@ They should see your note in their shared notes list.
 
 ![Recipient POD - Shared Notes List showing r note](../assets/images/recipient_shared_notes_read.png)
 
-They can read the note, however they do not have edit permission, hence they do not see an edit button from the note view.
+They have been granted `Read` permission, hence they can open and read the note
+
+However they do not have write permission, hence they do not see an `Edit` button in the note view.
+
+Similarly, they have not been granted control permission and consequently do not see an `Share` button in the note view.
 
 ![Recipient POD - Inside the shared r note](../assets/images/recipient_shared_read_only_note.png)
 
 
-## Test granting read and write access
+## Granting read and write access
 
 **These actions are by you**
 
@@ -95,17 +99,19 @@ Submit by pressing `OK` and click `Add permission` to **confirm** that you are g
 
 **The next actions are done by the recipient of your note**
 
-Now ask the recipient to login to their Podnotes app, and select `Share Notes` from the menu.
+Now ask the recipient to login to their Podnotes app, and select the `Share Notes` list from the menu.
 
 From their shared notes list, ask them to open the note.
 
 ![Recipient POD - Shared Notes List showing rw note](../assets/images/recipient_shared_notes_rw.png)
 
-They can read and write to the note, hence they do not see an edit button from the note view.
+They have beenn granted `Read` and `Write` permission. This means they can read and write to the note, hence they have an `Edit` button in the note view.
+
+They do not have the `Share` button, as you did not grant them `Control` permission.
 
 ![Recipient POD - Inside the shared rw note](../assets/images/recipient_shared_rw_note.png)
 
-Ask them to click `Edit` and add some text to your note - they have added the section `Another Section`. In this way the recipient is able to collaborate with you on the note, while you keep sharing control.
+Ask them to click `Edit` and add some text to your note - here they have added the section `Another Section`. In this way the recipient is able to collaborate with you on the note, while you keep sharing control.
 
 ![Recipient POD - Editing the shared rw note](../assets/images/recipient_editing_shared_rw_note.png)
 
