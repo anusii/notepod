@@ -12,7 +12,9 @@ This will open an popup with your POD webID. Click `Authorize` to login to your 
 
 ![POD authorization](../assets/images/server_pod_auth_popup.png)
 
-(Note: If you have flutter installed, you could also build and run the app locally on your machine.)
+Be patient, *you may need to wait several seconds for login* process to complete.
+
+Note: If you have flutter installed, you could also build and run the app locally on your machine.
 
 
 
