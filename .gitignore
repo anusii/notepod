@@ -175,6 +175,9 @@ pubspec.lock
 # Coverage
 coverage/
 
+# Build dmg folder
+installers/macos_dmg/
+
 #-----------------------------------------------------------------------
 # linux and windows
 #-----------------------------------------------------------------------
