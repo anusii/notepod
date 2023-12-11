@@ -157,6 +157,51 @@ class HomeState extends State<NavigationScreen>
         backgroundColor: lightGreen,
         centerTitle: true,
         title: const Text("POD Note Taker"),
+        actions: <Widget>[
+          const SizedBox(width:50),
+          IconButton(
+            tooltip: "Create a new note",
+            icon: const Icon(
+              Icons.add_circle,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'home',
+                        )),
+                (Route<dynamic> route) =>
+                    false, // This predicate ensures all previous routes are removed
+              );
+            },
+          ),
+          const SizedBox(width:10),
+          IconButton(
+            tooltip: "My notes",
+            icon: const Icon(
+              Icons.file_copy,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'listNotes',
+                        )),
+                (Route<dynamic> route) =>
+                    false, // This predicate ensures all previous routes are removed
+              );
+            },
+          ),
+          SizedBox(width:10),
+        ],
       ),
       drawer: NavDrawer(
         webId: widget.webId,

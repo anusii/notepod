@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podnotes/common/responsive.dart';
 import 'package:podnotes/constants/colours.dart';
 
 Row buildMsgCard(
@@ -11,7 +12,7 @@ Row buildMsgCard(
   return Row(
     children: [
       Expanded(
-        flex: 10,
+        flex:  Responsive.isDesktop(context) ? 10 : 8,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(60, 50, 60, 0),
           child: Card(
@@ -19,7 +20,7 @@ Row buildMsgCard(
             shadowColor: Colors.black,
             color: lighterGray,
             child: SizedBox(
-              height: 160,
+              height: Responsive.isDesktop(context) ? 160 : Responsive.isTablet(context) ? 200 : 220,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
