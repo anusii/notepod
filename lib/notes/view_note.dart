@@ -31,7 +31,6 @@ import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/notes/share_note.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -127,8 +126,7 @@ class _ViewNoteState extends State<ViewNote> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: 
-            [
+            children: [
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.share,
@@ -210,17 +208,17 @@ class _ViewNoteState extends State<ViewNote> {
                 ),
                 onPressed: () async {
                   Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: widget.webId,
-                                authData: widget.authData,
-                                page: 'editNote',
-                                noteFileName: noteData['noteFileName'],
-                              )),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationScreen(
+                              webId: widget.webId,
+                              authData: widget.authData,
+                              page: 'editNote',
+                              noteFileName: noteData['noteFileName'],
+                            )),
+                    (Route<dynamic> route) =>
+                        false, // This predicate ensures all previous routes are removed
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: darkGreen,
@@ -240,6 +238,7 @@ class _ViewNoteState extends State<ViewNote> {
               const SizedBox(
                 width: 5,
               ),
+
               /// Delete function: Following function is commented out
               // ElevatedButton.icon(
               //   icon: const Icon(
