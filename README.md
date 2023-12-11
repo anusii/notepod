@@ -51,11 +51,11 @@ Run the podnotes app in debug mode on your chosen device by specifying enough of
 flutter run -d chrome
 ```
 
-When you have completed the setup of your platform, you are ready for the [Getting Started](exercises/1_GettingStarted.md) section.
+When you have completed the setup of your platform, you are ready for the [PodNotes Getting Started](exercises/README.md) exercises where you can create a POD, make and share notes.
 
 ### Extra setup for MacOS
 
-Running the app on MacOS requires, additional configuration in Xcode. Open the project macos setting in Xcode with
+Running the app on MacOS requires, additional configuration in Xcode. Open the project macos folder in Xcode with
 ```
 cd podnotes/macos
 xed .
@@ -64,8 +64,15 @@ Select `Signing & Capabilities`. In `Team`, choose `Add an Account` and sign in 
 
 ### Extra setup for iOS
 
-For iOS, you will also need to set the deployment platform to match the iOS version on your simulator
-In the Simulator, open `Settings` -> `General` -> `About` to check the iOS version number, then set accordingly in Xcode
+For iOS, you will also need to set the deployment platform to match the iOS version on your simulator.
+
+Open the Simulator app, select your simulated device with `File` -> `Open Simulator` -> pick a device.
+```
+open -a Simulator
+```
+Then in the simulated device check the iOS version number by clicking on the `Settings`app and going to `General` -> `About` to look up the iOS.
+
+Open the project iOS folder in Xcode and add the iOS version used by your simulator.
 ```
 cd podnotes/ios
 xed .
