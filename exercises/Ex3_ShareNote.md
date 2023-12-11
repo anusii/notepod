@@ -36,7 +36,7 @@ A newly created note which you have not yet shared will have the file access per
 
 First we will test granting read access to a note.
 
-### Testing read access
+### Test granting read access
 
 From the sharing view of a note file, click `Add New Permission`.
 
@@ -75,14 +75,14 @@ Now ask the recipient to login to their Podnotes app, and select `Share Notes` f
 
 They should see your note in their shared notes list.
 
-![Shared note](../assets/images/recipient_shared_notes.png)
+![Recipient POD - Shared Notes List showing r note](../assets/images/recipient_shared_notes_read.png)
 
 They can read the note, however they do not have edit permission, hence they do not see an edit button from the note view.
 
-![Shared note](../assets/images/recipient_shared_read_only_note.png)
+![Recipient POD - Inside the shared r note](../assets/images/recipient_shared_read_only_note.png)
 
 
-## Test granting rw access
+## Test granting read and write access
 
 **These actions are by you**
 
@@ -92,12 +92,30 @@ This time grant the recipient, `Read` and `Write` access.
 
 Submit by pressing `OK` and click `Add permission` to **confirm** that you are granting the recipient this access to your note file.
 
+
 **The next actions are done by the recipient of your note**
 
 Now ask the recipient to login to their Podnotes app, and select `Share Notes` from the menu.
 
 From their shared notes list, ask them to open the note.
 
-They can read and write to the note, however they do not have edit permission, hence they do not see an edit button from the note view.
+![Recipient POD - Shared Notes List showing rw note](../assets/images/recipient_shared_notes_rw.png)
 
-![Shared note](../assets/images/recipient_shared_read_only_note.png)
+They can read and write to the note, hence they do not see an edit button from the note view.
+
+![Recipient POD - Inside the shared rw note](../assets/images/recipient_shared_rw_note.png)
+
+Ask them to click `Edit` and add some text to your note - they have added the section `Another Section`. In this way the recipient is able to collaborate with you on the note, while you keep sharing control.
+
+![Recipient POD - Editing the shared rw note](../assets/images/recipient_editing_shared_rw_note.png)
+
+
+**These actions are by you**
+
+Now, open your My Notes list, you will see the last modification time has been updated. Click the note to open it.
+
+![My Notes List](../assets/images/my_notes_list_edited_by_recipient.png)
+
+Here you can see the additional text added by the recipient.
+
+![RW note edited by recipient](../assets/images/rw_note_edited_by_recipient.png)
