@@ -34,6 +34,10 @@ A newly created note which you have not yet shared will have the file access per
 
 ## Share the Note
 
+First we will test granting read access to a note.
+
+### Testing read access
+
 From the sharing view of a note file, click `Add New Permission`.
 
 You specify the person you are granting access to using their webID.
@@ -45,9 +49,6 @@ https://pods.solidcommunity.au/[pod_name]/profile/card#me
 ```
 where `pod_name` is the name of their pod, and `profile/card#me` is the public card which everyone has in their POD. This is the public profile of that POD owner. You can view a POD user's profile by opening the webID URI in a web browser.
 
-### Testing read access
-
-From the sharing view of a note file, click `Add New Permission`.
 
 Enter their `webID` in the `web ID value` text field.
 
@@ -59,7 +60,7 @@ Click the checkbox to give the recipient `Read` access, and submit by pressing `
 
 ![Select permissions](../assets/images/select_permissions.png)
 
-Click `Add permission` to grant the recipient this access to your note file.
+Click `Add permission` to **confirm** that you are granting the recipient this access to your note file.
 
 ![Read granted](../assets/images/read_granted.png)
 
@@ -67,12 +68,36 @@ You have now granted the recipient access to your note file!
 
 ![Post grant read access](../assets/images/post_grant_read_access.png)
 
-**For recipient:**
+
+**The next actions are done by the recipient of your note**
 
 Now ask the recipient to login to their Podnotes app, and select `Share Notes` from the menu.
 
 They should see your note in their shared notes list.
 
-![Post grant read access](../assets/images/recipient_shared_notes.png)
+![Shared note](../assets/images/recipient_shared_notes.png)
 
 They can read the note, however they do not have edit permission, hence they do not see an edit button from the note view.
+
+![Shared note](../assets/images/recipient_shared_read_only_note.png)
+
+
+## Test granting rw access
+
+**These actions are by you**
+
+From the sharing view of a note file, click `Add New Permission`.
+
+This time grant the recipient, `Read` and `Write` access.
+
+Submit by pressing `OK` and click `Add permission` to **confirm** that you are granting the recipient this access to your note file.
+
+**The next actions are done by the recipient of your note**
+
+Now ask the recipient to login to their Podnotes app, and select `Share Notes` from the menu.
+
+From their shared notes list, ask them to open the note.
+
+They can read and write to the note, however they do not have edit permission, hence they do not see an edit button from the note view.
+
+![Shared note](../assets/images/recipient_shared_read_only_note.png)
