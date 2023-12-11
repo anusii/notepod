@@ -68,7 +68,7 @@ Open [Podnotes app](https://Podnotes.solidcommunity.au/) and click `Login`.
 
 This may show you a Community Solid Server login pop up if you are not already logged in to your POD on https://pods.solidcommunity.au.
 
-![POD log](../assets/images/server_login_popup.png)
+![POD login](../assets/images/server_login_popup.png)
 
 If you have recently logged in to your POD on this Solid servier, you will see a  Community Solid Server authorization pop up with the last credentials which you've used on the Solid Community AU host.
 
