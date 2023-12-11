@@ -6,9 +6,12 @@
 - [Exercise 4: Install Flutter and get started with PODs app development with Flutter](#exercise-4-install-flutter-and-get-started-with-pods-app-development-with-flutter)
   - [Install Flutter](#install-flutter)
     - [Flutter SDK](#flutter-sdk)
-    - [VS Code](#vs-code)
-    - [Android Studio](#android-studio)
-    - [Visual Studio](#visual-studio)
+    - [IDE](#ide)
+    - [Android Studio (Optional)](#android-studio)
+    - [Visual Studio (Optional)](#visual-studio)
+    - [MacOS (Optional)](#macos)
+    - [iOS (Optional)](#ios)
+    - [Flutter doctor](#doctor)
   - [Test run Flutter](#test-run-flutter)
   - [Get Podnotes code](#get-podnotes-code)
   - [Make changes to the Podnotes app](#make-changes-to-the-podnotes-app)
@@ -27,20 +30,22 @@ You do not need to run a Solid server, as the Podnotes app uses the Community So
 
 To get setup, you will first need to install Flutter. Installing Flutter for app development is a lengthy process. You will need to install the following:
 
-### Flutter SDK
+### Flutter SDK<a name="flutter-sdk"></a>
 - Follow the Flutter Dev instructions to install flutter for your preferred platform at [Flutter Dev Getting Started](https://docs.flutter.dev/get-started/install)
 - Flutter can be installed on Windows, MacOS, Linux, and ChromeOS
 - With Flutter SDK installation Dart SDK will also get automatically installed
 - After installing FLutter SDK you will also need to add the `<path to Flutter bin>` to your environment variables
 
 
-### VS Code 
-- Go to the [VS Code Download](https://code.visualstudio.com/Download) section and download and install VS Code to your respective platform 
+### IDE<a name="ide"></a>
 - VS Code is the recommended IDE for flutter development
+- Go to the [VS Code Download](https://code.visualstudio.com/Download) section and download and install VS Code to your respective platform
 - After installing, run VS Code and go to extensions. Search for `Flutter` and install the first extension in the search results
 - Installing this extension will also automatically install Dart extension for VS Code
 
-### Android Studio
+### Android Studio (Optional)<a name="android-studio"></a>
+*Android app development only*
+
 - Go to [Android studio web page](https://developer.android.com/studio) and download the installation file
 - Install and run Android studio
 - Complete the initial setup which will also install a few other required items
@@ -49,13 +54,28 @@ To get setup, you will first need to install Flutter. Installing Flutter for app
 - In the long list of tools select the one that says `Android SDK Command-line Tools (latest)` and click Apply. This will install the command line tools for Android
 - Before you can use Flutter, you must agree to the licenses of the Android SDK platform. FOr that do the following
 - Open a command line and enter the following line and press enter
-  ```flutter doctor --android-licenses``` 
+  ```flutter doctor --android-licenses```
 
-### Visual Studio
+### Visual Studio (Optional)<a name="visual-studio"></a>
+*Windows app development only*
+
 - You will also need to install Visual Studio if you are developing Windows apps
 - Install [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Build Tools 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
 - When installing Visual Studio or only the Build Tools, you need the `Desktop development with C++` workload installed for building windows, including all of its default components.
 
+### MacOS development (Optional)<a name="macos"></a>
+*MacOS app development only*
+
+- After installing the flutter SDK for MacOS, you will need to follow the additional [Extra Setup for MacOS](../README.md#extra_for_macos) to configure Xcode for PODs based app development.
+- If you experiment errors building for macos with `flutter run -d macos`, it is likely a mismatch between your macOS version, Xcode version, and flutter version. MacOS Sonoma and more recent versions of MacOS Venturer require Xcode version >= v15.0.1, and flutter version >= 3.18. To develop flutter apps with macOS, we recommend updating to MacOS Sonoma, Xcode >= 15.0.1, and using `flutter channel beta` (flutter channel stable is awaiting updates for Xcode 15.0.1).
+
+
+### iOS development (Optional)<a name="ios"></a>
+
+- After installing the flutter SDK for MacOS including the iOS steps, you will need to follow the additional [Extra Setup for iOS](../README.md#extra_for_ios) to configure Xcode for PODs based app development.
+
+
+### Flutter doctor <a name="doctor"></a>
 
 After the above setup, you should now have all the required software and tools installed for Flutter development.
 
@@ -90,12 +110,12 @@ You can also check your flutter install by running the flutter demo app on your 
 
 ## Get Podnotes code<a name="get_podnotes"></a>
 
-Now lets get the Podnotes project setup in your flutter development environment. 
+Now lets get the Podnotes project setup in your flutter development environment.
 
-Go to [Podnotes repo](https://github.com/anusii/podnotes). You can either Clone the repo by 
+Go to [Podnotes repo](https://github.com/anusii/podnotes). You can either Clone the repo by
 ```
 git clone https://github.com/anusii/podnotes.git
-``` 
+```
 or you can fork it to your own GitHub account.
 
 Now open your VS Code IDE. Go to `File -> Open Folder` and select the local podnotes directory.
@@ -104,7 +124,7 @@ Now open your VS Code IDE. Go to `File -> Open Folder` and select the local podn
 
 ## Make changes to the Podnotes app<a name="edit_podnotes"></a>
 
-There are a couple of options you can use to run the Podnotes app. 
+There are a couple of options you can use to run the Podnotes app.
 
 **Option 1**
 Open the Terminal in the VS Code (if not open by default at the bottom of the window) by going to `Terminal -> New Terminal` in the top menu bar.
@@ -124,9 +144,9 @@ When running for the first time it will ask to setup Windows device for the app.
 
 In the VS Code Explorer bar open the file `podnotes -> lib -> main.dart`. A play button will apear on the top right had coner of your window. Click that button and select either one of the options and the app will then run.
 
-For the first time it will again ask for you to setup the preferred device for the app to run on. 
+For the first time it will again ask for you to setup the preferred device for the app to run on.
 
-**Making changes to the app**
+**Editing Podnotes app**
 
 Open the Podnotes repo in your favourite editor. You can use any editor you like.
 

@@ -55,7 +55,7 @@ flutter run -d chrome
 
 When you have completed the setup of your platform, you are ready for the [PodNotes Getting Started](exercises/README.md) exercises where you can create a POD, make and share notes.
 
-### Extra setup for MacOS
+### Extra setup for MacOS<a name="extra_for_macos"></a>
 
 Running the app on MacOS requires, additional configuration in Xcode. Open the project macos folder in Xcode with
 ```
@@ -64,7 +64,7 @@ xed .
 ```
 Select `Signing & Capabilities`. In `Team`, choose `Add an Account` and sign in with your Apple ID account. In `Network`, select `Incoming Connections (Server)` and `Outgoing Connections (Client)`. The latter is needed to login to your POD.
 
-### Extra setup for iOS
+### Extra setup for iOS<a name="extra_for_ios"></a>
 
 For iOS, you will also need to set the deployment platform to match the iOS version on your simulator.
 
