@@ -1,20 +1,29 @@
-# Exercise 1: Get a POD and Login to Podnotes app
+# Exercise 1: Get a POD and login to Podnotes app
+
+**Table of Contents**
+
+- [Setup](#setup)
+- [Get a POD](#get_pod)
+- [Login and set master encryption key](#set_encrypt)
 
 This exercise will show you how to create a POD on the solid server host https://solidcommunity.au/ and how to use the Podnotes app to create and save notes to your POD.
 
-## Setup
+## Setup<a name="setup"></a>
 
-Option 1: Open the Podnotes app using the web app or download links for the binary for your OS:
+**Option 1:** Open the Podnotes app using the web app or download links for the binary for your OS:
 
 - [Podnotes web app](https://Podnotes.solidcommunity.au/)
-<!--- Podnotes Windows app (.exe)
-- Podnotes MacOS app (.app)
-- Podnotes Linux app
-- Podnotes Android app (.apk) -->
+
+See [Downloads](https://github.com/anusii/podnotes/tree/main/installers) for Podnotes app downloads for:
+
+<!-- - Podnotes.app (MacOS)
+- Podnotes Linux app -->
+- Podnotes.exe (Windows)
+- Podnotes.apk (Android)
 
 
 
-Option 2: If you already have `flutter` installed and setup to build to `chrome` or desired platform (Linux, MacOS, Windows, Android, iOS), you may build and run the Podnotes app locally on your machine.
+**Option 2:** If you already have `flutter` installed and setup to build to `chrome` or desired platform (Linux, MacOS, Windows, Android, iOS), you may build and run the Podnotes app locally on your machine.
 
 ```
 flutter devices
@@ -22,7 +31,7 @@ flutter run -d [your device]
 ```
 
 
-## Get a POD
+## Get a POD<a name="get_pod"></a>
 
 The Podnotes app requires you to have a POD hosted on any solid server, which is identified on the internet with a webID comprising the unique resource identifier (URI) of your POD. We have setup a solid server for the Solid AU Community for experimenting with Solid. You can use this solid server to get a POD if you don't have one on any Solid server.
 
@@ -59,7 +68,7 @@ Note: to look up your webID at anytime, login to https://pods.solidcommunity.au/
 
 
 
-## Login and set  encryption key
+## Login and set master encryption key<a name="set_encrypt"></a>
 
 The Podnotes app stores your files in encrypted form. To do this you must create a password to use as the master key for encrypting your POD files.
 The first time you login in to the Podnotes app, you need to set the master encryption key. Your files are only decrypted in the app. Each time you subsequently login, you will need to provide the master encryption key after app login to see your files.
@@ -68,7 +77,7 @@ Open [Podnotes app](https://Podnotes.solidcommunity.au/) and click `Login`.
 
 This may show you a Community Solid Server login pop up if you are not already logged in to your POD on https://pods.solidcommunity.au.
 
-![POD log](../assets/images/server_login_popup.png)
+![POD login](../assets/images/server_login_popup.png)
 
 If you have recently logged in to your POD on this Solid servier, you will see a  Community Solid Server authorization pop up with the last credentials which you've used on the Solid Community AU host.
 

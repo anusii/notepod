@@ -32,7 +32,7 @@ get to know your login details.
 
 
 
-## Install
+## Install Flutter and Podnotes<a name="install"></a>
 
 Follow the Flutter Dev instructions to install flutter for your preferred platform at [Flutter Dev Getting Started](https://docs.flutter.dev/get-started/install)
 
@@ -46,7 +46,9 @@ Found 4 connected devices:
   Chrome (web)                    • chrome                               • web-javascript • Google Chrome 120.0.6099.62
 ```
 
-Run the podnotes app in debug mode on your chosen device by specifying enough of the device name to be uniquely identifiable.
+Git clone the Podnotes app.
+
+Run the podnotes app in debug mode on your chosen device by specifying enough of the device name to be uniquely identifiable. E.g. for chrome use:
 ```
 flutter run -d chrome
 ```
