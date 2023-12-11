@@ -6,22 +6,39 @@
 - [Make a note](#make_note)
 
 
-This exercise will show you how to create a note in the Podnotes app.
+This exercise will show you how to create a note in the Podnotes web app.
+
+Note: If you have flutter installed, you could also build and run the app locally on your machine.
 
 
 ## Login<a name="login"></a>
 
-Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and click `Login`. If you have not logged in recently, you will probably see a login window, enter the email address and password that you used to create your POD.
+Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and click `Login`.
+
+**Option 1: no recent login**
+
+If you have not logged in recently, you will probably see a login window, enter the email address and password that you used to create your POD.
 
 ![POD login](../assets/images/server_login_popup.png)
 
-This will open an popup with your POD webID. Click `Authorize` to login to your POD in the Podnotes app.
+This will open an `Login` popup and asking you to enter your POD account email and password. Enter your `Email` and `Password`, and click `Login`. `Authorize` the Podnotes app to login to your POD.
+
+This will then show a popup window with heading `An application is requesting access`, showing your webID and asking you to `Authorize` the Podnotes app to login to your POD. Click `Authorize`.
 
 ![POD authorization](../assets/images/server_pod_auth_popup.png)
 
+**Option 2: recent login with same webID**
+
+In this case, you will see a popup with heading `An application is requesting access`, showing your last used webID and asking you to `Authorize` the Podnotes app to login to your POD. Click `Authorize`.
+
+**Option 3: recent login with different webID**
+
+If you have multiple webIDs and wish to use a different webID than that shown in the `An application is requesting access` popup, scroll down and select `Use a different account`, enter your credentials for your preferred webID, and click `Authorize`.
+
+**Wait**
+
 Be patient, *you may need to wait several seconds for login* process to complete.
 
-Note: If you have flutter installed, you could also build and run the app locally on your machine.
 
 
 
