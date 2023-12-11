@@ -68,6 +68,10 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    String dateStr = DateFormat("dd MMMM yyyy")
+                          .format(DateTime.now())
+                          .toString();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -86,6 +90,21 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 skipDisabled: true,
                 child: Column(
                   children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Date: $dateStr",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     FormBuilderTextField(
                       name: 'noteTitle',
                       decoration: const InputDecoration(
