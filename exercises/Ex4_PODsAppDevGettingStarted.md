@@ -1,4 +1,4 @@
-# Exercise 4: Getting started with Flutter for PODs based app development
+# Exercise 4: Install Flutter and get started with PODs app development
 
 **Table of Contents**
 
@@ -9,8 +9,9 @@
 - [More resources](#more)
 
 
-This exercise provides resources to get started developings PODs based apps with Flutter.
-You will have the opportunity to build and run the Podnotes app on your local machine, and add features to the Podnotes app.
+This exercise provides resources to install Flutter and get started developing PODs based apps with Flutter.
+
+You will have the opportunity to build and run the Podnotes app on your local machine, and add small features to the Podnotes app.
 
 You do not need to run a Solid server, as the Podnotes app uses the Community Solid Server open source software running on the Solid Community AU server https://pods.solidcommunity.au
 
