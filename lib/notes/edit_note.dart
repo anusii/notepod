@@ -44,13 +44,18 @@ class EditNote extends StatefulWidget {
   final Map authData;
   final Map noteData;
 
-  const EditNote({super.key, required this.webId, required this.authData, required this.noteData});
+  const EditNote(
+      {super.key,
+      required this.webId,
+      required this.authData,
+      required this.noteData});
 
   @override
   EditNoteState createState() => EditNoteState();
 }
 
-class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin {
+class EditNoteState extends State<EditNote>
+    with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
 
@@ -126,26 +131,26 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
-
                       Map prevNoteData = widget.noteData;
 
                       Map formData = formKey.currentState?.value as Map;
                       String noteText = _textController!.text;
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
-                      String noteTitle = formData['noteTitle'].replaceAll('\n', '');
+                      String noteTitle =
+                          formData['noteTitle'].replaceAll('\n', '');
 
-                      if(noteTitle == prevNoteData['noteTitle'] && noteText == prevNoteData['noteContent']){
+                      if (noteTitle == prevNoteData['noteTitle'] &&
+                          noteText == prevNoteData['noteContent']) {
                         showErrDialog(context, 'You have no new changes!');
                       } else {
-
                         // Loading animation
                         showAnimationDialog(
                           context,
                           17,
                           'Saving the changes!',
                           false,
-                        );                  
+                        );
 
                         // Get the master key
                         // String masterKey = await secureStorage.read(
@@ -184,21 +189,12 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                         noteNewData['encIv'] = dataEncryptIv.base64.toString();
 
                         // Update the file
-                        String updateRes = await updateNoteFile(widget.authData, prevNoteData, noteNewData);
+                        String updateRes = await updateNoteFile(
+                            widget.authData, prevNoteData, noteNewData);
 
                         if (updateRes == 'ok') {
                           // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NavigationScreen(
-                                      webId: widget.webId,
-                                      authData: widget.authData,
-                                      page: 'listNotes',
-                                    )),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
+                          Navigator.pop(context);
                         } else {
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
@@ -207,7 +203,6 @@ class EditNoteState extends State<EditNote> with SingleTickerProviderStateMixin 
                               'Failed to update the individual key. Try again!');
                         }
                       }
-                      
                     } else {
                       showErrDialog(context,
                           'Note name validation failed! Try using a different name.');
