@@ -173,6 +173,10 @@ Solid:
   + [Links to Solid Resources (Togaware)](https://survivor.togaware.com/gnulinux/solid-resources.html)
 - [Getting started as a Solid developer (Solidproject.org)](https://solidproject.org/developers/tutorials/getting-started)
 - [Solid forum (Solidproject.org)](https://forum.solidproject.org/)
+- [solid-auth](https://pub.dev/packages/solid_auth) package: Implementation of Solid-OIDC flow which can be used to authenticate a client application to a Solid POD. Solid OIDC is built on top of OpenID Connect 1.0.
+- [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: Implementation of data encryption which can be used to encrypt the content in turtle files stored in a Solid POD.
+- [rdflib](https://pub.dev/packages/rdflib) package: A dart package for working with RDF. Features include find and create triple instances, create a graph to store triples, export graph to ttl, etc.
+
 
 Flutter:
 
