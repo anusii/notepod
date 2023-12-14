@@ -1,4 +1,4 @@
-# Exercise 4: Install Flutter and get started with PODs app development with Flutter
+# Exercise 4: Getting started - PODs app development with Flutter
 
 **Table of Contents**
 
