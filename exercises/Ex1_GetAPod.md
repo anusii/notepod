@@ -14,7 +14,9 @@ This exercise will show you how to create a POD on the solid server host https:/
 
 - [Podnotes web app](https://Podnotes.solidcommunity.au/)
 
-See [Downloads](https://github.com/anusii/podnotes/tree/main/installers) for Podnotes app downloads for:
+Using Flutter framework, we can build apps for multiple platforms with a single codebase.
+
+Go to [Downloads](https://github.com/anusii/podnotes/tree/main/installers) to get the Podnotes app binaries for your platform:
 
 - Podnotes.dmg (Mac)
 - Podnotes.exe (Windows)
@@ -28,6 +30,8 @@ See [Downloads](https://github.com/anusii/podnotes/tree/main/installers) for Pod
 flutter devices
 flutter run -d [your device]
 ```
+
+**Option 3:** Follow the instructions in [Exercise 4 Getting Started - PODs app development with Flutter](Ex4_PODsAppDevGettingStarted.md) to install `flutter` and then run the app locally on your machine as in Option 2.
 
 
 ## Get a POD<a name="get_pod"></a>
