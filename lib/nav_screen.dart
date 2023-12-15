@@ -204,7 +204,7 @@ class HomeState extends State<NavigationScreen>
                 );
               },
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
           ],
         ),
         drawer: NavDrawer(

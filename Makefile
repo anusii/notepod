@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Saturday 2023-12-16 08:56:42 +1100 Graham Williams>
+# Time-stamp: <Saturday 2023-12-16 09:05:18 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -71,3 +71,8 @@ locals:
 .PHONY: docs
 docs::
 	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/podnotes/
+
+.PHONY: versions
+versions:
+	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
+	lib/constants/app.dart
