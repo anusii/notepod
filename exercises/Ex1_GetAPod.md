@@ -21,7 +21,7 @@ Go to [Downloads](https://github.com/anusii/podnotes/tree/main/installers) to ge
 - Podnotes.dmg (Mac)
 - Podnotes.exe (Windows)
 - Podnotes.apk (Android)
-- Podnotes.deb (Linux) *(Coming soon)*
+- Podnotes.tar.gz (Linux)
 
 
 **Option 2:** If you already have `flutter` installed and setup to build to `chrome` or desired platform (Linux, MacOS, Windows, Android, iOS), you may build and run the Podnotes app locally on your machine.
