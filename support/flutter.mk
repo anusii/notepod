@@ -216,6 +216,16 @@ qtest:
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	integration_test/$*_test.dart
 
+targz: $(APP)-$(VER)-linux-x86_64.tar.gz
+
+$(APP)-$(VER)-linux-x86_64.tar.gz:
+	mkdir -p dist
+	rm -rf build/linux/x64/release
+	flutter build linux
+	tar --transform 's|^build/linux/x64/release/bundle|$(APP)|' -czvf $@ build/linux/x64/release/bundle
+	mv $@ dist/
+
+
 realclean::
 	flutter clean
 	flutter pub get
