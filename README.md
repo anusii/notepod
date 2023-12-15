@@ -8,6 +8,15 @@
 
 *License: GNU GPL V3*
 
+## Install
+
+### Linux
+
++ Download
+  [podnotes-0.0.1-linux-x86_64.tar.gz](https://github.com/anusii/podnotes/blob/main/dist/podnotes-0.0.1-linux-x86_64.tar.gz)
++ `tar xzvf podnotes-0.0.1-linux-x86_64.tar.gz`
++ `podnotes/podnotes`
+
 ## App Startup
 
 On starting up the app you will see the login screen where a user's
