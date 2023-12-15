@@ -40,7 +40,8 @@ class NavDrawer extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     webId,
-                    style: const TextStyle(color: backgroundWhite, fontSize: 14),
+                    style:
+                        const TextStyle(color: backgroundWhite, fontSize: 14),
                   ),
                 ),
               ],
@@ -93,8 +94,7 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.file_open_outlined),
                   title: const Text('Shared Notes'),
-                  onTap: () 
-                  {
+                  onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

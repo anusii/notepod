@@ -103,7 +103,8 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 return snapshot.data == null ||
-                        snapshot.data.toString() == "null" || snapshot.data.length == 0
+                        snapshot.data.toString() == "null" ||
+                        snapshot.data.length == 0
                     ? Center(
                         child: Row(
                           children: <Widget>[

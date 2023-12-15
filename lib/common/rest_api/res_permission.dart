@@ -170,8 +170,7 @@ Future<void> addPermission(
         final encSharedAccess =
             encrypterPub.encrypt(accessListStr).base64.toString();
 
-        final encSharedWebId =
-            encrypterPub.encrypt(webId).base64.toString();
+        final encSharedWebId = encrypterPub.encrypt(webId).base64.toString();
 
         // Get username to create a directory
         List webIdContent = webId.split("/");
@@ -457,15 +456,16 @@ Future<String> fetchOtherPubKey(Map authData, String otherWebId) async {
 }
 
 Future<String> copySharedKey(
-    String webId,
-    String dirName,
-    Map authData,
-    String resName,
-    String resUrl,
-    String encSharedKey,
-    String encSharedPath,
-    String encSharedAccess,
-    String encSharedWebId,) async {
+  String webId,
+  String dirName,
+  Map authData,
+  String resName,
+  String resUrl,
+  String encSharedKey,
+  String encSharedPath,
+  String encSharedAccess,
+  String encSharedWebId,
+) async {
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -552,7 +552,7 @@ Future<String> copySharedKey(
           existPath != encSharedPath ||
           existAcc != encSharedAccess ||
           existWebId != encSharedWebId) {
-        String predObjWebIdPrev = 'data:$webIdPred "$existWebId";';    
+        String predObjWebIdPrev = 'data:$webIdPred "$existWebId";';
         String predObjPathPrev = 'data:$pathPred "$existPath";';
         String predObjAccPrev = 'data:$accessListPred "$existAcc";';
         String predObjKeyPrev = 'data:$sharedKeyPred "$existKey".';

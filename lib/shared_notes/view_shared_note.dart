@@ -173,20 +173,18 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if(accessList.contains('Control')) ... [
+              if (accessList.contains('Control')) ...[
                 shareNote(noteData, context, widget.authData, widget.webId),
                 const SizedBox(
                   width: 5,
                 ),
               ],
-              
-              if(accessList.contains('Write')) ... [
+              if (accessList.contains('Write')) ...[
                 editNote(context, noteData, widget.authData, widget.webId),
                 const SizedBox(
                   width: 5,
                 ),
               ],
-              
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.keyboard_backspace,
@@ -271,8 +269,4 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
     //   ],
     // );
   }
-
-  
-
-  
 }

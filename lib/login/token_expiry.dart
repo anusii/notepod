@@ -43,105 +43,105 @@ class _TokenExpiryState extends State<TokenExpiry> {
   @override
   Widget build(BuildContext context) {
     return Row(
-        children: [
-          Expanded(
-            flex: Responsive.isDesktop(context) ? 10 : 8,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(60, 50, 60, 0),
-              child: Card(
-                elevation: 10,
-                shadowColor: Colors.black,
-                color: lighterGray,
-                child: SizedBox(
-                  height: 210,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.error,
-                            color: Colors.red,
-                            size: 60,
-                          ),
+      children: [
+        Expanded(
+          flex: Responsive.isDesktop(context) ? 10 : 8,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(60, 50, 60, 0),
+            child: Card(
+              elevation: 10,
+              shadowColor: Colors.black,
+              color: lighterGray,
+              child: SizedBox(
+                height: 210,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ), //SizedBox
-                        const Text(
-                          tokenTimeOutTitle,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ), //Text
-                        const SizedBox(
-                          height: 10,
-                        ), //SizedBox
-                        const Text(
-                          tokenTimeOutErr,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
+                        alignment: Alignment.center,
+                        child: const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                          size: 60,
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ), //SizedBox
-                        SizedBox(
-                          width: 170,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginScreen(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ), //SizedBox
+                      const Text(
+                        tokenTimeOutTitle,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ), //Text
+                      const SizedBox(
+                        height: 10,
+                      ), //SizedBox
+                      const Text(
+                        tokenTimeOutErr,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ), //SizedBox
+                      SizedBox(
+                        width: 170,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(darkBlue),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.login_rounded,
+                                  color: backgroundWhite,
                                 ),
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(darkBlue),
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.login_rounded,
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Login Again',
+                                  style: TextStyle(
+                                    fontSize: 15,
                                     color: backgroundWhite,
                                   ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Login Again',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: backgroundWhite,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ), //Column
-                  ), //Padding
-                ), //SizedBox
-              ),
+                      ),
+                    ],
+                  ), //Column
+                ), //Padding
+              ), //SizedBox
             ),
           ),
-        ],
+        ),
+      ],
     );
   }
 }

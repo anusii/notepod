@@ -44,13 +44,18 @@ class EditSharedNote extends StatefulWidget {
   final Map authData;
   final Map noteData;
 
-  const EditSharedNote({super.key, required this.webId, required this.authData, required this.noteData});
+  const EditSharedNote(
+      {super.key,
+      required this.webId,
+      required this.authData,
+      required this.noteData});
 
   @override
   EditSharedNoteState createState() => EditSharedNoteState();
 }
 
-class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProviderStateMixin {
+class EditSharedNoteState extends State<EditSharedNote>
+    with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
 
@@ -85,8 +90,7 @@ class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProvide
                       name: 'noteTitle',
                       initialValue: widget.noteData['noteTitle'],
                       decoration: const InputDecoration(
-                        labelText:
-                            'Note Title',
+                        labelText: 'Note Title',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,
@@ -126,19 +130,19 @@ class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProvide
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
-
                       Map prevNoteData = widget.noteData;
 
                       Map formData = formKey.currentState?.value as Map;
                       String noteText = _textController!.text;
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
-                      String noteTitle = formData['noteTitle'].replaceAll('\n', '');
+                      String noteTitle =
+                          formData['noteTitle'].replaceAll('\n', '');
 
-                      if(noteTitle == prevNoteData['noteTitle'] && noteText == prevNoteData['noteContent']){
+                      if (noteTitle == prevNoteData['noteTitle'] &&
+                          noteText == prevNoteData['noteContent']) {
                         showErrDialog(context, 'You have no new changes!');
                       } else {
-
                         // Loading animation
                         showAnimationDialog(
                           context,
@@ -172,7 +176,8 @@ class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProvide
                         noteNewData['encIv'] = dataEncryptIv.base64.toString();
 
                         // Update the file
-                        String updateRes = await updateNoteFile(widget.authData, prevNoteData, noteNewData);
+                        String updateRes = await updateNoteFile(
+                            widget.authData, prevNoteData, noteNewData);
 
                         if (updateRes == 'ok') {
                           // ignore: use_build_context_synchronously
@@ -195,7 +200,6 @@ class EditSharedNoteState extends State<EditSharedNote> with SingleTickerProvide
                               'Failed to update the individual key. Try again!');
                         }
                       }
-                      
                     } else {
                       showErrDialog(context,
                           'Note name validation failed! Try using a different name.');

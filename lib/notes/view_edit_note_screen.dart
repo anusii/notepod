@@ -30,12 +30,13 @@ import 'package:podnotes/notes/view_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
 class ViewEditNoteScreen extends StatefulWidget {
-  const ViewEditNoteScreen(
-      {super.key,
-      required this.noteFileName,
-      required this.authData,
-      required this.webId,
-      required this.action,});
+  const ViewEditNoteScreen({
+    super.key,
+    required this.noteFileName,
+    required this.authData,
+    required this.webId,
+    required this.action,
+  });
 
   final String noteFileName;
   final Map authData;
@@ -67,7 +68,7 @@ class _ViewEditNoteScreenState extends State<ViewEditNoteScreen> {
 
   Widget _loadedScreen(Map noteData, String webId, Map authData) {
     Widget nextScreen;
-    if(widget.action == 'view'){
+    if (widget.action == 'view') {
       nextScreen = ViewNote(
         noteData: noteData,
         webId: webId,

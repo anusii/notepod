@@ -69,7 +69,8 @@ const encKeySuccess = 'Your encryption key is already setup.';
 
 const encKeyUpdate = 'Please update your encryption key';
 
-const nonReadableNoteMsg = 'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
+const nonReadableNoteMsg =
+    'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
 
 const tokenTimeOutErr =
     'Your login session has expired! Please login again to continue.';
@@ -79,7 +80,6 @@ const tokenTimeOutTitle = 'Login Timeout!';
 const noNotesMsg = 'You do not have any notes yet!';
 
 const noSharedNotesMsg = 'You do not have any shared notes yet!';
-
 
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(

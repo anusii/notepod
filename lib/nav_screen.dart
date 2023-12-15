@@ -47,13 +47,14 @@ class NavigationScreen extends StatefulWidget {
   final String? noteFileName;
   final List? sharedNoteData;
 
-  const NavigationScreen(
-      {super.key,
-      required this.webId,
-      required this.authData,
-      required this.page,
-      this.noteFileName,
-      this.sharedNoteData,});
+  const NavigationScreen({
+    super.key,
+    required this.webId,
+    required this.authData,
+    required this.page,
+    this.noteFileName,
+    this.sharedNoteData,
+  });
 
   @override
   HomeState createState() => HomeState();
@@ -77,9 +78,12 @@ class HomeState extends State<NavigationScreen>
     /// If expired redirect to the login page
     String accessToken = authData['accessToken'];
     bool hasExpired = JwtDecoder.isExpired(accessToken);
-    
-    if(hasExpired) {
-      loadingScreen = TokenExpiry(authData: authData, webId: webId,);
+
+    if (hasExpired) {
+      loadingScreen = TokenExpiry(
+        authData: authData,
+        webId: webId,
+      );
     } else {
       bool isKeyExist =
           authData['keyExist'] ? authData.containsKey('keyExist') : false;
@@ -142,75 +146,73 @@ class HomeState extends State<NavigationScreen>
       }
     }
 
-    if(hasExpired) {
+    if (hasExpired) {
       return Scaffold(
-      appBar: AppBar(
-        backgroundColor: lightGreen,
-        centerTitle: true,
-        title: const Text("POD Note Taker"),
-      ),
-      body: loadingScreen,
-    );
+        appBar: AppBar(
+          backgroundColor: lightGreen,
+          centerTitle: true,
+          title: const Text("POD Note Taker"),
+        ),
+        body: loadingScreen,
+      );
     } else {
       return Scaffold(
-      appBar: AppBar(
-        backgroundColor: lightGreen,
-        centerTitle: true,
-        title: const Text("POD Note Taker"),
-        actions: <Widget>[
-          const SizedBox(width:50),
-          IconButton(
-            tooltip: "Create a new note",
-            icon: const Icon(
-              Icons.add_circle,
-              color: Colors.black,
+        appBar: AppBar(
+          backgroundColor: lightGreen,
+          centerTitle: true,
+          title: const Text("POD Note Taker"),
+          actions: <Widget>[
+            const SizedBox(width: 50),
+            IconButton(
+              tooltip: "Create a new note",
+              icon: const Icon(
+                Icons.add_circle,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavigationScreen(
+                            webId: webId,
+                            authData: authData,
+                            page: 'home',
+                          )),
+                  (Route<dynamic> route) =>
+                      false, // This predicate ensures all previous routes are removed
+                );
+              },
             ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'home',
-                        )),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
-              );
-            },
-          ),
-          const SizedBox(width:10),
-          IconButton(
-            tooltip: "My notes",
-            icon: const Icon(
-              Icons.file_copy,
-              color: Colors.black,
+            const SizedBox(width: 10),
+            IconButton(
+              tooltip: "My notes",
+              icon: const Icon(
+                Icons.file_copy,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavigationScreen(
+                            webId: webId,
+                            authData: authData,
+                            page: 'listNotes',
+                          )),
+                  (Route<dynamic> route) =>
+                      false, // This predicate ensures all previous routes are removed
+                );
+              },
             ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'listNotes',
-                        )),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
-              );
-            },
-          ),
-          SizedBox(width:10),
-        ],
-      ),
-      drawer: NavDrawer(
-        webId: widget.webId,
-        authData: widget.authData,
-      ),
-      body: loadingScreen,
-    );
+            SizedBox(width: 10),
+          ],
+        ),
+        drawer: NavDrawer(
+          webId: widget.webId,
+          authData: widget.authData,
+        ),
+        body: loadingScreen,
+      );
     }
-    
-    
   }
 }

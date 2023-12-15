@@ -30,12 +30,13 @@ import 'package:podnotes/shared_notes/view_shared_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
 class ViewEditSharedNoteScreen extends StatefulWidget {
-  const ViewEditSharedNoteScreen(
-      {super.key,
-      required this.sharedNoteData,
-      required this.authData,
-      required this.webId,
-      required this.action,});
+  const ViewEditSharedNoteScreen({
+    super.key,
+    required this.sharedNoteData,
+    required this.authData,
+    required this.webId,
+    required this.action,
+  });
 
   final List sharedNoteData;
   final Map authData;
@@ -43,7 +44,8 @@ class ViewEditSharedNoteScreen extends StatefulWidget {
   final String action;
 
   @override
-  State<ViewEditSharedNoteScreen> createState() => _ViewEditSharedNoteScreenState();
+  State<ViewEditSharedNoteScreen> createState() =>
+      _ViewEditSharedNoteScreenState();
 }
 
 class _ViewEditSharedNoteScreenState extends State<ViewEditSharedNoteScreen> {
@@ -67,7 +69,7 @@ class _ViewEditSharedNoteScreenState extends State<ViewEditSharedNoteScreen> {
 
   Widget _loadedScreen(Map noteData, String webId, Map authData) {
     Widget nextScreen;
-    if(widget.action == 'view'){
+    if (widget.action == 'view') {
       nextScreen = ViewSharedNote(
         noteData: noteData,
         webId: webId,
