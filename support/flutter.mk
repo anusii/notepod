@@ -40,6 +40,9 @@ flutter:
 
   desktops  Set up for all desktop platforms (linux, windows, macos)
 
+  distributions
+    targz   Builds $(APP)-$(VER)-linux-x86_64.tar.gz
+
 Also supported:
 
   *.itest
