@@ -8,6 +8,15 @@
 #
 ########################################################################
 
+# App version numbers
+#   Major release
+#   Minor update
+#   Trivial update or bug fix
+
+ifeq ($(VER),)
+  VER = $(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2)
+endif
+
 define FLUTTER_HELP
 flutter:
 

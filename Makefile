@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Wednesday 2023-12-06 09:03:46 +1100 Graham Williams>
+# Time-stamp: <Saturday 2023-12-16 08:56:42 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -18,7 +18,7 @@
 #   Trivial update or bug fix
 
 APP=$(shell pwd | xargs basename)
-VER=0.0.1
+VER=
 DATE=$(shell date +%Y-%m-%d)
 
 DEST=/var/www/html/$(APP)
