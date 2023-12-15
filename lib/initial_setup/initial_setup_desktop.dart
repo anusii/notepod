@@ -412,7 +412,6 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
                                             if (formKey.currentState
                                                     ?.saveAndValidate() ??
                                                 false) {
-                                              
                                               showAnimationDialog(
                                                 context,
                                                 17,

@@ -30,10 +30,11 @@ import 'package:podnotes/widgets/loading_screen.dart';
 import 'package:podnotes/widgets/msg_card.dart';
 
 class ListSharedNotesScreen extends StatefulWidget {
-  const ListSharedNotesScreen(
-      {super.key,
-      required this.authData,
-      required this.webId,});
+  const ListSharedNotesScreen({
+    super.key,
+    required this.authData,
+    required this.webId,
+  });
 
   final Map authData;
   final String webId;
@@ -62,10 +63,10 @@ class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
   Widget _loadedScreen(List sharedNotesList, String webId, Map authData) {
     Widget nextScreen;
     nextScreen = ListSharedNotes(
-        sharedNotesList: sharedNotesList,
-        webId: webId,
-        authData: authData,
-      );
+      sharedNotesList: sharedNotesList,
+      webId: webId,
+      authData: authData,
+    );
     return Container(
       color: Colors.white,
       child: nextScreen,
@@ -86,27 +87,28 @@ class _ListSharedNotesScreenState extends State<ListSharedNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 return snapshot.data == null ||
-                      snapshot.data.toString() == "null" || snapshot.data.length == 0
-                  ? Center(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: buildMsgCard(
-                              context,
-                              Icons.info,
-                              Colors.amber,
-                              'No shared notes!',
-                              noSharedNotesMsg,
+                        snapshot.data.toString() == "null" ||
+                        snapshot.data.length == 0
+                    ? Center(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: buildMsgCard(
+                                context,
+                                Icons.info,
+                                Colors.amber,
+                                'No shared notes!',
+                                noSharedNotesMsg,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : returnVal = _loadedScreen(
-                    snapshot.data! as List,
-                    webId,
-                    authData,
-                  );                
+                          ],
+                        ),
+                      )
+                    : returnVal = _loadedScreen(
+                        snapshot.data! as List,
+                        webId,
+                        authData,
+                      );
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);
               }

@@ -390,10 +390,11 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   }
 }
 
-Future<String> updateNoteFile(Map authData, Map notePrevData, Map noteNewData) async {
-
+Future<String> updateNoteFile(
+    Map authData, Map notePrevData, Map noteNewData) async {
   // Get indi key file url
-  String noteFileUrl = notePrevData['noteFileUrl'] + notePrevData['noteFileName'];
+  String noteFileUrl =
+      notePrevData['noteFileUrl'] + notePrevData['noteFileName'];
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -418,16 +419,21 @@ Future<String> updateNoteFile(Map authData, Map notePrevData, Map noteNewData) a
   String subject = ':me';
 
   // Previous data
-  String predObjModifiedTimePrev = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
+  String predObjModifiedTimePrev =
+      'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
   String predObjIvPrev = 'podnotesTerms:$ivPred "$encIvPrev";';
-  String predObjNoteTitlePrev = 'podnotesTerms:$noteTitlePred "$noteTitlePrev";';
-  String predObjEncNoteContentPrev = 'podnotesTerms:$encNoteContentPred "$encNoteContentPrev".';
+  String predObjNoteTitlePrev =
+      'podnotesTerms:$noteTitlePred "$noteTitlePrev";';
+  String predObjEncNoteContentPrev =
+      'podnotesTerms:$encNoteContentPred "$encNoteContentPrev".';
 
   // New data
-  String predObjModifiedTime = 'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
+  String predObjModifiedTime =
+      'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
   String predObjIv = 'podnotesTerms:$ivPred "$encIvNew";';
   String predObjNoteTitle = 'podnotesTerms:$noteTitlePred "$noteTitleNew";';
-  String predObjEncNoteContent = 'podnotesTerms:$encNoteContentPred "$encNoteContentNew".';
+  String predObjEncNoteContent =
+      'podnotesTerms:$encNoteContentPred "$encNoteContentNew".';
 
   // Generate update sparql query
   String query =
@@ -479,7 +485,6 @@ Future<String> updateFileByQuery(
 }
 
 Future<List> getNoteList(Map authData, String notesUrl) async {
-
   List fileList = [];
 
   var rsaInfo = authData['rsaInfo'];
@@ -488,37 +493,38 @@ Future<List> getNoteList(Map authData, String notesUrl) async {
   String accessToken = authData['accessToken'];
 
   var resList = await getResourceList(
-      authData,
-      notesUrl,
-    );
-  
+    authData,
+    notesUrl,
+  );
+
   List noteList = resList[1];
 
   for (var i = 0; i < noteList.length; i++) {
-      String fileItem = noteList[i];
-      String fileItemUrl = notesUrl + fileItem;
+    String fileItem = noteList[i];
+    String fileItemUrl = notesUrl + fileItem;
 
-      // Generate DPoP token
-      String dPopTokenNoteFile =
-          genDpopToken(fileItemUrl, rsaKeyPair, publicKeyJwk, 'GET');
-      
-      // Get note file content
-      String noteFileContent = await fetchPrvFile(fileItemUrl, accessToken, dPopTokenNoteFile);
-      Map noteFileContentMap = getFileContent(noteFileContent);
+    // Generate DPoP token
+    String dPopTokenNoteFile =
+        genDpopToken(fileItemUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
-      String noteTitle = noteFileContentMap['noteTitle'][1];
-      String noteDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['createdDateTime'][1]));
-      String modifiedDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa').format(DateTime.parse(noteFileContentMap['modifiedDateTime'][1]));
+    // Get note file content
+    String noteFileContent =
+        await fetchPrvFile(fileItemUrl, accessToken, dPopTokenNoteFile);
+    Map noteFileContentMap = getFileContent(noteFileContent);
 
-      fileList.add([noteTitle, noteDateTime, fileItem, modifiedDateTime]);
+    String noteTitle = noteFileContentMap['noteTitle'][1];
+    String noteDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa')
+        .format(DateTime.parse(noteFileContentMap['createdDateTime'][1]));
+    String modifiedDateTime = DateFormat('yyyy-MM-dd hh:mm:ssa')
+        .format(DateTime.parse(noteFileContentMap['modifiedDateTime'][1]));
+
+    fileList.add([noteTitle, noteDateTime, fileItem, modifiedDateTime]);
   }
-  
-  return fileList;
 
+  return fileList;
 }
 
 Future<List> getSharedNotesList(Map authData, String webId) async {
-
   List sharedFileList = [];
 
   String sharedNotesDirLoc = webId.replaceAll(profCard, '$sharedDirLoc/');
@@ -529,102 +535,105 @@ Future<List> getSharedNotesList(Map authData, String webId) async {
   String accessToken = authData['accessToken'];
 
   var resList = await getResourceList(
-      authData,
-      sharedNotesDirLoc,
-    );
-  
+    authData,
+    sharedNotesDirLoc,
+  );
+
   List sharedNotesDirList = resList[0];
 
   for (var i = 0; i < sharedNotesDirList.length; i++) {
-      String sharedDir = sharedNotesDirList[i];
+    String sharedDir = sharedNotesDirList[i];
 
-      String sharedNotesFileLoc = '$sharedNotesDirLoc$sharedDir/$sharedKeyFile';
+    String sharedNotesFileLoc = '$sharedNotesDirLoc$sharedDir/$sharedKeyFile';
 
-      // Generate DPoP token
-      String dPopTokenSharedNoteFile =
-          genDpopToken(sharedNotesFileLoc, rsaKeyPair, publicKeyJwk, 'GET');
-      
-      // Get note file content
-      String shredNoteFileContent = await fetchPrvFile(sharedNotesFileLoc, accessToken, dPopTokenSharedNoteFile);
-      Map sharedNoteFileContentMap = getEncFileContent(shredNoteFileContent);
+    // Generate DPoP token
+    String dPopTokenSharedNoteFile =
+        genDpopToken(sharedNotesFileLoc, rsaKeyPair, publicKeyJwk, 'GET');
 
-      if(sharedNoteFileContentMap.isNotEmpty){
-        for (var fileName in sharedNoteFileContentMap.keys) {
-          // Get shared file information (all encrypted using receipient's public key)
-          String ownerWebIdEnc = sharedNoteFileContentMap[fileName][webIdPred];
-          String filePathEnc = sharedNoteFileContentMap[fileName][pathPred];
-          String fileSessionKeyEnc = sharedNoteFileContentMap[fileName][sharedKeyPred];
-          String fileAccListEnc = sharedNoteFileContentMap[fileName][accessListPred]; 
+    // Get note file content
+    String shredNoteFileContent = await fetchPrvFile(
+        sharedNotesFileLoc, accessToken, dPopTokenSharedNoteFile);
+    Map sharedNoteFileContentMap = getEncFileContent(shredNoteFileContent);
 
-          // Decrypt the data
+    if (sharedNoteFileContentMap.isNotEmpty) {
+      for (var fileName in sharedNoteFileContentMap.keys) {
+        // Get shared file information (all encrypted using receipient's public key)
+        String ownerWebIdEnc = sharedNoteFileContentMap[fileName][webIdPred];
+        String filePathEnc = sharedNoteFileContentMap[fileName][pathPred];
+        String fileSessionKeyEnc =
+            sharedNoteFileContentMap[fileName][sharedKeyPred];
+        String fileAccListEnc =
+            sharedNoteFileContentMap[fileName][accessListPred];
 
-          // Get encryption key and private key
-          String keyFileUrl =
-              webId.replaceAll(profCard, '$encDirLoc/$encKeyFile');
-          String keydPopToken =
-              genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
-          String keyFileInfo =
-              await fetchPrvFile(keyFileUrl, accessToken, keydPopToken);
+        // Decrypt the data
 
-          // Read file content using RDFlib
-          Map keyFileMap = getFileContent(keyFileInfo);
+        // Get encryption key and private key
+        String keyFileUrl =
+            webId.replaceAll(profCard, '$encDirLoc/$encKeyFile');
+        String keydPopToken =
+            genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
+        String keyFileInfo =
+            await fetchPrvFile(keyFileUrl, accessToken, keydPopToken);
 
-          // Get the master key from secure storage
-          String secureKey = await secureStorage.read(key: webId) ?? '';
-          String masterKeyStr =
-              sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
+        // Read file content using RDFlib
+        Map keyFileMap = getFileContent(keyFileInfo);
 
-          // Setup AES encrypter
-          final key = encrypt.Key.fromUtf8(masterKeyStr);
-          final iv = encrypt.IV.fromBase64(
-            keyFileMap[ivPred][1],
-          );
+        // Get the master key from secure storage
+        String secureKey = await secureStorage.read(key: webId) ?? '';
+        String masterKeyStr =
+            sha256.convert(utf8.encode(secureKey)).toString().substring(0, 32);
 
-          final encrypter =
-              encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+        // Setup AES encrypter
+        final key = encrypt.Key.fromUtf8(masterKeyStr);
+        final iv = encrypt.IV.fromBase64(
+          keyFileMap[ivPred][1],
+        );
 
-          // Decrypt private key
-          final ecc = encrypt.Encrypted.from64(keyFileMap[prvKeyPred][1]);
-          final prvKeyStr = encrypter.decrypt(ecc, iv: iv);
+        final encrypter =
+            encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
 
-          // Use POD's private key to decrypt shared file data
-          final parser = encrypt.RSAKeyParser();
-          final prvKey = parser.parse(prvKeyStr) as RSAPrivateKey;
-          final encrypterPrv = encrypt.Encrypter(
-            encrypt.RSA(privateKey: prvKey),
-          );
+        // Decrypt private key
+        final ecc = encrypt.Encrypted.from64(keyFileMap[prvKeyPred][1]);
+        final prvKeyStr = encrypter.decrypt(ecc, iv: iv);
 
-          final sharedWebId = encrypterPrv.decrypt(
-            encrypt.Key.fromBase64(
-              ownerWebIdEnc,
-            ),
-          );
+        // Use POD's private key to decrypt shared file data
+        final parser = encrypt.RSAKeyParser();
+        final prvKey = parser.parse(prvKeyStr) as RSAPrivateKey;
+        final encrypterPrv = encrypt.Encrypter(
+          encrypt.RSA(privateKey: prvKey),
+        );
 
-          final sharedFilePath = encrypterPrv.decrypt(
-            encrypt.IV.fromBase64(
-              filePathEnc,
-            ),
-          );
+        final sharedWebId = encrypterPrv.decrypt(
+          encrypt.Key.fromBase64(
+            ownerWebIdEnc,
+          ),
+        );
 
-          final sharedKey = encrypterPrv.decrypt(
-            encrypt.Key.fromBase64(
-              fileSessionKeyEnc,
-            ),
-          );
+        final sharedFilePath = encrypterPrv.decrypt(
+          encrypt.IV.fromBase64(
+            filePathEnc,
+          ),
+        );
 
-          final sharedAccList = encrypterPrv.decrypt(
-            encrypt.Key.fromBase64(
-              fileAccListEnc,
-            ),
-          );
+        final sharedKey = encrypterPrv.decrypt(
+          encrypt.Key.fromBase64(
+            fileSessionKeyEnc,
+          ),
+        );
 
-          sharedFileList.add([fileName, sharedWebId, sharedFilePath, sharedAccList, sharedKey]);
-        }
+        final sharedAccList = encrypterPrv.decrypt(
+          encrypt.Key.fromBase64(
+            fileAccListEnc,
+          ),
+        );
+
+        sharedFileList.add(
+            [fileName, sharedWebId, sharedFilePath, sharedAccList, sharedKey]);
       }
+    }
   }
-  
-  return sharedFileList;
 
+  return sharedFileList;
 }
 
 // Get the list of resources (folders and files) in a specific location
@@ -808,7 +817,8 @@ Future<Map> getSharedNoteContent(
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
   String accessToken = authData['accessToken'];
   String sharedNoteUrl = sharedNoteData[2];
-  String dPopTokenNote = genDpopToken(sharedNoteUrl, rsaKeyPair, publicKeyJwk, 'GET');
+  String dPopTokenNote =
+      genDpopToken(sharedNoteUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   String fileContent = await fetchPrvFile(
     sharedNoteUrl,
@@ -855,68 +865,63 @@ Future<Map> getSharedNoteContent(
 }
 
 // Delete a note with all the shared keys
-Future<String> deleteNote (
+Future<String> deleteNote(
   String webId,
   Map authData,
   String noteUrl,
-  String noteName,) async {
+  String noteName,
+) async {
+  // First get the acl data of the note and check if the note
+  // is shared with others
+  var rsaInfo = authData['rsaInfo'];
+  var rsaKeyPair = rsaInfo['rsa'];
+  var publicKeyJwk = rsaInfo['pubKeyJwk'];
+  String accessToken = authData['accessToken'];
 
-    // First get the acl data of the note and check if the note
-    // is shared with others
-    var rsaInfo = authData['rsaInfo'];
-    var rsaKeyPair = rsaInfo['rsa'];
-    var publicKeyJwk = rsaInfo['pubKeyJwk'];
-    String accessToken = authData['accessToken'];
+  String noteAclUrl = '$noteUrl.acl';
+  String dPopToken = genDpopToken(noteAclUrl, rsaKeyPair, publicKeyJwk, 'GET');
+  String fileInfo = await fetchPrvFile(noteAclUrl, accessToken, dPopToken);
 
-    String noteAclUrl = '$noteUrl.acl';
-    String dPopToken = genDpopToken(noteAclUrl, rsaKeyPair, publicKeyJwk, 'GET');
-    String fileInfo = await fetchPrvFile(noteAclUrl, accessToken, dPopToken);
+  AclResource aclResFile = AclResource(fileInfo);
 
-    AclResource aclResFile = AclResource(fileInfo);
+  List userPermRes = aclResFile.divideAclData();
+  Map userNameMap = userPermRes.first;
 
-    List userPermRes = aclResFile.divideAclData();
-    Map userNameMap = userPermRes.first;
+  bool allSharedKeysDel = true;
 
-    bool allSharedKeysDel = true;
+  for (var userAlias in userNameMap.keys) {
+    String userWebId = userNameMap[userAlias];
+    userWebId = userWebId.replaceAll('<', '');
+    userWebId = userWebId.replaceAll('>', '');
 
-    for (var userAlias in userNameMap.keys) {
-      String userWebId = userNameMap[userAlias];
-      userWebId = userWebId.replaceAll('<', '');
-      userWebId = userWebId.replaceAll('>', '');
+    // If the note is shared with others first remove the
+    // shared keys
+    if (!webId.contains(userWebId)) {
+      List webIdContent = webId.split("/");
+      String dirName = webIdContent[3];
 
-      // If the note is shared with others first remove the
-      // shared keys
-      if(!webId.contains(userWebId)){
+      String remSharedRes =
+          await removeSharedKey('${userWebId}me', dirName, authData, noteName);
 
-        List webIdContent = webId.split("/");
-        String dirName = webIdContent[3];
-
-        String remSharedRes = await removeSharedKey(
-                              '${userWebId}me',
-                              dirName,
-                              authData,
-                              noteName);
-        
-        if(remSharedRes != 'ok') {
-          allSharedKeysDel = false;
-        }
+      if (remSharedRes != 'ok') {
+        allSharedKeysDel = false;
       }
     }
+  }
 
-    // Now delete the note itself
-    if(allSharedKeysDel){
-      String resDel = await deleteItem(true, webId, authData, noteUrl);
+  // Now delete the note itself
+  if (allSharedKeysDel) {
+    String resDel = await deleteItem(true, webId, authData, noteUrl);
 
-      if(resDel == 'ok'){
-        return 'ok';
-      }
-      else {
-        throw Exception('Failed to delete resource! Try again in a while.');
-      }
+    if (resDel == 'ok') {
+      return 'ok';
     } else {
       throw Exception('Failed to delete resource! Try again in a while.');
     }
+  } else {
+    throw Exception('Failed to delete resource! Try again in a while.');
   }
+}
 
 // Delete a directory or a file
 Future<String> deleteItem(

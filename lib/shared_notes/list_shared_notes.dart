@@ -60,11 +60,12 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                   ),
                   //const Icon(Icons.text_snippet_outlined),
                   title: Text(sharedNotesList[index][0]),
-                  subtitle: Text('Shared by: ${sharedNotesList[index][1]} \nPermissions: ${sharedNotesList[index][3]}'),
+                  subtitle: Text(
+                      'Shared by: ${sharedNotesList[index][1]} \nPermissions: ${sharedNotesList[index][3]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     List notePermission = sharedNotesList[index][3].split(',');
-                    if(notePermission.contains('Read')){
+                    if (notePermission.contains('Read')) {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -91,7 +92,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             false, // This predicate ensures all previous routes are removed
                       );
                     }
-                    
                   },
                 ),
               )),

@@ -178,7 +178,6 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             onPressed: () async {
-
               showAnimationDialog(
                 context,
                 7,

@@ -49,7 +49,7 @@ String dividePubKeyStr(String keyStr) {
 }
 
 String genPubKeyStr(String keyStr) {
- return '''-----BEGIN RSA PUBLIC KEY-----\n$keyStr\n-----END RSA PUBLIC KEY-----''';
+  return '''-----BEGIN RSA PUBLIC KEY-----\n$keyStr\n-----END RSA PUBLIC KEY-----''';
 }
 
 Future<bool> verifyEncKey(String plaintextEncKey, Map authData) async {

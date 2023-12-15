@@ -20,7 +20,7 @@ class Responsive extends StatelessWidget {
       screenWidth(context) < desktopWidthThreshold;
 
   static bool isTablet(BuildContext context) =>
-     screenWidth(context) < 1100 && screenWidth(context) >= 960;
+      screenWidth(context) < 1100 && screenWidth(context) >= 960;
 
   static bool isDesktop(BuildContext context) =>
       screenWidth(context) >= desktopWidthThreshold;
@@ -32,7 +32,6 @@ class Responsive extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-
         return constraints.maxWidth >= desktopWidthThreshold ? desktop : mobile;
       },
     );

@@ -28,7 +28,6 @@ import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/msg_card.dart';
 
-
 class NonReadableNote extends StatefulWidget {
   final List noteMetaData;
   final String webId;
@@ -125,15 +124,14 @@ class _NonReadableNoteState extends State<NonReadableNote> {
           'Access Permission!',
           nonReadableNoteMsg,
         ),
-        
         Expanded(
           child: SizedBox(
             child: Container(
                 padding: const EdgeInsets.all(10),
                 child: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  )),
+                  Icons.edit,
+                  color: Colors.white,
+                )),
           ),
         ),
         Padding(
@@ -147,7 +145,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               //     width: 5,
               //   ),
               // ],
-              
+
               // if(accessList.contains('Write') && accessList.contains('Read')) ... [
               //   ElevatedButton.icon(
               //     icon: const Icon(
@@ -187,7 +185,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               //     width: 5,
               //   ),
               // ],
-              
+
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.keyboard_backspace,
@@ -230,6 +228,4 @@ class _NonReadableNoteState extends State<NonReadableNote> {
       ],
     );
   }
-
-  
 }
