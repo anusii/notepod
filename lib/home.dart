@@ -68,9 +68,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    String dateStr = DateFormat("dd MMMM yyyy")
-                          .format(DateTime.now())
-                          .toString();
+    String dateStr =
+        DateFormat("dd MMMM yyyy").format(DateTime.now()).toString();
 
     return SingleChildScrollView(
       child: Column(
@@ -108,8 +107,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     FormBuilderTextField(
                       name: 'noteTitle',
                       decoration: const InputDecoration(
-                        labelText:
-                            'Note Title',
+                        labelText: 'Note Title',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,
@@ -149,7 +147,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
-
                       // Loading animation
                       showAnimationDialog(
                         context,
@@ -157,14 +154,14 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         'Saving the note!',
                         false,
                       );
-                      
+
                       Map formData = formKey.currentState?.value as Map;
                       String noteText = _textController!.text;
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
                       // String noteTitle =
                       //     formData['noteTitle'].split(' ').join('_');
-                      
+
                       String noteTitle =
                           formData['noteTitle'].replaceAll('\n', '');
 
@@ -267,17 +264,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
                           if (updateIndKeyFileRes == 'ok') {
                             // ignore: use_build_context_synchronously
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NavigationScreen(
-                                        webId: widget.webId,
-                                        authData: widget.authData,
-                                        page: 'home',
-                                      )),
-                              (Route<dynamic> route) =>
-                                  false, // This predicate ensures all previous routes are removed
-                            );
+                            Navigator.pop(context);
                           } else {
                             // ignore: use_build_context_synchronously
                             Navigator.pop(context);
