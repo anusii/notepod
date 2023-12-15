@@ -222,11 +222,11 @@ qtest:
 targz: $(APP)-$(VER)-linux-x86_64.tar.gz
 
 $(APP)-$(VER)-linux-x86_64.tar.gz:
-	mkdir -p dist
+	mkdir -p installers
 	rm -rf build/linux/x64/release
 	flutter build linux
 	tar --transform 's|^build/linux/x64/release/bundle|$(APP)|' -czvf $@ build/linux/x64/release/bundle
-	mv $@ dist/
+	mv $@ installers/
 
 
 realclean::
