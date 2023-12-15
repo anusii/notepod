@@ -32,6 +32,13 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 const solidServerUrl = "https://pods.solidcommunity.au/";
 
+const String applicationName = "Podnotes"; // "Pod Note Taker";
+const String applicationVersion = "0.6.0";
+const String applicationRepo = 'https://github.com/anusii/podnotes';
+const String siiUrl = 'https://sii.anu.edu.au';
+const String authors =
+    "Authors: Anushka Vidanage, Graham Williams, Jess Moore.";
+
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
 const double buttonBorderRadius = 5;
@@ -69,7 +76,8 @@ const encKeySuccess = 'Your encryption key is already setup.';
 
 const encKeyUpdate = 'Please update your encryption key';
 
-const nonReadableNoteMsg = 'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
+const nonReadableNoteMsg =
+    'You do not have read access to this note and therefore cannot view that. However, you can delete or add content to it.';
 
 const tokenTimeOutErr =
     'Your login session has expired! Please login again to continue.';
@@ -79,7 +87,6 @@ const tokenTimeOutTitle = 'Login Timeout!';
 const noNotesMsg = 'You do not have any notes yet!';
 
 const noSharedNotesMsg = 'You do not have any shared notes yet!';
-
 
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(

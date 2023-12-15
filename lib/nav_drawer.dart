@@ -1,8 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:podnotes/common/logout.dart';
-import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/nav_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/common/logout.dart';
+import 'package:podnotes/constants/colours.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
@@ -40,7 +44,8 @@ class NavDrawer extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     webId,
-                    style: const TextStyle(color: backgroundWhite, fontSize: 14),
+                    style:
+                        const TextStyle(color: backgroundWhite, fontSize: 14),
                   ),
                 ),
               ],
@@ -93,8 +98,7 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.file_open_outlined),
                   title: const Text('Shared Notes'),
-                  onTap: () 
-                  {
+                  onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -154,7 +158,14 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
-                  onTap: () => {},
+                  onTap: () => {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return _aboutDialog();
+                      },
+                    ),
+                  },
                 ),
               ],
             ),
@@ -163,4 +174,70 @@ class NavDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+// Make About Dialog
+Widget _aboutDialog() {
+  return AboutDialog(
+    applicationName: applicationName,
+    applicationIcon: SizedBox(
+        height: 65,
+        width: 65,
+        child: Image.asset('assets/images/podnotes.png')),
+    applicationVersion: applicationVersion,
+    // applicationLegalese: "© Copyright Michelphoenix 2020",
+    children: <Widget>[
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        RichText(
+          text: TextSpan(
+            text: 'An ',
+            style: const TextStyle(color: Colors.black),
+            children: [
+              TextSpan(
+                text: 'ANU Software Innovation Institute',
+                style: const TextStyle(color: Colors.blue),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launchUrl(Uri.parse(siiUrl));
+                  },
+              ),
+              const TextSpan(
+                text: ' demo project for Solid PODs.',
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(
+                text: 'For more information see the ',
+                style: TextStyle(color: Colors.black),
+              ),
+              TextSpan(
+                text: 'Podnotes',
+                style: const TextStyle(color: Colors.blue),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launchUrl(Uri.parse(applicationRepo));
+                  },
+              ),
+              const TextSpan(
+                text: ' github repository.',
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        const Text(authors),
+      ]),
+    ],
+  );
 }
