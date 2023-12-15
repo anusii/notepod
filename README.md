@@ -2,7 +2,7 @@
 
 **An ANU Software Innovation Institute demo project for Solid PODs**.
 
-*Authors: Anushka Vidanage, Graham Williams*
+*Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
 *[ANU Software Innovation Institute](https://sii.anu.edu.au)*
 
