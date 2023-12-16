@@ -185,9 +185,9 @@ class HomeState extends State<NavigationScreen>
             ),
             const SizedBox(width: 10),
             IconButton(
-              tooltip: "My notes",
+              tooltip: "My Notes",
               icon: const Icon(
-                Icons.file_copy,
+                Icons.list,
                 color: Colors.black,
               ),
               onPressed: () {
