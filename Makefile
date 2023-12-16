@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Saturday 2023-12-16 09:05:18 +1100 Graham Williams>
+# Time-stamp: <Sunday 2023-12-17 10:33:33 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -54,7 +54,7 @@ endif
 define HELP
 $(APP):
 
-  locals	E.g., install $(APP)
+  solidcommunity	Install to https://podnotes.solidcommunity.au
 
 endef
 export HELP
@@ -76,3 +76,14 @@ docs::
 versions:
 	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
 	lib/constants/app.dart
+
+#
+# Manage the production install on the remote server.
+#
+
+.PHONY: solidcommunity
+solidcommunity:
+	rsync -avzh ./ solidcommunity.au:projects/podnotes/ \
+	--exclude .dart_tool --exclude build --exclude ios --exclude macos \
+	--exclude linux --exclude windows --exclude android
+	ssh solidcommunity.au '(cd projects/podnotes; flutter upgrade; make prod)'

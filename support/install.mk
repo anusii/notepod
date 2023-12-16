@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Thursday 2023-11-23 17:16:47 +1100 >
+# Time-stamp: <Sunday 2023-12-17 10:24:06 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
