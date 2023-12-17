@@ -187,7 +187,10 @@ class HomeState extends State<NavigationScreen>
             IconButton(
               tooltip: "My Notes",
               icon: const Icon(
-                Icons.list,
+                // TODO 20231217 gjw view_list icon is not rendering on web. In
+                // fact, any other icon I choose except the ones originally used
+                // do not render. Must be an extra step required.
+                Icons.view_list,
                 color: Colors.black,
               ),
               onPressed: () {

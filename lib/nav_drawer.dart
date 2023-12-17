@@ -74,7 +74,7 @@ class NavDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.list),
+                  leading: const Icon(Icons.view_list),
                   title: const Text('My Notes'),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
