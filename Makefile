@@ -37,6 +37,7 @@ INC_BASE=support
 # appropriate INC to a non-existant location and it will be skipped.
 
 INC_DOCKER=skip
+INC_MLHUB=skip
 
 # Load any modules available.
 
@@ -54,7 +55,7 @@ endif
 define HELP
 $(APP):
 
-  solidcommunity	Install to https://podnotes.solidcommunity.au
+  solidcommunity	Install to https://$(APP).solidcommunity.au
 
 endef
 export HELP
@@ -70,7 +71,7 @@ locals:
 
 .PHONY: docs
 docs::
-	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/podnotes/
+	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/$(APP)/
 
 .PHONY: versions
 versions:
@@ -83,7 +84,7 @@ versions:
 
 .PHONY: solidcommunity
 solidcommunity:
-	rsync -avzh ./ solidcommunity.au:projects/podnotes/ \
+	rsync -avzh ./ solidcommunity.au:projects/$(APP)/ \
 	--exclude .dart_tool --exclude build --exclude ios --exclude macos \
 	--exclude linux --exclude windows --exclude android
-	ssh solidcommunity.au '(cd projects/podnotes; flutter upgrade; make prod)'
+	ssh solidcommunity.au '(cd projects/$(APP); flutter upgrade; make prod)'
