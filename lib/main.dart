@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Graham Williams, Anushka Vidanage
+
 library;
 
 import 'package:flutter/material.dart';
@@ -32,6 +33,8 @@ import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/is_desktop.dart';
 
 void main() async {
+  // Remove [debugPrint] messages from production code.
+
   debugPrint = (String? message, {int? wrapWidth}) {
     null;
   };
@@ -44,7 +47,7 @@ void main() async {
     WindowOptions windowOptions = const WindowOptions(
       // Setting [alwaysOnTop] here will ensure the app starts on top of other
       // apps on the desktop so that it is visible. We later turn it of as we
-      // don;t want to force it always on top.
+      // don't want to force it always on top.
 
       alwaysOnTop: true,
 
@@ -59,7 +62,7 @@ void main() async {
 
       // The [title] is used for the window manager's window title.
 
-      title: "PODNotes - A note taking app with PODs",
+      title: "PODNotes - A note taking app with private PODs",
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -72,11 +75,11 @@ void main() async {
   // The runApp() function takes the given Widget and makes it the root of the
   // widget tree.
 
-  runApp(const MyApp());
+  runApp(const PODNotes());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PODNotes extends StatelessWidget {
+  const PODNotes({super.key});
 
   @override
   Widget build(BuildContext context) {
