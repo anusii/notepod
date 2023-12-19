@@ -124,6 +124,10 @@ docs::
 	dart doc
 	chmod -R go+rX doc
 
+.PHONY: fix
+fix:
+	dart fix --apply
+
 .PHONY: format
 format:
 	dart format lib/
