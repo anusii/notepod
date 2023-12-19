@@ -19,6 +19,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage
+library;
 
 import 'package:flutter/material.dart';
 import 'package:podnotes/common/rest_api/res_permission.dart';
@@ -65,11 +66,11 @@ DataRow permissionRow(
     BuildContext context) {
   String webIdCheck = userWebId.replaceAll('#me', '#');
 
-  double c_width = MediaQuery.of(context).size.width * 0.35;
+  double cWidth = MediaQuery.of(context).size.width * 0.35;
   return DataRow(cells: [
     DataCell(Container(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-      width: c_width,
+      width: cWidth,
       child: Column(
         children: <Widget>[
           Text(
@@ -171,7 +172,7 @@ DataRow permissionRow(
                                   .format(DateTime.now())
                                   .toString();
                               String logStr =
-                                  '${dateTimeStr};${resLocUrl}${resourceName};${userWebId};revoke;${userWebId};${permWebIdStr};${accessListStr.toLowerCase()}';
+                                  '$dateTimeStr;$resLocUrl$resourceName;$userWebId;revoke;$userWebId;$permWebIdStr;${accessListStr.toLowerCase()}';
 
                               // Write to log files of all actors in the permission
                               // action
@@ -267,7 +268,7 @@ class ShareNote extends StatefulWidget {
 class _ShareNoteState extends State<ShareNote> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController _permissionInputController = TextEditingController();
+  final TextEditingController _permissionInputController = TextEditingController();
 
   // Loading widget
 

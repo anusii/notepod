@@ -203,7 +203,7 @@ Future<void> addPermission(
         String dateTimeStr =
             DateFormat("yyyyMMddTHHmmss").format(DateTime.now()).toString();
         String logStr =
-            '${dateTimeStr};${resourceUrl};${webId};grant;${webId};${permissionWebId};${accessListStr.toLowerCase()}';
+            '$dateTimeStr;$resourceUrl;$webId;grant;$webId;$permissionWebId;${accessListStr.toLowerCase()}';
 
         // Write to log files of all actors in the permission
         // action
@@ -316,7 +316,7 @@ Future<String> setPermission(
       userNameMap[newUserPrefix] = permissionWebIdStr;
     }
   } else {
-    newUserPrefix = '<' + permissionWebId.trim() + '>';
+    newUserPrefix = '<${permissionWebId.trim()}>';
   }
 
   selectedPermItems.sort();
@@ -327,16 +327,16 @@ Future<String> setPermission(
     Set resourceSet = resouceList.first;
     Set userSet = resouceList[1];
     Set accessSet = resouceList[2];
-    resourceSet.add('<' + resourceName + '>');
+    resourceSet.add('<$resourceName>');
     userSet.add(newUserPrefix);
     userPermMap[newAccessStr] = [resourceSet, userSet, accessSet];
   } else {
     Set accessSet = {};
-    selectedPermItems.forEach((element) {
+    for (var element in selectedPermItems) {
       accessSet.add('acl:$element');
-    });
+    }
     userPermMap[newAccessStr] = [
-      {'<' + resourceName + '>'},
+      {'<$resourceName>'},
       {newUserPrefix},
       accessSet
     ];
@@ -345,10 +345,10 @@ Future<String> setPermission(
   String aclPrefixTemp =
       """@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n""";
 
-  if (userNameMap.length != 0) {
+  if (userNameMap.isNotEmpty) {
     for (var userPrefix in userNameMap.keys) {
       var userWebId = userNameMap[userPrefix];
-      String prefixLineStr = '@prefix ' + userPrefix + ' ' + userWebId + '.\n';
+      String prefixLineStr = '${'${'@prefix ' + userPrefix} ' + userWebId}.\n';
       aclPrefixTemp += prefixLineStr;
     }
   }
@@ -369,11 +369,8 @@ Future<String> setPermission(
     String userStr = userStrSet.join(', ');
     String accessModeStr = accessSet.join(', ');
 
-    String accessBlock = ':$accessStr\n    ' +
-        'a acl:Authorization;\n    ' +
-        'acl:accessTo $resourceStr;\n    ' +
-        'acl:agent $userStr;\n    ' +
-        'acl:mode $accessModeStr.\n';
+    String accessBlock =
+        ':$accessStr\n    a acl:Authorization;\n    acl:accessTo $resourceStr;\n    acl:agent $userStr;\n    acl:mode $accessModeStr.\n';
     aclBodyTemp += accessBlock;
   }
 
@@ -496,23 +493,12 @@ Future<String> copySharedKey(
       genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   /// Create file if not exists
-  var createUpdateRes;
+  String createUpdateRes;
   if (await checkResourceExists(
           keyFileUrl, accessToken, dPopTokenKeyFile, false) ==
       'not-exist') {
-    String keyFileBody = '@prefix : <#>.' +
-        '\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.' +
-        '\n@prefix terms: <http://purl.org/dc/terms/>.' +
-        '\n@prefix file: <$podnotesFile>.' +
-        '\n@prefix podnotesTerms: <$podnotesTerms>.' +
-        '\n:me' +
-        '\n    a foaf:PersonalProfileDocument;' +
-        '\n    terms:title "Shared Encryption Keys".' +
-        '\nfile:$resName' +
-        '\n    podnotesTerms:$webIdPred "$encSharedWebId";' +
-        '\n    podnotesTerms:$pathPred "$encSharedPath";' +
-        '\n    podnotesTerms:$accessListPred "$encSharedAccess";' +
-        '\n    podnotesTerms:$sharedKeyPred "$encSharedKey".';
+    String keyFileBody =
+        '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix terms: <http://purl.org/dc/terms/>.\n@prefix file: <$podnotesFile>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Shared Encryption Keys".\nfile:$resName\n    podnotesTerms:$webIdPred "$encSharedWebId";\n    podnotesTerms:$pathPred "$encSharedPath";\n    podnotesTerms:$accessListPred "$encSharedAccess";\n    podnotesTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Update the ttl file with the shared info
     createUpdateRes = await createItem(
@@ -650,7 +636,7 @@ Future<String> deletePermission(
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
 
-  String resourceAcl = resourseUrl + '.acl';
+  String resourceAcl = '$resourseUrl.acl';
 
   String dPopToken = genDpopToken(resourceAcl, rsaKeyPair, publicKeyJwk, 'GET');
   String fileInfo = await fetchPrvFile(resourceAcl, accessToken, dPopToken);
@@ -663,7 +649,7 @@ Future<String> deletePermission(
 
   Map newUserNameMap = {};
   String delUserPrefix = '';
-  if (userNameMap.length != 0) {
+  if (userNameMap.isNotEmpty) {
     for (var userPrefix in userNameMap.keys) {
       var userWebId = userNameMap[userPrefix];
       if (deleteWebId != userWebId) {
@@ -685,13 +671,13 @@ Future<String> deletePermission(
       Set userSet = resouceList[1];
       Set accessSet = resouceList[2];
 
-      if (delUserPrefix.length != 0) {
+      if (delUserPrefix.isNotEmpty) {
         userSet.remove(delUserPrefix);
       } else {
         userSet.remove(deleteWebId);
       }
 
-      if (userSet.length != 0) {
+      if (userSet.isNotEmpty) {
         newUserPermMap[accessStr] = [resourceSet, userSet, accessSet];
       }
     } else {
@@ -702,10 +688,10 @@ Future<String> deletePermission(
   String aclPrefixTemp =
       """@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n""";
 
-  if (newUserNameMap.length != 0) {
+  if (newUserNameMap.isNotEmpty) {
     for (var userPrefix in newUserNameMap.keys) {
       var userWebId = newUserNameMap[userPrefix];
-      String prefixLineStr = '@prefix ' + userPrefix + ' ' + userWebId + '.\n';
+      String prefixLineStr = '${'${'@prefix ' + userPrefix} ' + userWebId}.\n';
       aclPrefixTemp += prefixLineStr;
     }
   }
@@ -726,11 +712,8 @@ Future<String> deletePermission(
     String userStr = userStrSet.join(', ');
     String accessModeStr = accessSet.join(', ');
 
-    String accessBlock = ':$accessStr\n    ' +
-        'a acl:Authorization;\n    ' +
-        'acl:accessTo $resourceStr;\n    ' +
-        'acl:agent $userStr;\n    ' +
-        'acl:mode $accessModeStr.\n';
+    String accessBlock =
+        ':$accessStr\n    a acl:Authorization;\n    acl:accessTo $resourceStr;\n    acl:agent $userStr;\n    acl:mode $accessModeStr.\n';
     aclBodyTemp += accessBlock;
   }
 
@@ -782,7 +765,8 @@ Future<String> removeSharedKey(
   String dPopTokenKeyFile =
       genDpopToken(keyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
-  var createUpdateRes;
+  String createUpdateRes = 'ok';
+
   if (await checkResourceExists(
           keyFileUrl, accessToken, dPopTokenKeyFile, false) ==
       'exist') {
@@ -830,8 +814,6 @@ Future<String> removeSharedKey(
       //       'Either shared key or path is not the same as actually key or path');
       // }
     }
-  } else {
-    createUpdateRes = 'ok';
   }
 
   if (createUpdateRes == 'ok') {

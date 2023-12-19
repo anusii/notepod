@@ -32,23 +32,23 @@ Row buildMsgCard(
                     Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
+                      alignment: Alignment.center,
                       child: Icon(
                         errIcon,
                         color: errColour,
                         size: 60,
                       ),
-                      alignment: Alignment.center,
                     ), //CircleAvatar
                     const SizedBox(
                       height: 10,
                     ), //SizedBox
                     Text(
                       errTitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
@@ -59,7 +59,7 @@ Row buildMsgCard(
                     ), //SizedBox
                     Text(
                       errBody,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         color: Colors.black,
                       ), //Textstyle
