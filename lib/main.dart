@@ -62,7 +62,7 @@ void main() async {
 
       // The [title] is used for the window manager's window title.
 
-      title: "PODNotes - A note taking app with private PODs",
+      title: "PodNotes - A note taking app with private PODs",
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -75,11 +75,11 @@ void main() async {
   // The runApp() function takes the given Widget and makes it the root of the
   // widget tree.
 
-  runApp(const PODNotes());
+  runApp(const PodNotes());
 }
 
-class PODNotes extends StatelessWidget {
-  const PODNotes({super.key});
+class PodNotes extends StatelessWidget {
+  const PodNotes({super.key});
 
   @override
   Widget build(BuildContext context) {
