@@ -5,7 +5,7 @@
 /// License: GNU General Public License, Version 3 (the "License")
 /// https://www.gnu.org/licenses/gpl-3.0.en.html
 //
-// Time-stamp: <Wednesday 2023-11-01 08:27:58 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2023-12-20 08:44:31 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,13 +21,14 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Graham Williams
+
 library;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:universal_io/io.dart' show Platform;
 
-/// Test if we are running on a desktop platform and not in a browser.
+/// Test if we are running on a desktop platform but not in a browser.
 
 bool get isDesktop {
   if (kIsWeb) return false;
