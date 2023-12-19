@@ -1,4 +1,4 @@
-/// DESCRIPTION
+/// DESCRIPTION - PLEASE ADD A DESCRIPTION OF THIS FILE HERE ZHEYUAN.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: AUTHORS
+/// Authors: WHO WROTE THIS ORIGINALLY? ZHEYUAN OR ANUSHKA?
 
 library;
 
