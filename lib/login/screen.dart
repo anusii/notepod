@@ -1,4 +1,4 @@
-/// Login screen for the app.
+/// App login screen for connection to user's POD
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -26,20 +26,18 @@
 library;
 
 import 'package:flutter/material.dart';
+
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:solid_auth/solid_auth.dart';
+
+import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/initial_setup/initial_setup_screen.dart';
+import 'package:podnotes/initial_setup/screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
-
-// Package imports:
-import 'package:jwt_decoder/jwt_decoder.dart';
-
-// Project imports:
-import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:solid_auth/solid_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
@@ -196,7 +194,6 @@ class LoginScreen extends StatelessWidget {
 
               // Authentication process for the POD issuer
               var authData =
-                  // ignore: use_build_context_synchronously
                   await authenticate(Uri.parse(issuerUri), scopes, context);
 
               // Decode access token to get the correct webId
@@ -245,7 +242,6 @@ class LoginScreen extends StatelessWidget {
                           )),
                 );
               } else {
-                // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

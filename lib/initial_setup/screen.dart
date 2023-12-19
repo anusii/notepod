@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// DESCRIPTION
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -19,13 +19,14 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Zheyuan Xu, Graham Williams
+
 library;
 
 import 'package:flutter/material.dart';
 
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/initial_setup/initial_setup_desktop.dart';
+import 'package:podnotes/initial_setup/desktop.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
 
 class InitialSetupScreen extends StatefulWidget {
