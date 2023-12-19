@@ -268,7 +268,8 @@ class ShareNote extends StatefulWidget {
 class _ShareNoteState extends State<ShareNote> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final TextEditingController _permissionInputController = TextEditingController();
+  final TextEditingController _permissionInputController =
+      TextEditingController();
 
   // Loading widget
 
@@ -295,168 +296,159 @@ class _ShareNoteState extends State<ShareNote> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
-                      child: Column(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("File Access Permissions",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700)),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  size: 27.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => NavigationScreen(
-                                              webId: webId,
-                                              authData: authData,
-                                              page: 'listNotes',
-                                            )),
-                                    (Route<dynamic> route) =>
-                                        false, // This predicate ensures all previous routes are removed
-                                  );
-                                },
-                              ),
-                            ],
+                          const Text("File Access Permissions",
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.w700)),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              size: 27.0,
+                            ),
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NavigationScreen(
+                                          webId: webId,
+                                          authData: authData,
+                                          page: 'listNotes',
+                                        )),
+                                (Route<dynamic> route) =>
+                                    false, // This predicate ensures all previous routes are removed
+                              );
+                            },
                           ),
-                          const Divider(
-                            color: Color.fromARGB(255, 160, 160, 160),
-                            height: 10,
-                            thickness: 1,
-                            indent: 0,
-                            endIndent: 10,
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Column(
-                            children: [
-                              const Text(
-                                  '''You can add or remove access permission to your file here. In the following you can see the list of permissions that is already being given.''',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700)),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              resourceAttr(context, 'Resource name',
-                                  widget.resInfo['resName']),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              resourceAttr(context, 'Resource type',
-                                  widget.resInfo['resType']),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          DataTable(
-                            columnSpacing: 20,
-                            columns: const [
-                              DataColumn(
-                                  label: Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        'Pod name',
-                                      ),
-                                    ),
-                                  ),
-                                  tooltip:
-                                      'Retrieved from access control lists'),
-                              DataColumn(
-                                  label: Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        'Permissions',
-                                      ),
-                                    ),
-                                  ),
-                                  tooltip:
-                                      'Retrieved from access control lists'),
-                              DataColumn(label: Text('')),
-                              // DataColumn(label: Text('')),
-
-                              ///necessary as the number of Column is same with the row
-                            ],
-                            rows: [
-                              for (var resWebId
-                                  in widget.resInfo['resPerm'].keys)
-                                permissionRow(
-                                    resWebId,
-                                    widget.resInfo['resPerm'][resWebId],
-                                    widget.authData,
-                                    widget.resInfo['resName'],
-                                    widget.webId,
-                                    widget.resInfo['resUrl'],
-                                    widget.resInfo['resUsername'][resWebId],
-                                    context),
-                            ],
-                            headingRowColor: MaterialStateProperty.resolveWith(
-                                (states) => lightBlue),
-                            headingTextStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      String accessToken =
-                                          widget.authData['accessToken'];
-                                      String fileUrl =
-                                          widget.resInfo['resUrl'] +
-                                              widget.resInfo['resName'];
-                                      _displayPermissionInputDialog(
-                                        context,
-                                        accessToken,
-                                        fileUrl,
-                                        widget.resInfo['resName'],
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: darkBlue, // background
-                                        foregroundColor:
-                                            lightBlue, // foreground
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 25),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    child: const Text(
-                                      "Add New Permission",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        letterSpacing: 1.0,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )),
-                                // TextButton(
-                                //   child: Text('hello'),
-                                //   onPressed: () {
-                                //     var r = Random.secure();
-                                //     print("random string");
-                                //     print(randomAlphaNumeric(32,
-                                //         provider: CoreRandomProvider.from(r)));
-                                //   },
-                                // ),
-                              ])
                         ],
                       ),
-                    )),
+                      const Divider(
+                        color: Color.fromARGB(255, 160, 160, 160),
+                        height: 10,
+                        thickness: 1,
+                        indent: 0,
+                        endIndent: 10,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Column(
+                        children: [
+                          const Text(
+                              '''You can add or remove access permission to your file here. In the following you can see the list of permissions that is already being given.''',
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w700)),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          resourceAttr(context, 'Resource name',
+                              widget.resInfo['resName']),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          resourceAttr(context, 'Resource type',
+                              widget.resInfo['resType']),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      DataTable(
+                        columnSpacing: 20,
+                        columns: const [
+                          DataColumn(
+                              label: Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Pod name',
+                                  ),
+                                ),
+                              ),
+                              tooltip: 'Retrieved from access control lists'),
+                          DataColumn(
+                              label: Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Permissions',
+                                  ),
+                                ),
+                              ),
+                              tooltip: 'Retrieved from access control lists'),
+                          DataColumn(label: Text('')),
+                          // DataColumn(label: Text('')),
+
+                          ///necessary as the number of Column is same with the row
+                        ],
+                        rows: [
+                          for (var resWebId in widget.resInfo['resPerm'].keys)
+                            permissionRow(
+                                resWebId,
+                                widget.resInfo['resPerm'][resWebId],
+                                widget.authData,
+                                widget.resInfo['resName'],
+                                widget.webId,
+                                widget.resInfo['resUrl'],
+                                widget.resInfo['resUsername'][resWebId],
+                                context),
+                        ],
+                        headingRowColor: MaterialStateProperty.resolveWith(
+                            (states) => lightBlue),
+                        headingTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () async {
+                                  String accessToken =
+                                      widget.authData['accessToken'];
+                                  String fileUrl = widget.resInfo['resUrl'] +
+                                      widget.resInfo['resName'];
+                                  _displayPermissionInputDialog(
+                                    context,
+                                    accessToken,
+                                    fileUrl,
+                                    widget.resInfo['resName'],
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: darkBlue, // background
+                                    foregroundColor: lightBlue, // foreground
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                                child: const Text(
+                                  "Add New Permission",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    letterSpacing: 1.0,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            // TextButton(
+                            //   child: Text('hello'),
+                            //   onPressed: () {
+                            //     var r = Random.secure();
+                            //     print("random string");
+                            //     print(randomAlphaNumeric(32,
+                            //         provider: CoreRandomProvider.from(r)));
+                            //   },
+                            // ),
+                          ])
+                    ],
+                  ),
+                ),
               )
             ],
           ),
