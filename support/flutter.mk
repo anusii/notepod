@@ -126,10 +126,12 @@ docs::
 
 .PHONY: fix
 fix:
+	@echo "\n--\nDart: FIX"
 	dart fix --apply
 
 .PHONY: format
 format:
+	@echo "\n--\nDart: FORMAT"
 	dart format lib/
 
 .PHONY: tests
