@@ -36,7 +36,7 @@ Widget loadingScreen(double height) {
                 margin: const EdgeInsets.only(top: 25.0),
                 child: const Center(
                   child: Text(
-                    "Loading.. Please wait!",
+                    'Loading.. Please wait!',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),

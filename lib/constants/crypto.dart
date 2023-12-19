@@ -29,11 +29,10 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:solid_auth/solid_auth.dart';
-
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:solid_auth/solid_auth.dart';
 
 // TODO If these are constants then shouldn't they start with `const`?
 

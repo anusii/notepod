@@ -28,18 +28,17 @@ library;
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-
-import 'package:podnotes/constants/file_structure.dart';
 
 // import 'dart:async';
 
@@ -897,7 +896,7 @@ Future<String> deleteNote(
     // If the note is shared with others first remove the
     // shared keys
     if (!webId.contains(userWebId)) {
-      List webIdContent = webId.split("/");
+      List webIdContent = webId.split('/');
       String dirName = webIdContent[3];
 
       String remSharedRes =

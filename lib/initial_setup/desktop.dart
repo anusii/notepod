@@ -27,28 +27,26 @@ library;
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_rsa/fast_rsa.dart' as frsa;
+import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:solid_auth/solid_auth.dart';
-import 'package:solid_encrypt/solid_encrypt.dart';
-
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/crypto.dart';
 import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/login/screen.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/utils/truncate_str.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
+import 'package:podnotes/widgets/loading_animation.dart';
 import 'package:podnotes/widgets/msg_box.dart';
+import 'package:solid_auth/solid_auth.dart';
+import 'package:solid_encrypt/solid_encrypt.dart';
 
 class InitialSetupDesktop extends StatefulWidget {
   final Map resNeedToCreate;
@@ -869,7 +867,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
   }
 
   String capitalisedFirst(String text) {
-    String result = "";
+    String result = '';
     if (text.length == 1) {
       result = text.toUpperCase();
     } else if (text.length > 1) {

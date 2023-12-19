@@ -22,10 +22,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/crypto.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 
 class EncryptionKeyInput extends StatefulWidget {
@@ -60,7 +60,7 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
     return Column(
       children: [
         const SizedBox(height: 20.0),
-        const Text("Encryption Key",
+        const Text('Encryption Key',
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
         const SizedBox(height: 20.0),
         ValueListenableBuilder<bool?>(
@@ -169,7 +169,7 @@ class _EncryptionKeyInputState extends State<EncryptionKeyInput> {
         const SizedBox(
           height: 10,
         ),
-        const Text("WebID",
+        const Text('WebID',
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
         const SizedBox(
           height: 10,

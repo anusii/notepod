@@ -28,21 +28,20 @@ library;
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/crypto.dart';
+import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:pointycastle/asymmetric/api.dart';
-import 'package:podnotes/nav_screen.dart';
 import 'package:solid_auth/solid_auth.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-
-import 'package:podnotes/constants/file_structure.dart';
 
 Future<Map> getPermission(
     Map authData, String resourceName, String resourseUrl) async {
@@ -103,7 +102,7 @@ Future<void> addPermission(
 ) async {
   String permissionWebId = permissionInputController.text;
 
-  if (permissionWebId.isNotEmpty && permissionWebId.contains("https://")) {
+  if (permissionWebId.isNotEmpty && permissionWebId.contains('https://')) {
     if (await checkPublicProf(permissionWebId)) {
       String res = await setPermission(accessToken, authData, resourceName,
           resourceUrl, permissionWebId, selectedItems);
@@ -173,7 +172,7 @@ Future<void> addPermission(
         final encSharedWebId = encrypterPub.encrypt(webId).base64.toString();
 
         // Get username to create a directory
-        List webIdContent = webId.split("/");
+        List webIdContent = webId.split('/');
         String dirName = webIdContent[3];
 
         // Copying shared key to recipient's POD
@@ -201,7 +200,7 @@ Future<void> addPermission(
         // File owner and permission recipient
         String accessListStr = selectedItems.join(',');
         String dateTimeStr =
-            DateFormat("yyyyMMddTHHmmss").format(DateTime.now()).toString();
+            DateFormat('yyyyMMddTHHmmss').format(DateTime.now()).toString();
         String logStr =
             '$dateTimeStr;$resourceUrl;$webId;grant;$webId;$permissionWebId;${accessListStr.toLowerCase()}';
 
@@ -343,7 +342,7 @@ Future<String> setPermission(
   }
 
   String aclPrefixTemp =
-      """@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n""";
+      '''@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n''';
 
   if (userNameMap.isNotEmpty) {
     for (var userPrefix in userNameMap.keys) {
@@ -686,7 +685,7 @@ Future<String> deletePermission(
   }
 
   String aclPrefixTemp =
-      """@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n""";
+      '''@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n''';
 
   if (newUserNameMap.isNotEmpty) {
     for (var userPrefix in newUserNameMap.keys) {
