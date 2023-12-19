@@ -57,15 +57,15 @@ flutter_launcher_icons:
     image_path: "assets/images/podnotes.png"
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
   dart_code_metrics:
     git:
       url: https://github.com/Zheyuan-Robert-Xu/dart-code-metrics.git
       ref: master
 
   flutter_lints: ^3.0.1
+
+  flutter_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true
