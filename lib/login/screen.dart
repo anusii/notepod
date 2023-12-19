@@ -39,11 +39,19 @@ import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
 
-class LoginScreen extends StatelessWidget {
-  // Sample web ID to check the functionality
+/// A widget to display the initial login screen.
+///
+/// The login screen will be the intiial screen of the app when access to the
+/// user's POD is required for any of the functionality of the app requires
+/// access to the user's POD.
 
-  final webIdController = TextEditingController()
-    ..text = 'https://pods.solidcommunity.au';
+const _defaultWebID = 'https://pods.solidcommunity.au';
+const _mainImage = AssetImage('assets/images/podnotes-background.jpg');
+
+class LoginScreen extends StatelessWidget {
+  // Show a default solid server for authorisation.
+
+  final webIdController = TextEditingController()..text = _defaultWebID;
 
   LoginScreen({super.key});
 
@@ -54,9 +62,7 @@ class LoginScreen extends StatelessWidget {
             child: Container(
       decoration: screenWidth(context) < 1175
           ? const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/podnotes-background.jpg'),
-                  fit: BoxFit.cover))
+              image: DecorationImage(image: _mainImage, fit: BoxFit.cover))
           : null,
       child: Row(
         children: [
@@ -67,9 +73,7 @@ class LoginScreen extends StatelessWidget {
                   child: Container(
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(
-                                'assets/images/podnotes-background.jpg'),
-                            fit: BoxFit.cover)),
+                            image: _mainImage, fit: BoxFit.cover)),
                   )),
           Expanded(
               flex: 5,
