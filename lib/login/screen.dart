@@ -41,6 +41,7 @@ import 'package:podnotes/widgets/loading_animation.dart';
 
 class LoginScreen extends StatelessWidget {
   // Sample web ID to check the functionality
+
   final webIdController = TextEditingController()
     ..text = 'https://pods.solidcommunity.au';
 
@@ -182,34 +183,41 @@ class LoginScreen extends StatelessWidget {
                 'Logging in...',
                 false,
               );
-              // Get issuer URI
+
+              // Get issuer URI.
+
               String issuerUri = await getIssuer(webIdTextController.text);
 
-              // Define scopes. Also possible scopes -> webid, email, api
+              // Define scopes. Also possible scopes -> webid, email, api.
+
               final List<String> scopes = <String>[
                 'openid',
                 'profile',
                 'offline_access',
               ];
 
-              // Authentication process for the POD issuer
+              // Authentication process for the POD issuer.
+
               var authData =
                   await authenticate(Uri.parse(issuerUri), scopes, context);
 
-              // Decode access token to get the correct webId
+              // Decode access token to get the correct webId.
+
               String accessToken = authData['accessToken'];
               Map<String, dynamic> decodedToken =
                   JwtDecoder.decode(accessToken);
               String webId = decodedToken['webid'];
 
-              // Perform check to see whether all required resources exists
+              // Perform check to see whether all required resources exists.
+
               List resCheckList = await initialStructureTest(authData);
               bool allExists = resCheckList.first;
 
               if (allExists) {
                 imageCache.clear();
 
-                // Get profile information
+                // Get profile information.
+
                 var rsaInfo = authData['rsaInfo'];
                 var rsaKeyPair = rsaInfo['rsa'];
                 var publicKeyJwk = rsaInfo['pubKeyJwk'];
@@ -224,14 +232,15 @@ class LoginScreen extends StatelessWidget {
                 Map profInfo = getFileContent(profData);
                 authData['name'] = profInfo['fn'][1];
 
-                // Check if master key is set in the local storage
+                // Check if master key is set in the local storage.
+
                 bool isKeyExist = await secureStorage.containsKey(
                   key: webId,
                 );
                 authData['keyExist'] = isKeyExist;
 
-                // Navigate to the profile through main screen
-                // ignore: use_build_context_synchronously
+                // Navigate to the profile through main screen.
+
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
