@@ -30,14 +30,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
-const solidServerUrl = "https://pods.solidcommunity.au/";
+const solidServerUrl = 'https://pods.solidcommunity.au/';
 
-const String applicationName = "Podnotes"; // "Pod Note Taker";
-const String applicationVersion = "0.1.0";
+const String applicationName = 'Podnotes'; // "Pod Note Taker";
+const String applicationVersion = '0.1.0';
 const String applicationRepo = 'https://github.com/anusii/podnotes';
 const String siiUrl = 'https://sii.anu.edu.au';
 const String authors =
-    "Authors: Anushka Vidanage, Graham Williams, Jess Moore.";
+    'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
 
 const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;

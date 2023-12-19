@@ -313,13 +313,13 @@ class AclResource {
     Map<String, List> userPermMap = {};
 
     RegExp prefixRegExp = RegExp(
-      r"@prefix ([a-zA-Z0-9: <>#].*)",
+      r'@prefix ([a-zA-Z0-9: <>#].*)',
       caseSensitive: false,
       multiLine: false,
     );
 
     RegExp accessGroupRegExp = RegExp(
-      r"(?<=^:[a-zA-Z]+\n)(?:^\s+.*;$\n)*(?:^\s+.*\.\n?)",
+      r'(?<=^:[a-zA-Z]+\n)(?:^\s+.*;$\n)*(?:^\s+.*\.\n?)',
       caseSensitive: false,
       multiLine: true,
     );
@@ -341,19 +341,19 @@ class AclResource {
       String accessGroupStr = accessGroup[0].toString();
 
       RegExp accessRegExp = RegExp(
-        r"acl:access[T|t]o (?<resource><[a-zA-Z0-9_-]*.[a-z]*>)",
+        r'acl:access[T|t]o (?<resource><[a-zA-Z0-9_-]*.[a-z]*>)',
         caseSensitive: false,
         multiLine: false,
       );
 
       RegExp modeRegExp = RegExp(
-        r"acl:mode ([^.]*)",
+        r'acl:mode ([^.]*)',
         caseSensitive: false,
         multiLine: false,
       );
 
       RegExp agentRegExp = RegExp(
-        r"acl:agent[a-zA-Z]*? ([^;]*);",
+        r'acl:agent[a-zA-Z]*? ([^;]*);',
         caseSensitive: false,
         multiLine: false,
       );

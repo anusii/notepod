@@ -25,17 +25,16 @@
 
 library;
 
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
+import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/colours.dart';
+import 'package:podnotes/nav_screen.dart';
+import 'package:podnotes/widgets/err_dialogs.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
@@ -152,7 +151,7 @@ class EditSharedNoteState extends State<EditSharedNote>
                         );
 
                         // Get date and time
-                        String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
+                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
                             .format(DateTime.now())
                             .toString();
 

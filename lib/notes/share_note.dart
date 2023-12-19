@@ -22,6 +22,9 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
@@ -33,11 +36,7 @@ import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/data_cell.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-
 import 'package:solid_auth/solid_auth.dart';
-import 'package:intl/intl.dart';
 
 bool isNamePattern(String pattern) {
   // Check if the pattern contains the solid server url or profile card hashtag
@@ -147,7 +146,7 @@ DataRow permissionRow(
 
                             // If the file is encrypted
                             if (encryptedFlag) {
-                              List webIdContent = userWebId.split("/");
+                              List webIdContent = userWebId.split('/');
                               String dirName = webIdContent[3];
 
                               String remSharedRes = await removeSharedKey(
@@ -168,7 +167,7 @@ DataRow permissionRow(
                               /// File owner and permission recipient
                               String accessListStr =
                                   permissionStr.replaceAll(' ', '');
-                              String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
+                              String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
                                   .format(DateTime.now())
                                   .toString();
                               String logStr =
@@ -283,7 +282,7 @@ class _ShareNoteState extends State<ShareNote> {
       appBar: AppBar(
         backgroundColor: lightGreen,
         centerTitle: true,
-        title: const Text("POD Note Taker"),
+        title: const Text('POD Note Taker'),
       ),
       drawer: NavDrawer(
         webId: webId,
@@ -302,7 +301,7 @@ class _ShareNoteState extends State<ShareNote> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("File Access Permissions",
+                          const Text('File Access Permissions',
                               style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.w700)),
                           IconButton(
@@ -428,7 +427,7 @@ class _ShareNoteState extends State<ShareNote> {
                                         borderRadius:
                                             BorderRadius.circular(10))),
                                 child: const Text(
-                                  "Add New Permission",
+                                  'Add New Permission',
                                   style: TextStyle(
                                     color: Colors.white,
                                     letterSpacing: 1.0,
@@ -502,7 +501,7 @@ class _ShareNoteState extends State<ShareNote> {
                 TypeAheadFormField(
                   textFieldConfiguration: TextFieldConfiguration(
                     controller: _permissionInputController,
-                    decoration: const InputDecoration(hintText: "Web ID value"),
+                    decoration: const InputDecoration(hintText: 'Web ID value'),
                   ),
                   suggestionsCallback: (inputPattern) async {
                     // Textfield only gives suggestions when the
@@ -532,7 +531,7 @@ class _ShareNoteState extends State<ShareNote> {
                 standardHeight(),
                 MultiSelectDialogField(
                   items: permissionItems,
-                  title: const Text("Select the permissions"),
+                  title: const Text('Select the permissions'),
                   decoration: BoxDecoration(
                     color: lightGreen.withOpacity(0.15),
                     borderRadius: const BorderRadius.all(Radius.circular(40)),
@@ -546,7 +545,7 @@ class _ShareNoteState extends State<ShareNote> {
                     color: darkBlue,
                   ),
                   buttonText: const Text(
-                    "Select the permissions",
+                    'Select the permissions',
                     style: TextStyle(
                       color: darkBlue,
                       fontSize: 16,

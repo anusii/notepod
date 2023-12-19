@@ -59,7 +59,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                 child: Text(
-                  "Note file name: ${noteMetaData[0]}",
+                  'Note file name: ${noteMetaData[0]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -76,7 +76,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Sharedy by: ${noteMetaData[1]}",
+                  'Sharedy by: ${noteMetaData[1]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -92,7 +92,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Note path: ${noteMetaData[2]}",
+                  'Note path: ${noteMetaData[2]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -108,7 +108,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                 child: Text(
-                  "Permissions: ${noteMetaData[3]}",
+                  'Permissions: ${noteMetaData[3]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),

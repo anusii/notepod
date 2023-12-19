@@ -1,12 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:podnotes/common/logout.dart';
+import 'package:podnotes/constants/app.dart';
+import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/common/logout.dart';
-import 'package:podnotes/constants/colours.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;

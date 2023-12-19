@@ -151,7 +151,7 @@ class HomeState extends State<NavigationScreen>
         appBar: AppBar(
           backgroundColor: lightGreen,
           centerTitle: true,
-          title: const Text("POD Note Taker"),
+          title: const Text('POD Note Taker'),
         ),
         body: loadingScreen,
       );
@@ -160,11 +160,11 @@ class HomeState extends State<NavigationScreen>
         appBar: AppBar(
           backgroundColor: lightGreen,
           centerTitle: true,
-          title: const Text("POD Note Taker"),
+          title: const Text('POD Note Taker'),
           actions: <Widget>[
             const SizedBox(width: 50),
             IconButton(
-              tooltip: "Create a new note",
+              tooltip: 'Create a new note',
               icon: const Icon(
                 Icons.add_circle,
                 color: Colors.black,
@@ -185,7 +185,7 @@ class HomeState extends State<NavigationScreen>
             ),
             const SizedBox(width: 10),
             IconButton(
-              tooltip: "My Notes",
+              tooltip: 'My Notes',
               icon: const Icon(
                 // TODO 20231217 gjw view_list icon is not rendering on web. In
                 // fact, any other icon I choose except the ones originally used

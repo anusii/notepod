@@ -22,9 +22,8 @@
 library;
 
 import 'package:flutter/material.dart';
-
-import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/notes/list_notes.dart';
 import 'package:podnotes/widgets/loading_screen.dart';
@@ -103,7 +102,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
                 return snapshot.data == null ||
-                        snapshot.data.toString() == "null" ||
+                        snapshot.data.toString() == 'null' ||
                         snapshot.data.length == 0
                     ? Center(
                         child: Row(

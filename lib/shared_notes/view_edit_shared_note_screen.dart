@@ -22,9 +22,8 @@
 library;
 
 import 'package:flutter/material.dart';
-
-import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
+import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/shared_notes/edit_shared_note.dart';
 import 'package:podnotes/shared_notes/view_shared_note.dart';
 import 'package:podnotes/widgets/loading_screen.dart';

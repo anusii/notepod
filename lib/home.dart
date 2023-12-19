@@ -28,19 +28,18 @@ library;
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
 import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
@@ -57,7 +56,7 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
-  String sampleText = "";
+  String sampleText = '';
 
   @override
   void initState() {
@@ -68,7 +67,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     String dateStr =
-        DateFormat("dd MMMM yyyy").format(DateTime.now()).toString();
+        DateFormat('dd MMMM yyyy').format(DateTime.now()).toString();
 
     return SingleChildScrollView(
       child: Column(
@@ -92,7 +91,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Date: $dateStr",
+                          'Date: $dateStr',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -180,7 +179,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           .substring(0, 32);
 
                       // Get date and time
-                      String dateTimeStr = DateFormat("yyyyMMddTHHmmss")
+                      String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
                           .format(DateTime.now())
                           .toString();
 
