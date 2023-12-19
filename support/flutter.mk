@@ -30,6 +30,7 @@ flutter:
 
   docs	    Run `dart doc` to create documentation.
 
+  fix             Run `dart fix --apply`.
   format          Run `dart format`.
   dcm             Run dart code metrics 
     nullable	  Check NULLs from dart_code_metrics.
@@ -116,7 +117,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: format dcm analyze ignore license tests docs
+prep: fix format dcm analyze ignore license tests docs
 
 .PHONY: docs
 docs::
