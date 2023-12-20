@@ -117,7 +117,9 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: fix format dcm analyze ignore license tests docs
+prep: fix format dcm analyze ignore license
+	@echo "ADVISORY: make tests docs"
+	@echo $(SEPARATOR)
 
 .PHONY: docs
 docs::
@@ -177,13 +179,13 @@ analyze:
 
 .PHONY: ignore
 ignore:
-	@echo "Files that override lint checks with IGNORE:"
+	@echo "Files that override lint checks with IGNORE:\n"
 	@rgrep ignore: lib
 	@echo $(SEPARATOR)
 
 .PHONY: license
 license:
-	@echo "Files without a LICENSE:"
+	@echo "Files without a LICENSE:\n"
 	@find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -printf "\t%p\n"
 	@echo $(SEPARATOR)
 
