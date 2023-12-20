@@ -124,15 +124,19 @@ docs::
 	dart doc
 	chmod -R go+rX doc
 
+SEPARATOR="\n------------------------------------------------------------------------\n"
+
 .PHONY: fix
 fix:
-	@echo "\n--\nDart: FIX"
+	@echo "Dart: FIX"
 	dart fix --apply
+	@echo $(SEPARATOR)
 
 .PHONY: format
 format:
-	@echo "\n--\nDart: FORMAT"
+	@echo "Dart: FORMAT"
 	dart format lib/
+	@echo $(SEPARATOR)
 
 .PHONY: tests
 tests:: test qtest
@@ -142,39 +146,46 @@ dcm: nullable unused_code unused_files metrics
 
 .PHONY: nullable
 nullable:
-	@echo "\n--\nDart Code Metrics: NULLABLE"
+	@echo "Dart Code Metrics: NULLABLE"
 	-dart run dart_code_metrics:metrics check-unnecessary-nullable --disable-sunset-warning lib
+	@echo $(SEPARATOR)
 
 .PHONY: unused_code
 unused_code:
-	@echo "\n--\nDart Code Metrics: UNUSED CODE"
+	@echo "Dart Code Metrics: UNUSED CODE"
 	-dart run dart_code_metrics:metrics check-unused-code --disable-sunset-warning lib
+	@echo $(SEPARATOR)
 
 .PHONY: unused_files
 unused_files:
-	@echo "\n--\nDart Code Metrics: UNUSED FILES"
+	@echo "Dart Code Metrics: UNUSED FILES"
 	-dart run dart_code_metrics:metrics check-unused-files --disable-sunset-warning lib
+	@echo $(SEPARATOR)
 
 .PHONY: metrics 
 metrics:
-	@echo "\n--\nDart Code Metrics: METRICS"
-	dart run dart_code_metrics:metrics analyze --disable-sunset-warning lib --reporter=console
+	@echo "Dart Code Metrics: METRICS"
+	-dart run dart_code_metrics:metrics analyze --disable-sunset-warning lib --reporter=console
+	@echo $(SEPARATOR)
 
 .PHONY: analyze 
 analyze:
-	@echo "\n--\nFutter ANALYZE"
+	@echo "Futter ANALYZE"
 	-flutter analyze
 #	dart run custom_lint
+	@echo $(SEPARATOR)
 
 .PHONY: ignore
 ignore:
-	@echo "\n--\nFiles that override lint checks with IGNORE:"
+	@echo "Files that override lint checks with IGNORE:"
 	@rgrep ignore: lib
+	@echo $(SEPARATOR)
 
 .PHONY: license
 license:
-	@echo "\n--\nFiles without a LICENSE:"
+	@echo "Files without a LICENSE:"
 	@find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -printf "\t%p\n"
+	@echo $(SEPARATOR)
 
 .PHONY: riverpod
 riverpod:
@@ -208,8 +219,9 @@ desktops:
 
 .PHONY: test
 test:
-	@echo "\n--\nUnit TEST:"
+	@echo "Unit TEST:"
 	-flutter test test
+	@echo $(SEPARATOR)
 
 %.itest:
 	flutter test --dart-define=PAUSE=5 --device-id \
@@ -218,17 +230,19 @@ test:
 
 .PHONY: itest
 itest:
-	@echo "\n--\nPausing integration TEST:"
+	@echo "Pausing integration TEST:"
 	for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=5 --device-id \
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	$$t; done
+	@echo $(SEPARATOR)
 
 .PHONY: qtest
 qtest:
-	@echo "\n--\nQuick integration TEST:"
+	@echo "Quick integration TEST:"
 	-for t in integration_test/*_test.dart; do flutter test --dart-define=PAUSE=0 --device-id \
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	$$t; done
+	@echo $(SEPARATOR)
 
 %.qtest:
 	flutter test --dart-define=PAUSE=0 --device-id \
