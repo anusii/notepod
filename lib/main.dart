@@ -26,9 +26,11 @@
 library;
 
 import 'package:flutter/material.dart';
+
+import 'package:window_manager/window_manager.dart';
+
 import 'package:podnotes/login/screen.dart';
 import 'package:podnotes/utils/is_desktop.dart';
-import 'package:window_manager/window_manager.dart';
 
 void main() async {
   // Remove [debugPrint] messages from production code.
