@@ -10,10 +10,11 @@
 
 ## Introduction
 
-The podnotes app aims to be a template for apps that interact (read
-and write) with encrypted data stored on personal online data stores
-(PODs) hosted on a Solid Server. The intention is that you can use
-this code as the starting point for your own app development project.
+The podnotes app aims to be a template for flutter-based apps that
+interact (read and write) with encrypted data stored on personal
+online data stores (PODs) hosted on a Solid Server. The intention is
+that you can use this code as the starting point for your own app
+development project.
 
 The first beta release (version 0.1.0) included much low level
 code. Over the 7000 lines of code there is much that is being migrated
