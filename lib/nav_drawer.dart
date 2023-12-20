@@ -16,13 +16,16 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String name = authData['name'];
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(
-                top: 24 + MediaQuery.of(context).padding.top, bottom: 24),
+              top: 24 + MediaQuery.of(context).padding.top,
+              bottom: 24,
+            ),
             decoration: const BoxDecoration(
               color: darkGreen,
             ),
@@ -62,11 +65,12 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: webId,
-                                authData: authData,
-                                page: 'home',
-                              )),
+                        builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'home',
+                        ),
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );
@@ -79,11 +83,12 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: webId,
-                                authData: authData,
-                                page: 'listNotes',
-                              )),
+                        builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'listNotes',
+                        ),
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );
@@ -101,11 +106,12 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: webId,
-                                authData: authData,
-                                page: 'sharedNotes',
-                              )),
+                        builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'sharedNotes',
+                        ),
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );
@@ -128,11 +134,12 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: webId,
-                                authData: authData,
-                                page: 'encKeyInput',
-                              )),
+                        builder: (context) => NavigationScreen(
+                          webId: webId,
+                          authData: authData,
+                          page: 'encKeyInput',
+                        ),
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );
@@ -168,7 +175,7 @@ class NavDrawer extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -180,9 +187,10 @@ Widget _aboutDialog() {
   return AboutDialog(
     applicationName: applicationName,
     applicationIcon: SizedBox(
-        height: 65,
-        width: 65,
-        child: Image.asset('assets/images/podnotes.png')),
+      height: 65,
+      width: 65,
+      child: Image.asset('assets/images/podnotes.png'),
+    ),
     applicationVersion: applicationVersion,
     // applicationLegalese: "© Copyright Michelphoenix 2020",
     children: <Widget>[

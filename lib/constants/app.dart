@@ -36,6 +36,7 @@ const String applicationName = 'Podnotes'; // "Pod Note Taker";
 const String applicationVersion = '0.1.0';
 const String applicationRepo = 'https://github.com/anusii/podnotes';
 const String siiUrl = 'https://sii.anu.edu.au';
+
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
 
@@ -90,11 +91,17 @@ const noSharedNotesMsg = 'You do not have any shared notes yet!';
 
 List<MultiSelectItem> permissionItems = [
   MultiSelectItem(
-      1, 'Read (The recipient will be able to read the content of your file)'),
+    1,
+    'Read (The recipient will be able to read the content of your file)',
+  ),
   MultiSelectItem(
-      2, 'Write (The recipient will be able to add new content to your file)'),
-  MultiSelectItem(3,
-      'Control (The recipient will be able to alter the access permission to your file)')
+    2,
+    'Write (The recipient will be able to add new content to your file)',
+  ),
+  MultiSelectItem(
+    3,
+    'Control (The recipient will be able to alter the access permission to your file)',
+  ),
 ];
 
 Map permMap = {1: 'Read', 2: 'Write', 3: 'Control'};

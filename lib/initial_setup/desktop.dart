@@ -873,6 +873,7 @@ class _InitialSetupDesktopState extends State<InitialSetupDesktop> {
     } else if (text.length > 1) {
       result = text[0].toUpperCase() + text.substring(1);
     }
+
     return result;
   }
 }

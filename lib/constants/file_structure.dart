@@ -68,7 +68,7 @@ const List folders = [
   sharedDirLoc,
   myNotesDirLoc,
   encDirLoc,
-  logDirLoc
+  logDirLoc,
 ];
 
 // Files.

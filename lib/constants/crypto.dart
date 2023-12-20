@@ -1,4 +1,4 @@
-///
+/// DESCRIPTION PLEASE
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -34,7 +34,10 @@ import 'package:podnotes/constants/file_structure.dart';
 import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:solid_auth/solid_auth.dart';
 
-// TODO If these are constants then shouldn't they start with `const`?
+/// TODO 20231220 gjw REQUIRES A DOC STRING.
+
+// TODO 20231220 gjw IF THESE ARE CONSTANTS THEN SHOULDN'T THEY START WITH
+// `CONST`?
 
 String dividePubKeyStr(String keyStr) {
   final itemList = keyStr.split('\n');
@@ -44,41 +47,50 @@ String dividePubKeyStr(String keyStr) {
   itemList.remove('-----END PUBLIC KEY-----');
 
   String keyStrTrimmed = itemList.join('');
+
   return keyStrTrimmed;
 }
+
+/// TODO 20231220 gjw REQUIRES A DOC STRING.
+
+// TODO 20231220 gjw WHY USE TRIPPLE QUOTES HERE? CAN THEY BE REPLACED WITH A
+// SINGLE QUOTE?
 
 String genPubKeyStr(String keyStr) {
   return '''-----BEGIN RSA PUBLIC KEY-----\n$keyStr\n-----END RSA PUBLIC KEY-----''';
 }
 
-Future<bool> verifyEncKey(String plaintextEncKey, Map authData) async {
+/// TODO 20231220 gjw REQUIRES A DOC STRING.
+
+Future<bool> verifyEncKey(
+  String plaintextEncKey,
+  Map authData,
+) async {
   String sha224Result =
       sha224.convert(utf8.encode(plaintextEncKey)).toString().substring(0, 32);
 
   var rsaInfo = authData['rsaInfo'];
   var rsaKeyPair = rsaInfo['rsa'];
   var publicKeyJwk = rsaInfo['pubKeyJwk'];
+
   String accessToken = authData['accessToken'];
   Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
 
-  // Get webID
+  // Get webID.
+
   String webId = decodedToken['webid'];
 
   String encKeyFileUrl =
       webId.replaceAll('profile/card#me', '$encDirLoc/$encKeyFile');
+
   String dPopToken =
       genDpopToken(encKeyFileUrl, rsaKeyPair, publicKeyJwk, 'GET');
 
   String encKeyRes = await fetchPrvFile(encKeyFileUrl, accessToken, dPopToken);
+
   Map encFileContent = getFileContent(encKeyRes.toString());
 
   String encKeyHash = encFileContent['encKey'][1];
 
-  if (encKeyHash != sha224Result) {
-    // If the stored hash value is the same
-    return false;
-  } else {
-    // If not
-    return true;
-  }
+  return encKeyHash == sha224Result;
 }
