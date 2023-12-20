@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Sunday 2023-12-17 10:33:33 +1100 Graham Williams>
+# Time-stamp: <Wednesday 2023-12-20 13:22:19 +1100 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -56,6 +56,7 @@ define HELP
 $(APP):
 
   solidcommunity	Install to https://$(APP).solidcommunity.au
+  wc                    Count the number of lines of code.
 
 endef
 export HELP
@@ -77,6 +78,13 @@ docs::
 versions:
 	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
 	lib/constants/app.dart
+
+.PHONY: wc
+wc:
+	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
+	| egrep -v '^/' \
+	| egrep -v '^ *$$' \
+	| wc -l
 
 #
 # Manage the production install on the remote server.
