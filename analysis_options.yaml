@@ -5,6 +5,39 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
+analyzer:
+  plugins:
+    - dart_code_metrics
+
+dart_code_metrics:
+  anti-patterns:
+    - long-method
+    - long-parameter-list
+  metrics:
+    cyclomatic-complexity: 20
+    lines-of-executable-code: 50
+    maximum-nesting-level: 5
+    number-of-parameters: 5
+    source-lines-of-code: 50
+    maximum-lines-of-code: 200
+    
+  metrics-exclude:
+    - test/**
+    - integration_test/**
+    - lib/*.g.dart
+    - lib/*.freezed.dart
+  rules:
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-trailing-comma
+    - prefer-conditional-expressions
+    - no-equal-then-else
+    # - avoid-dynamic
+    - avoid-nested-conditional-expressions:
+        acceptable-level: 2
+    - prefer-first
+
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
