@@ -8,11 +8,37 @@
 
 *License: GNU GPL V3*
 
+## Introduction
+
+The podnotes app aims to be a template for apps that interact (read
+and write) with encrypted data stored on personal online data stores
+(PODs) hosted on a Solid Server. The intention is that you can use
+this code as the starting point for your own app development project.
+
+The first beta release (version 0.1.0) included much low level
+code. Over the 7000 lines of code there is much that is being migrated
+into the suite of solid packages for dart and flutter with the aim to
+reduce the programmer's burden to less than 1000 lines of code for a
+useful app.
+
+## Online Demo
+
+To use the app you will need a POD hosted on a solid server. You can
+get yourself a POD at https://pods.solidcommunity.au or any other Solid
+server.
+
+Then visit https://podnotes.solidcommunity.au and login to your
+POD. Write and save a few notes, edit saved notes, and maybe share
+some notes with other users. That's it! It is intended as a simple but
+useful demonstrator app and template.
+
 ## Install
 
-See the installers in the <a
-href="https://github.com/anusii/podnotes/tree/main/installers">installers</a>
-folder.
+Installers to install the app to run locally on your own device are
+available for all platforms from <a
+href="https://github.com/anusii/podnotes/tree/main/installers">github</a>. Generally,
+these are ready to run executable files, or operating system specific
+installation packages.
 
 ## App Startup
 
@@ -36,13 +62,16 @@ get to know your login details.
 	alt="Login Screen" width="400">
 </div>
 
-
-
 ## Install Flutter and Podnotes<a name="install"></a>
 
-Follow the Flutter Dev instructions to install flutter for your preferred platform at [Flutter Dev Getting Started](https://docs.flutter.dev/get-started/install)
+Follow the Flutter Dev instructions to install flutter for your
+preferred platform at [Flutter Dev Getting
+Started](https://docs.flutter.dev/get-started/install)
 
-After setup, run `flutter doctor` to check your setup, and `flutter devices` to see which devices you have configured, with the device name in the 2nd column
+After setup, run `flutter doctor` to check your setup, and `flutter
+devices` to see which devices you have configured, with the device
+name in the 2nd column
+
 ```
 flutter devices
 Found 4 connected devices:
@@ -54,38 +83,59 @@ Found 4 connected devices:
 
 Git clone the Podnotes app.
 
-Run the podnotes app in debug mode on your chosen device by specifying enough of the device name to be uniquely identifiable. E.g. for chrome use:
+Run the podnotes app in debug mode on your chosen device by specifying
+enough of the device name to be uniquely identifiable. E.g. for chrome
+use:
+
 ```
 flutter run -d chrome
 ```
 
-When you have completed the setup of your platform, you are ready for the [PodNotes Getting Started](exercises/README.md) exercises where you can create a POD, make and share notes.
+When you have completed the setup of your platform, you are ready for
+the [PodNotes Getting Started](exercises/README.md) exercises where
+you can create a POD, make and share notes.
 
 ### Extra setup for MacOS<a name="extra_for_macos"></a>
 
-Running the app on MacOS requires, additional configuration in Xcode. Open the project macos folder in Xcode with
+Running the app on MacOS requires, additional configuration in
+Xcode. Open the project macos folder in Xcode with
+
 ```
 cd podnotes/macos
 xed .
 ```
-Select `Signing & Capabilities`. In `Team`, choose `Add an Account` and sign in with your Apple ID account. In `Network`, select `Incoming Connections (Server)` and `Outgoing Connections (Client)`. The latter is needed to login to your POD.
+
+Select `Signing & Capabilities`. In `Team`, choose `Add an Account`
+and sign in with your Apple ID account. In `Network`, select `Incoming
+Connections (Server)` and `Outgoing Connections (Client)`. The latter
+is needed to login to your POD.
 
 ### Extra setup for iOS<a name="extra_for_ios"></a>
 
-For iOS, you will also need to set the deployment platform to match the iOS version on your simulator.
+For iOS, you will also need to set the deployment platform to match
+the iOS version on your simulator.
 
-Open the Simulator app, select your simulated device with `File` -> `Open Simulator` -> pick a device.
+Open the Simulator app, select your simulated device with `File` ->
+`Open Simulator` -> pick a device.
+
 ```
 open -a Simulator
 ```
-Then in the simulated device check the iOS version number by clicking on the `Settings`app and going to `General` -> `About` to look up the iOS.
 
-Open the project iOS folder in Xcode and add the iOS version used by your simulator.
+Then in the simulated device check the iOS version number by clicking
+on the `Settings`app and going to `General` -> `About` to look up the
+iOS.
+
+Open the project iOS folder in Xcode and add the iOS version used by
+your simulator.
+
 ```
 cd podnotes/ios
 xed .
 ```
-Select `General`. In `iOS`, change it to match the Simulator iOS version, e.g. `v17.0`.
+
+Select `General`. In `iOS`, change it to match the Simulator iOS
+version, e.g. `v17.0`.
 
 
 ## Useful resources
@@ -94,6 +144,22 @@ Packages:
 
 These dart packages support development PODs-based apps with flutter
 
-- [solid-auth](https://pub.dev/packages/solid_auth) package: Implementation of Solid-OIDC flow which can be used to authenticate a client application to a Solid POD. Solid OIDC is built on top of OpenID Connect 1.0.
-- [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: Implementation of data encryption which can be used to encrypt the content in turtle files stored in a Solid POD.
-- [rdflib](https://pub.dev/packages/rdflib) package: A dart package for working with RDF. Features include find and create triple instances, create a graph to store triples, export graph to ttl, etc.
+- [solid-core](https://pub.dev/packages/solid_core) package:
+  Implementation of the core support functionality.
+  
+- [solid-auth](https://pub.dev/packages/solid_auth) package:
+  Implementation of the Solid-OIDC flow which can be used to
+  authenticate a client application to a Solid POD. Solid OIDC is
+  built on top of OpenID Connect 1.0. Also provides a suite of tools
+  and widgets to support typical app workflows.
+
+- [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
+  Software Innovation Institute has a focus on the security of the
+  stored data. This package implements data encryption which can be
+  used to encrypt, on device, the content of turtle files to be stored
+  in a Solid POD. Data is then only decrypted on device.
+
+- [rdflib](https://pub.dev/packages/rdflib) package: A dart package
+  for working with RDF. Features include find and create triple
+  instances, create a graph to store triples, export graph to ttl,
+  etc.
