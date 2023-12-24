@@ -21,6 +21,8 @@ APP=$(shell pwd | xargs basename)
 VER=
 DATE=$(shell date +%Y-%m-%d)
 
+# Identify a destination used by install.mk
+
 DEST=/var/www/html/$(APP)
 
 ########################################################################

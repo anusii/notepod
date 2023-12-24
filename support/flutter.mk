@@ -101,7 +101,7 @@ macos: $(BUILD_RUNNER)
 
 .PHONY: android
 android: $(BUILD_RUNNER)
-	flutter run --device-id $(shell flutter devices | grep android | cut -d " " -f 5)
+	flutter run --device-id $(shell flutter devices | grep android | tr '•' '.' | tr -s ' ' | cut -d' ' -f6)
 
 .PHONY: emu
 emu:
