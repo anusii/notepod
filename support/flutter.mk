@@ -101,7 +101,7 @@ macos: $(BUILD_RUNNER)
 
 .PHONY: android
 android: $(BUILD_RUNNER)
-	flutter run --device-id $(shell flutter devices | grep android | tr '•' '.' | tr -s ' ' | cut -d' ' -f6)
+	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ')
 
 .PHONY: emu
 emu:
@@ -180,7 +180,7 @@ analyze:
 .PHONY: ignore
 ignore:
 	@echo "Files that override lint checks with IGNORE:\n"
-	@rgrep ignore: lib
+	@if rgrep ignore: lib; then exit 1; else exit 0; fi
 	@echo $(SEPARATOR)
 
 .PHONY: license
