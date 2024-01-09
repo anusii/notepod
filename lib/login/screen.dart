@@ -70,9 +70,13 @@ class LoginScreen extends StatelessWidget {
                   flex: 7,
                   child: Container(
                     decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: _mainImage, fit: BoxFit.cover)),
-                  )),
+                      image: DecorationImage(
+                        image: _mainImage,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
           Expanded(
               flex: 5,
               child: Container(

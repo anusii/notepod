@@ -1,12 +1,13 @@
 /// Privacy preserving note taking app using PODs.
+//
+// Time-stamp: <Wednesday 2023-12-27 07:54:18 +1100 Graham Williams>
+//
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://www.gnu.org/licenses/gpl-3.0.en.html
-//
-// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
