@@ -14,14 +14,20 @@
 
 The podnotes app is an example of a [Solid
 PODs](https://solidproject.org/about) app written in
-[Flutter](https://flutter.dev/) to read and write encrypted notes
-stored on your personal online data store (POD) hosted on a [Solid
-Server](https://github.com/CommunitySolidServer/CommunitySolidServer).
+[Flutter](https://flutter.dev/) to read, write, and share encrypted
+notes stored on your personal online data store (POD) hosted on a
+[Solid
+Server](https://github.com/CommunitySolidServer/CommunitySolidServer). Since
+you control where your notes are stored, and they are stored as
+standard Markdown, other apps can also interact with your notes. You
+maintain full control over **your** data, not the app developer
+collecting and hoarding **your** data.
 
 This first beta release (version 0.1.0) is functional and usable. Use
 cases include writing quick notes while on the move to come back to
-later on, capturing shopping lists that can be shared with your
-partner and called up whilst at the hardware store, and much more.
+later on, capturing shopping lists that can be shared with your family
+and called up the next time anyone of the family is at the shops, and
+much more.
 
 The current podnotes code base includes a lot of low level code that
 is being migrated to the [solid](https://github.com/anusii/solid)
@@ -167,9 +173,8 @@ Packages:
 These dart packages are under construction to support the development
 of PODs-based apps with flutter
 
-- [solid-core](https://pub.dev/packages/solid_core) package (not yet
-  available on pub.dev): Implementation of the core support
-  functionality.
+- [solid](https://github.com/anusii/solid) package (not yet available
+  on pub.dev): Implementation of the core high-level functionality.
   
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
@@ -178,10 +183,10 @@ of PODs-based apps with flutter
   and widgets to support typical app workflows.
 
 - [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
-  Software Innovation Institute has a focus on the security of the
+  Software Innovation Institute has a focus on the security of our
   stored data. This package implements data encryption which can be
   used to encrypt, on device, the content of turtle files to be stored
-  in a Solid POD. Data is then only decrypted on device.
+  in a Solid POD. Data is also only decrypted on device.
 
 - [rdflib](https://pub.dev/packages/rdflib) package: A dart package
   for working with RDF. Features include find and create triple
