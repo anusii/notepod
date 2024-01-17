@@ -25,44 +25,46 @@ migrated to the [solid](https://github.com/anusii/solid) package for
 flutter, to make it even easier to build your first PODs-based flutter
 app.
 
+**Shopping List**
+
 <div align="center">
 	<img
 	src="images/shopping.png"
 	alt="Login Screen" width="400">
 </div>
 
+## Obtaining a POD
 
-
-## Online Demo
-
-To use the app you will need a POD hosted on a solid server. You can
-get yourself a POD at https://pods.solidcommunity.au or any other Solid
-server.
-
-Then visit https://podnotes.solidcommunity.au and login to your
-POD. Write and save a few notes, edit saved notes, and maybe share
-some notes with other users. That's it! It is intended as a simple but
-useful demonstrator app and template.
-
-## Install
-
-Installers to install the app to run locally on your own device are
-available for all platforms from <a
-href="https://github.com/anusii/podnotes/tree/main/installers">github</a>. Generally,
-these are ready to run executable files, or operating system specific
-installation packages.
-
-## App Startup
-
-On starting up the app you will see the login screen where a user's
-WebID is to be entered. It will be remembered for future app
-activity.
-
-To obtain a WebID for yourself, visit our experimental
+To use the app you will need your own POD hosted on a Solid server. To
+try it out you can get yourself a POD at our experimental server, the
 [Australian Solid Community Pod
 Server](https://pods.solidcommunity.au/.account/login/password/register/)
 or any one of the available [Pod
 Providers](https://solidproject.org/users/get-a-pod) world wide.
+
+## Online Demo
+
+Once you have your own POD visit https://podnotes.solidcommunity.au
+and login to your POD. Write and save a few notes, edit saved notes,
+and maybe share some notes with other users. That's it! Simple but
+useful.
+
+## Install the App Locally
+
+You can install the app onto your own device using one of our
+installers. The app will then run locally on your own device rather
+than hosted on a web server. The installers are available for all
+platforms from <a
+href="https://github.com/anusii/podnotes/tree/main/installers">github</a>. The
+installers we make available are ready to run executable files or else
+operating system specific installation packages. Stay tuned for links
+to repository distribution.
+
+## App Startup
+
+On starting up the app you will see the login screen where a user's
+WebID is to be entered. Your login will be remembered through the
+browser for future app activity.
 
 On clicking the Login button your browser will popup to authenticate you
 on the Solid server of choice, not on the device. The device does not
@@ -76,7 +78,12 @@ get to know your login details.
 
 ## Install Flutter and Podnotes<a name="install"></a>
 
-Follow the Flutter Dev instructions to install flutter for your
+You can run the app directly from its source yourself with a little
+setup. You could then also modify the app to suit your own needs, or
+to add functionality that you may like to contribute back to the
+community. 
+
+Begin with the Flutter Dev instructions to install flutter for your
 preferred platform at [Flutter Dev Getting
 Started](https://docs.flutter.dev/get-started/install)
 
@@ -93,7 +100,7 @@ Found 4 connected devices:
   Chrome (web)                    • chrome                               • web-javascript • Google Chrome 120.0.6099.62
 ```
 
-Git clone the Podnotes app.
+Then git clone the podnotes repository from github.
 
 Run the podnotes app in debug mode on your chosen device by specifying
 enough of the device name to be uniquely identifiable. E.g. for chrome
@@ -154,10 +161,12 @@ version, e.g. `v17.0`.
 
 Packages:
 
-These dart packages support development PODs-based apps with flutter
+These dart packages are under construction to support the development
+of PODs-based apps with flutter
 
-- [solid-core](https://pub.dev/packages/solid_core) package:
-  Implementation of the core support functionality.
+- [solid-core](https://pub.dev/packages/solid_core) package (not yet
+  available on pub.dev): Implementation of the core support
+  functionality.
   
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
