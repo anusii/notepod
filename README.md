@@ -10,17 +10,28 @@
 
 ## Introduction
 
-The podnotes app aims to be a template for flutter-based apps that
-interact (read and write) with encrypted data stored on personal
-online data stores (PODs) hosted on a Solid Server. The intention is
-that you can use this code as the starting point for your own app
-development project.
+The podnotes app is an example of a [Solid
+PODs](https://solidproject.org/about) app developed in flutter to read
+and write encrypted notes stored on your personal online data store
+(POD) hosted on a Solid Server.
 
-The first beta release (version 0.1.0) included much low level
-code. Over the 7000 lines of code there is much that is being migrated
-into the suite of solid packages for dart and flutter with the aim to
-reduce the programmer's burden to less than 1000 lines of code for a
-useful app.
+This first beta release (version 0.1.0) is functional and usable. Use
+cases include writing quick notes while on the move to reference later
+on, capturing shopping lists that can be shared with your partner and
+called up whilst at the supermarket, and much more.
+
+The current code base includes much low level code that is being
+migrated to the [solid](https://github.com/anusii/solid) package for
+flutter, to make it even easier to build your first PODs-based flutter
+app.
+
+<div align="center">
+	<img
+	src="images/shopping.png"
+	alt="Login Screen" width="400">
+</div>
+
+
 
 ## Online Demo
 
