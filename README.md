@@ -1,8 +1,8 @@
 # PodNotes 
 
-## Markdown Notes with Encrypted PODs
+## Markdown Notes with Encrypted Pods
 
-**An ANU Software Innovation Institute demo project for Solid PODs**.
+**An ANU Software Innovation Institute demo project for Solid Pods**.
 
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
@@ -13,9 +13,9 @@
 ## Introduction
 
 The podnotes app is an example of a [Solid
-PODs](https://solidproject.org/about) app written in
+Pods](https://solidproject.org/about) app written in
 [Flutter](https://flutter.dev/) to read, write, and share encrypted
-notes stored on your personal online data store (POD) hosted on a
+notes stored on your personal online data store (Pod) hosted on a
 [Solid
 Server](https://github.com/CommunitySolidServer/CommunitySolidServer). Since
 you control where your notes are stored, and they are stored as
@@ -32,7 +32,7 @@ much more.
 The current podnotes code base includes a lot of low level code that
 is being migrated to the [solid](https://github.com/anusii/solid)
 package for Flutter. Once migrated it will be even easier to build
-your first PODs-based Flutter app.
+your first Pods-based Flutter app.
 
 **Shopping List**
 
@@ -42,10 +42,10 @@ your first PODs-based Flutter app.
 	alt="Login Screen" width="400">
 </div>
 
-## Obtaining a POD
+## Obtaining a Pod
 
-To use the app you will need your own POD hosted on a Solid server. To
-try it out you can get yourself a POD at our experimental server, the
+To use the app you will need your own Pod hosted on a Solid server. To
+try it out you can get yourself a Pod at our experimental server, the
 [Australian Solid Community Pod
 Server](https://pods.solidcommunity.au/.account/login/password/register/)
 or any one of the available [Pod
@@ -53,8 +53,8 @@ Providers](https://solidproject.org/users/get-a-pod) world wide.
 
 ## Online Demo
 
-Once you have your own POD visit https://podnotes.solidcommunity.au
-and login to your POD. Write and save a few notes, edit saved notes,
+Once you have your own Pod visit https://podnotes.solidcommunity.au
+and login to your Pod. Write and save a few notes, edit saved notes,
 and maybe share some notes with other users. That's it! Simple but
 useful.
 
@@ -121,7 +121,7 @@ flutter run -d chrome
 
 When you have completed the setup of your platform, you are ready for
 the [PodNotes Getting Started](exercises/README.md) exercises where
-you can create a POD, make and share notes.
+you can create a Pod, make and share notes.
 
 ### Extra setup for MacOS<a name="extra_for_macos"></a>
 
@@ -136,7 +136,7 @@ xed .
 Select `Signing & Capabilities`. In `Team`, choose `Add an Account`
 and sign in with your Apple ID account. In `Network`, select `Incoming
 Connections (Server)` and `Outgoing Connections (Client)`. The latter
-is needed to login to your POD.
+is needed to login to your Pod.
 
 ### Extra setup for iOS<a name="extra_for_ios"></a>
 
@@ -171,14 +171,14 @@ version, e.g. `v17.0`.
 Packages:
 
 These dart packages are under construction to support the development
-of PODs-based apps with flutter
+of Pods-based apps with flutter
 
 - [solid](https://github.com/anusii/solid) package (not yet available
   on pub.dev): Implementation of the core high-level functionality.
   
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
-  authenticate a client application to a Solid POD. Solid OIDC is
+  authenticate a client application to a Solid Pod. Solid OIDC is
   built on top of OpenID Connect 1.0. Also provides a suite of tools
   and widgets to support typical app workflows.
 
@@ -186,7 +186,7 @@ of PODs-based apps with flutter
   Software Innovation Institute has a focus on the security of our
   stored data. This package implements data encryption which can be
   used to encrypt, on device, the content of turtle files to be stored
-  in a Solid POD. Data is also only decrypted on device.
+  in a Solid Pod. Data is also only decrypted on device.
 
 - [rdflib](https://pub.dev/packages/rdflib) package: A dart package
   for working with RDF. Features include find and create triple
