@@ -18,6 +18,14 @@ native install of the app.
 + `$ tar zxvf podnotes.tar.gz`
 + `$ ./podnotes/podnotes`
 
+## MacOS
+
+The package file `podnotes.dmg` can be installed on MacOS. Download
+the file and open it on your Mac. Then, holding the Control key click
+on the app icon to display a menu. Choose `Open`. Then accept the
+warning to then run the app. The app should then run without the
+warning next time.
+
 ## Web -- No Installation Required
 
 No installer is required for a browser based experience of
