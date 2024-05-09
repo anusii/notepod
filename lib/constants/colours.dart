@@ -47,8 +47,8 @@ const warningRed = Colors.red;
 // messages. Comment them out for now, but eventually they probably go into one
 // of the solid packages.
 
-// const lightRed = Color.fromARGB(255, 255, 88, 77);
-// const darkRed = Color.fromARGB(255, 139, 38, 30);
+const lightRed = Color.fromARGB(255, 255, 88, 77);
+const darkRed = Color.fromARGB(255, 139, 38, 30);
 
 const confirmGreen = Colors.green;
 
