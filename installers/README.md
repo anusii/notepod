@@ -14,9 +14,31 @@ native install of the app.
 
 ## Linux tar Archive
 
-+ Download the podnotes.tar.gz` file 
-+ `$ tar zxvf podnotes.tar.gz`
-+ `$ ./podnotes/podnotes`
++ Download
+  [mlflutter.tar.gz](https://access.togaware.com/mlflutter.tar.gz)
+
+```bash
+wget https://access.togaware.com/mlflutter.tar.gz
+```
+
+Then
+
+```bash
+tar zxvf podnotes.tar.gz
+(cd podnotes; ./podnotes)
+```
+
+To install for the current user:
+
+```bash
+tar zxvf podnotes.tar.gz -C ${HOME}/.local/share/
+cat <<EOF > ~/.local/bin/mlflutter
+#!/bin/bash
+
+(cd ${HOME}/.local/share/mlflutter; ./mlflutter)
+EOF
+chmod a+rx ${HOME}/.local/bin/mlflutter
+```
 
 ## MacOS
 
