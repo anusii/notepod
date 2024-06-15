@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Wednesday 2023-12-20 13:22:19 +1100 Graham Williams>
+# Time-stamp: <Wednesday 2024-05-22 15:42:01 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -72,29 +72,12 @@ help::
 locals:
 	@echo "This might be the instructions to install $(APP)"
 
-.PHONY: docs
-docs::
-	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/$(APP)/
+apk::
+	rsync -avzh installers/$(APP)* solidcommunity.au:/var/www/html/installers/
+	ssh solidcommunity.au chmod -R go+rX /var/www/html/installers/
+	ssh solidcommunity.au chmod go=x /var/www/html/installers/
 
-.PHONY: versions
-versions:
-	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
-	lib/constants/app.dart
-
-.PHONY: wc
-wc:
-	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
-	| egrep -v '^/' \
-	| egrep -v '^ *$$' \
-	| wc -l
-
-#
-# Manage the production install on the remote server.
-#
-
-.PHONY: solidcommunity
-solidcommunity:
-	rsync -avzh ./ solidcommunity.au:projects/$(APP)/ \
-	--exclude .dart_tool --exclude build --exclude ios --exclude macos \
-	--exclude linux --exclude windows --exclude android
-	ssh solidcommunity.au '(cd projects/$(APP); flutter upgrade; make prod)'
+tgz::
+	rsync -avzh installers/$(APP)* solidcommunity.au:/var/www/html/installers/
+	ssh solidcommunity.au chmod -R go+rX /var/www/html/installers/
+	ssh solidcommunity.au chmod go=x /var/www/html/installers/
