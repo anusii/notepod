@@ -301,9 +301,11 @@ class _ShareNoteState extends State<ShareNote> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('File Access Permissions',
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.w700)),
+                          const Text(
+                            'File Access Permissions',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.w700),
+                          ),
                           IconButton(
                             icon: const Icon(
                               Icons.arrow_back,
@@ -313,11 +315,12 @@ class _ShareNoteState extends State<ShareNote> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NavigationScreen(
-                                          webId: webId,
-                                          authData: authData,
-                                          page: 'listNotes',
-                                        )),
+                                  builder: (context) => NavigationScreen(
+                                    webId: webId,
+                                    authData: authData,
+                                    page: 'listNotes',
+                                  ),
+                                ),
                                 (Route<dynamic> route) =>
                                     false, // This predicate ensures all previous routes are removed
                               );
@@ -338,9 +341,10 @@ class _ShareNoteState extends State<ShareNote> {
                       Column(
                         children: [
                           const Text(
-                              '''You can add or remove access permission to your file here. In the following you can see the list of permissions that is already being given.''',
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w700)),
+                            '''You can add or remove access permission to your file here. In the following you can see the list of permissions that is already being given.''',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w700),
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -377,7 +381,9 @@ class _ShareNoteState extends State<ShareNote> {
                                 ),
                               ),
                               tooltip: 'Retrieved from access control lists'),
-                          DataColumn(label: Text('')),
+                          DataColumn(
+                            label: Text(''),
+                          ),
                           // DataColumn(label: Text('')),
 
                           ///necessary as the number of Column is same with the row
@@ -403,52 +409,55 @@ class _ShareNoteState extends State<ShareNote> {
                         height: 30,
                       ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                                onPressed: () async {
-                                  String accessToken =
-                                      widget.authData['accessToken'];
-                                  String fileUrl = widget.resInfo['resUrl'] +
-                                      widget.resInfo['resName'];
-                                  _displayPermissionInputDialog(
-                                    context,
-                                    accessToken,
-                                    fileUrl,
-                                    widget.resInfo['resName'],
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: darkBlue, // background
-                                    foregroundColor: lightBlue, // foreground
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10))),
-                                child: const Text(
-                                  'Add New Permission',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    letterSpacing: 1.0,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )),
-                            // TextButton(
-                            //   child: Text('hello'),
-                            //   onPressed: () {
-                            //     var r = Random.secure();
-                            //     print("random string");
-                            //     print(randomAlphaNumeric(32,
-                            //         provider: CoreRandomProvider.from(r)));
-                            //   },
-                            // ),
-                          ])
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              String accessToken =
+                                  widget.authData['accessToken'];
+                              String fileUrl = widget.resInfo['resUrl'] +
+                                  widget.resInfo['resName'];
+                              _displayPermissionInputDialog(
+                                context,
+                                accessToken,
+                                fileUrl,
+                                widget.resInfo['resName'],
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: darkBlue, // background
+                              foregroundColor: lightBlue, // foreground
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Add New Permission',
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: 1.0,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          // TextButton(
+                          //   child: Text('hello'),
+                          //   onPressed: () {
+                          //     var r = Random.secure();
+                          //     print("random string");
+                          //     print(randomAlphaNumeric(32,
+                          //         provider: CoreRandomProvider.from(r)));
+                          //   },
+                          // ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -488,6 +497,11 @@ class _ShareNoteState extends State<ShareNote> {
 
   Future<void> _displayPermissionInputDialog(BuildContext context,
       String accessToken, String resourceUrl, String resourceName) async {
+    const List<String> _kOptions = <String>[
+      'aardvark',
+      'bobcat',
+      'chameleon',
+    ];
     List selectedItems = [];
     return showDialog(
       context: context,
@@ -498,35 +512,50 @@ class _ShareNoteState extends State<ShareNote> {
             height: 280,
             child: Column(
               children: [
-                TypeAheadFormField(
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: _permissionInputController,
-                    decoration: const InputDecoration(hintText: 'Web ID value'),
-                  ),
-                  suggestionsCallback: (inputPattern) async {
-                    // Textfield only gives suggestions when the
-                    // [inputPattern] satisfies the name-pattern.
+                // TypeAheadFormField(
+                //   textFieldConfiguration: TextFieldConfiguration(
+                //     controller: _permissionInputController,
+                //     decoration: const InputDecoration(hintText: 'Web ID value'),
+                //   ),
+                //   suggestionsCallback: (inputPattern) async {
+                //     // Textfield only gives suggestions when the
+                //     // [inputPattern] satisfies the name-pattern.
 
-                    if (isNamePattern(inputPattern)) {
-                      return [webIdAutoFilledStr(inputPattern)];
+                //     if (isNamePattern(inputPattern)) {
+                //       return [webIdAutoFilledStr(inputPattern)];
+                //     } else {
+                //       return [];
+                //     }
+                //   },
+                //   itemBuilder: (context, suggestion) {
+                //     return ListTile(
+                //       title: Text(suggestion),
+                //     );
+                //   },
+                //   onSuggestionSelected: (suggestion) {
+                //     // Set the text of the text field to the selected suggestion.
+
+                //     _permissionInputController.text = suggestion;
+                //   },
+                //   noItemsFoundBuilder: (context) => const Padding(
+                //     padding: EdgeInsets.all(8.0),
+                //     child: Text('No suggestions'),
+                //   ),
+                // ),
+                Autocomplete<String>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text == '') {
+                      return const Iterable<String>.empty();
+                    }
+                    if (isNamePattern(textEditingValue.text)) {
+                      return [webIdAutoFilledStr(textEditingValue.text)];
                     } else {
                       return [];
                     }
                   },
-                  itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      title: Text(suggestion),
-                    );
+                  onSelected: (String selection) {
+                    _permissionInputController.text = selection;
                   },
-                  onSuggestionSelected: (suggestion) {
-                    // Set the text of the text field to the selected suggestion.
-
-                    _permissionInputController.text = suggestion;
-                  },
-                  noItemsFoundBuilder: (context) => const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('No suggestions'),
-                  ),
                 ),
                 standardHeight(),
                 MultiSelectDialogField(
