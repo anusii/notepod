@@ -1,6 +1,4 @@
-# PodNotes 
-
-## Markdown Notes with Encrypted Pods
+# PodNotes &mdash; Markdown Notes with Encrypted Pods
 
 **An ANU Software Innovation Institute demo project for Solid Pods**.
 
@@ -18,10 +16,10 @@ Pods](https://solidproject.org/about) app written in
 notes stored on your personal online data store (Pod) hosted on a
 [Solid
 Server](https://github.com/CommunitySolidServer/CommunitySolidServer). Since
-you control where your notes are stored, and they are stored as
-standard Markdown, other apps can also interact with your notes. You
-maintain full control over **your** data, not the app developer
-collecting and hoarding **your** data.
+you control where your notes (in standard Markdown) are stored, other
+apps can also interact with your notes. You maintain full control over
+**your** data, not the app developer collecting and hoarding **your**
+data.
 
 This first beta release (version 0.1.0) is functional and usable. Use
 cases include writing quick notes while on the move to come back to
@@ -30,9 +28,10 @@ and called up the next time anyone of the family is at the shops, and
 much more.
 
 The current podnotes code base includes a lot of low level code that
-is being migrated to the [solid](https://github.com/anusii/solid)
-package for Flutter. Once migrated it will be even easier to build
-your first Pods-based Flutter app.
+is being migrated to the
+[solidpod](https://github.com/anusii/solidpodq) package for
+[Flutter](https://pub.dev/packages/solidpod). Once migrated it will be
+even easier to build your first Pods-based Flutter app.
 
 **Shopping List**
 

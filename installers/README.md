@@ -1,8 +1,8 @@
 # PodNotes Installers
 
-Flutter supports multiple platform targets and the app will run native
-on Android, iOS, Linux, MacOS, and Windows, as well as directly in a
-browser from the web. The functionality is identical across all
+Flutter supports multiple platform targets and Flutter based apps will
+run native on Android, iOS, Linux, MacOS, and Windows, as well as
+directly in a browser from the web. The functionality is identical across all
 platforms.
 
 ## Android Side Load
@@ -14,9 +14,35 @@ native install of the app.
 
 ## Linux tar Archive
 
-+ Download the podnotes.tar.gz` file 
-+ `$ tar zxvf podnotes.tar.gz`
-+ `$ ./podnotes/podnotes`
+Download [podnotes.tar.gz](https://solidcommunity.au/installers/podnotes.tar.gz)
+
+```bash
+wget https://solidcommunity.au/installers/podnotes.tar.gz
+```
+
+Then, to simply try it out locally:
+
+```bash
+tar zxvf podnotes.tar.gz
+podnotes/podnotes
+```
+
+Or, to install for the current user:
+
+```bash
+tar zxvf podnotes.tar.gz -C ${HOME}/.local/share/
+ln -s ${HOME}/.local/share/podnotes/podnotes ${HOME}/.local/bin/
+```
+
+Or, for a system-wide install:
+
+```bash
+sudo tar zxvf podnotes.tar.gz -C /opt/
+sudo ln -s /opt/podnotes/podnotes /usr/local/bin/
+``` 
+
+Once installed you can run the app as Alt-F2 and type `innerpod` then
+Enter.
 
 ## MacOS
 
@@ -29,7 +55,7 @@ warning next time.
 ## Web -- No Installation Required
 
 No installer is required for a browser based experience of
-PodNotes. Simply visit https://podnotes.solidcommunity.au. 
+PodNotes. Simply visit https://podnotes.solidcommunity.au.
 
 Also, your Web browser will provide an option in its menus to install
 the app locally, which can add an icon to your home screen to start

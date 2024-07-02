@@ -27,6 +27,7 @@ flutter:
   qlinux    Run with the linux device and debugPrint() turned off;
 
   prep      Prep for PR by running tests, checks, docs.
+  push      Do a git push and bump the build number if there is one.
 
   docs	    Run `dart doc` to create documentation.
 
@@ -44,6 +45,8 @@ flutter:
   test	    Run `flutter test` for testing.
   itest	    Run `flutter test integration_test` for interation testing.
   qtest	    Run above test with PAUSE=0.
+  coverage  Run with `--coverage`.
+    coview  View the generated html coverage in browser.
 
   riverpod  Setup `pubspec.yaml` to support riverpod.
   runner    Build the auto generated code as *.g.dart files.
@@ -51,7 +54,10 @@ flutter:
   desktops  Set up for all desktop platforms (linux, windows, macos)
 
   distributions
-    targz   Builds $(APP)-$(VER)-linux-x86_64.tar.gz
+    apk	    Builds installers/$(APP).apk
+    tgz     Builds installers/$(APP).tar.gz
+
+  publish   Publish a package to pub.dev
 
 Also supported:
 
@@ -117,7 +123,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: fix format dcm analyze ignore license
+prep: analyze fix format dcm ignore license todo
 	@echo "ADVISORY: make tests docs"
 	@echo $(SEPARATOR)
 
@@ -131,7 +137,7 @@ SEPARATOR="\n-------------------------------------------------------------------
 .PHONY: fix
 fix:
 	@echo "Dart: FIX"
-	dart fix --apply
+	dart fix --apply lib
 	@echo $(SEPARATOR)
 
 .PHONY: format
@@ -173,20 +179,26 @@ metrics:
 .PHONY: analyze 
 analyze:
 	@echo "Futter ANALYZE"
-	-flutter analyze
+	-flutter analyze lib
 #	dart run custom_lint
 	@echo $(SEPARATOR)
 
 .PHONY: ignore
 ignore:
 	@echo "Files that override lint checks with IGNORE:\n"
-	@if rgrep ignore: lib; then exit 1; else exit 0; fi
+	@-if rgrep -n ignore: lib; then exit 1; else exit 0; fi
+	@echo $(SEPARATOR)
+
+.PHONY: todo
+todo:
+	@echo "Files that include TODO items to be resolved:\n"
+	@-if rgrep -n ' TODO ' lib; then exit 1; else exit 0; fi
 	@echo $(SEPARATOR)
 
 .PHONY: license
 license:
 	@echo "Files without a LICENSE:\n"
-	@find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -printf "\t%p\n"
+	@-find lib -type f -not -name '*~' ! -exec grep -qE '^(/// .*|/// Copyright|/// Licensed)' {} \; -printf "\t%p\n"
 	@echo $(SEPARATOR)
 
 .PHONY: riverpod
@@ -251,16 +263,94 @@ qtest:
 	$(shell flutter devices | grep desktop | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|') \
 	integration_test/$*_test.dart
 
-targz: $(APP)-$(VER)-linux-x86_64.tar.gz
+.PHONY: coverage
+coverage:
+	@echo "COVERAGE"
+	@flutter test --coverage
+	@echo
+	@-/bin/bash support/coverage.sh
+	@echo $(SEPARATOR)
+
+.PHONY: coview
+coview:
+	@genhtml coverage/lcov.info -o coverage/html
+	@open coverage/html/index.html
+
+realclean::
+	rm -rf coverage
+
+# Crate an installer for Linux as a tar.gz archive.
+
+tgz:: $(APP)-$(VER)-linux-x86_64.tar.gz
 
 $(APP)-$(VER)-linux-x86_64.tar.gz:
 	mkdir -p installers
 	rm -rf build/linux/x64/release
-	flutter build linux
+	flutter build linux --release
 	tar --transform 's|^build/linux/x64/release/bundle|$(APP)|' -czvf $@ build/linux/x64/release/bundle
-	mv $@ installers/
+	cp $@ installers/
+	mv $@ installers/$(APP).tar.gz
 
+apk::
+	flutter build apk --release
+	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP).apk
+	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP)-$(VER).apk
+
+appbundle:
+	flutter build appbundle --release
 
 realclean::
 	flutter clean
 	flutter pub get
+
+# For the `dev` branch only, update the version sequence number prior
+# to a push (relies on the git.mk being loaded after this
+# flutter.mk). This is only undertaken through `make push` rather than
+# a `git push` in any other way. If
+# the pubspec.yaml is not using a build number then do not push to bump
+# the build number.
+
+VERSEQ=$(shell grep '^version: ' pubspec.yaml | cut -d'+' -f2 | awk '{print $$1+1}')
+
+BRANCH := $(shell git branch --show-current)
+
+ifeq ($(BRANCH),dev)
+push::
+	perl -pi -e 's|(^version: .*)\+.*|$$1+$(VERSEQ)|' pubspec.yaml
+	-egrep '^version: .*\+.*' pubspec.yaml && \
+	git commit -m "Bump sequence $(VERSEQ)" pubspec.yaml
+endif
+
+.PHONY: publish
+publish:
+	dart pub publish
+
+### TODO THESE SHOULD BE CHECKED AND CLEANED UP
+
+
+.PHONY: docs
+docs::
+	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/docs/$(APP)/
+
+.PHONY: versions
+versions:
+	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
+	lib/constants/app.dart
+
+.PHONY: wc
+wc: lib/*.dart
+	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
+	| egrep -v '^/' \
+	| egrep -v '^ *$$' \
+	| wc -l
+
+#
+# Manage the production install on the remote server.
+#
+
+.PHONY: solidcommunity
+solidcommunity:
+	rsync -avzh ./ solidcommunity.au:projects/$(APP)/ \
+	--exclude .dart_tool --exclude build --exclude ios --exclude macos \
+	--exclude linux --exclude windows --exclude android
+	ssh solidcommunity.au '(cd projects/$(APP); flutter upgrade; make prod)'
