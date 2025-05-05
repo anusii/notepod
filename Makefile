@@ -36,7 +36,7 @@ INC_BASE=support
 # Specific Makefiles will be loaded if they are found in
 # INC_BASE. Sometimes the INC_BASE is shared by multiple local
 # Makefiles and we want to skip specific makes. Simply define the
-# appropriate INC to a non-existant location and it will be skipped.
+# appropriate INC to a non-existent location and it will be skipped.
 
 INC_DOCKER=skip
 INC_MLHUB=skip
