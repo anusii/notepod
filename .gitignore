@@ -5,7 +5,6 @@
 *~
 !lib
  # Shouldn't this be ignored by default?
-.github
 installers
 
 ########################################################################
