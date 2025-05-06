@@ -9,7 +9,7 @@ name: Build Installers
 on:
   push:
     branches:
-      - dev
+      - main
 
 env:
   FLUTTER_VERSION: '3.29.3'
