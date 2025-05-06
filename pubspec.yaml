@@ -35,6 +35,7 @@ dependencies:
   url_launcher: ^6.2.1
   window_manager: ^0.3.7
 
+  intl: any
 flutter_launcher_icons:
   image_path: "assets/images/podnotes.png"
   android: true # can specify file name here e.g. "ic_launcher"
@@ -56,15 +57,14 @@ flutter_launcher_icons:
     image_path: "assets/images/podnotes.png"
 
 dev_dependencies:
-#  dart_code_metrics:
-#    git:
-#      url: https://github.com/anusii/dart-code-metrics.git
-#      ref: main
-
-  flutter_lints: ^4.0.0
 
   flutter_test:
     sdk: flutter
+
+  import_order_lint:
+    git:
+      url: https://github.com/anusii/import-order-lint.git
+      ref: main
 
 dependency_overrides:
   intl: ^0.19.0 # Eventually remove. Through solidpod, solid-auth depends on intl-0.19.0

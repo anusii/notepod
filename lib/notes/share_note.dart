@@ -22,9 +22,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:solid_auth/solid_auth.dart';
+
 import 'package:podnotes/common/rest_api/res_permission.dart';
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
@@ -36,7 +38,6 @@ import 'package:podnotes/nav_drawer.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/data_cell.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:solid_auth/solid_auth.dart';
 
 bool isNamePattern(String pattern) {
   // Check if the pattern contains the solid server url or profile card hashtag
@@ -400,7 +401,7 @@ class _ShareNoteState extends State<ShareNote> {
                                 widget.resInfo['resUsername'][resWebId],
                                 context),
                         ],
-                        headingRowColor: MaterialStateProperty.resolveWith(
+                        headingRowColor: WidgetStateProperty.resolveWith(
                             (states) => lightBlue),
                         headingTextStyle: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.black),

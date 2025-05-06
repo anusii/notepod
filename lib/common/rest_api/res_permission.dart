@@ -27,11 +27,15 @@ library;
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:pointycastle/asymmetric/api.dart';
+import 'package:solid_auth/solid_auth.dart';
+
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/crypto.dart';
@@ -40,8 +44,6 @@ import 'package:podnotes/constants/rdf_functions.dart';
 import 'package:podnotes/constants/turtle_structures.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/err_dialogs.dart';
-import 'package:pointycastle/asymmetric/api.dart';
-import 'package:solid_auth/solid_auth.dart';
 
 Future<Map> getPermission(
     Map authData, String resourceName, String resourseUrl) async {

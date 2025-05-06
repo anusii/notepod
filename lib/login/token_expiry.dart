@@ -23,6 +23,7 @@
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:podnotes/common/responsive.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
@@ -110,8 +111,7 @@ class _TokenExpiryState extends State<TokenExpiry> {
                             );
                           },
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(darkBlue),
+                            backgroundColor: WidgetStateProperty.all(darkBlue),
                           ),
                           child: const Padding(
                             padding: EdgeInsets.all(5),

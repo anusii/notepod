@@ -26,7 +26,10 @@
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:solid_auth/solid_auth.dart';
+
 import 'package:podnotes/common/rest_api/rest_api.dart';
 import 'package:podnotes/constants/app.dart';
 import 'package:podnotes/constants/colours.dart';
@@ -35,7 +38,6 @@ import 'package:podnotes/initial_setup/screen.dart';
 import 'package:podnotes/login/pod_reg.dart';
 import 'package:podnotes/nav_screen.dart';
 import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:solid_auth/solid_auth.dart';
 
 /// A widget to display the initial login screen.
 ///
