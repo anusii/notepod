@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=HealthPod
+Exec=.local/bin/healthpod
+Icon=/home/USER/.local/share/icons/hicolor/256x256/apps/healthpod.png
