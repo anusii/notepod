@@ -8,6 +8,14 @@
 
 *License: GNU GPL V3*
 
+Binaries to download latest version:
+[**GNU/Linux**](https://solidcommunity.au/installers/podnotes-dev-linux.zip) -
+[**Debian/Ubuntu**](https://solidcommunity.au/installers/podnotes_amd64.deb) -
+[**MacOS**](https://solidcommunity.au/installers/podnotes-dev-macos.zip) -
+[**Windows**](https://solidcommunity.au/installers/podnotes-dev-windows-inno.exe).
+
+Run in a browser: [**Web**](https://podnotes.solidcommunity.au).
+
 ## Introduction
 
 The podnotes app is an example of a [Solid
@@ -89,7 +97,7 @@ get to know your login details.
 You can run the app directly from its source yourself with a little
 setup. You could then also modify the app to suit your own needs, or
 to add functionality that you may like to contribute back to the
-community. 
+community.
 
 Begin with the Flutter Dev instructions to install flutter for your
 preferred platform at [Flutter Dev Getting
@@ -174,7 +182,7 @@ of Pods-based apps with flutter
 
 - [solid](https://github.com/anusii/solid) package (not yet available
   on pub.dev): Implementation of the core high-level functionality.
-  
+
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
   authenticate a client application to a Solid Pod. Solid OIDC is
