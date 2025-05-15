@@ -1,4 +1,21 @@
-# NotePod &mdash; Markdown Notes with Encrypted Pods
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+
+[![Last Updated](https://img.shields.io/github/last-commit/anusii/podnotes?label=last%20updated)](https://github.com/anusii/podnotes/commits/dev/)
+[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/podnotes/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/podnotes/blob/dev/CHANGELOG.md)
+[![GitHub Issues](https://img.shields.io/github/issues/anusii/podnotes)](https://github.com/anusii/podnotes/issues)
+[![GitHub License](https://img.shields.io/github/license/anusii/podnotes)](https://raw.githubusercontent.com/anusii/podnotes/main/LICENSE)
+[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/podnotes/dev)](https://github.com/gjwgit/rattle/commits/dev/)
+
+Binaries to download latest version:
+[**GNU/Linux**](https://solidcommunity.au/installers/podnotes-dev-linux.zip) -
+[**Debian/Ubuntu**](https://solidcommunity.au/installers/podnotes_amd64.deb) -
+[**MacOS**](https://solidcommunity.au/installers/podnotes-dev-macos.zip) -
+[**Windows**](https://solidcommunity.au/installers/podnotes-dev-windows-inno.exe).
+
+Run in a browser: [**Web**](https://podnotes.solidcommunity.au).
+
+# Notepod &mdash; Markdown Notes with Encrypted Pods
 
 **An ANU Software Innovation Institute demo project for Solid Pods**.
 
@@ -89,7 +106,7 @@ get to know your login details.
 You can run the app directly from its source yourself with a little
 setup. You could then also modify the app to suit your own needs, or
 to add functionality that you may like to contribute back to the
-community. 
+community.
 
 Begin with the Flutter Dev instructions to install flutter for your
 preferred platform at [Flutter Dev Getting
@@ -174,7 +191,7 @@ of Pods-based apps with flutter
 
 - [solid](https://github.com/anusii/solid) package (not yet available
   on pub.dev): Implementation of the core high-level functionality.
-  
+
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
   authenticate a client application to a Solid Pod. Solid OIDC is
