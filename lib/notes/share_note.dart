@@ -498,11 +498,11 @@ class _ShareNoteState extends State<ShareNote> {
 
   Future<void> _displayPermissionInputDialog(BuildContext context,
       String accessToken, String resourceUrl, String resourceName) async {
-    const List<String> _kOptions = <String>[
-      'aardvark',
-      'bobcat',
-      'chameleon',
-    ];
+    // const List<String> _kOptions = <String>[
+    //   'aardvark',
+    //   'bobcat',
+    //   'chameleon',
+    // ];
     List selectedItems = [];
     return showDialog(
       context: context,
@@ -563,7 +563,7 @@ class _ShareNoteState extends State<ShareNote> {
                   items: permissionItems,
                   title: const Text('Select the permissions'),
                   decoration: BoxDecoration(
-                    color: lightGreen.withOpacity(0.15),
+                    color: lightGreen.withValues(alpha: 0.15),
                     borderRadius: const BorderRadius.all(Radius.circular(40)),
                     border: Border.all(
                       color: darkGreen,
