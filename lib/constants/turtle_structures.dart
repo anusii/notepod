@@ -25,9 +25,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 //import 'package:indipod/home/profile_data.dart';
 
 // IRIs (Internationalized Resource Identifiers)
-String podnotesTerms = 'https://solidcommunity.au/predicates/terms#';
-String podnotesFile = 'https://solidcommunity.au/predicates/file#';
-String podnotesLogId = 'https://solidcommunity.au/predicates/logid#';
+String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
+String notepodFile = 'https://solidcommunity.au/predicates/file#';
+String notepodLogId = 'https://solidcommunity.au/predicates/logid#';
 String solid = 'http://www.w3.org/ns/solid/terms#';
 String foaf = 'http://xmlns.com/foaf/0.1/';
 String terms = 'http://purl.org/dc/terms/';
@@ -79,7 +79,7 @@ String genEncKeyBody(
   // Create a ttl file body.
 
   String keyFileBody =
-      '<$resUrl> <$terms$titlePred> "Encryption keys";\n    <$podnotesTerms$ivPred> "$prvKeyIvz";\n    <$podnotesTerms$encKeyPred> "$encMasterKey";\n    <$podnotesTerms$prvKeyPred> "$prvKey".';
+      '<$resUrl> <$terms$titlePred> "Encryption keys";\n    <$notepodTerms$ivPred> "$prvKeyIvz";\n    <$notepodTerms$encKeyPred> "$encMasterKey";\n    <$notepodTerms$prvKeyPred> "$prvKey".';
 
   return keyFileBody;
 }
@@ -116,7 +116,7 @@ String genPubDirAclBody() {
 // Set up individual key file content
 String genIndKeyFileBody() {
   String keyFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix file: <$podnotesFile>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Individual Encryption Keys".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix file: <$notepodFile>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Individual Encryption Keys".';
 
   return keyFileBody;
 }
@@ -124,7 +124,7 @@ String genIndKeyFileBody() {
 // Set up public key file content
 String genPubKeyFileBody(String resUrl, String pubKeyStr) {
   String keyFileBody =
-      '<$resUrl> <$terms$titlePred> "Public key";\n    <$podnotesTerms$pubKeyPred> "$pubKeyStr";';
+      '<$resUrl> <$terms$titlePred> "Public key";\n    <$notepodTerms$pubKeyPred> "$pubKeyStr";';
 
   return keyFileBody;
 }
@@ -152,7 +152,7 @@ String genProfFileBody(Map profData, Map authData) {
 // Set up log file content
 String genLogFileBody() {
   String logFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix logid: <$podnotesLogId>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Permissions Log".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix logid: <$notepodLogId>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Permissions Log".';
 
   return logFileBody;
 }
@@ -174,7 +174,7 @@ String genEncryptedNoteFileBody(
   String encNoteIv,
 ) {
   String encNoteFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    podnotesTerms:$createdDateTimePred "$dateTimeStr";\n    podnotesTerms:$modifiedDateTimePred "$dateTimeStr";\n    podnotesTerms:$ivPred "$encNoteIv";\n    podnotesTerms:$noteTitlePred "$noteTitle";\n    podnotesTerms:$encNoteContentPred "$encNoteContent".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    notepodTerms:$createdDateTimePred "$dateTimeStr";\n    notepodTerms:$modifiedDateTimePred "$dateTimeStr";\n    notepodTerms:$ivPred "$encNoteIv";\n    notepodTerms:$noteTitlePred "$noteTitle";\n    notepodTerms:$encNoteContentPred "$encNoteContent".';
 
   return encNoteFileBody;
 }

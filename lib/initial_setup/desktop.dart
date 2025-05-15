@@ -37,18 +37,18 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solid_encrypt/solid_encrypt.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/crypto.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/constants/turtle_structures.dart';
-import 'package:podnotes/login/screen.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/utils/truncate_str.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
-import 'package:podnotes/widgets/msg_box.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/crypto.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/login/screen.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/utils/truncate_str.dart';
+import 'package:notepod/widgets/err_dialogs.dart';
+import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/msg_box.dart';
 
 class InitialSetupDesktop extends StatefulWidget {
   final Map resNeedToCreate;

@@ -27,17 +27,17 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:solid_auth/solid_auth.dart';
 
-import 'package:podnotes/common/rest_api/res_permission.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/constants/turtle_structures.dart';
-import 'package:podnotes/nav_drawer.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/data_cell.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
+import 'package:notepod/common/rest_api/res_permission.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/rdf_functions.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/nav_drawer.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/widgets/data_cell.dart';
+import 'package:notepod/widgets/loading_animation.dart';
 
 bool isNamePattern(String pattern) {
   // Check if the pattern contains the solid server url or profile card hashtag

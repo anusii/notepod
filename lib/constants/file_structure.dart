@@ -35,7 +35,7 @@ const String profCard = 'profile/card#me';
 
 // Directory name constants.
 
-const mainResDir = 'podnotes';
+const mainResDir = 'notepod';
 const myNotesDir = 'mynotes';
 const sharingDir = 'sharing';
 const sharedDir = 'shared';

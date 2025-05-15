@@ -1,4 +1,4 @@
-# PodNotes &mdash; Markdown Notes with Encrypted Pods
+# NotePod &mdash; Markdown Notes with Encrypted Pods
 
 **An ANU Software Innovation Institute demo project for Solid Pods**.
 
@@ -10,7 +10,7 @@
 
 ## Introduction
 
-The podnotes app is an example of a [Solid
+The notepod app is an example of a [Solid
 Pods](https://solidproject.org/about) app written in
 [Flutter](https://flutter.dev/) to read, write, and share encrypted
 notes stored on your personal online data store (Pod) hosted on a
@@ -27,7 +27,7 @@ later on, capturing shopping lists that can be shared with your family
 and called up the next time anyone of the family is at the shops, and
 much more.
 
-The current podnotes code base includes a lot of low level code that
+The current notepod code base includes a lot of low level code that
 is being migrated to the
 [solidpod](https://github.com/anusii/solidpodq) package for
 [Flutter](https://pub.dev/packages/solidpod). Once migrated it will be
@@ -52,7 +52,7 @@ Providers](https://solidproject.org/users/get-a-pod) world wide.
 
 ## Online Demo
 
-Once you have your own Pod visit https://podnotes.solidcommunity.au
+Once you have your own Pod visit https://notepod.solidcommunity.au
 and login to your Pod. Write and save a few notes, edit saved notes,
 and maybe share some notes with other users. That's it! Simple but
 useful.
@@ -63,7 +63,7 @@ You can install the app onto your own device using one of our
 installers. The app will then run locally on your own device rather
 than hosted on a web server. The installers are available for all
 platforms from <a
-href="https://github.com/anusii/podnotes/tree/main/installers">github</a>. The
+href="https://github.com/anusii/notepod/tree/main/installers">github</a>. The
 installers we make available are ready to run executable files or else
 operating system specific installation packages. Stay tuned for links
 to repository distribution.
@@ -84,7 +84,7 @@ get to know your login details.
 	alt="Login Screen" width="400">
 </div>
 
-## Install Flutter and Podnotes<a name="install"></a>
+## Install Flutter and Notepod<a name="install"></a>
 
 You can run the app directly from its source yourself with a little
 setup. You could then also modify the app to suit your own needs, or
@@ -108,9 +108,9 @@ Found 4 connected devices:
   Chrome (web)                    • chrome                               • web-javascript • Google Chrome 120.0.6099.62
 ```
 
-Then git clone the podnotes repository from github.
+Then git clone the notepod repository from github.
 
-Run the podnotes app in debug mode on your chosen device by specifying
+Run the notepod app in debug mode on your chosen device by specifying
 enough of the device name to be uniquely identifiable. E.g. for chrome
 use:
 
@@ -119,7 +119,7 @@ flutter run -d chrome
 ```
 
 When you have completed the setup of your platform, you are ready for
-the [PodNotes Getting Started](exercises/README.md) exercises where
+the [NotePod Getting Started](exercises/README.md) exercises where
 you can create a Pod, make and share notes.
 
 ### Extra setup for MacOS<a name="extra_for_macos"></a>
@@ -128,7 +128,7 @@ Running the app on MacOS requires, additional configuration in
 Xcode. Open the project macos folder in Xcode with
 
 ```
-cd podnotes/macos
+cd notepod/macos
 xed .
 ```
 
@@ -157,7 +157,7 @@ Open the project iOS folder in Xcode and add the iOS version used by
 your simulator.
 
 ```
-cd podnotes/ios
+cd notepod/ios
 xed .
 ```
 

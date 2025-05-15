@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/rest_api/res_permission.dart';
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/notes/share_note.dart';
+import 'package:notepod/common/rest_api/res_permission.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/rdf_functions.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/notes/share_note.dart';
 
 ElevatedButton shareNote(Map<dynamic, dynamic> noteData, BuildContext context,
     Map authData, String webId) {

@@ -29,16 +29,16 @@ import 'package:flutter/material.dart';
 
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/home.dart';
-import 'package:podnotes/login/token_expiry.dart';
-import 'package:podnotes/master_key_setup/enc_key_input.dart';
-import 'package:podnotes/nav_drawer.dart';
-import 'package:podnotes/notes/list_notes_screen.dart';
-import 'package:podnotes/notes/view_edit_note_screen.dart';
-import 'package:podnotes/shared_notes/list_shared_notes_screen.dart';
-import 'package:podnotes/shared_notes/non_readable_note.dart';
-import 'package:podnotes/shared_notes/view_edit_shared_note_screen.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/home.dart';
+import 'package:notepod/login/token_expiry.dart';
+import 'package:notepod/master_key_setup/enc_key_input.dart';
+import 'package:notepod/nav_drawer.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/view_edit_note_screen.dart';
+import 'package:notepod/shared_notes/list_shared_notes_screen.dart';
+import 'package:notepod/shared_notes/non_readable_note.dart';
+import 'package:notepod/shared_notes/view_edit_shared_note_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {

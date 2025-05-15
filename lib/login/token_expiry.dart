@@ -24,10 +24,10 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/responsive.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/login/screen.dart';
+import 'package:notepod/common/responsive.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/login/screen.dart';
 
 class TokenExpiry extends StatefulWidget {
   final Map authData;

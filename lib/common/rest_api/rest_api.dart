@@ -35,11 +35,11 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 
-import 'package:podnotes/common/rest_api/res_permission.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/constants/turtle_structures.dart';
+import 'package:notepod/common/rest_api/res_permission.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/rdf_functions.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 
 // import 'dart:async';
 
@@ -329,13 +329,13 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
   Map keyFileDataMap = getFileContent(keyFileContent);
 
   // Define query parameters
-  String prefix1 = 'file: <$podnotesFile>';
-  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+  String prefix1 = 'file: <$notepodFile>';
+  String prefix2 = 'notepodTerms: <$notepodTerms>';
 
   String subject = 'file:$resName';
-  String predObjPath = 'podnotesTerms:$pathPred "$encNoteFilePath";';
-  String predObjIv = 'podnotesTerms:$ivPred "$encNoteIv";';
-  String predObjKey = 'podnotesTerms:$sessionKeyPred "$encSessionKey".';
+  String predObjPath = 'notepodTerms:$pathPred "$encNoteFilePath";';
+  String predObjIv = 'notepodTerms:$ivPred "$encNoteIv";';
+  String predObjKey = 'notepodTerms:$sessionKeyPred "$encSessionKey".';
 
   // Check if the resource is previously added or not
   if (keyFileDataMap.containsKey(resName)) {
@@ -350,9 +350,9 @@ Future<String> updateIndKeyFile(String webId, Map authData, String resName,
     if (existKey != encSessionKey ||
         existPath != encNoteFilePath ||
         existIv != encNoteIv) {
-      String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
-      String predObjIvPrev = 'podnotesTerms:$ivPred "$existIv";';
-      String predObjKeyPrev = 'podnotesTerms:$sessionKeyPred "$existKey".';
+      String predObjPathPrev = 'notepodTerms:$pathPred "$existPath";';
+      String predObjIvPrev = 'notepodTerms:$ivPred "$existIv";';
+      String predObjKeyPrev = 'notepodTerms:$sessionKeyPred "$existKey".';
 
       // Generate update sparql query
       String query =
@@ -414,26 +414,25 @@ Future<String> updateNoteFile(
 
   // Define query parameters
   String prefix1 = ': <#>';
-  String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+  String prefix2 = 'notepodTerms: <$notepodTerms>';
 
   String subject = ':me';
 
   // Previous data
   String predObjModifiedTimePrev =
-      'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
-  String predObjIvPrev = 'podnotesTerms:$ivPred "$encIvPrev";';
-  String predObjNoteTitlePrev =
-      'podnotesTerms:$noteTitlePred "$noteTitlePrev";';
+      'notepodTerms:$modifiedDateTimePred "$modifiedDateTimePrev";';
+  String predObjIvPrev = 'notepodTerms:$ivPred "$encIvPrev";';
+  String predObjNoteTitlePrev = 'notepodTerms:$noteTitlePred "$noteTitlePrev";';
   String predObjEncNoteContentPrev =
-      'podnotesTerms:$encNoteContentPred "$encNoteContentPrev".';
+      'notepodTerms:$encNoteContentPred "$encNoteContentPrev".';
 
   // New data
   String predObjModifiedTime =
-      'podnotesTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
-  String predObjIv = 'podnotesTerms:$ivPred "$encIvNew";';
-  String predObjNoteTitle = 'podnotesTerms:$noteTitlePred "$noteTitleNew";';
+      'notepodTerms:$modifiedDateTimePred "$modifiedDateTimeNew";';
+  String predObjIv = 'notepodTerms:$ivPred "$encIvNew";';
+  String predObjNoteTitle = 'notepodTerms:$noteTitlePred "$noteTitleNew";';
   String predObjEncNoteContent =
-      'podnotesTerms:$encNoteContentPred "$encNoteContentNew".';
+      'notepodTerms:$encNoteContentPred "$encNoteContentNew".';
 
   // Generate update sparql query
   String query =

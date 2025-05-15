@@ -32,9 +32,9 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 const solidServerUrl = 'https://pods.solidcommunity.au/';
 
-const String applicationName = 'Podnotes'; // "Pod Note Taker";
+const String applicationName = 'notepod'; // "Pod Note Taker";
 const String applicationVersion = '0.1.0';
-const String applicationRepo = 'https://github.com/anusii/podnotes';
+const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
 
 const String authors =
@@ -57,7 +57,7 @@ FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 //     'Your login session has expired! Please login again to continue.';
 
 const initialStructureWelcome =
-    'Welcome to PODNotes initial structure setup wizard!';
+    'Welcome to NotePod initial structure setup wizard!';
 
 const initialStructureTitle = 'Structure setup wizard!';
 

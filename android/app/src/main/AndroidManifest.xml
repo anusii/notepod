@@ -34,7 +34,7 @@
    </queries>
     <application
         android:usesCleartextTraffic="true"
-        android:label="podnotes"
+        android:label="notepod"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

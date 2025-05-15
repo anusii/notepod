@@ -26,9 +26,9 @@ import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/shared_notes/shared_note_controls.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/shared_notes/shared_note_controls.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map noteData;

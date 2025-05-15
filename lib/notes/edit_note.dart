@@ -33,10 +33,10 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/widgets/err_dialogs.dart';
+import 'package:notepod/widgets/loading_animation.dart';
 
 class EditNote extends StatefulWidget {
   final String webId;

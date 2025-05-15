@@ -30,14 +30,14 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:solid_auth/solid_auth.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/initial_setup/screen.dart';
-import 'package:podnotes/login/pod_reg.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/loading_animation.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/rdf_functions.dart';
+import 'package:notepod/initial_setup/screen.dart';
+import 'package:notepod/login/pod_reg.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/widgets/loading_animation.dart';
 
 /// A widget to display the initial login screen.
 ///
@@ -46,7 +46,7 @@ import 'package:podnotes/widgets/loading_animation.dart';
 /// access to the user's POD.
 
 const _defaultWebID = 'https://pods.solidcommunity.au';
-const _mainImage = AssetImage('assets/images/podnotes-background.jpg');
+const _mainImage = AssetImage('assets/images/notepod-background.jpg');
 
 class LoginScreen extends StatelessWidget {
   // Show a default solid server for authorisation.
@@ -100,7 +100,7 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/images/podnotes.png',
+                            'assets/images/notepod.png',
                             width: 300,
                           ),
                           const SizedBox(
