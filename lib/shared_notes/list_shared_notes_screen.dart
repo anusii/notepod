@@ -23,11 +23,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/shared_notes/list_shared_notes.dart';
-import 'package:podnotes/widgets/loading_screen.dart';
-import 'package:podnotes/widgets/msg_card.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/shared_notes/list_shared_notes.dart';
+import 'package:notepod/widgets/loading_screen.dart';
+import 'package:notepod/widgets/msg_card.dart';
 
 class ListSharedNotesScreen extends StatefulWidget {
   const ListSharedNotesScreen({

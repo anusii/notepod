@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:podnotes/common/logout.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/login/screen.dart';
-import 'package:podnotes/nav_screen.dart';
+import 'package:notepod/common/logout.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/login/screen.dart';
+import 'package:notepod/nav_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
@@ -191,7 +191,7 @@ Widget _aboutDialog() {
     applicationIcon: SizedBox(
       height: 65,
       width: 65,
-      child: Image.asset('assets/images/podnotes.png'),
+      child: Image.asset('assets/images/notepod.png'),
     ),
     applicationVersion: applicationVersion,
     // applicationLegalese: "© Copyright Michelphoenix 2020",
@@ -228,7 +228,7 @@ Widget _aboutDialog() {
                 style: TextStyle(color: Colors.black),
               ),
               TextSpan(
-                text: 'Podnotes',
+                text: 'Notepod',
                 style: const TextStyle(color: Colors.blue),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {

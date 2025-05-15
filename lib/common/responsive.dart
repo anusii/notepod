@@ -1,7 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/constants/app.dart';
+import 'package:notepod/constants/app.dart';
 
 class Responsive extends StatelessWidget {
   final Widget mobile;

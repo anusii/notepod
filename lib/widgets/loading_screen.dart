@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/constants/colours.dart';
+import 'package:notepod/constants/colours.dart';
 
 Widget loadingScreen(double height) {
   return Column(

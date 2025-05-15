@@ -24,10 +24,10 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/msg_card.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/widgets/msg_card.dart';
 
 class NonReadableNote extends StatefulWidget {
   final List noteMetaData;

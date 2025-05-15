@@ -23,11 +23,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/notes/edit_note.dart';
-import 'package:podnotes/notes/view_note.dart';
-import 'package:podnotes/widgets/loading_screen.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/notes/edit_note.dart';
+import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/widgets/loading_screen.dart';
 
 class ViewEditNoteScreen extends StatefulWidget {
   const ViewEditNoteScreen({

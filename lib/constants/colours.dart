@@ -52,7 +52,7 @@ const darkRed = Color.fromARGB(255, 139, 38, 30);
 
 const confirmGreen = Colors.green;
 
-List<Color> defaultPodnotesColors = const [
+List<Color> defaultNotepodColors = const [
   darkBlue,
   darkGreen,
   darkCopper,

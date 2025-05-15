@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:loading_indicator/loading_indicator.dart';
 
-import 'package:podnotes/constants/colours.dart';
+import 'package:notepod/constants/colours.dart';
 
 showAnimationDialog(
   BuildContext context,
@@ -29,7 +29,7 @@ showAnimationDialog(
               children: [
                 LoadingIndicator(
                   indicatorType: Indicator.values[animationIndex],
-                  colors: defaultPodnotesColors,
+                  colors: defaultNotepodColors,
                   strokeWidth: 4.0,
                   pathBackgroundColor: showPathBackground
                       ? const Color.fromARGB(59, 0, 0, 0)

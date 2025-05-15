@@ -23,11 +23,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/colours.dart';
-import 'package:podnotes/constants/crypto.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/crypto.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/widgets/err_dialogs.dart';
 
 class EncryptionKeyInput extends StatefulWidget {
   final ValueNotifier<bool?> validEncKey;

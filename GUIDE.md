@@ -13,7 +13,7 @@ template app. You can do this in your favourite IDE or simply on the
 command line
 
 ```bash
-flutter create podnotes
+flutter create notepod
 ```
 
 ## Beginnings of App

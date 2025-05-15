@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:podnotes/common/responsive.dart';
-import 'package:podnotes/constants/colours.dart';
+import 'package:notepod/common/responsive.dart';
+import 'package:notepod/constants/colours.dart';
 
 Row buildMsgCard(
   BuildContext context,

@@ -1,6 +1,6 @@
 {
-    "name": "podnotes",
-    "short_name": "podnotes",
+    "name": "notepod",
+    "short_name": "notepod",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",

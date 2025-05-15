@@ -36,14 +36,14 @@ import 'package:intl/intl.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 
-import 'package:podnotes/common/rest_api/rest_api.dart';
-import 'package:podnotes/constants/app.dart';
-import 'package:podnotes/constants/crypto.dart';
-import 'package:podnotes/constants/file_structure.dart';
-import 'package:podnotes/constants/rdf_functions.dart';
-import 'package:podnotes/constants/turtle_structures.dart';
-import 'package:podnotes/nav_screen.dart';
-import 'package:podnotes/widgets/err_dialogs.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/crypto.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/rdf_functions.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:notepod/widgets/err_dialogs.dart';
 
 Future<Map> getPermission(
     Map authData, String resourceName, String resourseUrl) async {
@@ -499,7 +499,7 @@ Future<String> copySharedKey(
           keyFileUrl, accessToken, dPopTokenKeyFile, false) ==
       'not-exist') {
     String keyFileBody =
-        '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix terms: <http://purl.org/dc/terms/>.\n@prefix file: <$podnotesFile>.\n@prefix podnotesTerms: <$podnotesTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Shared Encryption Keys".\nfile:$resName\n    podnotesTerms:$webIdPred "$encSharedWebId";\n    podnotesTerms:$pathPred "$encSharedPath";\n    podnotesTerms:$accessListPred "$encSharedAccess";\n    podnotesTerms:$sharedKeyPred "$encSharedKey".';
+        '@prefix : <#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix terms: <http://purl.org/dc/terms/>.\n@prefix file: <$notepodFile>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Shared Encryption Keys".\nfile:$resName\n    notepodTerms:$webIdPred "$encSharedWebId";\n    notepodTerms:$pathPred "$encSharedPath";\n    notepodTerms:$accessListPred "$encSharedAccess";\n    notepodTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Update the ttl file with the shared info
     createUpdateRes = await createItem(
@@ -515,14 +515,14 @@ Future<String> copySharedKey(
     Map keyFileDataMap = getEncFileContent(keyFileContent);
 
     /// Define query parameters
-    String prefix1 = 'file: <$podnotesFile>';
-    String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+    String prefix1 = 'file: <$notepodFile>';
+    String prefix2 = 'notepodTerms: <$notepodTerms>';
 
     String subject = 'file:$resName';
-    String predObjWebId = 'podnotesTerms:$webIdPred "$encSharedWebId";';
-    String predObjPath = 'podnotesTerms:$pathPred "$encSharedPath";';
-    String predObjAcc = 'podnotesTerms:$accessListPred "$encSharedAccess";';
-    String predObjKey = 'podnotesTerms:$sharedKeyPred "$encSharedKey".';
+    String predObjWebId = 'notepodTerms:$webIdPred "$encSharedWebId";';
+    String predObjPath = 'notepodTerms:$pathPred "$encSharedPath";';
+    String predObjAcc = 'notepodTerms:$accessListPred "$encSharedAccess";';
+    String predObjKey = 'notepodTerms:$sharedKeyPred "$encSharedKey".';
 
     /// Check if the resource is previously added or not
     if (keyFileDataMap.containsKey(resName)) {
@@ -598,7 +598,7 @@ Future<String> addPermLogLine(
       genDpopToken(permFileUrl, rsaKeyPair, publicKeyJwk, 'PATCH');
 
   String dataQuery =
-      'INSERT DATA {<$podnotesLogId$dateTimeStr> <$podnotesTerms#log> "<$permLineStr>"};';
+      'INSERT DATA {<$notepodLogId$dateTimeStr> <$notepodTerms#log> "<$permLineStr>"};';
 
   final editResponse = await http.patch(
     Uri.parse(permFileUrl),
@@ -780,8 +780,8 @@ Future<String> removeSharedKey(
     // Check if the resource is previously added or not
     if (keyFileDataMap.containsKey(resName)) {
       // Define query parameters
-      String prefix1 = 'file: <$podnotesFile>';
-      String prefix2 = 'podnotesTerms: <$podnotesTerms>';
+      String prefix1 = 'file: <$notepodFile>';
+      String prefix2 = 'notepodTerms: <$notepodTerms>';
 
       String subject = 'file:$resName';
       String existKey = keyFileDataMap[resName][sharedKeyPred];
@@ -789,10 +789,10 @@ Future<String> removeSharedKey(
       String existAcc = keyFileDataMap[resName][accessListPred];
       String existWebId = keyFileDataMap[resName][webIdPred];
 
-      String predObjWebIdPrev = 'podnotesTerms:$webIdPred "$existWebId";';
-      String predObjPathPrev = 'podnotesTerms:$pathPred "$existPath";';
-      String predObjAccPrev = 'podnotesTerms:$accessListPred "$existAcc";';
-      String predObjKeyPrev = 'podnotesTerms:$sharedKeyPred "$existKey".';
+      String predObjWebIdPrev = 'notepodTerms:$webIdPred "$existWebId";';
+      String predObjPathPrev = 'notepodTerms:$pathPred "$existPath";';
+      String predObjAccPrev = 'notepodTerms:$accessListPred "$existAcc";';
+      String predObjKeyPrev = 'notepodTerms:$sharedKeyPred "$existKey".';
 
       // Generate update sparql query
       String query =

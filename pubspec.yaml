@@ -1,4 +1,4 @@
-name: podnotes
+name: notepod
 description: Privacy preserving note taking app using PODs.
 publish_to: 'none'
 version: 0.1.3
@@ -29,7 +29,9 @@ dependencies:
   openid_client: ^0.4.8
   pointycastle: ^3.7.3
   rdflib: ^0.2.8
-  solid_auth: ^0.1.13
+  rename: ^3.1.0
+  solidpod: ^0.6.6
+  # solid_auth: ^0.1.13
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
@@ -37,7 +39,7 @@ dependencies:
 
   intl: any
 flutter_launcher_icons:
-  image_path: "assets/images/podnotes.png"
+  image_path: "assets/images/notepod.png"
   android: true # can specify file name here e.g. "ic_launcher"
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
   min_sdk_android: 21 # android min sdk min:16, default 21
@@ -45,16 +47,16 @@ flutter_launcher_icons:
   background_color_ios: "#ffffff"
   web:
     generate: true
-    image_path: "assets/images/podnotes.png"
+    image_path: "assets/images/notepod.png"
     background_color: "#ffffff"
     theme_color: "#ffffff"
   windows:
     generate: true
-    image_path: "assets/images/podnotes.png"
+    image_path: "assets/images/notepod.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/podnotes.png"
+    image_path: "assets/images/notepod.png"
 
 dev_dependencies:
 

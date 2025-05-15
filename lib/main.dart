@@ -30,8 +30,8 @@ import 'package:flutter/material.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:podnotes/login/screen.dart';
-import 'package:podnotes/utils/is_desktop.dart';
+import 'package:notepod/login/screen.dart';
+import 'package:notepod/utils/is_desktop.dart';
 
 void main() async {
   // Remove [debugPrint] messages from production code.
@@ -63,7 +63,7 @@ void main() async {
 
       // The [title] is used for the window manager's window title.
 
-      title: 'PodNotes - A note taking app with private PODs',
+      title: 'NotePod - A note taking app with private PODs',
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -76,11 +76,11 @@ void main() async {
   // The runApp() function takes the given Widget and makes it the root of the
   // widget tree.
 
-  runApp(const PodNotes());
+  runApp(const NotePod());
 }
 
-class PodNotes extends StatelessWidget {
-  const PodNotes({super.key});
+class NotePod extends StatelessWidget {
+  const NotePod({super.key});
 
   @override
   Widget build(BuildContext context) {
