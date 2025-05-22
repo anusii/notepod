@@ -42,7 +42,6 @@ import 'package:notepod/constants/crypto.dart';
 import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/constants/rdf_functions.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/nav_screen.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 
 Future<Map> getPermission(
@@ -237,17 +236,17 @@ Future<void> addPermission(
         }
 
         // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NavigationScreen(
-                    webId: webId,
-                    authData: authData,
-                    page: 'listNotes',
-                  )),
-          (Route<dynamic> route) =>
-              false, // This predicate ensures all previous routes are removed
-        );
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) => NavigationScreen(
+        //             webId: webId,
+        //             authData: authData,
+        //             page: 'listNotes',
+        //           )),
+        //   (Route<dynamic> route) =>
+        //       false, // This predicate ensures all previous routes are removed
+        // );
       } else {
         // ignore: use_build_context_synchronously
         Navigator.pop(context);

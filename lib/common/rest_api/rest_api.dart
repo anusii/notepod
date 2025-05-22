@@ -25,23 +25,16 @@
 
 library;
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
-import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:pointycastle/asymmetric/api.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/api/common_permission.dart';
 import 'package:solidpod/src/solid/read_external_pod.dart';
 
 import 'package:notepod/common/rest_api/res_permission.dart';
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/constants/rdf_functions.dart';
 import 'package:notepod/constants/turtle_structures.dart';

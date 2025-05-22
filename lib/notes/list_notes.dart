@@ -27,7 +27,6 @@ import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 
-import 'package:notepod/nav_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 
 class ListNotes extends StatefulWidget {

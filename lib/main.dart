@@ -29,12 +29,10 @@ library;
 import 'package:flutter/material.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/home.dart';
-import 'package:notepod/nav_screen.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:notepod/login/screen.dart';
 import 'package:notepod/utils/is_desktop.dart';
 
 void main() async {

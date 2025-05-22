@@ -25,7 +25,6 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/shared_notes/edit_shared_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/widgets/loading_screen.dart';
