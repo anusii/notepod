@@ -27,6 +27,10 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/home.dart';
+import 'package:notepod/nav_screen.dart';
+import 'package:solidpod/solidpod.dart';
 
 import 'package:window_manager/window_manager.dart';
 
@@ -90,7 +94,26 @@ class NotePod extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      home: LoginScreen(),
+      home: SolidLogin(
+        title: 'MANAGE YOUR RIO POD',
+        appDirectory: 'notepod',
+        image: AssetImage('assets/images/notepod-background.jpg'),
+        logo: AssetImage('assets/images/notepod.png'),
+        link: 'https://pub.dev/packages/solidpod',
+        webID: 'https://pods.solidcommunity.au',
+        required: false,
+        loginButtonStyle: LoginButtonStyle(
+          background: Colors.lightGreenAccent,
+          tooltip: 'You need to connect to your Solid Pod\n'
+              'to access the template JSON parameter\n'
+              'files for the Rio device.',
+        ),
+        child: AppScreen(
+          title: 'Note Taker for your Pod',
+          childPage: Home(),
+        ),
+      ),
+      // LoginScreen(),
     );
   }
 }

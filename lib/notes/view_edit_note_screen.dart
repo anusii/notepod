@@ -58,11 +58,11 @@ class _ViewEditNoteScreenState extends State<ViewEditNoteScreen> {
     String webId = widget.webId;
     String noteFileName = widget.noteFileName;
 
-    _asyncDataFetch = getNoteContent(
-      authData,
-      webId,
-      noteFileName,
-    );
+    // _asyncDataFetch = getNoteContent(
+    //   authData,
+    //   webId,
+    //   noteFileName,
+    // );
     super.initState();
   }
 
@@ -71,14 +71,14 @@ class _ViewEditNoteScreenState extends State<ViewEditNoteScreen> {
     if (widget.action == 'view') {
       nextScreen = ViewNote(
         noteData: noteData,
-        webId: webId,
-        authData: authData,
+        // webId: webId,
+        // authData: authData,
       );
     } else {
       nextScreen = EditNote(
         noteData: noteData,
-        webId: webId,
-        authData: authData,
+        // webId: webId,
+        // authData: authData,
       );
     }
     return Container(

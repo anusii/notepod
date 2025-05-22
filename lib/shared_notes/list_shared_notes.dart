@@ -23,19 +23,17 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
 
-import 'package:notepod/nav_screen.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 
 class ListSharedNotes extends StatefulWidget {
-  final List sharedNotesList;
-  final String webId;
-  final Map authData;
+  final Map sharedNotesMap;
 
   const ListSharedNotes({
     super.key,
-    required this.sharedNotesList,
-    required this.webId,
-    required this.authData,
+    required this.sharedNotesMap,
   });
 
   @override
@@ -46,11 +44,12 @@ class ListSharedNotes extends StatefulWidget {
 class _ListSharedNotesState extends State<ListSharedNotes> {
   @override
   Widget build(BuildContext context) {
-    List sharedNotesList = widget.sharedNotesList;
+    Map sharedNotesMap = widget.sharedNotesMap;
+    List sharedNotesUrlList = sharedNotesMap.keys.toList();
     return SizedBox(
       child: ListView.builder(
           padding: const EdgeInsets.all(10),
-          itemCount: sharedNotesList.length,
+          itemCount: sharedNotesMap.length,
           itemBuilder: (context, index) => Card(
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -60,38 +59,41 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     backgroundImage: AssetImage('assets/images/note-icon.png'),
                   ),
                   //const Icon(Icons.text_snippet_outlined),
-                  title: Text(sharedNotesList[index][0]),
+                  title: Text(
+                      sharedNotesMap[sharedNotesUrlList[index]][noteFileName]),
                   subtitle: Text(
-                      'Shared by: ${sharedNotesList[index][1]} \nPermissions: ${sharedNotesList[index][3]}'),
+                      'Shared by: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
-                    List notePermission = sharedNotesList[index][3].split(',');
-                    if (notePermission.contains('Read')) {
+                    String notePermission =
+                        sharedNotesMap[sharedNotesUrlList[index]]
+                            [permissionList];
+                    if (notePermission.contains('read')) {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NavigationScreen(
-                                  webId: widget.webId,
-                                  authData: widget.authData,
-                                  page: 'viewSharedNote',
-                                  sharedNoteData: sharedNotesList[index],
+                            builder: (context) => AppScreen(
+                                  childPage: ViewSharedNoteScreen(
+                                    sharedNoteData: sharedNotesMap[
+                                        sharedNotesUrlList[index]],
+                                  ),
                                 )),
                         (Route<dynamic> route) =>
                             false, // This predicate ensures all previous routes are removed
                       );
                     } else {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NavigationScreen(
-                                  webId: widget.webId,
-                                  authData: widget.authData,
-                                  page: 'nonReadNote',
-                                  sharedNoteData: sharedNotesList[index],
-                                )),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
+                      // Navigator.pushAndRemoveUntil(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => NavigationScreen(
+                      //             webId: widget.webId,
+                      //             authData: widget.authData,
+                      //             page: 'nonReadNote',
+                      //             sharedNoteData: sharedNotesList[index],
+                      //           )),
+                      //   (Route<dynamic> route) =>
+                      //       false, // This predicate ensures all previous routes are removed
+                      // );
                     }
                   },
                 ),

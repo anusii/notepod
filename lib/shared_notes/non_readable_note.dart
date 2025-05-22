@@ -23,22 +23,20 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_screen.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
 class NonReadableNote extends StatefulWidget {
   final List noteMetaData;
-  final String webId;
-  final Map authData;
 
   const NonReadableNote({
     super.key,
     required this.noteMetaData,
-    required this.webId,
-    required this.authData,
   });
 
   @override
@@ -196,10 +194,10 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              page: 'sharedNotes',
+                        builder: (context) => AppScreen(
+                              title: topBarTitle,
+                              childPage: SharedNotesScreen(),
+                              // childPage: SharedNotes(),
                             )),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed

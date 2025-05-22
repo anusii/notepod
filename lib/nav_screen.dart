@@ -36,9 +36,9 @@ import 'package:notepod/master_key_setup/enc_key_input.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_edit_note_screen.dart';
-import 'package:notepod/shared_notes/list_shared_notes_screen.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
-import 'package:notepod/shared_notes/view_edit_shared_note_screen.dart';
+import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -93,7 +93,7 @@ class HomeState extends State<NavigationScreen>
       }
 
       if (page == 'home') {
-        loadingScreen = Home(webId: webId, authData: authData);
+        loadingScreen = Home();
       } else if (page == 'encKeyInput') {
         loadingScreen = EncryptionKeyInput(
           validEncKey: ValueNotifier(isKeyExist),
@@ -101,10 +101,7 @@ class HomeState extends State<NavigationScreen>
           authData: authData,
         );
       } else if (page == 'listNotes') {
-        loadingScreen = ListNotesScreen(
-          webId: webId,
-          authData: authData,
-        );
+        loadingScreen = ListNotesScreen();
       } else if (page == 'viewNote') {
         loadingScreen = ViewEditNoteScreen(
           noteFileName: widget.noteFileName!,
@@ -120,29 +117,24 @@ class HomeState extends State<NavigationScreen>
           action: 'edit',
         );
       } else if (page == 'sharedNotes') {
-        loadingScreen = ListSharedNotesScreen(
-          webId: webId,
-          authData: authData,
-        );
-      } else if (page == 'viewSharedNote') {
-        loadingScreen = ViewEditSharedNoteScreen(
-          sharedNoteData: widget.sharedNoteData!,
-          webId: webId,
-          authData: authData,
-          action: 'view',
-        );
-      } else if (page == 'editSharedNote') {
-        loadingScreen = ViewEditSharedNoteScreen(
-          sharedNoteData: widget.sharedNoteData!,
-          webId: webId,
-          authData: authData,
-          action: 'edit',
-        );
-      } else if (page == 'nonReadNote') {
+        loadingScreen = SharedNotesScreen();
+      }
+      // else if (page == 'viewSharedNote') {
+      //   loadingScreen = ViewSharedNoteScreen(
+      //     sharedNoteData: widget.sharedNoteData!,
+
+      //   );
+      // } else if (page == 'editSharedNote') {
+      //   loadingScreen = ViewSharedNoteScreen(
+      //     sharedNoteData: widget.sharedNoteData!,
+
+      //   );
+      // }
+      else if (page == 'nonReadNote') {
         loadingScreen = NonReadableNote(
           noteMetaData: widget.sharedNoteData!,
-          webId: webId,
-          authData: authData,
+          // webId: webId,
+          // authData: authData,
         );
       }
     }
@@ -213,7 +205,7 @@ class HomeState extends State<NavigationScreen>
         ),
         drawer: NavDrawer(
           webId: widget.webId,
-          authData: widget.authData,
+          // authData: widget.authData,
         ),
         body: loadingScreen,
       );

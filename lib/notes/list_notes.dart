@@ -23,19 +23,19 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 
 import 'package:notepod/nav_screen.dart';
+import 'package:notepod/notes/view_note.dart';
 
 class ListNotes extends StatefulWidget {
-  final List fileList;
-  final String webId;
-  final Map authData;
+  final Map notesMap;
 
   const ListNotes({
     super.key,
-    required this.fileList,
-    required this.webId,
-    required this.authData,
+    required this.notesMap,
   });
 
   @override
@@ -46,11 +46,12 @@ class ListNotes extends StatefulWidget {
 class _ListNotesState extends State<ListNotes> {
   @override
   Widget build(BuildContext context) {
-    List fileList = widget.fileList;
+    Map notesMap = widget.notesMap;
+    List fileNames = notesMap.keys.toList();
     return SizedBox(
       child: ListView.builder(
           padding: const EdgeInsets.all(10),
-          itemCount: fileList.length,
+          itemCount: notesMap.length,
           itemBuilder: (context, index) => Card(
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -60,20 +61,27 @@ class _ListNotesState extends State<ListNotes> {
                     backgroundImage: AssetImage('assets/images/note-icon.png'),
                   ),
                   //const Icon(Icons.text_snippet_outlined),
-                  title: Text(fileList[index][0]),
+                  title: Text(notesMap[fileNames[index]][noteTitlePred]),
                   subtitle: Text(
-                      'Created on: ${fileList[index][1]} \nLast modified: ${fileList[index][3]}'),
+                      'Created on: ${notesMap[fileNames[index]][createdDateTimePred]} \nLast modified: ${notesMap[fileNames[index]][modifiedDateTimePred]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationScreen(
-                                webId: widget.webId,
-                                authData: widget.authData,
-                                page: 'viewNote',
-                                noteFileName: fileList[index][2],
-                              )),
+                        builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: ViewNote(
+                            noteData: notesMap[fileNames[index]],
+                          ),
+                        ),
+                        // NavigationScreen(
+                        //   webId: widget.webId,
+                        //   authData: widget.authData,
+                        //   page: 'viewNote',
+                        //   noteFileName: fileList[index][2],
+                        // )
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );

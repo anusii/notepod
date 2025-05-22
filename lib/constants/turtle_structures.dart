@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Zheyuan Xu
+/// Authors: Anushka Vidanage
 library;
 
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -59,12 +59,24 @@ String prvKeyPred = 'prvKey';
 String pubKeyPred = 'pubKey';
 String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';
-String encNoteContentPred = 'encNoteContent';
+String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
+String encNoteContentPred = 'encNoteContent';
 String ivPred = 'iv';
 String accessListPred = 'accessList';
 String sharedKeyPred = 'sharedKey';
 String webIdPred = 'webId';
+String mePred = ':me';
+String meKey = '#me';
+
+// Shared notes details
+String sharedTime = 'sharedTime';
+String noteUrl = 'noteUrl';
+String noteFileName = 'noteFileName';
+String noteOwner = 'noteOwner';
+String permissionGranter = 'permissionGranter';
+String permissionRecepient = 'permissionRecepient';
+String permissionList = 'permissionList';
 
 String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
 
@@ -116,7 +128,7 @@ String genPubDirAclBody() {
 // Set up individual key file content
 String genIndKeyFileBody() {
   String keyFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix file: <$notepodFile>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Individual Encryption Keys".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix file: <$notepodFile>.\n@prefix notepodTerms: <$notepodTerms>.\n$mePred\n    a foaf:PersonalProfileDocument;\n    terms:title "Individual Encryption Keys".';
 
   return keyFileBody;
 }
@@ -139,7 +151,7 @@ String genProfFileBody(Map profData, Map authData) {
   var gender = profData['gender'];
 
   String fileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix solid: <$solid>.\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.\n@prefix pro: <./>.\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.\n\n:me\n    solid:oidcIssuer <$issuerUri>;\n    a foaf:Person;\n    vcard:fn "$name";\n    vcard:Gender "$gender";\n    foaf:name "$name".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix solid: <$solid>.\n@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.\n@prefix pro: <./>.\n\npro:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me.\n\n$mePred\n    solid:oidcIssuer <$issuerUri>;\n    a foaf:Person;\n    vcard:fn "$name";\n    vcard:Gender "$gender";\n    foaf:name "$name".';
 
   return fileBody;
 }
@@ -152,7 +164,7 @@ String genProfFileBody(Map profData, Map authData) {
 // Set up log file content
 String genLogFileBody() {
   String logFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix logid: <$notepodLogId>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Permissions Log".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix logid: <$notepodLogId>.\n@prefix notepodTerms: <$notepodTerms>.\n$mePred\n    a foaf:PersonalProfileDocument;\n    terms:title "Permissions Log".';
 
   return logFileBody;
 }
@@ -174,7 +186,20 @@ String genEncryptedNoteFileBody(
   String encNoteIv,
 ) {
   String encNoteFileBody =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix notepodTerms: <$notepodTerms>.\n:me\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    notepodTerms:$createdDateTimePred "$dateTimeStr";\n    notepodTerms:$modifiedDateTimePred "$dateTimeStr";\n    notepodTerms:$ivPred "$encNoteIv";\n    notepodTerms:$noteTitlePred "$noteTitle";\n    notepodTerms:$encNoteContentPred "$encNoteContent".';
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix notepodTerms: <$notepodTerms>.\n$mePred\n    a foaf:PersonalProfileDocument;\n    terms:title "Encrypted Note";\n    notepodTerms:$createdDateTimePred "$dateTimeStr";\n    notepodTerms:$modifiedDateTimePred "$dateTimeStr";\n    notepodTerms:$ivPred "$encNoteIv";\n    notepodTerms:$noteTitlePred "$noteTitle";\n    notepodTerms:$encNoteContentPred "$encNoteContent".';
 
   return encNoteFileBody;
+}
+
+// Set up encrypted note file content
+String genNoteTTLStr(
+  String createdTimeStr,
+  String updatedTimeStr,
+  String noteTitle,
+  String noteContent,
+) {
+  String noteTTLStr =
+      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix notepodTerms: <$notepodTerms>.\n$mePred\n    a foaf:PersonalProfileDocument;\n    terms:title "Note";\n    notepodTerms:$createdDateTimePred "$createdTimeStr";\n    notepodTerms:$modifiedDateTimePred "$updatedTimeStr";\n    notepodTerms:$noteTitlePred "$noteTitle";\n    notepodTerms:$noteContentPred "$noteContent".';
+
+  return noteTTLStr;
 }

@@ -1,6 +1,6 @@
 /// Constants relating to the file structure for storing the notes.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+/// Copyright (C) 2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
@@ -36,6 +36,7 @@ const String profCard = 'profile/card#me';
 // Directory name constants.
 
 const mainResDir = 'notepod';
+const dataDir = 'data';
 const myNotesDir = 'mynotes';
 const sharingDir = 'sharing';
 const sharedDir = 'shared';

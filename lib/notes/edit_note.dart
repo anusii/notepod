@@ -21,33 +21,32 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams, Jess Moore
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
 import 'package:flutter/material.dart';
 
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
+import 'package:solidpod/solidpod.dart';
+import 'package:notepod/app_screen.dart';
 
 class EditNote extends StatefulWidget {
-  final String webId;
-  final Map authData;
   final Map noteData;
 
-  const EditNote(
-      {super.key,
-      required this.webId,
-      required this.authData,
-      required this.noteData});
+  const EditNote({super.key, required this.noteData});
 
   @override
   EditNoteState createState() => EditNoteState();
@@ -66,7 +65,7 @@ class EditNoteState extends State<EditNote>
 
   @override
   Widget build(BuildContext context) {
-    _textController!.text = widget.noteData['noteContent'];
+    _textController!.text = widget.noteData[noteContentPred];
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -86,8 +85,8 @@ class EditNoteState extends State<EditNote>
                 child: Column(
                   children: [
                     FormBuilderTextField(
-                      name: 'noteTitle',
-                      initialValue: widget.noteData['noteTitle'],
+                      name: noteTitlePred,
+                      initialValue: widget.noteData[noteTitlePred],
                       decoration: const InputDecoration(
                         labelText:
                             'Note Title (Do not use underscores (_) in title)',
@@ -137,10 +136,10 @@ class EditNoteState extends State<EditNote>
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
                       String noteTitle =
-                          formData['noteTitle'].replaceAll('\n', '');
+                          formData[noteTitlePred].replaceAll('\n', '');
 
-                      if (noteTitle == prevNoteData['noteTitle'] &&
-                          noteText == prevNoteData['noteContent']) {
+                      if (noteTitle == prevNoteData[noteTitlePred] &&
+                          noteText == prevNoteData[noteContentPred]) {
                         showErrDialog(context, 'You have no new changes!');
                       } else {
                         // Loading animation
@@ -151,55 +150,65 @@ class EditNoteState extends State<EditNote>
                           false,
                         );
 
-                        // Get the master key
-                        // String masterKey = await secureStorage.read(
-                        //       key: widget.webId,
-                        //     ) ??
-                        //     '';
-
-                        // Hash plaintext master key to get hashed master key
-                        // String encKey = sha256
-                        //     .convert(utf8.encode(masterKey))
-                        //     .toString()
-                        //     .substring(0, 32);
+                        // Get note created time
+                        String createdDateTimeStr =
+                            prevNoteData[createdDateTimePred];
 
                         // Get date and time
-                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                            .format(DateTime.now())
-                            .toString();
+                        String modifiedDateTimeStr =
+                            DateFormat('yyyyMMddTHHmmss')
+                                .format(DateTime.now())
+                                .toString();
 
-                        // Get the random session key for this file
-                        final indKeyStr = prevNoteData['encSessionKey'];
-
-                        // Encrypt markdown text using random session key
-                        final indKey = encrypt.Key.fromBase64(indKeyStr);
-                        final dataEncryptIv = encrypt.IV.fromLength(16);
-                        final dataEncrypter = encrypt.Encrypter(
-                            encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
-                        final dataEncryptVal =
-                            dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
-                        String dataEncryptValStr =
-                            dataEncryptVal.base64.toString();
-
+                        // Create new note data map
                         Map noteNewData = {};
-                        noteNewData['noteTitle'] = noteTitle;
-                        noteNewData['modifiedDateTime'] = dateTimeStr;
-                        noteNewData['encContent'] = dataEncryptValStr;
-                        noteNewData['encIv'] = dataEncryptIv.base64.toString();
+                        noteNewData[noteTitlePred] = noteTitle;
+                        noteNewData[createdDateTimePred] = createdDateTimeStr;
+                        noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
+                        noteNewData[noteContentPred] = noteText;
 
-                        // Update the file
-                        String updateRes = await updateNoteFile(
-                            widget.authData, prevNoteData, noteNewData);
+                        // Encrypt note text using created time as the key
+                        // av: 20250519 - We need to encrypt the note text because
+                        // at the moment rdflib cannot parse multiline text with
+                        // # (hash) values in them.
+                        String encNoteText = encryptVal(
+                            noteText, prevNoteData[createdDateTimePred]);
 
-                        if (updateRes == 'ok') {
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                        // Create TTL body for note
+                        final noteTTLStr = genNoteTTLStr(createdDateTimeStr,
+                            modifiedDateTimeStr, noteTitle, encNoteText);
+
+                        // Create note file name
+                        String noteFileName =
+                            '$myNotesDir/$noteFileNamePrefix$createdDateTimeStr.ttl';
+
+                        final createNoteStatus = await writePod(
+                          noteFileName,
+                          noteTTLStr,
+                          context,
+                          EditNote(
+                            noteData: noteNewData,
+                          ),
+                          encrypted: false, // save in plain text for now
+                        );
+
+                        if (createNoteStatus ==
+                            SolidFunctionCallStatus.success) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: ViewNote(noteData: noteNewData),
+                              ),
+                            ),
+                            (Route<dynamic> route) =>
+                                false, // This predicate ensures all previous routes are removed
+                          );
                         } else {
-                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
                           showErrDialog(context,
-                              'Failed to update the individual key. Try again!');
+                              'Failed to store the note file in your POD. Try again!');
                         }
                       }
                     } else {
@@ -213,7 +222,7 @@ class EditNoteState extends State<EditNote>
                     foregroundColor: darkBlue,
                     backgroundColor: lightBlue, // foreground
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
+                      horizontal: 30,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -221,6 +230,41 @@ class EditNoteState extends State<EditNote>
                   ),
                   child: const Text(
                     'SAVE CHANGES',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.keyboard_backspace,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: ViewNote(noteData: widget.noteData),
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: titleAsh,
+                    backgroundColor: lightGray, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'GO BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

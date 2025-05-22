@@ -25,21 +25,21 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/nav_screen.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class ViewSharedNote extends StatefulWidget {
-  final Map noteData;
-  final String webId;
-  final Map authData;
+  final Map fullNoteData;
 
   const ViewSharedNote({
     super.key,
-    required this.noteData,
-    required this.webId,
-    required this.authData,
+    required this.fullNoteData,
   });
 
   @override
@@ -50,8 +50,9 @@ class ViewSharedNote extends StatefulWidget {
 class _ViewSharedNoteState extends State<ViewSharedNote> {
   @override
   Widget build(BuildContext context) {
-    Map noteData = widget.noteData;
-    List accessList = noteData['noteAccessList'].split(',');
+    Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
+    Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
+    List accessList = sharedNoteInfo[permissionList].split(',');
 
     return Column(
       children: <Widget>[
@@ -62,7 +63,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                 child: Text(
-                  noteData['noteTitle'],
+                  sharedNoteContent[noteTitlePred],
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -79,7 +80,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Created on: ${noteData['createdDateTime']}",
+                  'Created on: ${sharedNoteContent[createdDateTimePred]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -95,7 +96,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
+                  'Last modified on: ${sharedNoteContent[modifiedDateTimePred]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -111,7 +112,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Owner: ${noteData['noteOwner']}",
+                  'Owner: ${sharedNoteInfo[noteOwner]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -127,7 +128,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Shared by: ${noteData['noteSharedBy']}",
+                  'Shared by: ${sharedNoteInfo[permissionGranter]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -143,7 +144,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                 child: Text(
-                  "Permissions: ${noteData['noteAccessList']}",
+                  'Permissions: ${sharedNoteInfo[permissionList]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -157,7 +158,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             child: Container(
                 padding: const EdgeInsets.all(10),
                 child: MarkdownParse(
-                  data: noteData['noteContent'],
+                  data: sharedNoteContent[noteContentPred],
                   // onTapHastag: (String name, String match) {
                   //   // name => hashtag
                   //   // match => #hashtag
@@ -174,14 +175,14 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (accessList.contains('Control')) ...[
-                shareNote(noteData, context, widget.authData, widget.webId),
+              if (accessList.contains('control')) ...[
+                shareNote(context, sharedNoteContent),
                 const SizedBox(
                   width: 5,
                 ),
               ],
-              if (accessList.contains('Write')) ...[
-                editNote(context, noteData, widget.authData, widget.webId),
+              if (accessList.contains('write')) ...[
+                editNote(context, sharedNoteContent),
                 const SizedBox(
                   width: 5,
                 ),
@@ -195,10 +196,10 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              page: 'sharedNotes',
+                        builder: (context) => AppScreen(
+                              title: topBarTitle,
+                              childPage: SharedNotesScreen(),
+                              // childPage: SharedNotes(),
                             )),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed

@@ -32,24 +32,22 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:notepod/app_screen.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/nav_screen.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 //import 'package:simple_markdown_editor/simple_markdown_editor.dart';
 
 class EditSharedNote extends StatefulWidget {
-  final String webId;
-  final Map authData;
   final Map noteData;
 
-  const EditSharedNote(
-      {super.key,
-      required this.webId,
-      required this.authData,
-      required this.noteData});
+  const EditSharedNote({super.key, required this.noteData});
 
   @override
   EditSharedNoteState createState() => EditSharedNoteState();
@@ -68,7 +66,7 @@ class EditSharedNoteState extends State<EditSharedNote>
 
   @override
   Widget build(BuildContext context) {
-    _textController!.text = widget.noteData['noteContent'];
+    _textController!.text = widget.noteData[noteContentPred];
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -88,8 +86,8 @@ class EditSharedNoteState extends State<EditSharedNote>
                 child: Column(
                   children: [
                     FormBuilderTextField(
-                      name: 'noteTitle',
-                      initialValue: widget.noteData['noteTitle'],
+                      name: noteTitlePred,
+                      initialValue: widget.noteData[noteTitlePred],
                       decoration: const InputDecoration(
                         labelText: 'Note Title',
                         labelStyle: TextStyle(
@@ -131,76 +129,76 @@ class EditSharedNoteState extends State<EditSharedNote>
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
-                      Map prevNoteData = widget.noteData;
+                      // Map prevNoteData = widget.noteData;
 
-                      Map formData = formKey.currentState?.value as Map;
-                      String noteText = _textController!.text;
-                      // Note title need to be spaceless as we are using that name
-                      // to create a .acl file. And the acl file url cannot have spaces
-                      String noteTitle =
-                          formData['noteTitle'].replaceAll('\n', '');
+                      // Map formData = formKey.currentState?.value as Map;
+                      // String noteText = _textController!.text;
+                      // // Note title need to be spaceless as we are using that name
+                      // // to create a .acl file. And the acl file url cannot have spaces
+                      // String noteTitle =
+                      //     formData['noteTitle'].replaceAll('\n', '');
 
-                      if (noteTitle == prevNoteData['noteTitle'] &&
-                          noteText == prevNoteData['noteContent']) {
-                        showErrDialog(context, 'You have no new changes!');
-                      } else {
-                        // Loading animation
-                        showAnimationDialog(
-                          context,
-                          17,
-                          'Saving the changes!',
-                          false,
-                        );
+                      // if (noteTitle == prevNoteData['noteTitle'] &&
+                      //     noteText == prevNoteData['noteContent']) {
+                      //   showErrDialog(context, 'You have no new changes!');
+                      // } else {
+                      //   // Loading animation
+                      //   showAnimationDialog(
+                      //     context,
+                      //     17,
+                      //     'Saving the changes!',
+                      //     false,
+                      //   );
 
-                        // Get date and time
-                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                            .format(DateTime.now())
-                            .toString();
+                      //   // Get date and time
+                      //   String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
+                      //       .format(DateTime.now())
+                      //       .toString();
 
-                        // Get the random session key for this file
-                        final indKeyStr = prevNoteData['encSessionKey'];
+                      //   // Get the random session key for this file
+                      //   final indKeyStr = prevNoteData['encSessionKey'];
 
-                        // Encrypt markdown text using random session key
-                        final indKey = encrypt.Key.fromBase64(indKeyStr);
-                        final dataEncryptIv = encrypt.IV.fromLength(16);
-                        final dataEncrypter = encrypt.Encrypter(
-                            encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
-                        final dataEncryptVal =
-                            dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
-                        String dataEncryptValStr =
-                            dataEncryptVal.base64.toString();
+                      //   // Encrypt markdown text using random session key
+                      //   final indKey = encrypt.Key.fromBase64(indKeyStr);
+                      //   final dataEncryptIv = encrypt.IV.fromLength(16);
+                      //   final dataEncrypter = encrypt.Encrypter(
+                      //       encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
+                      //   final dataEncryptVal =
+                      //       dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
+                      //   String dataEncryptValStr =
+                      //       dataEncryptVal.base64.toString();
 
-                        Map noteNewData = {};
-                        noteNewData['noteTitle'] = noteTitle;
-                        noteNewData['modifiedDateTime'] = dateTimeStr;
-                        noteNewData['encContent'] = dataEncryptValStr;
-                        noteNewData['encIv'] = dataEncryptIv.base64.toString();
+                      //   Map noteNewData = {};
+                      //   noteNewData['noteTitle'] = noteTitle;
+                      //   noteNewData['modifiedDateTime'] = dateTimeStr;
+                      //   noteNewData['encContent'] = dataEncryptValStr;
+                      //   noteNewData['encIv'] = dataEncryptIv.base64.toString();
 
-                        // Update the file
-                        String updateRes = await updateNoteFile(
-                            widget.authData, prevNoteData, noteNewData);
+                      //   // Update the file
+                      //   String updateRes = await updateNoteFile(
+                      //       widget.authData, prevNoteData, noteNewData);
 
-                        if (updateRes == 'ok') {
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NavigationScreen(
-                                      webId: widget.webId,
-                                      authData: widget.authData,
-                                      page: 'sharedNotes',
-                                    )),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
-                          showErrDialog(context,
-                              'Failed to update the individual key. Try again!');
-                        }
-                      }
+                      //   if (updateRes == 'ok') {
+                      //     // ignore: use_build_context_synchronously
+                      //     Navigator.pushAndRemoveUntil(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => NavigationScreen(
+                      //                 webId: widget.webId,
+                      //                 authData: widget.authData,
+                      //                 page: 'sharedNotes',
+                      //               )),
+                      //       (Route<dynamic> route) =>
+                      //           false, // This predicate ensures all previous routes are removed
+                      // );
+                      // } else {
+                      //   // ignore: use_build_context_synchronously
+                      //   Navigator.pop(context);
+                      //   // ignore: use_build_context_synchronously
+                      //   showErrDialog(context,
+                      //       'Failed to update the individual key. Try again!');
+                      // }
+                      // }
                     } else {
                       showErrDialog(context,
                           'Note name validation failed! Try using a different name.');
@@ -212,7 +210,7 @@ class EditSharedNoteState extends State<EditSharedNote>
                     foregroundColor: darkBlue,
                     backgroundColor: lightBlue, // foreground
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
+                      horizontal: 30,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -220,6 +218,42 @@ class EditSharedNoteState extends State<EditSharedNote>
                   ),
                   child: const Text(
                     'SAVE CHANGES',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.keyboard_backspace,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: SharedNotesScreen(),
+                                // childPage: SharedNotes(),
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: titleAsh,
+                    backgroundColor: lightGray, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'GO BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

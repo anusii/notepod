@@ -36,6 +36,7 @@ const String applicationName = 'notepod'; // "Pod Note Taker";
 const String applicationVersion = '0.1.0';
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
+const String topBarTitle = 'Note Taker for your Pod';
 
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';

@@ -25,25 +25,24 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/common/rest_api/res_permission.dart';
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/rdf_functions.dart';
-import 'package:notepod/nav_screen.dart';
+import 'package:notepod/constants/file_structure.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/notes/edit_note.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/app_screen.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
-  final String webId;
-  final Map authData;
 
   const ViewNote({
     super.key,
     required this.noteData,
-    required this.webId,
-    required this.authData,
   });
 
   @override
@@ -65,7 +64,7 @@ class _ViewNoteState extends State<ViewNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                 child: Text(
-                  noteData['noteTitle'],
+                  noteData[noteTitlePred],
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -82,7 +81,7 @@ class _ViewNoteState extends State<ViewNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  "Created on: ${noteData['createdDateTime']}",
+                  'Created on: ${noteData[createdDateTimePred]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -98,7 +97,7 @@ class _ViewNoteState extends State<ViewNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                 child: Text(
-                  "Last modified on: ${noteData['modifiedDateTimeFormatted']}",
+                  'Last modified on: ${noteData[modifiedDateTimePred]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -112,7 +111,7 @@ class _ViewNoteState extends State<ViewNote> {
             child: Container(
                 padding: const EdgeInsets.all(10),
                 child: MarkdownParse(
-                  data: noteData['noteContent'],
+                  data: noteData[noteContentPred],
                   // onTapHastag: (String name, String match) {
                   //   // name => hashtag
                   //   // match => #hashtag
@@ -135,51 +134,20 @@ class _ViewNoteState extends State<ViewNote> {
                   color: Colors.white,
                 ),
                 onPressed: () async {
-                  // Get the permission info of the note
-                  Map filePermMap = await getPermission(
-                    widget.authData,
-                    noteData['noteFileName'],
-                    noteData['noteFileUrl'],
-                  );
+                  // Get note file path
+                  String noteFilePath =
+                      '$myNotesDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
-                  Map resInfo = {};
-                  resInfo['resName'] = noteData['noteFileName'];
-                  resInfo['resType'] = 'File';
-                  resInfo['resUrl'] = noteData['noteFileUrl'];
-
-                  // The [userPerMap] is empty, which means the user have no access
-                  // to the folder/file. In this case, the lock_open button will not work.
-
-                  // if (filePermInfo.isEmpty) {
-                  //   setState(() {
-                  //     widget.isSharedFolderList[index] = false;
-                  //   });
-
-                  //   return;
-                  // }
-
-                  Map permNameMap = {};
-                  for (var permWebId in filePermMap.keys) {
-                    String permWebIdUrl = permWebId.replaceAll('<', '');
-                    permWebIdUrl = permWebIdUrl.replaceAll('>', '');
-
-                    String profInfo = await fetchPubFile(permWebIdUrl);
-                    PodProfile podProfile = PodProfile(profInfo.toString());
-                    String profName = podProfile.getProfName();
-                    permNameMap[permWebId] = profName;
-                  }
-
-                  resInfo['resPerm'] = filePermMap;
-                  resInfo['resUsername'] = permNameMap;
-
-                  // ignore: use_build_context_synchronously
+                  // redirect
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ShareNote(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              resInfo: resInfo,
+                        builder: (context) => AppScreen(
+                              title: topBarTitle,
+                              childPage: ShareNote(
+                                noteData: noteData,
+                                noteFilePath: noteFilePath,
+                              ),
                             )),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed
@@ -212,12 +180,13 @@ class _ViewNoteState extends State<ViewNote> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              page: 'editNote',
-                              noteFileName: noteData['noteFileName'],
-                            )),
+                      builder: (context) => AppScreen(
+                        title: topBarTitle,
+                        childPage: EditNote(
+                          noteData: noteData,
+                        ),
+                      ),
+                    ),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed
                   );
@@ -266,28 +235,25 @@ class _ViewNoteState extends State<ViewNote> {
                                 'Deleting the note!',
                                 false,
                               );
-                              String noteUrl = noteData['noteFileUrl'] +
-                                  noteData['noteFileName'];
-                              String delNoteRes = await deleteNote(
-                                  widget.webId,
-                                  widget.authData,
-                                  noteUrl,
-                                  noteData['noteFileName']);
 
-                              if (delNoteRes == 'ok') {
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NavigationScreen(
-                                            webId: widget.webId,
-                                            authData: widget.authData,
-                                            page: 'listNotes',
-                                          )),
-                                  (Route<dynamic> route) =>
-                                      false, // This predicate ensures all previous routes are removed
-                                );
-                              }
+                              // Delete file
+                              // Create note file path
+                              String noteFilePath =
+                                  '$mainResDir/$dataDir/$myNotesDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+
+                              // Call solid delete file function
+                              await deleteFile(noteFilePath);
+
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AppScreen(
+                                          title: topBarTitle,
+                                          childPage: ListNotesScreen(),
+                                        )),
+                                (Route<dynamic> route) =>
+                                    false, // This predicate ensures all previous routes are removed
+                              );
                             },
                             child: const Text('Yes'),
                           ),
@@ -332,10 +298,9 @@ class _ViewNoteState extends State<ViewNote> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                              webId: widget.webId,
-                              authData: widget.authData,
-                              page: 'listNotes',
+                        builder: (context) => AppScreen(
+                              title: topBarTitle,
+                              childPage: ListNotesScreen(),
                             )),
                     (Route<dynamic> route) =>
                         false, // This predicate ensures all previous routes are removed
@@ -364,47 +329,5 @@ class _ViewNoteState extends State<ViewNote> {
         ),
       ],
     );
-    // Column(
-    //   children: [
-    //     const SizedBox(height: 20.0),
-    //     const Text("Encryption Key",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(height: 20.0),
-
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-    //     const Text("WebID",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-
-    //     // Spacer(),
-
-    //     // // Only show version text in mobile version.
-
-    //     // !Responsive.isDesktop(context)
-    //     //     ? Row(
-    //     //         mainAxisAlignment: MainAxisAlignment.end,
-    //     //         children: [
-    //     //           SelectableText(
-    //     //             APP_VERSION,
-    //     //             style: TextStyle(
-    //     //               fontSize: versionTextSize,
-    //     //               color: Colors.black,
-    //     //             ),
-    //     //           ),
-    //     //         ],
-    //     //       )
-    //     //     : Container(),
-
-    //     // // Avoid the APP_VERSION disappear at the bottom.
-
-    //     SizedBox(
-    //       height: screenHeight(context) * 0.1,
-    //     )
-    //   ],
-    // );
   }
 }

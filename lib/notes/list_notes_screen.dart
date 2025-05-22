@@ -25,17 +25,12 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
 class ListNotesScreen extends StatefulWidget {
-  const ListNotesScreen(
-      {super.key, required this.authData, required this.webId});
-
-  final Map authData;
-  final String webId;
+  const ListNotesScreen({super.key});
 
   @override
   State<ListNotesScreen> createState() => _ListNotesScreenState();
@@ -48,17 +43,12 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
 
   @override
   void initState() {
-    Map authData = widget.authData;
-    String webId = widget.webId;
-    String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getNoteList(
-      authData,
-      notesUrl,
-    );
+    // String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
+    _asyncDataFetch = getNoteList(context, ListNotesScreen());
     super.initState();
   }
 
-  Widget _loadedScreen(List notesList, String webId, Map authData) {
+  Widget _loadedScreen(Map notesMap) {
     // List filesList = [];
     // for (var i = 0; i < resourceList[1].length; i++) {
     //   String fileItem = resourceList[1][i];
@@ -82,18 +72,13 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     return Container(
       color: Colors.white,
       child: ListNotes(
-        fileList: notesList,
-        webId: webId,
-        authData: authData,
+        notesMap: notesMap,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Map authData = widget.authData;
-    String webId = widget.webId;
-
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -121,9 +106,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                         ),
                       )
                     : returnVal = _loadedScreen(
-                        snapshot.data! as List,
-                        webId,
-                        authData,
+                        snapshot.data! as Map,
                       );
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);
