@@ -32,7 +32,6 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:solid_auth/solid_auth.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/api/common_permission.dart';
-import 'package:solidpod/src/solid/read_external_pod.dart';
 
 import 'package:notepod/common/rest_api/res_permission.dart';
 import 'package:notepod/constants/file_structure.dart';
@@ -566,7 +565,8 @@ Future<bool> checkResourceStatus(
   }
 }
 
-Future<Map> getSharedNotes(BuildContext context, Widget childPage) async {
+Future<Map> getSharedNotes(BuildContext context, Widget childPage,
+    {bool filesWithGrantAccess = true}) async {
   final loggedIn = await loginIfRequired(context);
   String webId = await getWebId() as String;
   webId = webId.replaceAll(profCard, '');
@@ -580,6 +580,13 @@ Future<Map> getSharedNotes(BuildContext context, Widget childPage) async {
       for (final sharedFilaUrl in sharedNotesLogMap.keys) {
         final sharedFileDetails = sharedNotesLogMap[sharedFilaUrl];
 
+        // If [filesWithGrantAccess] is set to true record only the files
+        // with grant permission as the latest log entry
+        if (filesWithGrantAccess &&
+            sharedFileDetails[PermissionLogLiteral.type] == 'revoke') {
+          continue;
+        }
+
         sharedNotesMap[sharedFilaUrl] = {
           sharedTime: sharedFileDetails[PermissionLogLiteral.logtime],
           noteUrl: sharedFileDetails[PermissionLogLiteral.resource],
@@ -588,6 +595,7 @@ Future<Map> getSharedNotes(BuildContext context, Widget childPage) async {
           permissionGranter: sharedFileDetails[PermissionLogLiteral.granter],
           permissionRecepient:
               sharedFileDetails[PermissionLogLiteral.recepient],
+          permissionType: sharedFileDetails[PermissionLogLiteral.type],
           permissionList: sharedFileDetails[PermissionLogLiteral.permissions],
         };
       }

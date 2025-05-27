@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:notepod/app_screen.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 
 class ListSharedNotes extends StatefulWidget {
@@ -62,7 +63,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                   title: Text(
                       sharedNotesMap[sharedNotesUrlList[index]][noteFileName]),
                   subtitle: Text(
-                      'Shared by: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
+                      'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     String notePermission =
@@ -82,18 +83,26 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             false, // This predicate ensures all previous routes are removed
                       );
                     } else {
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => NavigationScreen(
-                      //             webId: widget.webId,
-                      //             authData: widget.authData,
-                      //             page: 'nonReadNote',
-                      //             sharedNoteData: sharedNotesList[index],
-                      //           )),
-                      //   (Route<dynamic> route) =>
-                      //       false, // This predicate ensures all previous routes are removed
-                      // );
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AppScreen(
+                                  childPage: NonReadableNote(
+                                    noteMetaData: sharedNotesMap[
+                                        sharedNotesUrlList[index]],
+                                  ),
+                                )
+
+                            // NavigationScreen(
+                            //       webId: widget.webId,
+                            //       authData: widget.authData,
+                            //       page: 'nonReadNote',
+                            //       sharedNoteData: sharedNotesList[index],
+                            //     )
+                            ),
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                      );
                     }
                   },
                 ),

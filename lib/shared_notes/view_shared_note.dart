@@ -175,13 +175,13 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (accessList.contains('control')) ...[
-                shareNote(context, sharedNoteContent),
+                shareNote(context, widget.fullNoteData),
                 const SizedBox(
                   width: 5,
                 ),
               ],
               if (accessList.contains('write')) ...[
-                editNote(context, sharedNoteContent),
+                editNote(context, widget.fullNoteData),
                 const SizedBox(
                   width: 5,
                 ),

@@ -27,11 +27,15 @@ import 'package:notepod/app_screen.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:solidpod/solidpod.dart';
 
 class NonReadableNote extends StatefulWidget {
-  final List noteMetaData;
+  final Map noteMetaData;
 
   const NonReadableNote({
     super.key,
@@ -46,7 +50,7 @@ class NonReadableNote extends StatefulWidget {
 class _NonReadableNoteState extends State<NonReadableNote> {
   @override
   Widget build(BuildContext context) {
-    List noteMetaData = widget.noteMetaData;
+    Map noteMetaData = widget.noteMetaData;
 
     return Column(
       children: <Widget>[
@@ -57,7 +61,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                 child: Text(
-                  'Note file name: ${noteMetaData[0]}',
+                  'Note file name: ${noteMetaData[noteFileName]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
@@ -74,7 +78,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  'Sharedy by: ${noteMetaData[1]}',
+                  'Sharedy by: ${noteMetaData[noteOwner]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -90,7 +94,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  'Note path: ${noteMetaData[2]}',
+                  'Note path: ${noteMetaData[noteUrl]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -106,7 +110,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                 child: Text(
-                  'Permissions: ${noteMetaData[3]}',
+                  'Permissions: ${noteMetaData[permissionList]}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -137,53 +141,85 @@ class _NonReadableNoteState extends State<NonReadableNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // if(accessList.contains('Control')) ... [
-              //   shareNote(noteData, context, widget.authData, widget.webId),
-              //   const SizedBox(
-              //     width: 5,
-              //   ),
-              // ],
+              if (noteMetaData[permissionList].contains('control')) ...[
+                shareNote(context, noteMetaData),
+                const SizedBox(
+                  width: 5,
+                ),
+              ],
+              if (noteMetaData[permissionList].contains('write')) ...[
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext ctx) {
+                        return AlertDialog(
+                          title: const Text('Please Confirm'),
+                          content: const Text(
+                            'Are you sure you want to delete this note?',
+                          ),
+                          actions: [
+                            // The "Yes" button
+                            TextButton(
+                              onPressed: () async {
+                                showAnimationDialog(
+                                  context,
+                                  17,
+                                  'Deleting the note!',
+                                  false,
+                                );
 
-              // if(accessList.contains('Write') && accessList.contains('Read')) ... [
-              //   ElevatedButton.icon(
-              //     icon: const Icon(
-              //       Icons.edit,
-              //       color: Colors.white,
-              //     ),
-              //     onPressed: () async {
-              //       Navigator.pushAndRemoveUntil(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (context) => NavigationScreen(
-              //                     webId: widget.webId,
-              //                     authData: widget.authData,
-              //                     page: 'editSharedNote',
-              //                     sharedNoteData: noteData['noteMetadata'],
-              //                   )),
-              //           (Route<dynamic> route) =>
-              //               false, // This predicate ensures all previous routes are removed
-              //         );
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       foregroundColor: darkGreen,
-              //       backgroundColor: lightGreen, // foreground
-              //       padding: const EdgeInsets.symmetric(
-              //         horizontal: 15,
-              //       ),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(20),
-              //       ),
-              //     ),
-              //     label: const Text(
-              //       'EDIT',
-              //       style: TextStyle(color: Colors.white),
-              //     ),
-              //   ),
-              //   const SizedBox(
-              //     width: 5,
-              //   ),
-              // ],
+                                // Call solid delete file function
+                                await deleteExternalFile(noteMetaData[noteUrl]);
 
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AppScreen(
+                                            title: topBarTitle,
+                                            childPage: SharedNotesScreen(),
+                                          )),
+                                  (Route<dynamic> route) =>
+                                      false, // This predicate ensures all previous routes are removed
+                                );
+                              },
+                              child: const Text('Yes'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Close the dialog
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('No'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: darkRed,
+                    backgroundColor: lightRed, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'DELETE',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+              ],
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.keyboard_backspace,

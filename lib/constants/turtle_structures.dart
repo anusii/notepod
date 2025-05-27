@@ -76,6 +76,7 @@ String noteFileName = 'noteFileName';
 String noteOwner = 'noteOwner';
 String permissionGranter = 'permissionGranter';
 String permissionRecepient = 'permissionRecepient';
+String permissionType = 'permissionType';
 String permissionList = 'permissionList';
 
 String dirBody = '<> <http://purl.org/dc/terms/title> "Basic container" .';
