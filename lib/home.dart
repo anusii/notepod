@@ -33,7 +33,6 @@ import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';

@@ -108,22 +108,6 @@ class AppScreenState extends State<AppScreen>
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: const Text('Home Screen'),
-    //     // leading: IconButton(
-    //     //   icon: const Icon(Icons.arrow_back),
-    //     //   onPressed: () {
-    //     //     Navigator.pop(context);
-    //     //   },
-    //     // ),
-    //   ),
-    //   drawer: const NavDrawer(),
-    //   body: const Center(
-    //     child: Text('RioPod Test page'),
-    //   ),
-    // );
-
     return FutureBuilder<({String name, String? webId})>(
       future: _getInfo(),
       builder: (context, snapshot) {

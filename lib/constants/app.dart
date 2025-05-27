@@ -27,13 +27,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-
-const solidServerUrl = 'https://pods.solidcommunity.au/';
-
-const String applicationName = 'notepod'; // "Pod Note Taker";
-const String applicationVersion = '0.1.0';
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
 const String topBarTitle = 'Note Taker for your Pod';
@@ -49,63 +42,12 @@ const double standardSpace = 20.0;
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
-/// Local secure storage instance.
-
-FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-
-// const loginTimeoutTitle = 'Login Timeout!';
-// const loginTimeoutError =
-//     'Your login session has expired! Please login again to continue.';
-
-const initialStructureWelcome =
-    'Welcome to NotePod initial structure setup wizard!';
-
-const initialStructureTitle = 'Structure setup wizard!';
-
-const initialStructureMsg =
-    'You are being re-directed to this page because you have either created a completely new POD and you will need to setup the initial resource structure to start using the app OR we have detected some missing files and/or folders in your POD that will prevent you from using some functionalities of the app, and therefore need to be re-created.';
-
-const requiredPwdMsg =
-    'We would also need a password (a master key) for the encryption of notes. For this password you can use the same password you use for login to your POD (not recommended) or a completely different password (highly recommended). Please enter your password below.';
-
-const publicKeyMsg =
-    'We will also create a random public/private key pair for secure data sharing with other PODs.';
-
-const encKeyInputMsg =
-    'Please enter encryption key to encrypt/decrypt your data.';
-
-const encKeySuccess = 'Your encryption key is already setup.';
-
-const encKeyUpdate = 'Please update your encryption key';
-
 const nonReadableNoteMsg =
     'You do not have read access to this note and therefore cannot view that. However, you can delete it or share it with others.';
-
-const tokenTimeOutErr =
-    'Your login session has expired! Please login again to continue.';
-
-const tokenTimeOutTitle = 'Login Timeout!';
 
 const noNotesMsg = 'You do not have any notes yet!';
 
 const noSharedNotesMsg = 'You do not have any shared notes yet!';
-
-List<MultiSelectItem> permissionItems = [
-  MultiSelectItem(
-    1,
-    'Read (The recipient will be able to read the content of your file)',
-  ),
-  MultiSelectItem(
-    2,
-    'Write (The recipient will be able to add new content to your file)',
-  ),
-  MultiSelectItem(
-    3,
-    'Control (The recipient will be able to alter the access permission to your file)',
-  ),
-];
-
-Map permMap = {1: 'Read', 2: 'Write', 3: 'Control'};
 
 SizedBox standardHeight() {
   return const SizedBox(

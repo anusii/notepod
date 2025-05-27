@@ -111,7 +111,6 @@ class NotePod extends StatelessWidget {
           childPage: Home(),
         ),
       ),
-      // LoginScreen(),
     );
   }
 }

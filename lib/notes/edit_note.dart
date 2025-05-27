@@ -34,7 +34,6 @@ import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/encryption.dart';

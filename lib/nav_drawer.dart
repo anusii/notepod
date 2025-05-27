@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
@@ -56,6 +57,7 @@ class NavDrawer extends StatelessWidget {
     }
 
     return Drawer(
+      shape: Border(),
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         children: <Widget>[
@@ -163,24 +165,6 @@ class NavDrawer extends StatelessWidget {
                     Navigator.of(context).pop();
                   },
                 ),
-                // ListTile(
-                //   leading: const Icon(Icons.lock_outline),
-                //   title: const Text('Setup Encryption Key'),
-                //   onTap: () {
-                //     Navigator.pushAndRemoveUntil(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => NavigationScreen(
-                //           webId: webId,
-                //           authData: {'authData': ''},
-                //           page: 'encKeyInput',
-                //         ),
-                //       ),
-                //       (Route<dynamic> route) =>
-                //           false, // This predicate ensures all previous routes are removed
-                //     );
-                //   },
-                // ),
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Logout'),
@@ -197,13 +181,18 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
-                  onTap: () => {
+                  onTap: () async {
+                    // Get application getails
+                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                    String appName = packageInfo.appName;
+                    String version = packageInfo.version;
+
                     showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
-                        return _aboutDialog();
+                        return _aboutDialog(appName, version);
                       },
-                    ),
+                    );
                   },
                 ),
               ],
@@ -216,15 +205,15 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Make About Dialog
-Widget _aboutDialog() {
+Widget _aboutDialog(String appName, String appVersion) {
   return AboutDialog(
-    applicationName: applicationName,
+    applicationName: capitalize(appName),
     applicationIcon: SizedBox(
       height: 65,
       width: 65,
       child: Image.asset('assets/images/notepod.png'),
     ),
-    applicationVersion: applicationVersion,
+    applicationVersion: appVersion,
     // applicationLegalese: "© Copyright Michelphoenix 2020",
     children: <Widget>[
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -259,7 +248,7 @@ Widget _aboutDialog() {
                 style: TextStyle(color: Colors.black),
               ),
               TextSpan(
-                text: 'Notepod',
+                text: capitalize(appName),
                 style: const TextStyle(color: Colors.blue),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {

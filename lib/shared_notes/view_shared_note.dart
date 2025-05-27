@@ -227,47 +227,5 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
         ),
       ],
     );
-    // Column(
-    //   children: [
-    //     const SizedBox(height: 20.0),
-    //     const Text("Encryption Key",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(height: 20.0),
-
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-    //     const Text("WebID",
-    //         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-    //     const SizedBox(
-    //       height: 10,
-    //     ),
-
-    //     // Spacer(),
-
-    //     // // Only show version text in mobile version.
-
-    //     // !Responsive.isDesktop(context)
-    //     //     ? Row(
-    //     //         mainAxisAlignment: MainAxisAlignment.end,
-    //     //         children: [
-    //     //           SelectableText(
-    //     //             APP_VERSION,
-    //     //             style: TextStyle(
-    //     //               fontSize: versionTextSize,
-    //     //               color: Colors.black,
-    //     //             ),
-    //     //           ),
-    //     //         ],
-    //     //       )
-    //     //     : Container(),
-
-    //     // // Avoid the APP_VERSION disappear at the bottom.
-
-    //     SizedBox(
-    //       height: screenHeight(context) * 0.1,
-    //     )
-    //   ],
-    // );
   }
 }

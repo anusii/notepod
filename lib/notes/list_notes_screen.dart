@@ -43,32 +43,11 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
 
   @override
   void initState() {
-    // String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
     _asyncDataFetch = getNoteList(context, ListNotesScreen());
     super.initState();
   }
 
   Widget _loadedScreen(Map notesMap) {
-    // List filesList = [];
-    // for (var i = 0; i < resourceList[1].length; i++) {
-    //   String fileItem = resourceList[1][i];
-    //   String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-    //   var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-    //       .format(DateTime.parse(fileDateStr));
-    //   String fileName = '';
-    //   if (fileItem.split('-').length == 3) {
-    //     fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-    //   } else if (fileItem.split('-').length > 3) {
-    //     var fileNameList =
-    //         fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-    //     fileName = fileNameList.join(' ').replaceAll('_', ' ');
-    //   } else {
-    //     throw Exception('Cannot happen!');
-    //   }
-
-    //   filesList.add([fileName, fileDate, fileItem]);
-    // }
-
     return Container(
       color: Colors.white,
       child: ListNotes(
