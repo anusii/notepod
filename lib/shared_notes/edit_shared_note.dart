@@ -27,29 +27,26 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:notepod/app_screen.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/nav_screen.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/view_shared_note.dart';
+import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
-//import 'package:simple_markdown_editor/simple_markdown_editor.dart';
+import 'package:solidpod/solidpod.dart';
 
 class EditSharedNote extends StatefulWidget {
-  final String webId;
-  final Map authData;
-  final Map noteData;
+  final Map fullNoteData;
 
-  const EditSharedNote(
-      {super.key,
-      required this.webId,
-      required this.authData,
-      required this.noteData});
+  const EditSharedNote({super.key, required this.fullNoteData});
 
   @override
   EditSharedNoteState createState() => EditSharedNoteState();
@@ -68,7 +65,9 @@ class EditSharedNoteState extends State<EditSharedNote>
 
   @override
   Widget build(BuildContext context) {
-    _textController!.text = widget.noteData['noteContent'];
+    Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
+    Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
+    _textController!.text = sharedNoteContent[noteContentPred];
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -88,8 +87,8 @@ class EditSharedNoteState extends State<EditSharedNote>
                 child: Column(
                   children: [
                     FormBuilderTextField(
-                      name: 'noteTitle',
-                      initialValue: widget.noteData['noteTitle'],
+                      name: noteTitlePred,
+                      initialValue: sharedNoteContent[noteTitlePred],
                       decoration: const InputDecoration(
                         labelText: 'Note Title',
                         labelStyle: TextStyle(
@@ -131,17 +130,17 @@ class EditSharedNoteState extends State<EditSharedNote>
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState?.saveAndValidate() ?? false) {
-                      Map prevNoteData = widget.noteData;
+                      Map prevNoteData = sharedNoteContent;
 
                       Map formData = formKey.currentState?.value as Map;
                       String noteText = _textController!.text;
                       // Note title need to be spaceless as we are using that name
                       // to create a .acl file. And the acl file url cannot have spaces
                       String noteTitle =
-                          formData['noteTitle'].replaceAll('\n', '');
+                          formData[noteTitlePred].replaceAll('\n', '');
 
-                      if (noteTitle == prevNoteData['noteTitle'] &&
-                          noteText == prevNoteData['noteContent']) {
+                      if (noteTitle == prevNoteData[noteTitlePred] &&
+                          noteText == prevNoteData[noteContentPred]) {
                         showErrDialog(context, 'You have no new changes!');
                       } else {
                         // Loading animation
@@ -152,53 +151,74 @@ class EditSharedNoteState extends State<EditSharedNote>
                           false,
                         );
 
+                        // Get note created time
+                        String createdDateTimeStr =
+                            prevNoteData[createdDateTimePred];
+
                         // Get date and time
-                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                            .format(DateTime.now())
-                            .toString();
-
-                        // Get the random session key for this file
-                        final indKeyStr = prevNoteData['encSessionKey'];
-
-                        // Encrypt markdown text using random session key
-                        final indKey = encrypt.Key.fromBase64(indKeyStr);
-                        final dataEncryptIv = encrypt.IV.fromLength(16);
-                        final dataEncrypter = encrypt.Encrypter(
-                            encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
-                        final dataEncryptVal =
-                            dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
-                        String dataEncryptValStr =
-                            dataEncryptVal.base64.toString();
-
+                        String modifiedDateTimeStr =
+                            DateFormat('yyyyMMddTHHmmss')
+                                .format(DateTime.now())
+                                .toString();
+                        // Create new note data map
                         Map noteNewData = {};
-                        noteNewData['noteTitle'] = noteTitle;
-                        noteNewData['modifiedDateTime'] = dateTimeStr;
-                        noteNewData['encContent'] = dataEncryptValStr;
-                        noteNewData['encIv'] = dataEncryptIv.base64.toString();
+                        noteNewData[noteTitlePred] = noteTitle;
+                        noteNewData[createdDateTimePred] = createdDateTimeStr;
+                        noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
+                        noteNewData[noteContentPred] = noteText;
 
-                        // Update the file
-                        String updateRes = await updateNoteFile(
-                            widget.authData, prevNoteData, noteNewData);
+                        // Encrypt note text using created time as the key
+                        // av: 20250519 - We need to encrypt the note text because
+                        // at the moment rdflib cannot parse multiline text with
+                        // # (hash) values in them.
+                        String encNoteText = encryptVal(
+                            noteText, prevNoteData[createdDateTimePred]);
 
-                        if (updateRes == 'ok') {
-                          // ignore: use_build_context_synchronously
+                        // Create TTL body for note
+                        final noteTTLStr = genNoteTTLStr(createdDateTimeStr,
+                            modifiedDateTimeStr, noteTitle, encNoteText);
+
+                        // Get note url
+                        String noteFileUrl = sharedNoteInfo[noteUrl];
+
+                        // Get note owner webId
+                        String noteOwnerWebId = sharedNoteInfo[noteOwner];
+
+                        // New full note data
+                        Map newFullNoteData = {
+                          'sharedNoteInfo': sharedNoteInfo,
+                          'sharedNoteContent': noteNewData
+                        };
+
+                        final createNoteStatus = await writeExternalPod(
+                          noteFileUrl,
+                          noteTTLStr,
+                          noteOwnerWebId,
+                          context,
+                          ViewSharedNote(
+                            fullNoteData: newFullNoteData,
+                          ),
+                        );
+
+                        if (createNoteStatus ==
+                            SolidFunctionCallStatus.success) {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => NavigationScreen(
-                                      webId: widget.webId,
-                                      authData: widget.authData,
-                                      page: 'sharedNotes',
-                                    )),
+                              builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: ViewSharedNote(
+                                  fullNoteData: newFullNoteData,
+                                ),
+                              ),
+                            ),
                             (Route<dynamic> route) =>
                                 false, // This predicate ensures all previous routes are removed
                           );
                         } else {
-                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-                          // ignore: use_build_context_synchronously
                           showErrDialog(context,
-                              'Failed to update the individual key. Try again!');
+                              'Failed to store the note file in your POD. Try again!');
                         }
                       }
                     } else {
@@ -212,7 +232,7 @@ class EditSharedNoteState extends State<EditSharedNote>
                     foregroundColor: darkBlue,
                     backgroundColor: lightBlue, // foreground
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
+                      horizontal: 30,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -220,6 +240,42 @@ class EditSharedNoteState extends State<EditSharedNote>
                   ),
                   child: const Text(
                     'SAVE CHANGES',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.keyboard_backspace,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: SharedNotesScreen(),
+                                // childPage: SharedNotes(),
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: titleAsh,
+                    backgroundColor: lightGray, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'GO BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

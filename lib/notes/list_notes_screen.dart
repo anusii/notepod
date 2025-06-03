@@ -25,17 +25,12 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/file_structure.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
 class ListNotesScreen extends StatefulWidget {
-  const ListNotesScreen(
-      {super.key, required this.authData, required this.webId});
-
-  final Map authData;
-  final String webId;
+  const ListNotesScreen({super.key});
 
   @override
   State<ListNotesScreen> createState() => _ListNotesScreenState();
@@ -48,52 +43,21 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
 
   @override
   void initState() {
-    Map authData = widget.authData;
-    String webId = widget.webId;
-    String notesUrl = webId.replaceAll(profCard, '$myNotesDirLoc/');
-    _asyncDataFetch = getNoteList(
-      authData,
-      notesUrl,
-    );
+    _asyncDataFetch = getNoteList(context, ListNotesScreen());
     super.initState();
   }
 
-  Widget _loadedScreen(List notesList, String webId, Map authData) {
-    // List filesList = [];
-    // for (var i = 0; i < resourceList[1].length; i++) {
-    //   String fileItem = resourceList[1][i];
-    //   String fileDateStr = fileItem.split('-').last.replaceAll('.ttl', '');
-    //   var fileDate = DateFormat('yyyy-MM-dd hh:mm:ssa')
-    //       .format(DateTime.parse(fileDateStr));
-    //   String fileName = '';
-    //   if (fileItem.split('-').length == 3) {
-    //     fileName = fileItem.split('-')[1].replaceAll('_', ' ');
-    //   } else if (fileItem.split('-').length > 3) {
-    //     var fileNameList =
-    //         fileItem.split('-').getRange(1, fileItem.split('-').length - 1);
-    //     fileName = fileNameList.join(' ').replaceAll('_', ' ');
-    //   } else {
-    //     throw Exception('Cannot happen!');
-    //   }
-
-    //   filesList.add([fileName, fileDate, fileItem]);
-    // }
-
+  Widget _loadedScreen(Map notesMap) {
     return Container(
       color: Colors.white,
       child: ListNotes(
-        fileList: notesList,
-        webId: webId,
-        authData: authData,
+        notesMap: notesMap,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Map authData = widget.authData;
-    String webId = widget.webId;
-
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -121,9 +85,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                         ),
                       )
                     : returnVal = _loadedScreen(
-                        snapshot.data! as List,
-                        webId,
-                        authData,
+                        snapshot.data! as Map,
                       );
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);

@@ -1,65 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 
-import 'package:notepod/common/rest_api/res_permission.dart';
-import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/rdf_functions.dart';
-import 'package:notepod/nav_screen.dart';
-import 'package:notepod/notes/share_note.dart';
+import 'package:notepod/shared_notes/edit_shared_note.dart';
+import 'package:notepod/shared_notes/share_external_note.dart';
 
-ElevatedButton shareNote(Map<dynamic, dynamic> noteData, BuildContext context,
-    Map authData, String webId) {
+ElevatedButton shareNote(
+    BuildContext context, Map<dynamic, dynamic> fullNoteData) {
   return ElevatedButton.icon(
     icon: const Icon(
       Icons.share,
       color: Colors.white,
     ),
-    onPressed: () async {
-      // Get the permission info of the note
-      Map filePermMap = await getPermission(
-        authData,
-        noteData['noteFileName'],
-        noteData['noteFileUrl'],
-      );
-
-      Map resInfo = {};
-      resInfo['resName'] = noteData['noteFileName'];
-      resInfo['resType'] = 'File';
-      resInfo['resUrl'] = noteData['noteFileUrl'];
-
-      // The [userPerMap] is empty, which means the user have no access
-      // to the folder/file. In this case, the lock_open button will not work.
-
-      // if (filePermInfo.isEmpty) {
-      //   setState(() {
-      //     widget.isSharedFolderList[index] = false;
-      //   });
-
-      //   return;
-      // }
-
-      Map permNameMap = {};
-      for (var permWebId in filePermMap.keys) {
-        String permWebIdUrl = permWebId.replaceAll('<', '');
-        permWebIdUrl = permWebIdUrl.replaceAll('>', '');
-
-        String profInfo = await fetchPubFile(permWebIdUrl);
-        PodProfile podProfile = PodProfile(profInfo.toString());
-        String profName = podProfile.getProfName();
-        permNameMap[permWebId] = profName;
-      }
-
-      resInfo['resPerm'] = filePermMap;
-      resInfo['resUsername'] = permNameMap;
-
+    onPressed: () {
       // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => ShareNote(
-                  webId: webId,
-                  authData: authData,
-                  resInfo: resInfo,
+            builder: (context) => AppScreen(
+                  title: topBarTitle,
+                  childPage: ShareExternalNote(
+                    fullNoteData: fullNoteData,
+                  ),
+                  // childPage: SharedNotes(),
                 )),
         (Route<dynamic> route) =>
             false, // This predicate ensures all previous routes are removed
@@ -82,8 +46,10 @@ ElevatedButton shareNote(Map<dynamic, dynamic> noteData, BuildContext context,
   );
 }
 
-ElevatedButton editNote(BuildContext context, Map<dynamic, dynamic> noteData,
-    Map authData, String webId) {
+ElevatedButton editNote(
+  BuildContext context,
+  Map<dynamic, dynamic> fullNoteData,
+) {
   return ElevatedButton.icon(
     icon: const Icon(
       Icons.edit,
@@ -93,11 +59,10 @@ ElevatedButton editNote(BuildContext context, Map<dynamic, dynamic> noteData,
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => NavigationScreen(
-                  webId: webId,
-                  authData: authData,
-                  page: 'editSharedNote',
-                  sharedNoteData: noteData['noteMetadata'],
+            builder: (context) => AppScreen(
+                  childPage: EditSharedNote(
+                    fullNoteData: fullNoteData,
+                  ),
                 )),
         (Route<dynamic> route) =>
             false, // This predicate ensures all previous routes are removed

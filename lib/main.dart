@@ -27,10 +27,12 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/home.dart';
+import 'package:solidpod/solidpod.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:notepod/login/screen.dart';
 import 'package:notepod/utils/is_desktop.dart';
 
 void main() async {
@@ -90,7 +92,25 @@ class NotePod extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      home: LoginScreen(),
+      home: SolidLogin(
+        title: 'NOTEPOD - A Note Taker',
+        appDirectory: 'notepod',
+        image: AssetImage('assets/images/notepod-background.jpg'),
+        logo: AssetImage('assets/images/notepod.png'),
+        link: 'https://github.com/anusii/notepod',
+        webID: 'https://pods.solidcommunity.au',
+        required: false,
+        loginButtonStyle: LoginButtonStyle(
+          background: Colors.lightGreenAccent,
+          tooltip: 'You need to connect to your Solid account\n'
+              'to access the markdown note files\n'
+              'stored in your POD.',
+        ),
+        child: AppScreen(
+          title: 'Note Taker for your Pod',
+          childPage: Home(),
+        ),
+      ),
     );
   }
 }

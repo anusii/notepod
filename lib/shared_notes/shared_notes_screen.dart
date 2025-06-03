@@ -1,4 +1,4 @@
-/// DESCRIPTION
+/// Individual's PODs app for diabetes care in Yarrabah.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -18,86 +18,79 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Zheyuan Xu, Graham Williams
-
+/// Authors: Anushka Vidanage
 library;
 
 import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/initial_setup/desktop.dart';
+import 'package:notepod/shared_notes/list_shared_notes.dart';
 import 'package:notepod/widgets/loading_screen.dart';
+import 'package:notepod/widgets/msg_card.dart';
 
-class InitialSetupScreen extends StatefulWidget {
-  const InitialSetupScreen(
-      {super.key, required this.authData, required this.webId});
-
-  final Map authData;
-  final String webId;
+class SharedNotesScreen extends StatefulWidget {
+  const SharedNotesScreen({
+    super.key,
+  });
 
   @override
-  State<InitialSetupScreen> createState() => _InitialSetupScreenState();
+  State<SharedNotesScreen> createState() => _SharedNotesScreenState();
 }
 
-class _InitialSetupScreenState extends State<InitialSetupScreen> {
+class _SharedNotesScreenState extends State<SharedNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
 
   @override
   void initState() {
-    Map authData = widget.authData;
-    _asyncDataFetch = initialStructureTest(authData);
+    _asyncDataFetch = getSharedNotes(context, SharedNotesScreen());
     super.initState();
   }
 
-  Widget _loadedScreen(
-      List resNotExist, String webId, String logoutUrl, Map authData) {
-    Map resNeedToCreate = resNotExist.last;
-
+  Widget _loadedScreen(Map sharedNotesMap) {
+    Widget nextScreen;
+    nextScreen = ListSharedNotes(
+      sharedNotesMap: sharedNotesMap,
+    );
     return Container(
       color: Colors.white,
-      child: Column(
-        children: [
-          Expanded(
-              child: InitialSetupDesktop(
-                  resNeedToCreate: resNeedToCreate,
-                  authData: authData,
-                  webId: webId))
-        ],
-      ),
+      child: nextScreen,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Map authData = widget.authData;
-    String webId = widget.webId;
-    String logoutUrl = authData['logoutUrl'];
-
     return Scaffold(
       key: _scaffoldKey,
-      // drawer: ConstrainedBox(
-      //     constraints: BoxConstraints(maxWidth: sideMenuScreenSize),
-      //     child: SideMenu(
-      //       authData: authData,
-      //       webId: webId,
-      //       pageName: 'home',
-      //       allResIn: false,
-      //     )),
-      // endDrawer: ConstrainedBox(
-      //   constraints: BoxConstraints(maxWidth: 400),
-      //   child: ListOfSurveys(authData: authData, webId: webId)
-      // ),
       body: SafeArea(
         child: FutureBuilder(
             future: _asyncDataFetch,
             builder: (context, snapshot) {
               Widget returnVal;
               if (snapshot.connectionState == ConnectionState.done) {
-                returnVal = _loadedScreen(
-                    snapshot.data! as List, webId, logoutUrl, authData);
+                return snapshot.data == null ||
+                        snapshot.data.toString() == 'null' ||
+                        snapshot.data.length == 0
+                    ? Center(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: buildMsgCard(
+                                context,
+                                Icons.info,
+                                Colors.amber,
+                                'No shared notes!',
+                                noSharedNotesMsg,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : returnVal = _loadedScreen(
+                        snapshot.data! as Map,
+                      );
               } else {
                 returnVal = loadingScreen(normalLoadingScreenHeight);
               }

@@ -1,25 +1,63 @@
+/// Navigation Drawer for notepod.
+///
+/// Copyright (C) 2025, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: Anushka Vidanage
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:notepod/common/logout.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/login/screen.dart';
-import 'package:notepod/nav_screen.dart';
+import 'package:notepod/utils/misc.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/home.dart';
+import 'package:notepod/main.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
-  final Map authData;
 
-  const NavDrawer({super.key, required this.webId, required this.authData});
+  const NavDrawer({
+    super.key,
+    required this.webId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    String name = authData['name'];
+    String name = '';
+    if (webId.isNotEmpty) {
+      name = getNameFromWebId(webId);
+    } else {
+      name = 'Not logged in';
+    }
 
     return Drawer(
+      shape: Border(),
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         children: <Widget>[
@@ -67,10 +105,9 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'home',
+                        builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: Home(),
                         ),
                       ),
                       (Route<dynamic> route) =>
@@ -85,10 +122,9 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'listNotes',
+                        builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: ListNotesScreen(),
                         ),
                       ),
                       (Route<dynamic> route) =>
@@ -108,10 +144,10 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'sharedNotes',
+                        builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: SharedNotesScreen(),
+                          // childPage: SharedNotes(),
                         ),
                       ),
                       (Route<dynamic> route) =>
@@ -130,35 +166,14 @@ class NavDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.lock_outline),
-                  title: const Text('Setup Encryption Key'),
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NavigationScreen(
-                          webId: webId,
-                          authData: authData,
-                          page: 'encKeyInput',
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
-                ),
-                ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Logout'),
-                  onTap: () async {
-                    if (await logoutUser(authData['logoutUrl'])) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      );
-                    }
-                  },
+                  onTap: webId.isEmpty
+                      ? null
+                      : () async {
+                          // Then direct to logout popup
+                          await logoutPopup(context, const NotePod());
+                        },
                 ),
                 const Divider(
                   color: titleAsh,
@@ -166,13 +181,18 @@ class NavDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
-                  onTap: () => {
+                  onTap: () async {
+                    // Get application getails
+                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                    String appName = packageInfo.appName;
+                    String version = packageInfo.version;
+
                     showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
-                        return _aboutDialog();
+                        return _aboutDialog(appName, version);
                       },
-                    ),
+                    );
                   },
                 ),
               ],
@@ -185,15 +205,15 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Make About Dialog
-Widget _aboutDialog() {
+Widget _aboutDialog(String appName, String appVersion) {
   return AboutDialog(
-    applicationName: applicationName,
+    applicationName: capitalize(appName),
     applicationIcon: SizedBox(
       height: 65,
       width: 65,
       child: Image.asset('assets/images/notepod.png'),
     ),
-    applicationVersion: applicationVersion,
+    applicationVersion: appVersion,
     // applicationLegalese: "© Copyright Michelphoenix 2020",
     children: <Widget>[
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -228,7 +248,7 @@ Widget _aboutDialog() {
                 style: TextStyle(color: Colors.black),
               ),
               TextSpan(
-                text: 'Notepod',
+                text: capitalize(appName),
                 style: const TextStyle(color: Colors.blue),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {

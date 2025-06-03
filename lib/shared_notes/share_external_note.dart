@@ -26,25 +26,27 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/app_screen.dart';
 
-class ShareNote extends StatefulWidget {
-  final Map noteData;
-  final String noteFilePath;
+class ShareExternalNote extends StatefulWidget {
+  final Map fullNoteData;
 
-  const ShareNote(
-      {super.key, required this.noteData, required this.noteFilePath});
+  const ShareExternalNote({
+    super.key,
+    required this.fullNoteData,
+  });
 
   @override
-  ShareNoteState createState() => ShareNoteState();
+  ShareExternalNoteState createState() => ShareExternalNoteState();
 }
 
-class ShareNoteState extends State<ShareNote>
+class ShareExternalNoteState extends State<ShareExternalNote>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
@@ -73,7 +75,8 @@ class ShareNoteState extends State<ShareNote>
                       MaterialPageRoute(
                           builder: (context) => AppScreen(
                                 title: topBarTitle,
-                                childPage: ViewNote(noteData: widget.noteData),
+                                childPage: SharedNotesScreen(),
+                                // childPage: SharedNotes(),
                               )),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
@@ -99,10 +102,12 @@ class ShareNoteState extends State<ShareNote>
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: GrantPermissionUi(
                     showAppBar: false,
-                    fileName: widget.noteFilePath,
-                    child: ShareNote(
-                      noteData: widget.noteData,
-                      noteFilePath: widget.noteFilePath,
+                    fileName: widget.fullNoteData['sharedNoteInfo'][noteUrl],
+                    isExternalRes: true,
+                    externalWebId: widget.fullNoteData['sharedNoteInfo']
+                        [noteOwner],
+                    child: ShareExternalNote(
+                      fullNoteData: widget.fullNoteData,
                     ),
                   ),
                 ),
