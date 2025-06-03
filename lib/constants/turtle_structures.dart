@@ -60,8 +60,17 @@ String genNoteTTLStr(
   String noteTitle,
   String noteContent,
 ) {
-  String noteTTLStr =
-      '@prefix : <#>.\n@prefix foaf: <$foaf>.\n@prefix terms: <$terms>.\n@prefix notepodTerms: <$notepodTerms>.\n$mePred\n    a foaf:PersonalProfileDocument;\n    terms:title "Note";\n    notepodTerms:$createdDateTimePred "$createdTimeStr";\n    notepodTerms:$modifiedDateTimePred "$updatedTimeStr";\n    notepodTerms:$noteTitlePred "$noteTitle";\n    notepodTerms:$noteContentPred "$noteContent".';
+  String noteTTLStr = '''@prefix : <#>.
+      @prefix foaf: <$foaf>.
+      @prefix terms: <$terms>.
+      @prefix notepodTerms: <$notepodTerms>.
+      $mePred
+          a foaf:PersonalProfileDocument;
+          terms:title "Note";
+          notepodTerms:$createdDateTimePred "$createdTimeStr";
+          notepodTerms:$modifiedDateTimePred "$updatedTimeStr";
+          notepodTerms:$noteTitlePred "$noteTitle";
+          notepodTerms:$noteContentPred "$noteContent".''';
 
   return noteTTLStr;
 }
