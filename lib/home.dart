@@ -202,7 +202,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         noteTTLStr,
                         context,
                         Home(),
-                        encrypted: false, // save in plain text for now
+                        //encrypted: false, // save in plain text for now
                       );
 
                       if (createNoteStatus == SolidFunctionCallStatus.success) {
@@ -212,101 +212,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         showErrDialog(context,
                             'Failed to store the note file in your POD. Try again!');
                       }
-
-                      // // Create a random session key
-                      // final indKey = encrypt.Key.fromSecureRandom(32);
-
-                      // // Encrypt markdown text using random session key
-                      // final dataEncryptIv = encrypt.IV.fromLength(16);
-                      // final dataEncrypter = encrypt.Encrypter(
-                      //     encrypt.AES(indKey, mode: encrypt.AESMode.cbc));
-                      // final dataEncryptVal =
-                      //     dataEncrypter.encrypt(noteText, iv: dataEncryptIv);
-                      // String dataEncryptValStr =
-                      //     dataEncryptVal.base64.toString();
-
-                      // // Encrypt random key using the master key
-                      // final keyEncrypt = encrypt.Key.fromUtf8(encKey);
-                      // final keyEncryptIv = encrypt.IV.fromLength(16);
-                      // final keyEncryptEncrypter1 = encrypt.Encrypter(
-                      //     encrypt.AES(keyEncrypt, mode: encrypt.AESMode.cbc));
-                      // final keyEncryptVal = keyEncryptEncrypter1
-                      //     .encrypt(indKey.base64, iv: keyEncryptIv);
-                      // String keyEncryptValStr = keyEncryptVal.base64.toString();
-
-                      // // Create encrypted data ttl file body
-                      // String encNoteFileBody = genEncryptedNoteFileBody(
-                      //     dateTimeStr,
-                      //     noteTitle,
-                      //     dataEncryptValStr,
-                      //     dataEncryptIv.base64);
-
-                      // // print(keyEncryptValStr);
-                      // // print('');
-                      // // print(encNoteFileBody);
-
-                      // // Create ACL file body for the note file
-                      // String noteFileAclBody =
-                      //     genPrvFileAclBody(noteAclFileName, widget.webId);
-
-                      // // Create ttl file to store encrypted note data on the POD
-                      // String createNoteFileRes = await createItem(
-                      //     true,
-                      //     noteFileName,
-                      //     encNoteFileBody,
-                      //     widget.webId,
-                      //     widget.authData,
-                      //     fileLoc: '$myNotesDirLoc/',
-                      //     fileType: fileType[noteFileName.split('.').last],
-                      //     aclFlag: false);
-
-                      // if (createNoteFileRes == 'ok') {
-                      //   // Create acl file to store acl file data on the POD
-                      //   String createAclFileRes = await createItem(
-                      //       true,
-                      //       noteAclFileName,
-                      //       noteFileAclBody,
-                      //       widget.webId,
-                      //       widget.authData,
-                      //       fileLoc: '$myNotesDirLoc/',
-                      //       fileType: fileType[noteAclFileName.split('.').last],
-                      //       aclFlag: true);
-
-                      //   if (createAclFileRes == 'ok') {
-                      //     // Store the encrypted session key on the POD
-                      //     String updateIndKeyFileRes = await updateIndKeyFile(
-                      //       widget.webId,
-                      //       widget.authData,
-                      //       noteFileName,
-                      //       keyEncryptValStr,
-                      //       '$myNotesDirLoc/$noteFileName',
-                      //       keyEncryptIv.base64,
-                      //     );
-
-                      //     if (updateIndKeyFileRes == 'ok') {
-                      //       // ignore: use_build_context_synchronously
-                      //       Navigator.pop(context);
-                      //     } else {
-                      //       // ignore: use_build_context_synchronously
-                      //       Navigator.pop(context);
-                      //       // ignore: use_build_context_synchronously
-                      //       showErrDialog(context,
-                      //           'Failed to update the individual key. Try again!');
-                      //     }
-                      //   } else {
-                      //     // ignore: use_build_context_synchronously
-                      //     Navigator.pop(context);
-                      //     // ignore: use_build_context_synchronously
-                      //     showErrDialog(context,
-                      //         'Failed to create the ACL resoruce. Try again!');
-                      //   }
-                      // } else {
-                      //   // ignore: use_build_context_synchronously
-                      //   Navigator.pop(context);
-                      //   // ignore: use_build_context_synchronously
-                      //   showErrDialog(context,
-                      //       'Failed to store the note file in your POD. Try again!');
-                      // }
                     } else {
                       showErrDialog(context,
                           'Note name validation failed! Try using a different name.');

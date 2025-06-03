@@ -188,7 +188,7 @@ class EditNoteState extends State<EditNote>
                           EditNote(
                             noteData: noteNewData,
                           ),
-                          encrypted: false, // save in plain text for now
+                          // encrypted: false, // save in plain text for now
                         );
 
                         if (createNoteStatus ==

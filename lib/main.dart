@@ -93,18 +93,18 @@ class NotePod extends StatelessWidget {
         primarySwatch: Colors.lightGreen,
       ),
       home: SolidLogin(
-        title: 'MANAGE YOUR RIO POD',
+        title: 'NOTEPOD - A Note Taker',
         appDirectory: 'notepod',
         image: AssetImage('assets/images/notepod-background.jpg'),
         logo: AssetImage('assets/images/notepod.png'),
-        link: 'https://pub.dev/packages/solidpod',
+        link: 'https://github.com/anusii/notepod',
         webID: 'https://pods.solidcommunity.au',
         required: false,
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,
-          tooltip: 'You need to connect to your Solid Pod\n'
-              'to access the template JSON parameter\n'
-              'files for the Rio device.',
+          tooltip: 'You need to connect to your Solid account\n'
+              'to access the markdown note files\n'
+              'stored in your POD.',
         ),
         child: AppScreen(
           title: 'Note Taker for your Pod',
