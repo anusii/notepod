@@ -34,10 +34,10 @@ dependencies:
   rename: ^3.1.0
   # solidpod: ^0.6.6
   solidpod:
-    # path: ../solidpod
-    git:
-      url: https://github.com/anusii/solidpod.git
-      ref: av/274_extra_functionality
+    path: ../solidpod
+    # git:
+    #   url: https://github.com/anusii/solidpod.git
+    #   ref: av/274_extra_functionality
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
