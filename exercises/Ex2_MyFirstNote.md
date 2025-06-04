@@ -2,18 +2,19 @@
 
 **Table of Contents**
 
-- [Login](#login)
-- [Make a note](#make_note)
+- [Exercise 2: My First Note](#exercise-2-my-first-note)
+  - [Login](#login)
+  - [Make a note](#make-a-note)
 
 
-This exercise will show you how to create a note in the Podnotes web app.
+This exercise will show you how to create a note in the Notepod web app.
 
 Note: If you have flutter installed, you could also build and run the app locally on your machine.
 
 
 ## Login<a name="login"></a>
 
-Open the Podnotes app ([web app](https://Podnotes.solidcommunity.au/)) and click `Login`.
+Open the Notepod app ([web app](https://notepod.solidcommunity.au/)) and click `Login`.
 
 **Option 1: no recent login**
 
@@ -21,15 +22,17 @@ If you have not logged in recently, you will probably see a login window, enter 
 
 ![POD login](../assets/images/server_login_popup.png)
 
-This will open an `Login` popup and asking you to enter your POD account email and password. Enter your `Email` and `Password`, and click `Login`. `Authorize` the Podnotes app to login to your POD.
+This will open an `Login` popup and asking you to enter your POD account email and password. Enter your `Email` and `Password`, and click `Login`. `Authorize` the Notepod app to login to your POD.
 
-This will then show a popup window with heading `An application is requesting access`, showing your webID and asking you to `Authorize` the Podnotes app to login to your POD. Click `Authorize`.
+This will then show a popup window with heading `An application is requesting access`, showing your webID and asking you to `Authorize` the Notepod app to login to your POD. Click `Authorize`.
 
 ![POD authorization](../assets/images/server_pod_auth_popup.png)
 
 **Option 2: recent login with same webID**
 
-In this case, you will see a popup with heading `An application is requesting access`, showing your last used webID and asking you to `Authorize` the Podnotes app to login to your POD. Click `Authorize`.
+In this case, the app will log you in directly without having to enter credentials again.
+
+<!-- see a popup with heading `An application is requesting access`, showing your last used webID and asking you to `Authorize` the Notepod app to login to your POD. Click `Authorize`. -->
 
 **Option 3: recent login with different webID**
 
@@ -44,9 +47,9 @@ Be patient, *you may need to wait several seconds for login* process to complete
 
 ## Make a note<a name="make_note"></a>
 
-By default, the Podnotes app opens on the create new note page, or you can get to this page by selecting `Home` in the menu.
+By default, the Notepod app opens on the create new note page, or you can get to this page by selecting `Home` in the menu.
 
-In `Note Title`` field, enter a title for your note.
+In `Note Title` field, enter a title for your note.
 
 Below the Note Title field, enter the text of your note using markdown.
 
@@ -64,7 +67,7 @@ After saving, you wil see an empty new note page.
 
 Open the menu and click `My Notes` to view your saved notes.
 
-![Menu](../assets/images/podnotes_menu.png)
+![Menu](../assets/images/notepod_menu.png)
 
 Congratulations, you have successfully saved your first note in a POD!
 

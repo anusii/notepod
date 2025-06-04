@@ -189,8 +189,9 @@ Packages:
 These dart packages are under construction to support the development
 of Pods-based apps with flutter
 
-- [solid](https://github.com/anusii/solid) package (not yet available
-  on pub.dev): Implementation of the core high-level functionality.
+- [solidpod](https://pub.dev/packages/solidpod) package: Provides 
+  high level functionality to manage a Solid personal online data 
+  stores (Pods) via a Flutter application.
 
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
@@ -210,6 +211,6 @@ of Pods-based apps with flutter
   etc.
 
 
-## Related APps
+## Related Apps
 
 https://notepod.vincenttunru.com/
