@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams
+/// Authors: Graham Williams, Anushka Vidanage
 
 library;
 
@@ -30,14 +30,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
-import 'package:solidpod/solidpod.dart';
+import 'package:notepod/widgets/markdown_editor.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 
 class Home extends StatefulWidget {
   // final String webId;
@@ -52,14 +54,35 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
-  String sampleText = '';
+
+  TextEditingController? _textController;
+  late final FocusNode _focusNode;
+
+  String data = '';
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
+
+    // Start listening to changes.
+    _textController!.addListener(_renderMarkdown);
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _textController!.dispose(); // Dispose the TextEditingController
+    _focusNode.dispose(); // Dispose the FocusNode
+    super.dispose();
+  }
+
+  void _renderMarkdown() {
+    setState(() {
+      data = _textController!.text;
+      ;
+    });
   }
 
   @override
@@ -122,16 +145,20 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
           const SizedBox(
             height: 10,
           ),
-          Container(
-              padding: const EdgeInsets.all(10),
-              child: SplittedMarkdownFormField(
-                controller: _textController,
-                markdownSyntax: '## Headline',
-                decoration: const InputDecoration(
-                  hintText: 'Editable text',
-                ),
-                emojiConvert: true,
-              )),
+          markdownEditor(context, _textController!, _focusNode, data),
+
+          // av: 20250604 - The following code is from the package
+          // markdown_editor_plus. The current version of this gives some errors
+          // when inputting different styles such as checkboxes.
+          // SplittedMarkdownFormField(
+          //   controller: _textController,
+          //   markdownSyntax: '## Headline',
+          //   decoration: const InputDecoration(
+          //     hintText: 'Editable text',
+          //   ),
+          //   emojiConvert: true,
+          // ),
+
           const SizedBox(
             height: 20,
           ),
@@ -160,21 +187,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
                       String noteTitle =
                           formData['noteTitle'].replaceAll('\n', '');
-
-                      // By default all notes will be encrypted before storing in
-                      // a POD
-
-                      // Get the master key
-                      // String masterKey = await secureStorage.read(
-                      //       key: widget.webId,
-                      //     ) ??
-                      //     '';
-
-                      // // Hash plaintext master key to get hashed master key
-                      // String encKey = sha256
-                      //     .convert(utf8.encode(masterKey))
-                      //     .toString()
-                      //     .substring(0, 32);
 
                       // Get date and time
                       String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
@@ -206,7 +218,19 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       );
 
                       if (createNoteStatus == SolidFunctionCallStatus.success) {
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
+
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppScreen(
+                              title: topBarTitle,
+                              childPage: Home(),
+                            ),
+                          ),
+                          (Route<dynamic> route) =>
+                              false, // This predicate ensures all previous routes are removed
+                        );
                       } else {
                         Navigator.pop(context);
                         showErrDialog(context,
@@ -243,43 +267,55 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
     );
-    // Column(
-    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //   children: [
-    //     // const MarkdownAutoPreview(
-    //     //   decoration: InputDecoration(
-    //     //     hintText: 'Markdown Auto Preview',
-    //     //   ),
-    //     //   emojiConvert: true,
-    //     //   // maxLines: 10,
-    //     //   // minLines: 1,
-    //     //   // expands: true,
-    //     // ),
-    //     SplittedMarkdownFormField(
-    //       controller: _textController,
-    //       markdownSyntax: '## Headline',
-    //       decoration: const InputDecoration(
-    //         hintText: 'Splitted Markdown FormField',
-    //       ),
-    //       emojiConvert: true,
-    //     ),
-    //   ],
-    // );
-    // Container(
-    //   padding: const EdgeInsets.all(10),
-    //   child: SafeArea(
-    //     child: MarkdownAutoPreview(
-    //       controller: _textController,
-    //       enableToolBar: true,
-    //       emojiConvert: true,
-    //       // autoCloseAfterSelectEmoji: false,
-    //       // onChanged: (String text) {
-    //       //   setState(() {
-    //       //     this.text = text;
-    //       //   });
-    //       // },
-    //     ),
-    //   ),
-    // );
   }
+
+  // Container markdownEditor(double cardWidth,
+  //     TextEditingController textController, FocusNode focusNode) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(10),
+  //     child: Row(
+  //       children: [
+  //         Column(
+  //           children: [
+  //             SizedBox(
+  //               width: cardWidth,
+  //               child: TextField(
+  //                 autofocus: true,
+  //                 controller: textController,
+  //                 focusNode: focusNode,
+  //                 keyboardType: TextInputType.multiline,
+  //                 maxLines: null,
+  //                 decoration: InputDecoration(
+  //                   border: OutlineInputBorder(),
+  //                   labelText: 'Note content',
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 10,
+  //             ),
+  //             SizedBox(
+  //               width: cardWidth,
+  //               child: MarkdownToolbar(
+  //                 useIncludedTextField:
+  //                     false, // Because we want to use our own, set useIncludedTextField to false
+  //                 controller: textController, // Add the _controller
+  //                 focusNode: focusNode, // Add the _focusNode
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         SizedBox(
+  //           width: 20,
+  //         ),
+  //         Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             SizedBox(width: cardWidth, child: MarkdownBlock(data: data))
+  //           ],
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

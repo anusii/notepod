@@ -24,8 +24,9 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+// import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:solidpod/solidpod.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
@@ -108,18 +109,21 @@ class _ViewNoteState extends State<ViewNote> {
         Expanded(
           child: SizedBox(
             child: Container(
-                padding: const EdgeInsets.all(10),
-                child: MarkdownParse(
-                  data: noteData[noteContentPred],
-                  // onTapHastag: (String name, String match) {
-                  //   // name => hashtag
-                  //   // match => #hashtag
-                  // },
-                  // onTapMention: (String name, String match) {
-                  //   // name => mention
-                  //   // match => #mention
-                  // },
-                )),
+              padding: const EdgeInsets.all(10),
+              child: MarkdownBlock(data: noteData[noteContentPred]),
+
+              // MarkdownParse(
+              //   data: noteData[noteContentPred],
+              //   // onTapHastag: (String name, String match) {
+              //   //   // name => hashtag
+              //   //   // match => #hashtag
+              //   // },
+              //   // onTapMention: (String name, String match) {
+              //   //   // name => mention
+              //   //   // match => #mention
+              //   // },
+              // )
+            ),
           ),
         ),
         Padding(
