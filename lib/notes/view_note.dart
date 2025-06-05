@@ -110,7 +110,8 @@ class _ViewNoteState extends State<ViewNote> {
           child: SizedBox(
             child: Container(
               padding: const EdgeInsets.all(10),
-              child: MarkdownBlock(data: noteData[noteContentPred]),
+              child: SingleChildScrollView(
+                  child: MarkdownBlock(data: noteData[noteContentPred])),
 
               // MarkdownParse(
               //   data: noteData[noteContentPred],

@@ -156,7 +156,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           child: SizedBox(
             child: Container(
                 padding: const EdgeInsets.all(10),
-                child: MarkdownBlock(data: sharedNoteContent[noteContentPred])),
+                child: SingleChildScrollView(
+                    child: MarkdownBlock(
+                        data: sharedNoteContent[noteContentPred]))),
           ),
         ),
         Padding(
