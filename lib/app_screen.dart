@@ -22,13 +22,15 @@
 // Authors: Anushka Vidanage
 
 import 'package:flutter/material.dart';
+
+import 'package:solidpod/solidpod.dart';
+// import 'package:solidpod/solidpod.dart' show getAppNameVersion;
+import 'package:version_widget/version_widget.dart';
+
+import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
-
-import 'package:solidpod/solidpod.dart';
-
-import 'package:notepod/nav_drawer.dart';
 
 class AppScreen extends StatefulWidget {
   /// Initialise widget variables.
@@ -45,6 +47,25 @@ class AppScreenState extends State<AppScreen>
     with SingleTickerProviderStateMixin {
   String? _webId;
 
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppInfo();
+  }
+
+  /// Loads the app name and version from package_info_plus.
+
+  Future<void> _loadAppInfo() async {
+    final appInfo = await getAppNameVersion();
+    if (mounted) {
+      setState(() {
+        _appVersion = appInfo.version;
+      });
+    }
+  }
+
   Future<({String name, String? webId})> _getInfo() async =>
       (name: await AppInfo.name, webId: await getWebId());
 
@@ -56,6 +77,13 @@ class AppScreenState extends State<AppScreen>
         title: Text(widget.title),
         actions: <Widget>[
           const SizedBox(width: 50),
+          VersionWidget(
+            version: _appVersion,
+            changelogUrl:
+                'https://github.com/anusii/healthpod/blob/dev/CHANGELOG.md',
+            showDate: true,
+          ),
+          const SizedBox(width: 20),
           IconButton(
             tooltip: 'Create a new note',
             icon: const Icon(
