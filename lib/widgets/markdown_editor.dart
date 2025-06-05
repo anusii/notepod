@@ -43,6 +43,7 @@ Container markdownEditor(
   return Container(
     padding: const EdgeInsets.all(10),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           children: [
