@@ -27,7 +27,7 @@ Architecture: amd64
 Depends: libgtk-3-0, libblkid1, liblzma5
 Maintainer: Graham Williams <graham.williams@togaware.com>
 Description: Your notes collected privately
- With PodNotes your notes are stored, encrypted, in your Pod.
+ With Notepod your notes are stored, encrypted, in your Pod.
  The app is provided as a template for other SOlid Pods based apps.
 EOL
 
@@ -35,7 +35,7 @@ EOL
 
 cat > ${APP}_${VER}_amd64/usr/share/applications/${APP}.desktop << EOL
 [Desktop Entry]
-Name=PodNotes
+Name=Notepod
 Comment=Note taking with notes stored in Pods
 Exec=/usr/bin/${APP}
 Icon=${APP}
@@ -66,7 +66,7 @@ chmod 755 ${APP}_${VER}_amd64/usr/lib/${APP}/${APP}
 
 # Build the debian package.
 
-dpkg-deb --build ${APP}_${VER}_amd64
+dpkg-deb --build --root-owner-group ${APP}_${VER}_amd64
 
 # Cleanup.
 
