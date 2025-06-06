@@ -23,11 +23,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+// import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
-
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
@@ -156,17 +156,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           child: SizedBox(
             child: Container(
                 padding: const EdgeInsets.all(10),
-                child: MarkdownParse(
-                  data: sharedNoteContent[noteContentPred],
-                  // onTapHastag: (String name, String match) {
-                  //   // name => hashtag
-                  //   // match => #hashtag
-                  // },
-                  // onTapMention: (String name, String match) {
-                  //   // name => mention
-                  //   // match => #mention
-                  // },
-                )),
+                child: SingleChildScrollView(
+                    child: MarkdownBlock(
+                        data: sharedNoteContent[noteContentPred]))),
           ),
         ),
         Padding(

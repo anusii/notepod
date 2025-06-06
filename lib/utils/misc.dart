@@ -21,6 +21,8 @@
 //
 // Authors: Anushka Vidanage
 
+import 'package:intl/intl.dart';
+
 String capitalize(String word) =>
     '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
 
@@ -36,4 +38,32 @@ String getNameFromWebId(String webId) {
   }
 
   return capNameList.join(' ');
+}
+
+// Date format type for displaying date and time.
+enum DateFormatType {
+  defaultFormat,
+  longDate,
+  longDateTime,
+}
+
+// Get the given date and time in a specific format.
+String getDateTimeStr(
+  String dateTimeStr, {
+  DateFormatType formatType = DateFormatType.defaultFormat,
+}) {
+  String pattern;
+  switch (formatType) {
+    case DateFormatType.longDate:
+      pattern = 'dd MMM yyyy';
+      break;
+    case DateFormatType.longDateTime:
+      pattern = 'dd MMM yyyy hh:mm:ss a';
+      break;
+    case DateFormatType.defaultFormat:
+      // default:
+      pattern = 'dd/MM/yyyy hh:mm:ss a';
+  }
+  final dateFormat = DateFormat(pattern);
+  return dateFormat.format(DateTime.parse(dateTimeStr));
 }

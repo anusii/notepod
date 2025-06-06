@@ -30,9 +30,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:notepod/app_screen.dart';
+import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
@@ -41,7 +41,7 @@ import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
-import 'package:solidpod/solidpod.dart';
+import 'package:notepod/widgets/markdown_editor.dart';
 
 class EditSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -54,20 +54,43 @@ class EditSharedNote extends StatefulWidget {
 
 class EditSharedNoteState extends State<EditSharedNote>
     with SingleTickerProviderStateMixin {
-  TextEditingController? _textController;
   final formKey = GlobalKey<FormBuilderState>();
+
+  TextEditingController? _textController;
+  late final FocusNode _focusNode;
+
+  String data = '';
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    _textController!.text =
+        widget.fullNoteData['sharedNoteContent'][noteContentPred];
+    // Start listening to changes.
+    _textController!.addListener(_renderMarkdown);
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _textController!.dispose(); // Dispose the TextEditingController
+    _focusNode.dispose(); // Dispose the FocusNode
+    super.dispose();
+  }
+
+  void _renderMarkdown() {
+    setState(() {
+      data = _textController!.text;
+      ;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
     Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
-    _textController!.text = sharedNoteContent[noteContentPred];
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -109,16 +132,17 @@ class EditSharedNoteState extends State<EditSharedNote>
           const SizedBox(
             height: 10,
           ),
-          Container(
-              padding: const EdgeInsets.all(10),
-              child: SplittedMarkdownFormField(
-                controller: _textController,
-                markdownSyntax: '## Headline',
-                decoration: const InputDecoration(
-                  hintText: 'Editable text',
-                ),
-                emojiConvert: true,
-              )),
+          markdownEditor(context, _textController!, _focusNode, data),
+          // Container(
+          //     padding: const EdgeInsets.all(10),
+          //     child: SplittedMarkdownFormField(
+          //       controller: _textController,
+          //       markdownSyntax: '## Headline',
+          //       decoration: const InputDecoration(
+          //         hintText: 'Editable text',
+          //       ),
+          //       emojiConvert: true,
+          //     )),
           const SizedBox(
             height: 20,
           ),

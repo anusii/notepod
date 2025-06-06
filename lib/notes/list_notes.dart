@@ -28,6 +28,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 
 import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/utils/misc.dart';
 
 class ListNotes extends StatefulWidget {
   final Map notesMap;
@@ -62,7 +63,7 @@ class _ListNotesState extends State<ListNotes> {
                   //const Icon(Icons.text_snippet_outlined),
                   title: Text(notesMap[fileNames[index]][noteTitlePred]),
                   subtitle: Text(
-                      'Created on: ${notesMap[fileNames[index]][createdDateTimePred]} \nLast modified: ${notesMap[fileNames[index]][modifiedDateTimePred]}'),
+                      'Created on: ${getDateTimeStr(notesMap[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(notesMap[fileNames[index]][modifiedDateTimePred])}'),
                   trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
