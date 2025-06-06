@@ -71,14 +71,14 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: podnotes-${{ github.ref_name }}-linux.zip
+          filename: notepod-${{ github.ref_name }}-linux.zip
           directory: build/linux/x64/release/bundle
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: podnotes-linux-zip
-          path: build/linux/x64/release/bundle/podnotes-${{ github.ref_name }}-linux.zip
+          name: notepod-linux-zip
+          path: build/linux/x64/release/bundle/notepod-${{ github.ref_name }}-linux.zip
 
   ########################################################################
 
@@ -110,7 +110,7 @@ jobs:
         run: flutter build windows
 
       - name: Check the DLLs for Inclusion in the .iss script
-        run: dir D:\a\podnotes\podnotes\build\windows\x64\runner\Release\
+        run: dir D:\a\notepod\notepod\build\windows\x64\runner\Release\
 
       - name: Get Version from pubspec.yaml
         run: |
@@ -129,14 +129,14 @@ jobs:
         # uses: gjwgit/Inno-Setup-Action@v1.2.5
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
-          path: installers/podnotes-windows.iss
+          path: installers/notepod-windows.iss
           options: /O+
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: podnotes-windows-inno
-          path: D:\a\podnotes\podnotes\installers\installers\podnotes-dev-windows-inno.exe
+          name: notepod-windows-inno
+          path: D:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
 
   # ########################################################################
 
@@ -173,14 +173,14 @@ jobs:
   #       uses: thedoctor0/zip-release@master
   #       with:
   #         type: 'zip'
-  #         filename: podnotes-${{github.ref_name}}-windows.zip
+  #         filename: notepod-${{github.ref_name}}-windows.zip
   #         directory: build/windows/x64/runner/Release
 
   #     - name: Upload Artifact
   #       uses: actions/upload-artifact@v4
   #       with:
-  #         name: podnotes-windows-zip
-  #         path: build/windows/x64/runner/Release/podnotes-${{github.ref_name}}-windows.zip
+  #         name: notepod-windows-zip
+  #         path: build/windows/x64/runner/Release/notepod-${{github.ref_name}}-windows.zip
 
   # ########################################################################
 
@@ -218,8 +218,8 @@ jobs:
   #       with:
   #         type: 'zip'
   #         directory: build/macos/Build/Products/Release
-  #         path: podnotes.app
-  #         filename: podnotes-${{github.ref_name}}-macos.zip
+  #         path: notepod.app
+  #         filename: notepod-${{github.ref_name}}-macos.zip
 
   #     - name: Review Bundle Contents
   #       run: ls -lh build/macos/Build/Products/Release
@@ -227,8 +227,8 @@ jobs:
   #     - name: Upload Artifact
   #       uses: actions/upload-artifact@v4
   #       with:
-  #         name: podnotes-macos-zip
-  #         path: build/macos/Build/Products/Release/podnotes-${{github.ref_name}}-macos.zip
+  #         name: notepod-macos-zip
+  #         path: build/macos/Build/Products/Release/notepod-${{github.ref_name}}-macos.zip
 
   ########################################################################
 
@@ -266,8 +266,8 @@ jobs:
   #       with:
   #         type: 'zip'
   #         directory: build/macos/Build/Products/Release
-  #         path: podnotes.app
-  #         filename: podnotes-${{github.ref_name}}-macos.zip
+  #         path: notepod.app
+  #         filename: notepod-${{github.ref_name}}-macos.zip
 
   #     - name: Review Bundle Contents
   #       run: ls -lh build/macos/Build/Products/Release
@@ -275,8 +275,8 @@ jobs:
   #     - name: Upload Artifact
   #       uses: actions/upload-artifact@v4
   #       with:
-  #         name: podnotes-macos-zip
-  #         path: build/macos/Build/Products/Release/podnotes-${{github.ref_name}}-macos.zip
+  #         name: notepod-macos-zip
+  #         path: build/macos/Build/Products/Release/notepod-${{github.ref_name}}-macos.zip
 
   # ########################################################################
 
@@ -314,8 +314,8 @@ jobs:
   #       with:
   #         type: 'zip'
   #         directory: build/macos/Build/Products/Release
-  #         path: podnotes.app
-  #         filename: podnotes-${{github.ref_name}}-ios.zip
+  #         path: notepod.app
+  #         filename: notepod-${{github.ref_name}}-ios.zip
 
   #     - name: Review Bundle Contents
   #       run: ls -lh build/macos/Build/Products/Release
@@ -323,5 +323,5 @@ jobs:
   #     - name: Upload Artifact
   #       uses: actions/upload-artifact@v4
   #       with:
-  #         name: podnotes-macos-zip
-  #         path: build/macos/Build/Products/Release/podnotes-${{github.ref_name}}-macos.zip
+  #         name: notepod-macos-zip
+  #         path: build/macos/Build/Products/Release/notepod-${{github.ref_name}}-macos.zip
