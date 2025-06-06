@@ -186,6 +186,7 @@ installers/macos_dmg/
 
 **/linux/flutter/generated*
 **/windows/flutter/generated*
+**/linux/runner
 
 #-----------------------------------------------------------------------
 # Symbols
