@@ -1,19 +1,19 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-[![Last Updated](https://img.shields.io/github/last-commit/anusii/podnotes?label=last%20updated)](https://github.com/anusii/podnotes/commits/dev/)
-[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/podnotes/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/podnotes/blob/dev/CHANGELOG.md)
-[![GitHub Issues](https://img.shields.io/github/issues/anusii/podnotes)](https://github.com/anusii/podnotes/issues)
-[![GitHub License](https://img.shields.io/github/license/anusii/podnotes)](https://raw.githubusercontent.com/anusii/podnotes/main/LICENSE)
-[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/podnotes/dev)](https://github.com/gjwgit/rattle/commits/dev/)
+[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
+[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
+[![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
+[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 
 Binaries to download latest version:
-[**GNU/Linux**](https://solidcommunity.au/installers/podnotes-dev-linux.zip) -
-[**Debian/Ubuntu**](https://solidcommunity.au/installers/podnotes_amd64.deb) -
-[**MacOS**](https://solidcommunity.au/installers/podnotes-dev-macos.zip) -
-[**Windows**](https://solidcommunity.au/installers/podnotes-dev-windows-inno.exe).
+[**GNU/Linux**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
+[**Debian/Ubuntu**](https://solidcommunity.au/installers/notepod_amd64.deb) -
+[**MacOS**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
+[**Windows**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
-Run in a browser: [**Web**](https://podnotes.solidcommunity.au).
+Run in a browser: [**Web**](https://notepod.solidcommunity.au).
 
 # Notepod &mdash; Markdown Notes with Encrypted Pods
 
@@ -189,8 +189,8 @@ Packages:
 These dart packages are under construction to support the development
 of Pods-based apps with flutter
 
-- [solidpod](https://pub.dev/packages/solidpod) package: Provides 
-  high level functionality to manage a Solid personal online data 
+- [solidpod](https://pub.dev/packages/solidpod) package: Provides
+  high level functionality to manage a Solid personal online data
   stores (Pods) via a Flutter application.
 
 - [solid-auth](https://pub.dev/packages/solid_auth) package:
