@@ -80,7 +80,7 @@ class AppScreenState extends State<AppScreen>
           VersionWidget(
             version: _appVersion,
             changelogUrl:
-                'https://github.com/anusii/healthpod/blob/dev/CHANGELOG.md',
+                'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
             showDate: true,
           ),
           const SizedBox(width: 20),
