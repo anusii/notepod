@@ -11,7 +11,8 @@ Binaries to download latest version:
 [**GNU/Linux**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
 [**Debian/Ubuntu**](https://solidcommunity.au/installers/notepod_amd64.deb) -
 [**MacOS**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
-[**Windows**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+Windows [**inno**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+[**zip**](https://solidcommunity.au/installers/notepod-dev-windows.zip).
 
 Run in a browser: [**Web**](https://notepod.solidcommunity.au).
 
