@@ -3,27 +3,27 @@
 **Table of Contents**
 
 
-- [Exercise 4: Install Flutter and get started with PODs app development with Flutter](#exercise-4-install-flutter-and-get-started-with-pods-app-development-with-flutter)
+- [Exercise 4: Getting started - PODs app development with Flutter](#exercise-4-getting-started---pods-app-development-with-flutter)
   - [Install Flutter](#install-flutter)
     - [Flutter SDK](#flutter-sdk)
     - [IDE](#ide)
-    - [Android Studio (Optional)](#android-studio)
-    - [Visual Studio (Optional)](#visual-studio)
-    - [MacOS (Optional)](#macos)
-    - [iOS (Optional)](#ios)
-    - [Flutter doctor](#doctor)
+    - [Android Studio (Optional)](#android-studio-optional)
+    - [Visual Studio (Optional)](#visual-studio-optional)
+    - [MacOS development (Optional)](#macos-development-optional)
+    - [iOS development (Optional)](#ios-development-optional)
+    - [Flutter doctor ](#flutter-doctor-)
   - [Test run Flutter](#test-run-flutter)
-  - [Get Podnotes code](#get-podnotes-code)
-  - [Make changes to the Podnotes app](#make-changes-to-the-podnotes-app)
-    - [Tackle a Podnotes issue](#tackle-a-podnotes-issue)
+  - [Get Notepod code](#get-notepod-code)
+  - [Make changes to the Notepod app](#make-changes-to-the-notepod-app)
+    - [Tackle a Notepod issue](#tackle-a-notepod-issue)
   - [More resources](#more-resources)
 
 
 This exercise provides resources to install Flutter and get started developing PODs based apps with Flutter.
 
-You will have the opportunity to build and run the Podnotes app on your local machine, and add small features to the Podnotes app.
+You will have the opportunity to build and run the Notepod app on your local machine, and add small features to the Notepod app.
 
-You do not need to run a Solid server, as the Podnotes app uses the Community Solid Server open source software running on the Solid Community AU server https://pods.solidcommunity.au
+You do not need to run a Solid server, as the Notepod app uses the Community Solid Server open source software running on the Solid Community AU server https://pods.solidcommunity.au
 
 
 ## Install Flutter<a name="install_flutter"></a>
@@ -108,28 +108,28 @@ You can also run `flutter --version` to check the installed version of the Flutt
 You can also check your flutter install by running the flutter demo app on your preferred device - see [Test drive flutter](https://docs.flutter.dev/get-started/test-drive?tab=terminal)
 
 
-## Get Podnotes code<a name="get_podnotes"></a>
+## Get Notepod code<a name="get_notepod"></a>
 
-Now lets get the Podnotes project setup in your flutter development environment.
+Now lets get the Notepod project setup in your flutter development environment.
 
-Go to [Podnotes repo](https://github.com/anusii/podnotes). You can either Clone the repo by
+Go to [Notepod repo](https://github.com/anusii/notepod). You can either Clone the repo by
 ```
-git clone https://github.com/anusii/podnotes.git
+git clone https://github.com/anusii/notepod.git
 ```
 or you can fork it to your own GitHub account.
 
-Now open your VS Code IDE. Go to `File -> Open Folder` and select the local podnotes directory.
+Now open your VS Code IDE. Go to `File -> Open Folder` and select the local notepod directory.
 
-*You are now ready to make changes to the Podnotes app with Flutter.*
+*You are now ready to make changes to the Notepod app with Flutter.*
 
-## Make changes to the Podnotes app<a name="edit_podnotes"></a>
+## Make changes to the Notepod app<a name="edit_notepod"></a>
 
-There are a couple of options you can use to run the Podnotes app.
+There are a couple of options you can use to run the Notepod app.
 
 **Option 1**
 Open the Terminal in the VS Code (if not open by default at the bottom of the window) by going to `Terminal -> New Terminal` in the top menu bar.
 
-Go to the `podnotes` directory and run the following command.
+Go to the `notepod` directory and run the following command.
 
 ```
 flutter run -d [your_device]
@@ -142,19 +142,19 @@ When running for the first time it will ask to setup Windows device for the app.
 
 **Option 2**
 
-In the VS Code Explorer bar open the file `podnotes -> lib -> main.dart`. A play button will apear on the top right had coner of your window. Click that button and select either one of the options and the app will then run.
+In the VS Code Explorer bar open the file `notepod -> lib -> main.dart`. A play button will apear on the top right had coner of your window. Click that button and select either one of the options and the app will then run.
 
 For the first time it will again ask for you to setup the preferred device for the app to run on.
 
-**Editing Podnotes app**
+**Editing Notepod app**
 
-Open the Podnotes repo in your favourite editor. You can use any editor you like.
+Open the Notepod repo in your favourite editor. You can use any editor you like.
 
 Edit some text in the app, by searching and changing that text in your editor. Press `R` to hot restart the app to see your changes.
 
-### Tackle a Podnotes issue<a name="podnotes_issue"></a>
+### Tackle a Notepod issue<a name="notepod_issue"></a>
 
-Now you can have a go at contributing to an [issue in the Podnotes repo](https://github.com/anusii/podnotes/issues).
+Now you can have a go at contributing to an [issue in the Notepod repo](https://github.com/anusii/notepod/issues).
 
 Pick an issue, create a branch, make your changes, and submit a pull request - we're excited to see your contributions!
 
