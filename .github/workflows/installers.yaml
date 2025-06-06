@@ -138,97 +138,97 @@ jobs:
           name: notepod-windows-inno
           path: D:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
 
-  # ########################################################################
+  ########################################################################
 
-  # build-windows-zip:
-  #   if: |
-  #     contains(github.event.head_commit.message, 'bump version') ||
-  #     contains(github.event.head_commit.message, 'build installers')
-  #   runs-on: windows-latest
+  build-windows-zip:
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers')
+    runs-on: windows-latest
 
-  #   steps:
-  #     - name: Clone Repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
 
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: 'stable'
-  #         architecture: x64
-  #         flutter-version: ${{env.FLUTTER_VERSION}}
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: ${{env.FLUTTER_VERSION}}
 
-  #     - name: Install project dependencies
-  #       run: flutter pub get
+      - name: Install project dependencies
+        run: flutter pub get
 
-  #     - name: Generate intermediates
-  #       run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
-  #     - name: Enable windows build
-  #       run: flutter config --enable-windows-desktop
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
 
-  #     - name: Build artifacts
-  #       run: flutter build windows --release
+      - name: Build artifacts
+        run: flutter build windows --release
 
-  #     - name: Archive Release
-  #       uses: thedoctor0/zip-release@master
-  #       with:
-  #         type: 'zip'
-  #         filename: notepod-${{github.ref_name}}-windows.zip
-  #         directory: build/windows/x64/runner/Release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: notepod-${{github.ref_name}}-windows.zip
+          directory: build/windows/x64/runner/Release
 
-  #     - name: Upload Artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: notepod-windows-zip
-  #         path: build/windows/x64/runner/Release/notepod-${{github.ref_name}}-windows.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notepod-windows-zip
+          path: build/windows/x64/runner/Release/notepod-${{github.ref_name}}-windows.zip
 
-  # ########################################################################
+  ########################################################################
 
-  # build-macos-zip:
-  #   if: |
-  #     contains(github.event.head_commit.message, 'bump version') ||
-  #     contains(github.event.head_commit.message, 'build installers')
-  #   runs-on: macos-latest
+  build-macos-zip:
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers')
+    runs-on: macos-latest
 
-  #   steps:
-  #     - name: Clone Repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
 
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: 'stable'
-  #         architecture: x64
-  #         flutter-version: ${{env.FLUTTER_VERSION}}
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+          flutter-version: ${{env.FLUTTER_VERSION}}
 
-  #     - name: Install Project Dependencies
-  #       run: flutter pub get
+      - name: Install Project Dependencies
+        run: flutter pub get
 
-  #     - name: Generate intermediates
-  #       run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Generate intermediates
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
-  #     - name: Enable macOS build
-  #       run: flutter config --enable-macos-desktop
+      - name: Enable macOS build
+        run: flutter config --enable-macos-desktop
 
-  #     - name: Build artifacts
-  #       run: flutter build macos --release
+      - name: Build artifacts
+        run: flutter build macos --release
 
-  #     - name: Archive Release
-  #       uses: thedoctor0/zip-release@master
-  #       with:
-  #         type: 'zip'
-  #         directory: build/macos/Build/Products/Release
-  #         path: notepod.app
-  #         filename: notepod-${{github.ref_name}}-macos.zip
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: build/macos/Build/Products/Release
+          path: notepod.app
+          filename: notepod-${{github.ref_name}}-macos.zip
 
-  #     - name: Review Bundle Contents
-  #       run: ls -lh build/macos/Build/Products/Release
+      - name: Review Bundle Contents
+        run: ls -lh build/macos/Build/Products/Release
 
-  #     - name: Upload Artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: notepod-macos-zip
-  #         path: build/macos/Build/Products/Release/notepod-${{github.ref_name}}-macos.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notepod-macos-zip
+          path: build/macos/Build/Products/Release/notepod-${{github.ref_name}}-macos.zip
 
   ########################################################################
 
