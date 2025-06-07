@@ -4,7 +4,7 @@
 #define MyAppName "NotePod"
 #define MyAppVersion "dev-windows-inno"
 #define MyAppPublisher "ANU Software Innovation Institute"
-#define MyAppURL "https://pods.dev.solidcommunity.au/"
+#define MyAppURL "https://notepod.solidcommunity.au/"
 #define MyAppExeName "notepod.exe"
 
 [Setup]
