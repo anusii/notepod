@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// List notes screen
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
