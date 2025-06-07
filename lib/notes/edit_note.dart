@@ -1,4 +1,4 @@
-/// The home page for the app.
+/// The edit note page.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
