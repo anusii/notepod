@@ -109,8 +109,8 @@ jobs:
       - name: Build Artifact
         run: flutter build windows
 
-      - name: Check the DLLs for Inclusion in the .iss script
-        run: dir D:\a\notepod\notepod\build\windows\x64\runner\Release\
+#      - name: Check the DLLs for Inclusion in the .iss script
+#        run: dir D:\a\notepod\notepod\build\windows\x64\runner\Release\
 
       - name: Get Version from pubspec.yaml
         run: |
