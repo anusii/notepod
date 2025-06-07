@@ -136,7 +136,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notepod-windows-inno
-          path: D:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
+          path: C:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
 
   ########################################################################
 
