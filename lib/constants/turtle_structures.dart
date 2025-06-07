@@ -27,7 +27,7 @@ const String profCard = 'profile/card#me';
 // Directory name constants.
 const mainResDir = 'notepod';
 const dataDir = 'data';
-const myNotesDir = 'mynotes';
+// const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
 // IRIs (Internationalized Resource Identifiers)
