@@ -214,7 +214,7 @@ class EditNoteState extends State<EditNote>
 
                         // Create note file name
                         String noteFileName =
-                            '$myNotesDir/$noteFileNamePrefix$createdDateTimeStr.ttl';
+                            '$noteFileNamePrefix$createdDateTimeStr.ttl';
 
                         final createNoteStatus = await writePod(
                           noteFileName,

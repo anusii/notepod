@@ -203,7 +203,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       // String noteFileName =
                       //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
                       String noteFileName =
-                          '$myNotesDir/$noteFileNamePrefix$dateTimeStr.ttl';
+                          '$noteFileNamePrefix$dateTimeStr.ttl';
 
                       // Create TTL body for note
                       final noteTTLStr = genNoteTTLStr(

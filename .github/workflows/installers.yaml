@@ -109,8 +109,8 @@ jobs:
       - name: Build Artifact
         run: flutter build windows
 
-#      - name: Check the DLLs for Inclusion in the .iss script
-#        run: dir D:\a\notepod\notepod\build\windows\x64\runner\Release\
+      - name: Check the DLLs for Inclusion in the .iss script
+        run: dir C:\a\notepod\notepod\build\windows\x64\runner\Release\
 
       - name: Get Version from pubspec.yaml
         run: |
@@ -136,7 +136,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notepod-windows-inno
-          path: D:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
+          path: C:\a\notepod\notepod\installers\installers\notepod-dev-windows-inno.exe
 
   ########################################################################
 

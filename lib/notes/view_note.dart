@@ -140,7 +140,7 @@ class _ViewNoteState extends State<ViewNote> {
                 onPressed: () async {
                   // Get note file path
                   String noteFilePath =
-                      '$myNotesDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+                      '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
                   // redirect
                   Navigator.pushAndRemoveUntil(
@@ -243,7 +243,7 @@ class _ViewNoteState extends State<ViewNote> {
                               // Delete file
                               // Create note file path
                               String noteFilePath =
-                                  '$mainResDir/$dataDir/$myNotesDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+                                  '$mainResDir/$dataDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
                               // Call solid delete file function
                               await deleteFile(noteFilePath);
