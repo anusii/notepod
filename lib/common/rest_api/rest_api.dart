@@ -45,13 +45,14 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
     final dataDirPath = await getDataDirPath();
     final dataDirUrl = await getDirUrl(dataDirPath);
 
-    final notesDirUrl = '$dataDirUrl/$myNotesDir/';
+    final notesDirUrl = '$dataDirUrl/';
 
     // Check if the directory exist
     bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
 
     if (resExist) {
       final res = await getResourcesInContainer(notesDirUrl);
+      // print(res);
 
       Map notesMap = {};
       // Loop through the list of files to get the file names
