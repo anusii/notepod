@@ -1,6 +1,6 @@
 /// DESCRIPTION
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+/// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
@@ -21,13 +21,14 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Graham Williams
 
 library;
 
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/api/common_permission.dart';
 
@@ -35,7 +36,8 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/rdf.dart';
 
-// Get the list of notes created by the user
+// Get the list of notes created by the user.
+
 Future<Map> getNoteList(BuildContext context, Widget childPage) async {
   final loggedIn = await loginIfRequired(context);
   String webId = await getWebId() as String;
@@ -47,27 +49,34 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
 
     final notesDirUrl = '$dataDirUrl/';
 
-    // Check if the directory exist
+    // Check if the directory exists.
+
     bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
 
     if (resExist) {
+      debugPrint("Checking data directory for the notes: $notesDirUrl.");
       final res = await getResourcesInContainer(notesDirUrl);
-      // print(res);
+      print(res);
 
       Map notesMap = {};
       // Loop through the list of files to get the file names
       for (final fileName in res.files) {
         // Read file content
+        debugPrint('About to read from $fileName');
         String noteContent =
             await readPod(fileName.replaceAll(webId, ''), context, childPage);
+        debugPrint('About to call noteInfoMap $fileName');
         notesMap[fileName] = noteInfoMap(noteContent);
+        debugPrint('$fileName => ${notesMap[fileName]}');
       }
       // final filteredMap = filterTreatments(treatmentMap, type);
       return notesMap;
     } else {
+      debugPrint("No data directory for the notes: $notesDirUrl.");
       return {};
     }
   } else {
+    debugPrint("Not logged in in finding the list of notes.");
     return {};
   }
 }

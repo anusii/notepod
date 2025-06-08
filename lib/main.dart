@@ -1,6 +1,6 @@
 /// Privacy preserving note taking app using PODs.
 //
-// Time-stamp: <Wednesday 2023-12-27 07:54:18 +1100 Graham Williams>
+// Time-stamp: <Sunday 2025-06-08 15:25:41 +0200 Graham Williams>
 //
 ///
 /// Copyright (C) 2023, Software Innovation Institute
@@ -38,9 +38,9 @@ import 'package:notepod/utils/is_desktop.dart';
 void main() async {
   // Remove [debugPrint] messages from production code.
 
-  debugPrint = (String? message, {int? wrapWidth}) {
-    null;
-  };
+  // debugPrint = (String? message, {int? wrapWidth}) {
+  //   null;
+  // };
 
   if (isDesktop) {
     WidgetsFlutterBinding.ensureInitialized();
