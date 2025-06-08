@@ -54,9 +54,9 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
     bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
 
     if (resExist) {
-      debugPrint("Checking data directory for the notes: $notesDirUrl.");
+      debugPrint('Checking data directory for the notes: $notesDirUrl.');
       final res = await getResourcesInContainer(notesDirUrl);
-      print(res);
+      debugPrint(res.toString());
 
       Map notesMap = {};
       // Loop through the list of files to get the file names
@@ -72,11 +72,11 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
       // final filteredMap = filterTreatments(treatmentMap, type);
       return notesMap;
     } else {
-      debugPrint("No data directory for the notes: $notesDirUrl.");
+      debugPrint('No data directory for the notes: $notesDirUrl.');
       return {};
     }
   } else {
-    debugPrint("Not logged in in finding the list of notes.");
+    debugPrint('Not logged in in finding the list of notes.');
     return {};
   }
 }
