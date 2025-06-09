@@ -28,14 +28,23 @@ Notepod.
 
 ## Android
 
-You can side load the latest version of the app by visiting the
-[Installer](https://solidcommunity.au/installers/notepod.apk) from
+You can side load the latest version of the app by downloading the
+[installer](https://solidcommunity.au/installers/notepod.apk) through
 your Android device's browser. This will download the app to your
-Android device where you can click on the `notepod.apk` file. Your
-browser will ask if you are comfortable to install the app locally. If
-you are comfortable with side loading the app then choose to do so.
+Android device. Then visit the Downloads folder where you can click on
+the `notepod.apk` file. Your browser will ask if you are okay with
+installing the app locally.
 
 ## Linux
+
+### Deb Install for Debian/Ubuntu
+
+Download and install the deb package:
+
+```bash
+wget https://solidcommunity.au/installers/notepod_amd64.dev -O notepod_amd64.deb
+sudo dpkg --install notepod_amd64.deb
+```
 
 ### Zip Install
 
@@ -72,13 +81,9 @@ To install for any user on the computer:
 ```bash
 sudo unzip notepod-dev-linux.zip -d /opt/notepod
 sudo ln -s /opt/notepod/notepod /usr/local/bin/
+wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/notepod.desktop -O ${HOME}/usr/local/share/applications/notepod.desktop
+wget https://github.com/anusii/notepod/raw/dev/installers/notepod.png -O ${HOME}/use/local/share/icons/notepod.png
 ```
-
-The
-[notepod.desktop](https://solidcommunity.au/installers/notepod.desktop)
-and [app icon](https://solidcommunity.au/installers/notepod.png) can
-be installed into `/usr/local/share/applications/` and
-`/usr/local/share/icons/` respectively.
 
 Once installed you can run the app from the GNOME desktop through
 Alt-F2 and type `notepod` then Enter.
