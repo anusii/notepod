@@ -10,6 +10,17 @@ Visit the
 [CHANGELOG](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 for the latest updates.
 
+Binaries to download latest version:
+[**GNU/Linux**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
+[**Debian/Ubuntu**](https://solidcommunity.au/installers/notepod_amd64.deb) -
+[**Android**](https://solidcommunity.au/installers/notepod.apk) -
+[**MacOS**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
+Windows
+[**zip**](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
+[**inno**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+
+Run in a browser: [**Web**](https://notepod.solidcommunity.au).
+
 ## Prerequisite
 
 There are no specific prerequisites for installing and running
