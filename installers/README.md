@@ -7,7 +7,7 @@ identical across all platforms so the experience across different
 platforms will be very similar.
 
 Visit the
-[CHANGELOG](https://github.com/gjwgit/notepod/blob/dev/CHANGELOG.md)
+[CHANGELOG](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 for the latest updates.
 
 ## Prerequisite
@@ -50,10 +50,10 @@ Then set up your local installation (only required once):
 
 ```bash
 ln -s ${HOME}/.local/share/notepod/notepod ${HOME}/.local/bin/
-wget https://raw.githubusercontent.com/gjwgit/notepod/dev/installers/notepod.desktop -O ${HOME}/.local/share/applications/notepod.desktop
+wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/notepod.desktop -O ${HOME}/.local/share/applications/notepod.desktop
 sed -i "s/USER/$(whoami)/g" ${HOME}/.local/share/applications/notepod.desktop
 mkdir -p ${HOME}/.local/share/icons/hicolor/256x256/apps/
-wget https://github.com/gjwgit/notepod/raw/dev/installers/notepod.png -O ${HOME}/.local/share/icons/hicolor/256x256/apps/notepod.png
+wget https://github.com/anusii/notepod/raw/dev/installers/notepod.png -O ${HOME}/.local/share/icons/hicolor/256x256/apps/notepod.png
 ```
 
 To install for any user on the computer:
