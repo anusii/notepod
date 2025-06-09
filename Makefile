@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Tuesday 2025-05-06 21:12:42 +1000 Graham Williams>
+# Time-stamp: <Monday 2025-06-09 16:42:16 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -134,5 +134,5 @@ deb:
 # /usr/bin/rattle. This is working so add deb into the install and now
 # utilise that for the default install on my machine.
 
-ginstall: deb # apk
+ginstall: deb apk
 	(cd installers; make $@)
