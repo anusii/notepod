@@ -8,7 +8,7 @@
 PRODUCT_NAME = notepod
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.podnotes
+PRODUCT_BUNDLE_IDENTIFIER = com.togare.notepod
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023-2025 com.togaware. All rights reserved.

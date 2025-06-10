@@ -4,7 +4,7 @@
 # them as artefacts on github, we can upload them to solidcommunity.au for
 # distribution.
 
-APP=podnotes
+APP=notepod
 
 HOST=solidcommunity.au
 FLDR=/var/www/html/installers/

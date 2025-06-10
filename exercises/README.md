@@ -1,6 +1,7 @@
 # Getting Started
 
-This folder contains a selection of exercises to get started with the PODs-based apps using the Podnotes app.
+This folder contains a selection of exercises to get started with the
+PODs-based apps using the NotePod app.
 
 Exercises:
 
