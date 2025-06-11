@@ -8,8 +8,9 @@
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 
 Binaries to download latest version:
-[**GNU/Linux**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
-[**Debian/Ubuntu**](https://solidcommunity.au/installers/notepod_amd64.deb) -
+GNU/Linux
+[**deb**](https://solidcommunity.au/installers/notepod_amd64.deb) or
+[**zip**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
 [**Android**](https://solidcommunity.au/installers/notepod.apk) -
 [**MacOS**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
 Windows
