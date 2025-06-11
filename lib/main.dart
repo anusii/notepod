@@ -1,6 +1,6 @@
 /// Privacy preserving note taking app using PODs.
 //
-// Time-stamp: <Sunday 2025-06-08 15:25:41 +0200 Graham Williams>
+// Time-stamp: <Wednesday 2025-06-11 10:36:05 +1000 Graham Williams>
 //
 ///
 /// Copyright (C) 2023, Software Innovation Institute
@@ -87,7 +87,7 @@ class NotePod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'POD Note Taker',
+      title: 'Note Taker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
