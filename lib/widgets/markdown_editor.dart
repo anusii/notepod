@@ -57,7 +57,7 @@ Container markdownEditor(
                 maxLines: null,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Note content',
+                  labelText: 'Note Content',
                 ),
               ),
             ),
