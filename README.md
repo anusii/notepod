@@ -9,7 +9,7 @@
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
-Binaries to download latest version:
+Download the latest version:
 GNU/Linux
 [**deb**](https://solidcommunity.au/installers/notepod_amd64.deb) or
 [**zip**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
