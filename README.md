@@ -7,17 +7,19 @@
 [![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 
+Run the app online: [**web**](https://notepod.solidcommunity.au).
+
 Binaries to download latest version:
 GNU/Linux
 [**deb**](https://solidcommunity.au/installers/notepod_amd64.deb) or
 [**zip**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
-[**Android**](https://solidcommunity.au/installers/notepod.apk) -
-[**MacOS**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
+Android
+[**apk**](https://solidcommunity.au/installers/notepod.apk) -
+macOS
+[**zip**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
 Windows
 [**zip**](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [**inno**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
-
-Run in a browser: [**Web**](https://notepod.solidcommunity.au).
 
 # Notepod &mdash; Markdown Notes with Encrypted Pods
 

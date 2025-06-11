@@ -10,7 +10,7 @@ Visit the
 [CHANGELOG](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 for the latest updates.
 
-Online: [**Web**](https://notepod.solidcommunity.au).
+Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Binaries to download latest version:
 GNU/Linux
