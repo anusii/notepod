@@ -125,6 +125,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ),
                     FormBuilderTextField(
                       name: 'noteTitle',
+                      autofocus: true,
                       decoration: const InputDecoration(
                         labelText: 'Note Title',
                         labelStyle: TextStyle(
