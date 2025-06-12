@@ -50,7 +50,7 @@ Container markdownEditor(
             SizedBox(
               width: cardWidth,
               child: TextField(
-                autofocus: true,
+                // autofocus: true,
                 controller: textController,
                 focusNode: focusNode,
                 keyboardType: TextInputType.multiline,

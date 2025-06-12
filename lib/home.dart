@@ -125,6 +125,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ),
                     FormBuilderTextField(
                       name: 'noteTitle',
+                      autofocus: true,
                       decoration: const InputDecoration(
                         labelText: 'Note Title',
                         labelStyle: TextStyle(
@@ -185,56 +186,63 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       // String noteTitle =
                       //     formData['noteTitle'].split(' ').join('_');
 
-                      String noteTitle =
-                          formData['noteTitle'].replaceAll('\n', '');
+                      if (noteText.trim() != '') {
+                        String noteTitle =
+                            formData['noteTitle'].replaceAll('\n', '');
 
-                      // Get date and time
-                      String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                          .format(DateTime.now())
-                          .toString();
+                        // Get date and time
+                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
+                            .format(DateTime.now())
+                            .toString();
 
-                      // Encrypt note text using created time as the key
-                      // av: 20250519 - We need to encrypt the note text because
-                      // at the moment rdflib cannot parse multiline text with
-                      // # (hash) values in them.
-                      String encNoteText = encryptVal(noteText, dateTimeStr);
+                        // Encrypt note text using created time as the key
+                        // av: 20250519 - We need to encrypt the note text because
+                        // at the moment rdflib cannot parse multiline text with
+                        // # (hash) values in them.
+                        String encNoteText = encryptVal(noteText, dateTimeStr);
 
-                      // Create note file name
-                      // String noteFileName =
-                      //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
-                      String noteFileName =
-                          '$noteFileNamePrefix$dateTimeStr.ttl';
+                        // Create note file name
+                        // String noteFileName =
+                        //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
+                        String noteFileName =
+                            '$noteFileNamePrefix$dateTimeStr.ttl';
 
-                      // Create TTL body for note
-                      final noteTTLStr = genNoteTTLStr(
-                          dateTimeStr, dateTimeStr, noteTitle, encNoteText);
+                        // Create TTL body for note
+                        final noteTTLStr = genNoteTTLStr(
+                            dateTimeStr, dateTimeStr, noteTitle, encNoteText);
 
-                      final createNoteStatus = await writePod(
-                        noteFileName,
-                        noteTTLStr,
-                        context,
-                        Home(),
-                        //encrypted: false, // save in plain text for now
-                      );
-
-                      if (createNoteStatus == SolidFunctionCallStatus.success) {
-                        //Navigator.pop(context);
-
-                        Navigator.pushAndRemoveUntil(
+                        final createNoteStatus = await writePod(
+                          noteFileName,
+                          noteTTLStr,
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => AppScreen(
-                              title: topBarTitle,
-                              childPage: Home(),
-                            ),
-                          ),
-                          (Route<dynamic> route) =>
-                              false, // This predicate ensures all previous routes are removed
+                          Home(),
+                          //encrypted: false, // save in plain text for now
                         );
+
+                        if (createNoteStatus ==
+                            SolidFunctionCallStatus.success) {
+                          //Navigator.pop(context);
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: Home(),
+                              ),
+                            ),
+                            (Route<dynamic> route) =>
+                                false, // This predicate ensures all previous routes are removed
+                          );
+                        } else {
+                          Navigator.pop(context);
+                          showErrDialog(context,
+                              'Failed to store the note file in your POD. Try again!');
+                        }
                       } else {
                         Navigator.pop(context);
-                        showErrDialog(context,
-                            'Failed to store the note file in your POD. Try again!');
+                        showErrDialog(
+                            context, 'Please enter some note content.');
                       }
                     } else {
                       showErrDialog(context,
