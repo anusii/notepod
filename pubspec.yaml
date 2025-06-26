@@ -35,22 +35,13 @@ dependencies:
   rdf_core: ^0.9.2
   rdflib: ^0.2.12
   rename: ^3.1.0
-  # solidpod: ^0.6.6
-  solidpod:
-    # path: ../solidpod
-    git:
-      url: https://github.com/anusii/solidpod.git
-      ref: av/274_extra_functionality
+  solidpod: ^0.6.7
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
-  version_widget:
-    git:
-      url: https://github.com/anusii/version_widget.git
-      ref: main
-  window_manager: ^0.4.3
+  version_widget: ^1.0.2
+  window_manager: ^0.5.0
 
-  intl: any
 flutter_launcher_icons:
   image_path: "assets/images/notepod.png"
   android: true # can specify file name here e.g. "ic_launcher"
@@ -72,7 +63,6 @@ flutter_launcher_icons:
     image_path: "assets/images/notepod.png"
 
 dev_dependencies:
-
   flutter_test:
     sdk: flutter
 
@@ -80,9 +70,6 @@ dev_dependencies:
     git:
       url: https://github.com/anusii/import-order-lint.git
       ref: main
-
-dependency_overrides:
-  intl: ^0.19.0 # Eventually remove. Through solidpod, solid-auth depends on intl-0.19.0
 
 flutter:
   uses-material-design: true
