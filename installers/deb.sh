@@ -55,7 +55,7 @@ cp -r ../build/linux/x64/release/bundle/* ${APP}_${VER}_amd64/usr/lib/${APP}/
 # Copy the app icon which is assumed to be named ${APP}.png in the
 # installers folder.
 
-cp ${APP}.png ${APP}_${VER}_amd64/usr/share/icons/hicolor/512x512/apps/
+cp app.png ${APP}_${VER}_amd64/usr/share/icons/hicolor/512x512/apps/${APP}.png
 
 # Set correct permissions.
 
