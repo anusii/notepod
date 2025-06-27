@@ -10,16 +10,16 @@
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Download the latest version:
-GNU/Linux
-[**deb**](https://solidcommunity.au/installers/notepod_amd64.deb) or
-[**zip**](https://solidcommunity.au/installers/notepod-dev-linux.zip) -
-Android
-[**apk**](https://solidcommunity.au/installers/notepod.apk) -
-macOS
-[**zip**](https://solidcommunity.au/installers/notepod-dev-macos.zip) -
-Windows
-[**zip**](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
-[**inno**](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+**GNU/Linux**
+[deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
+[zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
+**Android**
+[apk](https://solidcommunity.au/installers/notepod.apk);
+**macOS**
+[zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
+**Windows**
+[zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
+[inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
 # Notepod &mdash; Markdown Notes with Encrypted Pods
 
