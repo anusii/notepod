@@ -1,12 +1,12 @@
 /// DESCRIPTION
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Friday 2025-02-14 08:06:50 +1100 Graham Williams>
+///
+/// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://www.gnu.org/licenses/gpl-3.0.en.html
-//
-// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software

@@ -4,7 +4,8 @@
 # them as artefacts on github, we can upload them to solidcommunity.au for
 # distribution.
 
-APP=notepod
+APP=$(basename "$(dirname "$(pwd)")")
+REP=$(git remote get-url origin | sed -E 's#.*[/:]([^/]+)/[^/]+(\.git)?$#\1#')
 
 HOST=solidcommunity.au
 FLDR=/var/www/html/installers/
@@ -33,14 +34,14 @@ conclusion=$(gh run view ${bumpId} --json conclusion --jq '.conclusion')
 # 20250611 gjw Currently failing:
 #
 # gh run download ${bumpId} --name ${APP}-linux-zip
-# error downloading notepod-linux-zip: would result in path traversal
+# error downloading ${APP}-linux-zip: would result in path traversal
 #
 # I was then manually downloading through browser, unzip and move
 # here, then run this script.
 #
 # But this should work as an alternative:
 #
-# gh api -H "Accept: application/vnd.github+json"   repos/anusii/notepod/actions/artifacts/3300608315/zip >| artifact.zip
+# gh api -H "Accept: application/vnd.github+json"   repos/${REP}/${APP}/actions/artifacts/3300608315/zip >| artifact.zip
 #
 # Need to get the correct artifact ID for each artefact.
 
@@ -58,10 +59,10 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     ## gh run download ${bumpId} --name ${APP}-linux-zip
 
-    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/anusii/notepod/actions/artifacts \
-		    --jq '.artifacts[] | select(.name=="notepod-linux-zip") | .id' | head -n 1)
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-linux-zip")) | .id' | head -n 1)
     echo "artifact id: $artifactId"
-    gh api -H "Accept: application/vnd.github+json" repos/anusii/notepod/actions/artifacts/${artifactId}/zip > artifact.zip
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
     unzip artifact.zip
     rm -f artifact.zip
 
@@ -74,10 +75,10 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     ## gh run download ${bumpId} --name ${APP}-windows-inno
 
-    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/anusii/notepod/actions/artifacts \
-		    --jq '.artifacts[] | select(.name=="notepod-windows-inno") | .id' | head -n 1)
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-windows-inno")) | .id' | head -n 1)
     echo "artifact id: $artifactId"
-    gh api -H "Accept: application/vnd.github+json" repos/anusii/notepod/actions/artifacts/${artifactId}/zip > artifact.zip
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
     unzip artifact.zip
     rm -f artifact.zip
 
@@ -90,10 +91,10 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     ## gh run download ${bumpId} --name ${APP}-windows-zip
 
-    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/anusii/notepod/actions/artifacts \
-		    --jq '.artifacts[] | select(.name=="notepod-windows-zip") | .id' | head -n 1)
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-windows-zip")) | .id' | head -n 1)
     echo "artifact id: $artifactId"
-    gh api -H "Accept: application/vnd.github+json" repos/anusii/notepod/actions/artifacts/${artifactId}/zip > artifact.zip
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
     unzip artifact.zip
     rm -f artifact.zip
 
@@ -108,10 +109,10 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     ## gh run download ${bumpId} --name ${APP}-macos-zip
 
-    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/anusii/notepod/actions/artifacts \
-		    --jq '.artifacts[] | select(.name=="notepod-macos-zip") | .id' | head -n 1)
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-macos-zip")) | .id' | head -n 1)
     echo "artifact id: $artifactId"
-    gh api -H "Accept: application/vnd.github+json" repos/anusii/notepod/actions/artifacts/${artifactId}/zip > artifact.zip
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
     unzip artifact.zip
     rm -f artifact.zip
 

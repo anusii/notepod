@@ -73,10 +73,10 @@ Then set up your local installation (only required once):
 
 ```bash
 ln -s ${HOME}/.local/share/notepod/notepod ${HOME}/.local/bin/
-wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/notepod.desktop -O ${HOME}/.local/share/applications/notepod.desktop
+wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/app.desktop -O ${HOME}/.local/share/applications/notepod.desktop
 sed -i "s/USER/$(whoami)/g" ${HOME}/.local/share/applications/notepod.desktop
 mkdir -p ${HOME}/.local/share/icons/hicolor/256x256/apps/
-wget https://github.com/anusii/notepod/raw/dev/installers/notepod.png -O ${HOME}/.local/share/icons/hicolor/256x256/apps/notepod.png
+wget https://github.com/anusii/notepod/raw/dev/installers/app.png -O ${HOME}/.local/share/icons/hicolor/256x256/apps/notepod.png
 ```
 
 To install for any user on the computer:
@@ -84,8 +84,8 @@ To install for any user on the computer:
 ```bash
 sudo unzip notepod-dev-linux.zip -d /opt/notepod
 sudo ln -s /opt/notepod/notepod /usr/local/bin/
-wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/notepod.desktop -O ${HOME}/usr/local/share/applications/notepod.desktop
-wget https://github.com/anusii/notepod/raw/dev/installers/notepod.png -O ${HOME}/use/local/share/icons/notepod.png
+wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/app.desktop -O ${HOME}/usr/local/share/applications/notepod.desktop
+wget https://github.com/anusii/notepod/raw/dev/installers/app.png -O ${HOME}/use/local/share/icons/notepod.png
 ```
 
 Once installed you can run the app from the GNOME desktop through

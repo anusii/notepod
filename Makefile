@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Monday 2025-06-09 16:42:16 +1000 Graham Williams>
+# Time-stamp: <Thursday 2025-06-26 16:07:58 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -110,7 +110,7 @@ tgz::
 apk::
 	rsync -avzh installers/$(APP).apk $(REPO):$(RLOC)
 	ssh $(REPO) chmod a+r $(RLOC)$(APP).apk
-	mv -f installers/$(APP)-*.apk installers/ARCHIVE
+	mv -f installers/$(APP)-*.apk installers/ARCHIVE/
 	rm -f installers/$(APP).apk
 
 deb:
@@ -120,7 +120,7 @@ deb:
 	wget $(DWLD)/$(APP)_amd64.deb -O $(APP)_amd64.deb
 	wajig install $(APP)_amd64.deb
 	rm -f $(APP)_amd64.deb
-	mv -f installers/$(APP)_*.deb installers/ARCHIVE
+	mv -f installers/$(APP)_*.deb installers/ARCHIVE/
 
 # 20250110 gjw A ginstall of the github built bundles, and the locally
 # built apk installed to the repository and moved into ARCHIVE.

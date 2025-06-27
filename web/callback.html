@@ -7,7 +7,7 @@
         const AUTH_RESPONSE_KEY = "openidconnect_auth_response_info";
 
         window.onload = function () {
-            if (window.opener && window.opener !== window) { //Used when working as a popup. Uses post message to respond to the parent window                
+            if (window.opener && window.opener !== window) { //Used when working as a popup. Uses post message to respond to the parent window
                 var parent = window.opener ?? window.parent;
                 parent.postMessage(location.href, "*");
             } else { //Used for redirect loop functionality.
