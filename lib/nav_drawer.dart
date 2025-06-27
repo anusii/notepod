@@ -26,18 +26,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/utils/misc.dart';
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/main.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/utils/misc.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
