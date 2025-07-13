@@ -27,21 +27,16 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/utils/save_note.dart';
 
 Container markdownEditor(
     BuildContext context,
     TextEditingController textController,
     FocusNode focusNode,
-    String markdownData,
-    GlobalKey<FormBuilderState> formKey,
-    [Map? prevNoteData,
-    bool shared = false]) {
+    String markdownData) {
   final cardWidth = (screenWidth(context) / 2) - 20;
 
   return Container(
@@ -63,11 +58,6 @@ Container markdownEditor(
                   border: OutlineInputBorder(),
                   labelText: 'Note Content',
                 ),
-                onSubmitted: (value) async {
-                  await saveNote(
-                      context, textController, formKey, prevNoteData, shared);
-                },
-                textInputAction: TextInputAction.done,
               ),
             ),
             SizedBox(

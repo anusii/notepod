@@ -26,6 +26,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/src/services/hardware_keyboard.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -37,11 +38,6 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
-
-// import 'package:notepod/home.dart';
-
-// import 'package:notepod/app_screen.dart';
-// import 'package:notepod/constants/app.dart';
 
 class EditNote extends StatefulWidget {
   final Map noteData;
@@ -68,7 +64,20 @@ class EditNoteState extends State<EditNote>
     _textController!.text = widget.noteData[noteContentPred];
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
-    _focusNode = FocusNode();
+    _focusNode = FocusNode(
+      onKeyEvent: (FocusNode node, KeyEvent evt) {
+        if (!HardwareKeyboard.instance.isShiftPressed &&
+            evt.logicalKey.keyLabel == 'Enter') {
+          if (evt is KeyDownEvent) {
+            // Save note when enter (not shift-enter) pressed
+            saveNote(context, _textController!, formKey, widget.noteData);
+          }
+          return KeyEventResult.handled;
+        } else {
+          return KeyEventResult.ignored;
+        }
+      },
+    );
   }
 
   @override
@@ -129,8 +138,7 @@ class EditNoteState extends State<EditNote>
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(context, _textController!, _focusNode, data, formKey,
-              widget.noteData),
+          markdownEditor(context, _textController!, _focusNode, data),
 
           // Container(
           //   padding: const EdgeInsets.all(10),

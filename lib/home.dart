@@ -26,6 +26,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/src/services/hardware_keyboard.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -62,7 +63,20 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
-    _focusNode = FocusNode();
+    _focusNode = FocusNode(
+      onKeyEvent: (FocusNode node, KeyEvent evt) {
+        if (!HardwareKeyboard.instance.isShiftPressed &&
+            evt.logicalKey.keyLabel == 'Enter') {
+          if (evt is KeyDownEvent) {
+            // Save note when enter (not shift-enter) pressed
+            saveNote(context, _textController!, formKey);
+          }
+          return KeyEventResult.handled;
+        } else {
+          return KeyEventResult.ignored;
+        }
+      },
+    );
   }
 
   @override
@@ -140,7 +154,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(context, _textController!, _focusNode, data, formKey),
+          markdownEditor(context, _textController!, _focusNode, data),
 
           // av: 20250604 - The following code is from the package
           // markdown_editor_plus. The current version of this gives some errors
