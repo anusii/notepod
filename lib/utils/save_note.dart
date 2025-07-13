@@ -1,18 +1,44 @@
+/// The edit note page.
+///
+/// Copyright (C) 2023, Software Innovation Institute
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License");
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+//
+// Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program.  If not, see <https://www.gnu.org/licenses/>.
+///
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:solidpod/solidpod.dart';
-import 'package:notepod/home.dart';
 import 'package:intl/intl.dart';
+import 'package:solidpod/solidpod.dart';
+
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
 
 Future<void> saveNote(BuildContext context,
     TextEditingController _textController, GlobalKey<FormBuilderState> formKey,
