@@ -26,12 +26,13 @@
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/app_screen.dart';
 
 class ShareNote extends StatefulWidget {
   final Map noteData;

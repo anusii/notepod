@@ -29,19 +29,15 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-// import 'package:intl/intl.dart';
-// import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/notes/view_note.dart';
-// import 'package:notepod/utils/encryption.dart';
-// import 'package:notepod/widgets/err_dialogs.dart';
-// import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/app_screen.dart';
+
 // import 'package:notepod/home.dart';
 
 // import 'package:notepod/app_screen.dart';

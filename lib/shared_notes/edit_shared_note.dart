@@ -34,8 +34,8 @@ import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 
 class EditSharedNote extends StatefulWidget {

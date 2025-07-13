@@ -27,25 +27,12 @@ library;
 
 import 'package:flutter/material.dart';
 
-// import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:markdown_widget/markdown_widget.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:markdown_toolbar/markdown_toolbar.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 
 import 'package:notepod/constants/app.dart';
-
-// import 'package:solidpod/solidpod.dart';
-
-// import 'package:notepod/widgets/loading_animation.dart';
-// import 'package:notepod/utils/encryption.dart';
-// import 'package:notepod/widgets/err_dialogs.dart';
-// import 'package:notepod/app_screen.dart';
-// import 'package:notepod/constants/turtle_structures.dart';
-// import 'package:notepod/constants/app.dart';
-// import 'package:intl/intl.dart';
-// import 'package:notepod/home.dart';
 import 'package:notepod/utils/save_note.dart';
-
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 Container markdownEditor(
     BuildContext context,
