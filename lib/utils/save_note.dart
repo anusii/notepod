@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
@@ -15,14 +16,18 @@ import 'package:notepod/constants/app.dart';
 
 Future<void> saveNote(BuildContext context,
     TextEditingController _textController, GlobalKey<FormBuilderState> formKey,
-    [Map? prevNoteData]) async {
+    [Map? prevNoteData, bool shared = false]) async {
   if (formKey.currentState?.saveAndValidate() ?? false) {
     // Compares to prevNoteData if previous note data provided
+    // Adds sharing metadata if shared==true
 
     final createNoteStatus;
     Map formData = formKey.currentState?.value as Map;
     String noteText = _textController.text;
     Map noteNewData = {};
+
+    // Previous shared note info only used when saveNote() on edit shared note
+    Map prevSharedNoteInfo = {};
 
     // Note title need to be spaceless as we are using that name
     // to create a .acl file. And the acl file url cannot have spaces
@@ -32,7 +37,11 @@ Future<void> saveNote(BuildContext context,
     String modifiedDateTimeStr =
         DateFormat('yyyyMMddTHHmmss').format(DateTime.now()).toString();
 
-    // if (noteText.trim() != '') {
+    if (shared) {
+      Map prevNoteFullData = prevNoteData!;
+      prevNoteData = prevNoteFullData['sharedNoteContent'];
+      prevSharedNoteInfo = prevNoteFullData['sharedNoteInfo'];
+    }
 
     if (prevNoteData != null) {
       if (noteTitle == prevNoteData[noteTitlePred] &&
@@ -50,17 +59,49 @@ Future<void> saveNote(BuildContext context,
         // Update existing note
         String createdDateTimeStr = prevNoteData[createdDateTimePred];
 
+        // Format new note data structure
         noteNewData = await prepNewNoteData(
             createdDateTimeStr, modifiedDateTimeStr, noteTitle, noteText);
 
-        createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            EditNote(
-              noteData: noteNewData,
-            ));
+        if (shared) {
+          // Shared edited note
+          // New full note data
+          Map newFullNoteData = {
+            'sharedNoteInfo': prevSharedNoteInfo,
+            'sharedNoteContent': noteNewData
+          };
+          // Encrypt note, create TTL, update file in POD
+          createNoteStatus = await saveNoteToPod(
+              context,
+              noteNewData,
+              ViewSharedNote(
+                fullNoteData: newFullNoteData,
+              ),
+              shared,
+              prevSharedNoteInfo);
 
-        postSaveNav(context, createNoteStatus, ViewNote(noteData: noteNewData));
+          // Navigate to return page
+          postSaveNav(
+              context,
+              createNoteStatus,
+              ViewSharedNote(
+                fullNoteData: newFullNoteData,
+              ));
+        } else {
+          // Non-shared edited note
+          // Encrypt note, create TTL, update file in POD
+          createNoteStatus = await saveNoteToPod(
+              context,
+              noteNewData,
+              EditNote(
+                noteData: noteNewData,
+              ),
+              shared);
+
+          // Navigate to return page
+          postSaveNav(
+              context, createNoteStatus, ViewNote(noteData: noteNewData));
+        }
       }
     } else {
       // Newly created note (not editing previous note)
@@ -75,19 +116,19 @@ Future<void> saveNote(BuildContext context,
           false,
         );
 
+        // Format new note data structure
         // As new note, use modoifiedDateTimeStr for creation datetimestamp
         noteNewData = await prepNewNoteData(
             modifiedDateTimeStr, modifiedDateTimeStr, noteTitle, noteText);
 
+        // Encrypt note, create TTL and write to file in POD
         createNoteStatus = await saveNoteToPod(context, noteNewData, Home());
 
+        // Navigate to return page
         postSaveNav(context, createNoteStatus, Home());
       } else {
         Navigator.pop(context);
         showErrDialog(context, 'Please enter some note content.');
-        // TODO 20250713 JM: why is close of dialog causing black screen
-        // 'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5848 pos 12: '_history.isNotEmpty': is not true.
-        // Occurs when saved on empty note text with Submit button press or enter press in markdown editor.
       }
     }
   } else {
@@ -95,8 +136,6 @@ Future<void> saveNote(BuildContext context,
         context, 'Note name validation failed! Try using a different name.');
   }
 }
-
-// TODO: wrap up actions as save_new_note(), save_updated_note(), save_shared_not()
 
 Future<Map> prepNewNoteData(String createdDateTimeStr,
     String modifiedDateTimeStr, String noteTitle, String noteText) async {
@@ -111,12 +150,12 @@ Future<Map> prepNewNoteData(String createdDateTimeStr,
 }
 
 Future<SolidFunctionCallStatus> saveNoteToPod(
-    BuildContext context, Map noteNewData, Widget returnPage) async {
+    BuildContext context, Map noteNewData, Widget returnPage,
+    [bool shared = false, Map prevSharedNoteInfo = const {}]) async {
   // Encrypt note text using created time as the key
   // av: 20250519 - We need to encrypt the note text because
   // at the moment rdflib cannot parse multiline text with
   // # (hash) values in them.
-  // TODO: add prevnotedata for prev time
   String encNoteText = encryptVal(
       noteNewData[noteContentPred], noteNewData[createdDateTimePred]);
 
@@ -133,18 +172,34 @@ Future<SolidFunctionCallStatus> saveNoteToPod(
       noteNewData[noteTitlePred],
       encNoteText);
 
-  // final createNoteStatus = await writePod(
-  return await writePod(
-    noteFileName,
-    noteTTLStr,
-    context,
-    returnPage,
-    //encrypted: false, // save in plain text for now
-  );
+  if (shared) {
+    // Get note url
+    String noteFileUrl = prevSharedNoteInfo[noteUrl];
+
+    // Get note owner webId
+    String noteOwnerWebId = prevSharedNoteInfo[noteOwner];
+
+    return await writeExternalPod(
+      noteFileUrl,
+      noteTTLStr,
+      noteOwnerWebId,
+      context,
+      returnPage,
+    );
+  } else {
+// Write note to POD
+    return await writePod(
+      noteFileName,
+      noteTTLStr,
+      context,
+      returnPage,
+      //encrypted: false, // save in plain text for now
+    );
+  }
 }
 
 Future<void> postSaveNav(BuildContext context,
-    SolidFunctionCallStatus createNoteStatus, Widget returnPage2) async {
+    SolidFunctionCallStatus createNoteStatus, Widget returnPage) async {
   if (createNoteStatus == SolidFunctionCallStatus.success) {
     //Navigator.pop(context);
 
@@ -153,8 +208,7 @@ Future<void> postSaveNav(BuildContext context,
       MaterialPageRoute(
         builder: (context) => AppScreen(
           title: topBarTitle,
-          // childPage: Home(),
-          childPage: returnPage2,
+          childPage: returnPage,
         ),
       ),
       (Route<dynamic> route) =>

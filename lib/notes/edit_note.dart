@@ -35,7 +35,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/notes/save_note.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/notes/view_note.dart';
 // import 'package:notepod/utils/encryption.dart';
 // import 'package:notepod/widgets/err_dialogs.dart';

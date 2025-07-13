@@ -29,18 +29,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:intl/intl.dart';
-import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
-import 'package:notepod/shared_notes/view_shared_note.dart';
-import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/widgets/err_dialogs.dart';
-import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 
 class EditSharedNote extends StatefulWidget {
@@ -88,7 +83,6 @@ class EditSharedNoteState extends State<EditSharedNote>
 
   @override
   Widget build(BuildContext context) {
-    Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
     Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
 
     return SingleChildScrollView(
@@ -132,7 +126,8 @@ class EditSharedNoteState extends State<EditSharedNote>
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(context, _textController!, _focusNode, data, formKey),
+          markdownEditor(context, _textController!, _focusNode, data, formKey,
+              widget.fullNoteData, true),
           // Container(
           //     padding: const EdgeInsets.all(10),
           //     child: SplittedMarkdownFormField(
@@ -153,102 +148,8 @@ class EditSharedNoteState extends State<EditSharedNote>
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    if (formKey.currentState?.saveAndValidate() ?? false) {
-                      Map prevNoteData = sharedNoteContent;
-
-                      Map formData = formKey.currentState?.value as Map;
-                      String noteText = _textController!.text;
-                      // Note title need to be spaceless as we are using that name
-                      // to create a .acl file. And the acl file url cannot have spaces
-                      String noteTitle =
-                          formData[noteTitlePred].replaceAll('\n', '');
-
-                      if (noteTitle == prevNoteData[noteTitlePred] &&
-                          noteText == prevNoteData[noteContentPred]) {
-                        showErrDialog(context, 'You have no new changes!');
-                      } else {
-                        // Loading animation
-                        showAnimationDialog(
-                          context,
-                          17,
-                          'Saving the changes!',
-                          false,
-                        );
-
-                        // Get note created time
-                        String createdDateTimeStr =
-                            prevNoteData[createdDateTimePred];
-
-                        // Get date and time
-                        String modifiedDateTimeStr =
-                            DateFormat('yyyyMMddTHHmmss')
-                                .format(DateTime.now())
-                                .toString();
-                        // Create new note data map
-                        Map noteNewData = {};
-                        noteNewData[noteTitlePred] = noteTitle;
-                        noteNewData[createdDateTimePred] = createdDateTimeStr;
-                        noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
-                        noteNewData[noteContentPred] = noteText;
-
-                        // Encrypt note text using created time as the key
-                        // av: 20250519 - We need to encrypt the note text because
-                        // at the moment rdflib cannot parse multiline text with
-                        // # (hash) values in them.
-                        String encNoteText = encryptVal(
-                            noteText, prevNoteData[createdDateTimePred]);
-
-                        // Create TTL body for note
-                        final noteTTLStr = genNoteTTLStr(createdDateTimeStr,
-                            modifiedDateTimeStr, noteTitle, encNoteText);
-
-                        // Get note url
-                        String noteFileUrl = sharedNoteInfo[noteUrl];
-
-                        // Get note owner webId
-                        String noteOwnerWebId = sharedNoteInfo[noteOwner];
-
-                        // New full note data
-                        Map newFullNoteData = {
-                          'sharedNoteInfo': sharedNoteInfo,
-                          'sharedNoteContent': noteNewData
-                        };
-
-                        final createNoteStatus = await writeExternalPod(
-                          noteFileUrl,
-                          noteTTLStr,
-                          noteOwnerWebId,
-                          context,
-                          ViewSharedNote(
-                            fullNoteData: newFullNoteData,
-                          ),
-                        );
-
-                        if (createNoteStatus ==
-                            SolidFunctionCallStatus.success) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: ViewSharedNote(
-                                  fullNoteData: newFullNoteData,
-                                ),
-                              ),
-                            ),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
-                        } else {
-                          Navigator.pop(context);
-                          showErrDialog(context,
-                              'Failed to store the note file in your POD. Try again!');
-                        }
-                      }
-                    } else {
-                      showErrDialog(context,
-                          'Note name validation failed! Try using a different name.');
-                    }
+                    await saveNote(context, _textController!, formKey,
+                        widget.fullNoteData, true);
 
                     // Redirect to the home page
                   },

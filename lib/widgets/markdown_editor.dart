@@ -43,7 +43,7 @@ import 'package:notepod/constants/app.dart';
 // import 'package:notepod/constants/app.dart';
 // import 'package:intl/intl.dart';
 // import 'package:notepod/home.dart';
-import 'package:notepod/notes/save_note.dart';
+import 'package:notepod/utils/save_note.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -53,7 +53,8 @@ Container markdownEditor(
     FocusNode focusNode,
     String markdownData,
     GlobalKey<FormBuilderState> formKey,
-    [Map? prevNoteData]) {
+    [Map? prevNoteData,
+    bool shared = false]) {
   final cardWidth = (screenWidth(context) / 2) - 20;
 
   return Container(
@@ -77,7 +78,7 @@ Container markdownEditor(
                 ),
                 onSubmitted: (value) async {
                   await saveNote(
-                      context, textController, formKey, prevNoteData);
+                      context, textController, formKey, prevNoteData, shared);
                 },
                 textInputAction: TextInputAction.done,
               ),

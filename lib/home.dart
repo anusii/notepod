@@ -32,7 +32,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/notes/save_note.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 
 class Home extends StatefulWidget {
