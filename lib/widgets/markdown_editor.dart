@@ -33,11 +33,27 @@ import 'package:markdown_toolbar/markdown_toolbar.dart';
 
 import 'package:notepod/constants/app.dart';
 
+// import 'package:solidpod/solidpod.dart';
+
+// import 'package:notepod/widgets/loading_animation.dart';
+// import 'package:notepod/utils/encryption.dart';
+// import 'package:notepod/widgets/err_dialogs.dart';
+// import 'package:notepod/app_screen.dart';
+// import 'package:notepod/constants/turtle_structures.dart';
+// import 'package:notepod/constants/app.dart';
+// import 'package:intl/intl.dart';
+// import 'package:notepod/home.dart';
+import 'package:notepod/notes/save_note.dart';
+
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+
 Container markdownEditor(
     BuildContext context,
     TextEditingController textController,
     FocusNode focusNode,
-    String markdownData) {
+    String markdownData,
+    GlobalKey<FormBuilderState> formKey,
+    [Map? prevNoteData]) {
   final cardWidth = (screenWidth(context) / 2) - 20;
 
   return Container(
@@ -59,6 +75,11 @@ Container markdownEditor(
                   border: OutlineInputBorder(),
                   labelText: 'Note Content',
                 ),
+                onSubmitted: (value) async {
+                  await saveNote(
+                      context, textController, formKey, prevNoteData);
+                },
+                textInputAction: TextInputAction.done,
               ),
             ),
             SizedBox(

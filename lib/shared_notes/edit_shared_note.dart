@@ -132,7 +132,7 @@ class EditSharedNoteState extends State<EditSharedNote>
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(context, _textController!, _focusNode, data),
+          markdownEditor(context, _textController!, _focusNode, data, formKey),
           // Container(
           //     padding: const EdgeInsets.all(10),
           //     child: SplittedMarkdownFormField(

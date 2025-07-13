@@ -30,16 +30,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/widgets/err_dialogs.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/notes/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
 
 class Home extends StatefulWidget {
   // final String webId;
@@ -146,7 +140,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(context, _textController!, _focusNode, data),
+          markdownEditor(context, _textController!, _focusNode, data, formKey),
 
           // av: 20250604 - The following code is from the package
           // markdown_editor_plus. The current version of this gives some errors
@@ -170,84 +164,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    if (formKey.currentState?.saveAndValidate() ?? false) {
-                      // Loading animation
-                      showAnimationDialog(
-                        context,
-                        17,
-                        'Saving the note!',
-                        false,
-                      );
-
-                      Map formData = formKey.currentState?.value as Map;
-                      String noteText = _textController!.text;
-                      // Note title need to be spaceless as we are using that name
-                      // to create a .acl file. And the acl file url cannot have spaces
-                      // String noteTitle =
-                      //     formData['noteTitle'].split(' ').join('_');
-
-                      if (noteText.trim() != '') {
-                        String noteTitle =
-                            formData['noteTitle'].replaceAll('\n', '');
-
-                        // Get date and time
-                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                            .format(DateTime.now())
-                            .toString();
-
-                        // Encrypt note text using created time as the key
-                        // av: 20250519 - We need to encrypt the note text because
-                        // at the moment rdflib cannot parse multiline text with
-                        // # (hash) values in them.
-                        String encNoteText = encryptVal(noteText, dateTimeStr);
-
-                        // Create note file name
-                        // String noteFileName =
-                        //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
-                        String noteFileName =
-                            '$noteFileNamePrefix$dateTimeStr.ttl';
-
-                        // Create TTL body for note
-                        final noteTTLStr = genNoteTTLStr(
-                            dateTimeStr, dateTimeStr, noteTitle, encNoteText);
-
-                        final createNoteStatus = await writePod(
-                          noteFileName,
-                          noteTTLStr,
-                          context,
-                          Home(),
-                          //encrypted: false, // save in plain text for now
-                        );
-
-                        if (createNoteStatus ==
-                            SolidFunctionCallStatus.success) {
-                          //Navigator.pop(context);
-
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: Home(),
-                              ),
-                            ),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
-                        } else {
-                          Navigator.pop(context);
-                          showErrDialog(context,
-                              'Failed to store the note file in your POD. Try again!');
-                        }
-                      } else {
-                        Navigator.pop(context);
-                        showErrDialog(
-                            context, 'Please enter some note content.');
-                      }
-                    } else {
-                      showErrDialog(context,
-                          'Note name validation failed! Try using a different name.');
-                    }
+                    await saveNote(context, _textController!, formKey);
 
                     // Redirect to the home page
                   },
