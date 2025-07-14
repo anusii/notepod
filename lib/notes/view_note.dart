@@ -35,6 +35,8 @@ import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/app_screen.dart';
+import 'package:notepod/utils/misc.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -80,7 +82,7 @@ class _ViewNoteState extends State<ViewNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  'Created on: ${noteData[createdDateTimePred]}',
+                  'Created on: ${getDateTimeStr(noteData[createdDateTimePred])}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -96,7 +98,7 @@ class _ViewNoteState extends State<ViewNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                 child: Text(
-                  'Last modified on: ${noteData[modifiedDateTimePred]}',
+                  'Last modified on: ${getDateTimeStr(noteData[modifiedDateTimePred])}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),

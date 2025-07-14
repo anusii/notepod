@@ -32,6 +32,7 @@ import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/utils/misc.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -79,7 +80,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  'Created on: ${sharedNoteContent[createdDateTimePred]}',
+                  'Created on: ${getDateTimeStr(sharedNoteContent[createdDateTimePred])}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -95,7 +96,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
                 child: Text(
-                  'Last modified on: ${sharedNoteContent[modifiedDateTimePred]}',
+                  'Last modified on: ${getDateTimeStr(sharedNoteContent[modifiedDateTimePred])}',
                   style: const TextStyle(
                     fontSize: 14,
                   ),

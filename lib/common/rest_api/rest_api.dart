@@ -46,6 +46,8 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
     final dataDirPath = await getDataDirPath();
     final dataDirUrl = await getDirUrl(dataDirPath);
 
+    // Why do we need the additional `/`? (20250714 gjw)
+
     final notesDirUrl = '$dataDirUrl/';
 
     // Check if the directory exists.
@@ -53,29 +55,29 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
     bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
 
     if (resExist) {
-      debugPrint('Checking data directory for the notes: $notesDirUrl.');
+      //debugPrint('Data: $dataDirUrl');
       final res = await getResourcesInContainer(notesDirUrl);
-      debugPrint(res.toString());
+      // debugPrint(res.toString());
 
       Map notesMap = {};
       // Loop through the list of files to get the file names
       for (final fileName in res.files) {
         // Read file content
-        debugPrint('About to read from $fileName');
+        //debugPrint('Read: $fileName');
         String noteContent =
             await readPod(fileName.replaceAll(webId, ''), context, childPage);
-        debugPrint('About to call noteInfoMap $fileName');
+        //debugPrint('NoteInfoMap: $fileName');
         notesMap[fileName] = noteInfoMap(noteContent);
-        debugPrint('$fileName => ${notesMap[fileName]}');
+        //debugPrint('$fileName => ${notesMap[fileName]}');
       }
       // final filteredMap = filterTreatments(treatmentMap, type);
       return notesMap;
     } else {
-      debugPrint('No data directory for the notes: $notesDirUrl.');
+      debugPrint('WARN: No data directory for the notes: $notesDirUrl.');
       return {};
     }
   } else {
-    debugPrint('Not logged in in finding the list of notes.');
+    debugPrint('WARN: Not logged in when finding the list of notes.');
     return {};
   }
 }
@@ -123,7 +125,7 @@ Future<bool> checkResourceStatus(
   } else if (response.statusCode == 404) {
     return false;
   } else {
-    debugPrint('Failed to check resource status.\n'
+    debugPrint('WARN: Failed to check resource status.\n'
         'URL: $resUrl\n'
         'ERR: ${response.body}');
     return false;
