@@ -26,13 +26,14 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class ShareExternalNote extends StatefulWidget {
   final Map fullNoteData;

@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams, Anushka Vidanage
+/// Authors: Graham Williams, Anushka Vidanage, Jess Moore
 
 library;
 
@@ -30,16 +30,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/widgets/err_dialogs.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
 
 class Home extends StatefulWidget {
   // final String webId;
@@ -69,6 +63,24 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _focusNode = FocusNode();
+    // To enable the ENTER => SAVE functionality within a note replace the above
+    // line with the following. For now we will stay with current
+    // behaviour. (20250714 gjw).
+    //
+    // _focusNode = FocusNode(
+    //   onKeyEvent: (FocusNode node, KeyEvent evt) {
+    //     if (!HardwareKeyboard.instance.isShiftPressed &&
+    //         evt.logicalKey.keyLabel == 'Enter') {
+    //       if (evt is KeyDownEvent) {
+    //         // Save note when enter (not shift-enter) pressed
+    //         saveNote(context, _textController!, formKey);
+    //       }
+    //       return KeyEventResult.handled;
+    //     } else {
+    //       return KeyEventResult.ignored;
+    //     }
+    //   },
+    // );
   }
 
   @override
@@ -170,84 +182,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    if (formKey.currentState?.saveAndValidate() ?? false) {
-                      // Loading animation
-                      showAnimationDialog(
-                        context,
-                        17,
-                        'Saving the note!',
-                        false,
-                      );
-
-                      Map formData = formKey.currentState?.value as Map;
-                      String noteText = _textController!.text;
-                      // Note title need to be spaceless as we are using that name
-                      // to create a .acl file. And the acl file url cannot have spaces
-                      // String noteTitle =
-                      //     formData['noteTitle'].split(' ').join('_');
-
-                      if (noteText.trim() != '') {
-                        String noteTitle =
-                            formData['noteTitle'].replaceAll('\n', '');
-
-                        // Get date and time
-                        String dateTimeStr = DateFormat('yyyyMMddTHHmmss')
-                            .format(DateTime.now())
-                            .toString();
-
-                        // Encrypt note text using created time as the key
-                        // av: 20250519 - We need to encrypt the note text because
-                        // at the moment rdflib cannot parse multiline text with
-                        // # (hash) values in them.
-                        String encNoteText = encryptVal(noteText, dateTimeStr);
-
-                        // Create note file name
-                        // String noteFileName =
-                        //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
-                        String noteFileName =
-                            '$noteFileNamePrefix$dateTimeStr.ttl';
-
-                        // Create TTL body for note
-                        final noteTTLStr = genNoteTTLStr(
-                            dateTimeStr, dateTimeStr, noteTitle, encNoteText);
-
-                        final createNoteStatus = await writePod(
-                          noteFileName,
-                          noteTTLStr,
-                          context,
-                          Home(),
-                          //encrypted: false, // save in plain text for now
-                        );
-
-                        if (createNoteStatus ==
-                            SolidFunctionCallStatus.success) {
-                          //Navigator.pop(context);
-
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: Home(),
-                              ),
-                            ),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
-                        } else {
-                          Navigator.pop(context);
-                          showErrDialog(context,
-                              'Failed to store the note file in your POD. Try again!');
-                        }
-                      } else {
-                        Navigator.pop(context);
-                        showErrDialog(
-                            context, 'Please enter some note content.');
-                      }
-                    } else {
-                      showErrDialog(context,
-                          'Note name validation failed! Try using a different name.');
-                    }
+                    await saveNote(context, _textController!, formKey);
 
                     // Redirect to the home page
                   },
@@ -276,54 +211,4 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
     );
   }
-
-  // Container markdownEditor(double cardWidth,
-  //     TextEditingController textController, FocusNode focusNode) {
-  //   return Container(
-  //     padding: const EdgeInsets.all(10),
-  //     child: Row(
-  //       children: [
-  //         Column(
-  //           children: [
-  //             SizedBox(
-  //               width: cardWidth,
-  //               child: TextField(
-  //                 autofocus: true,
-  //                 controller: textController,
-  //                 focusNode: focusNode,
-  //                 keyboardType: TextInputType.multiline,
-  //                 maxLines: null,
-  //                 decoration: InputDecoration(
-  //                   border: OutlineInputBorder(),
-  //                   labelText: 'Note content',
-  //                 ),
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               height: 10,
-  //             ),
-  //             SizedBox(
-  //               width: cardWidth,
-  //               child: MarkdownToolbar(
-  //                 useIncludedTextField:
-  //                     false, // Because we want to use our own, set useIncludedTextField to false
-  //                 controller: textController, // Add the _controller
-  //                 focusNode: focusNode, // Add the _focusNode
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         SizedBox(
-  //           width: 20,
-  //         ),
-  //         Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             SizedBox(width: cardWidth, child: MarkdownBlock(data: data))
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 }
