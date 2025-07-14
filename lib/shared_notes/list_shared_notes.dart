@@ -24,6 +24,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
@@ -55,6 +56,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
             child: Text(
               'Shared Notes (created by other people)',
+              style: titleStyle,
             ),
           ),
           Expanded(

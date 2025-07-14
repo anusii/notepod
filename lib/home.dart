@@ -113,10 +113,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       children: [
                         Text(
                           'Date: $dateStr',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: titleStyle,
                         ),
                       ],
                     ),

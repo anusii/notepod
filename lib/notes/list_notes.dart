@@ -56,6 +56,7 @@ class _ListNotesState extends State<ListNotes> {
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
             child: Text(
               'My Notes (created by me)',
+              style: titleStyle,
             ),
           ),
           Expanded(
