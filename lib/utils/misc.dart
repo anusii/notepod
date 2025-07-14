@@ -1,6 +1,6 @@
 // Misc functions.
 ///
-// Time-stamp: <Friday 2025-06-27 14:00:17 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-07-14 10:11:39 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -43,24 +43,30 @@ String getNameFromWebId(String webId) {
 }
 
 // Date format type for displaying date and time.
+
 enum DateFormatType {
   defaultFormat,
   longDate,
   longDateTime,
 }
 
-// Get the given date and time in a specific format.
+/// Get the given date and time in a specific format.
+///
+/// The default for the optional argument is the longDateFormat which is more
+/// readily human readable. It drops the leading zero on the day and hour, and
+/// drops the seconds. (20250714 gjw)
+
 String getDateTimeStr(
   String dateTimeStr, {
-  DateFormatType formatType = DateFormatType.defaultFormat,
+  DateFormatType formatType = DateFormatType.longDateTime,
 }) {
   String pattern;
   switch (formatType) {
     case DateFormatType.longDate:
-      pattern = 'dd MMM yyyy';
+      pattern = 'd MMM yyyy';
       break;
     case DateFormatType.longDateTime:
-      pattern = 'dd MMM yyyy hh:mm:ss a';
+      pattern = 'd MMM yyyy h:mm a';
       break;
     case DateFormatType.defaultFormat:
       // default:
