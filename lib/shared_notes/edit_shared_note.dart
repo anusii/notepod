@@ -65,21 +65,25 @@ class EditSharedNoteState extends State<EditSharedNote>
         widget.fullNoteData['sharedNoteContent'][noteContentPred];
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
-    _focusNode = FocusNode(
-      onKeyEvent: (FocusNode node, KeyEvent evt) {
-        if (!HardwareKeyboard.instance.isShiftPressed &&
-            evt.logicalKey.keyLabel == 'Enter') {
-          if (evt is KeyDownEvent) {
-            // Save note when enter (not shift-enter) pressed
-            saveNote(
-                context, _textController!, formKey, widget.fullNoteData, true);
-          }
-          return KeyEventResult.handled;
-        } else {
-          return KeyEventResult.ignored;
-        }
-      },
-    );
+    _focusNode = FocusNode();
+    // To enable the ENTER => SAVE functionality replace the above line with the
+    // following. For now we will stasy with current behaviour. (20250714 gjw).
+    //
+    // _focusNode = FocusNode(
+    //   onKeyEvent: (FocusNode node, KeyEvent evt) {
+    //     if (!HardwareKeyboard.instance.isShiftPressed &&
+    //         evt.logicalKey.keyLabel == 'Enter') {
+    //       if (evt is KeyDownEvent) {
+    //         // Save note when enter (not shift-enter) pressed
+    //         saveNote(
+    //             context, _textController!, formKey, widget.fullNoteData, true);
+    //       }
+    //       return KeyEventResult.handled;
+    //     } else {
+    //       return KeyEventResult.ignored;
+    //     }
+    //   },
+    // );
   }
 
   @override
