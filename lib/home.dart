@@ -31,6 +31,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
@@ -125,10 +126,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       children: [
                         Text(
                           'Date: $dateStr',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: titleStyle,
                         ),
                       ],
                     ),

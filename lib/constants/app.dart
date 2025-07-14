@@ -56,3 +56,9 @@ SizedBox standardHeight() {
 }
 
 const double desktopWidthThreshold = 960;
+
+// Text style of page titles
+const titleStyle = TextStyle(
+  fontSize: 15,
+  fontWeight: FontWeight.bold,
+);

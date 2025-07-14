@@ -25,6 +25,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/app_screen.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
@@ -48,57 +49,72 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
     Map sharedNotesMap = widget.sharedNotesMap;
     List sharedNotesUrlList = sharedNotesMap.keys.toList();
     return SizedBox(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: sharedNotesMap.length,
-          itemBuilder: (context, index) => Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    radius: 26,
-                    backgroundImage: AssetImage('assets/images/note-icon.png'),
-                  ),
-                  //const Icon(Icons.text_snippet_outlined),
-                  title: Text(
-                      sharedNotesMap[sharedNotesUrlList[index]][noteFileName]),
-                  subtitle: Text(
-                      'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    String notePermission =
-                        sharedNotesMap[sharedNotesUrlList[index]]
-                            [permissionList];
-                    if (notePermission.contains('read')) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AppScreen(
-                                  childPage: ViewSharedNoteScreen(
-                                    sharedNoteData: sharedNotesMap[
-                                        sharedNotesUrlList[index]],
-                                  ),
-                                )),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
-                    } else {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AppScreen(
-                                  childPage: NonReadableNote(
-                                    noteMetaData: sharedNotesMap[
-                                        sharedNotesUrlList[index]],
-                                  ),
-                                )),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
-                    }
-                  },
-                ),
-              )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+            child: Text(
+              'Shared Notes (created by other people)',
+              style: titleStyle,
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: sharedNotesMap.length,
+                itemBuilder: (context, index) => Card(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: ListTile(
+                        leading: const CircleAvatar(
+                          radius: 26,
+                          backgroundImage:
+                              AssetImage('assets/images/note-icon.png'),
+                        ),
+                        //const Icon(Icons.text_snippet_outlined),
+                        title: Text(sharedNotesMap[sharedNotesUrlList[index]]
+                            [noteFileName]),
+                        subtitle: Text(
+                            'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
+                        trailing: const Icon(Icons.arrow_forward),
+                        onTap: () {
+                          String notePermission =
+                              sharedNotesMap[sharedNotesUrlList[index]]
+                                  [permissionList];
+                          if (notePermission.contains('read')) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AppScreen(
+                                        childPage: ViewSharedNoteScreen(
+                                          sharedNoteData: sharedNotesMap[
+                                              sharedNotesUrlList[index]],
+                                        ),
+                                      )),
+                              (Route<dynamic> route) =>
+                                  false, // This predicate ensures all previous routes are removed
+                            );
+                          } else {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AppScreen(
+                                        childPage: NonReadableNote(
+                                          noteMetaData: sharedNotesMap[
+                                              sharedNotesUrlList[index]],
+                                        ),
+                                      )),
+                              (Route<dynamic> route) =>
+                                  false, // This predicate ensures all previous routes are removed
+                            );
+                          }
+                        },
+                      ),
+                    )),
+          ),
+        ],
+      ),
     );
   }
 }

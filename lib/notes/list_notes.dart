@@ -49,39 +49,54 @@ class _ListNotesState extends State<ListNotes> {
     Map notesMap = widget.notesMap;
     List fileNames = notesMap.keys.toList();
     return SizedBox(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: notesMap.length,
-          itemBuilder: (context, index) => Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    radius: 26,
-                    backgroundImage: AssetImage('assets/images/note-icon.png'),
-                  ),
-                  //const Icon(Icons.text_snippet_outlined),
-                  title: Text(notesMap[fileNames[index]][noteTitlePred]),
-                  subtitle: Text(
-                      'Created on: ${getDateTimeStr(notesMap[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(notesMap[fileNames[index]][modifiedDateTimePred])}'),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppScreen(
-                          title: topBarTitle,
-                          childPage: ViewNote(
-                            noteData: notesMap[fileNames[index]],
-                          ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+            child: Text(
+              'My Notes (created by me)',
+              style: titleStyle,
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: notesMap.length,
+                itemBuilder: (context, index) => Card(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: ListTile(
+                        leading: const CircleAvatar(
+                          radius: 26,
+                          backgroundImage:
+                              AssetImage('assets/images/note-icon.png'),
                         ),
+                        //const Icon(Icons.text_snippet_outlined),
+                        title: Text(notesMap[fileNames[index]][noteTitlePred]),
+                        subtitle: Text(
+                            'Created on: ${getDateTimeStr(notesMap[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(notesMap[fileNames[index]][modifiedDateTimePred])}'),
+                        trailing: const Icon(Icons.arrow_forward),
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: ViewNote(
+                                  noteData: notesMap[fileNames[index]],
+                                ),
+                              ),
+                            ),
+                            (Route<dynamic> route) =>
+                                false, // This predicate ensures all previous routes are removed
+                          );
+                        },
                       ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
-                ),
-              )),
+                    )),
+          ),
+        ],
+      ),
     );
   }
 }
