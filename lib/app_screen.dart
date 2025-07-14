@@ -26,12 +26,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
-// import 'package:solidpod/solidpod.dart' show getAppNameVersion;
 import 'package:version_widget/version_widget.dart';
 
-import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
+import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
 class AppScreen extends StatefulWidget {

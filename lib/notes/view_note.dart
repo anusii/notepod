@@ -24,19 +24,18 @@ library;
 
 import 'package:flutter/material.dart';
 
-// import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:solidpod/solidpod.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/widgets/loading_animation.dart';
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/loading_animation.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
