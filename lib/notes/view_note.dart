@@ -36,7 +36,6 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/utils/misc.dart';
-import 'package:notepod/widgets/loading_animation.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
