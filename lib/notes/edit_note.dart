@@ -64,8 +64,9 @@ class EditNoteState extends State<EditNote>
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _focusNode = FocusNode();
-    // To enable the ENTER => SAVE functionality replace the above line with the
-    // following. For now we will stasy with current behaviour. (20250714 gjw).
+    // To enable the ENTER => SAVE functionality within a note, replace the
+    // above line with the following. For now we will stay with current
+    // behaviour. (20250714 gjw).
     //
     // _focusNode = FocusNode(
     //   onKeyEvent: (FocusNode node, KeyEvent evt) {
