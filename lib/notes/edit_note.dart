@@ -122,8 +122,7 @@ class EditNoteState extends State<EditNote>
                       name: noteTitlePred,
                       initialValue: widget.noteData[noteTitlePred],
                       decoration: const InputDecoration(
-                        labelText:
-                            'Note Title (Do not use underscores (_) in title)',
+                        labelText: 'Note Title',
                         labelStyle: TextStyle(
                           color: darkBlue,
                           letterSpacing: 1.5,
