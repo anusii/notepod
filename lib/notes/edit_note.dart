@@ -226,7 +226,7 @@ class EditNoteState extends State<EditNote>
                     ),
                   ),
                   label: const Text(
-                    'GO BACK',
+                    'BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

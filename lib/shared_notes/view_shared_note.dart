@@ -208,7 +208,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                   ),
                 ),
                 label: const Text(
-                  'GO BACK',
+                  'BACK',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

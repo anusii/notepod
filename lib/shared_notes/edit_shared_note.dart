@@ -218,7 +218,7 @@ class EditSharedNoteState extends State<EditSharedNote>
                     ),
                   ),
                   label: const Text(
-                    'GO BACK',
+                    'BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

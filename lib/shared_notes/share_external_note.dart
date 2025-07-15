@@ -94,7 +94,7 @@ class ShareExternalNoteState extends State<ShareExternalNote>
                     ),
                   ),
                   label: const Text(
-                    'GO BACK',
+                    'BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

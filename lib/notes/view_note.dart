@@ -321,7 +321,7 @@ class _ViewNoteState extends State<ViewNote> {
                   ),
                 ),
                 label: const Text(
-                  'GO BACK',
+                  'BACK',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
