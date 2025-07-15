@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 
 library;
 
@@ -44,25 +44,75 @@ class ListNotes extends StatefulWidget {
 }
 
 class _ListNotesState extends State<ListNotes> {
+  Map _foundNotes = {};
+  List fileNames = [];
+
+  @override
+  void initState() {
+    // By default _foundNotes is the full list of notes
+    _foundNotes = widget.notesMap;
+    fileNames = _foundNotes.keys.toList();
+    super.initState();
+  }
+
+  // Search notes
+  void _searchNotes(String enteredKeyword) {
+    Map results = {};
+    if (enteredKeyword.isEmpty) {
+      // Display all notes if no search string
+      results = widget.notesMap;
+    } else {
+      // Display notes with title containing search string
+      results = Map.fromEntries(widget.notesMap.entries.where((note) =>
+          (note.value as Map)[noteTitlePred]
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase())));
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundNotes = results;
+      fileNames = _foundNotes.keys.toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map notesMap = widget.notesMap;
-    List fileNames = notesMap.keys.toList();
     return SizedBox(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Text(
-              'My Notes (created by me)',
-              style: titleStyle,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'My Notes (created by me)',
+                  style: titleStyle,
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  onChanged: (value) => _searchNotes(value),
+                  decoration: const InputDecoration(
+                    labelText: 'Search',
+                    hintText: 'Enter title',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                _foundNotes.length > 1 || _foundNotes.isEmpty
+                    ? Text('Found ${_foundNotes.length} notes')
+                    : Text('Found ${_foundNotes.length} note'),
+              ],
             ),
           ),
           Expanded(
             child: ListView.builder(
                 padding: const EdgeInsets.all(10),
-                itemCount: notesMap.length,
+                itemCount: _foundNotes.length,
                 itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -73,9 +123,10 @@ class _ListNotesState extends State<ListNotes> {
                               AssetImage('assets/images/note-icon.png'),
                         ),
                         //const Icon(Icons.text_snippet_outlined),
-                        title: Text(notesMap[fileNames[index]][noteTitlePred]),
+                        title:
+                            Text(_foundNotes[fileNames[index]][noteTitlePred]),
                         subtitle: Text(
-                            'Created on: ${getDateTimeStr(notesMap[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(notesMap[fileNames[index]][modifiedDateTimePred])}'),
+                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}'),
                         trailing: const Icon(Icons.arrow_forward),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
@@ -84,7 +135,7 @@ class _ListNotesState extends State<ListNotes> {
                               builder: (context) => AppScreen(
                                 title: topBarTitle,
                                 childPage: ViewNote(
-                                  noteData: notesMap[fileNames[index]],
+                                  noteData: _foundNotes[fileNames[index]],
                                 ),
                               ),
                             ),
