@@ -47,21 +47,25 @@ class _ListNotesState extends State<ListNotes> {
   Map _foundNotes = {};
   List fileNames = [];
   // Sort order
-  // true: ascending, false: descending
+  // true: ascending (A-Z), false: descending (Z-A)
+  // Initial sort will sort alphabetically
   bool _sortTitleAscending = true;
+  // true: ascending (oldest modified note), false: descending (last modified note)
+  // First button press will change to sort by last modified first
+  bool _sortModDateAscending = true;
 
   @override
   void initState() {
     // By default _foundNotes is the full list of notes
     _foundNotes = widget.notesMap;
     fileNames = _foundNotes.keys.toList();
-    // Initial sort by title
+    // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
     super.initState();
   }
 
+  // Sort alphanumerically on note title field
   void _sortByTitle(bool ascending) {
-    // Sort the items by name
     setState(() {
       _sortTitleAscending = ascending;
       fileNames
@@ -72,8 +76,19 @@ class _ListNotesState extends State<ListNotes> {
             : _foundNotes[b][noteTitlePred]
                 .toLowerCase()
                 .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
+    });
+  }
 
-      debugPrint('running _sortByTitle(${_sortTitleAscending.toString()})');
+  // Sort numerically on note modified date field
+  void _sortByModDate(bool ascending) {
+    setState(() {
+      _sortModDateAscending = ascending;
+      fileNames
+        ..sort((a, b) => _sortModDateAscending
+            ? _foundNotes[a][modifiedDateTimePred]
+                .compareTo(_foundNotes[b][modifiedDateTimePred])
+            : _foundNotes[b][modifiedDateTimePred]
+                .compareTo(_foundNotes[a][modifiedDateTimePred]));
     });
   }
 
@@ -132,22 +147,51 @@ class _ListNotesState extends State<ListNotes> {
                       _foundNotes.length > 1 || _foundNotes.isEmpty
                           ? Text('Found ${_foundNotes.length} notes')
                           : Text('Found ${_foundNotes.length} note'),
-                      // Title Sort Label and Button
-                      TextButton.icon(
-                        onPressed: () {
-                          _sortByTitle(!_sortTitleAscending);
-                        },
-                        icon: Icon(
-                          _sortTitleAscending
-                              ? Icons.arrow_drop_down
-                              : Icons.arrow_drop_up,
-                          color: Colors.black,
-                        ),
-                        label: Text(
-                          _sortTitleAscending ? 'Title A to Z' : 'Title Z to A',
-                          style: smallTextStyle,
-                        ),
-                        iconAlignment: IconAlignment.end,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // Title Sort Label and Button
+                          TextButton.icon(
+                            onPressed: () {
+                              _sortByTitle(!_sortTitleAscending);
+                            },
+                            icon: Icon(
+                              _sortTitleAscending
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up,
+                              color: Colors.black,
+                            ),
+                            label: Text(
+                              _sortTitleAscending
+                                  ? 'Title A to Z'
+                                  : 'Title Z to A',
+                              style: smallTextStyle,
+                            ),
+                            iconAlignment: IconAlignment.end,
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          // Date Sort Label and Button
+                          TextButton.icon(
+                            onPressed: () {
+                              _sortByModDate(!_sortModDateAscending);
+                            },
+                            icon: Icon(
+                              _sortModDateAscending
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up,
+                              color: Colors.black,
+                            ),
+                            label: Text(
+                              _sortModDateAscending
+                                  ? 'Date First Modified'
+                                  : 'Date Last Modified',
+                              style: smallTextStyle,
+                            ),
+                            iconAlignment: IconAlignment.end,
+                          ),
+                        ],
                       ),
                     ]),
               ],
