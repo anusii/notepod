@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Graham Williams
 
 library;
 
@@ -33,6 +33,7 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/note_back_button.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -179,39 +180,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                   width: 5,
                 ),
               ],
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.keyboard_backspace,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AppScreen(
-                              title: topBarTitle,
-                              childPage: SharedNotesScreen(),
-                              // childPage: SharedNotes(),
-                            )),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: titleAsh,
-                  backgroundColor: lightGray, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'BACK',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              NoteBackButton(childPage: SharedNotesScreen()),
             ],
           ),
         ),

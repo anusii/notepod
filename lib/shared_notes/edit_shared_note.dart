@@ -37,6 +37,7 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
+import 'package:notepod/widgets/note_back_button.dart';
 
 class EditSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -189,39 +190,7 @@ class EditSharedNoteState extends State<EditSharedNote>
                 const SizedBox(
                   width: 5,
                 ),
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.keyboard_backspace,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: SharedNotesScreen(),
-                                // childPage: SharedNotes(),
-                              )),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: titleAsh,
-                    backgroundColor: lightGray, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  label: const Text(
-                    'BACK',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                NoteBackButton(childPage: SharedNotesScreen()),
               ],
             ),
           ),
