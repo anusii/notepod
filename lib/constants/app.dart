@@ -66,5 +66,4 @@ const titleStyle = TextStyle(
 // Text style for list sort buttons
 const smallTextStyle = TextStyle(
   fontSize: 12,
-  fontWeight: FontWeight.bold,
 );

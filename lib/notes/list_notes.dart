@@ -74,7 +74,6 @@ class _ListNotesState extends State<ListNotes> {
                 .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
 
       debugPrint('running _sortByTitle(${_sortTitleAscending.toString()})');
-      super.initState();
     });
   }
 
@@ -126,33 +125,33 @@ class _ListNotesState extends State<ListNotes> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                _foundNotes.length > 1 || _foundNotes.isEmpty
-                    ? Text('Found ${_foundNotes.length} notes')
-                    : Text('Found ${_foundNotes.length} note'),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Search summary statement
+                      _foundNotes.length > 1 || _foundNotes.isEmpty
+                          ? Text('Found ${_foundNotes.length} notes')
+                          : Text('Found ${_foundNotes.length} note'),
+                      // Title Sort Label and Button
+                      TextButton.icon(
+                        onPressed: () {
+                          _sortByTitle(!_sortTitleAscending);
+                        },
+                        icon: Icon(
+                          _sortTitleAscending
+                              ? Icons.arrow_drop_down
+                              : Icons.arrow_drop_up,
+                          color: Colors.black,
+                        ),
+                        label: Text(
+                          _sortTitleAscending ? 'Title A to Z' : 'Title Z to A',
+                          style: smallTextStyle,
+                        ),
+                        iconAlignment: IconAlignment.end,
+                      ),
+                    ]),
               ],
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              // Title Sort Label and Button
-              TextButton.icon(
-                onPressed: () {
-                  _sortByTitle(!_sortTitleAscending);
-                },
-                icon: Icon(
-                  _sortTitleAscending
-                      ? Icons.arrow_drop_down
-                      : Icons.arrow_drop_up,
-                  color: Colors.black,
-                ),
-                label: Text(
-                  _sortTitleAscending ? 'Title A to Z' : 'Title Z to A',
-                  style: smallTextStyle,
-                ),
-                iconAlignment: IconAlignment.end,
-              ),
-            ]),
           ),
           Expanded(
             child: ListView.builder(
