@@ -1,9 +1,9 @@
-/// Privacy preserving note taking app using PODs.
+/// NotePod - A note taking app with notes shared through private PODs.
 //
-// Time-stamp: <Wednesday 2025-06-11 10:36:05 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 09:20:50 +1000 Graham Williams>
 //
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+/// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
@@ -36,7 +36,7 @@ import 'package:notepod/home.dart';
 import 'package:notepod/utils/is_desktop.dart';
 
 void main() async {
-  // Remove [debugPrint] messages from production code.
+  // Globally remove [debugPrint] messages.
 
   // debugPrint = (String? message, {int? wrapWidth}) {
   //   null;

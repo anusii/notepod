@@ -1,12 +1,12 @@
-/// The home page for the app.
+/// NotePod - A note taking app with notes shared through private PODs.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+/// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://www.gnu.org/licenses/gpl-3.0.en.html
 //
-// Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 09:27:55 +1000 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -35,6 +35,8 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
+
+/// The home page for the app.
 
 class Home extends StatefulWidget {
   // final String webId;
