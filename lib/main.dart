@@ -1,13 +1,12 @@
 /// NotePod - A note taking app with notes shared through private PODs.
-//
+///
 // Time-stamp: <Wednesday 2025-07-16 09:20:50 +1000 Graham Williams>
-//
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute
+/// Copyright (C) 2023-2025, Software Innovation Institute, ANU
 ///
-/// Licensed under the GNU General Public License, Version 3 (the "License");
+/// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -80,6 +79,8 @@ void main() async {
 
   runApp(const NotePod());
 }
+
+/// The root widget of the NotePod application.
 
 class NotePod extends StatelessWidget {
   const NotePod({super.key});
