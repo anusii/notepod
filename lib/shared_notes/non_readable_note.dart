@@ -250,7 +250,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                   ),
                 ),
                 label: const Text(
-                  'GO BACK',
+                  'BACK',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

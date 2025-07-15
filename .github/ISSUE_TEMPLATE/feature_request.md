@@ -12,7 +12,7 @@ assignees: ''
 
 ## Why
 
-So that as a [user] I can [clear and concise description of
+So that as a user I can [clear and concise description of
 what you want to happen and the benefit of it.]
 
 ## Closing Crieria

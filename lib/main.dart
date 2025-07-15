@@ -1,13 +1,12 @@
-/// Privacy preserving note taking app using PODs.
-//
-// Time-stamp: <Wednesday 2025-06-11 10:36:05 +1000 Graham Williams>
-//
+/// NotePod - A note taking app with notes shared through private PODs.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Wednesday 2025-07-16 09:20:50 +1000 Graham Williams>
 ///
-/// Licensed under the GNU General Public License, Version 3 (the "License");
+/// Copyright (C) 2023-2025, Software Innovation Institute, ANU
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// Licensed under the GNU General Public License, Version 3 (the "License").
+///
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -36,7 +35,7 @@ import 'package:notepod/home.dart';
 import 'package:notepod/utils/is_desktop.dart';
 
 void main() async {
-  // Remove [debugPrint] messages from production code.
+  // Globally remove [debugPrint] messages.
 
   // debugPrint = (String? message, {int? wrapWidth}) {
   //   null;
@@ -80,6 +79,8 @@ void main() async {
 
   runApp(const NotePod());
 }
+
+/// The root widget of the NotePod application.
 
 class NotePod extends StatelessWidget {
   const NotePod({super.key});

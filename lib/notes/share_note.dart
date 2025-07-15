@@ -91,7 +91,7 @@ class ShareNoteState extends State<ShareNote>
                     ),
                   ),
                   label: const Text(
-                    'GO BACK',
+                    'BACK',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
