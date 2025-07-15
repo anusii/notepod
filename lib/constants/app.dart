@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -60,5 +60,11 @@ const double desktopWidthThreshold = 960;
 // Text style of page titles
 const titleStyle = TextStyle(
   fontSize: 15,
+  fontWeight: FontWeight.bold,
+);
+
+// Text style for list sort buttons
+const smallTextStyle = TextStyle(
+  fontSize: 12,
   fontWeight: FontWeight.bold,
 );

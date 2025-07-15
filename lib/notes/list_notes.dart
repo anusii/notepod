@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 
 library;
 
@@ -44,10 +44,41 @@ class ListNotes extends StatefulWidget {
 }
 
 class _ListNotesState extends State<ListNotes> {
+  Map _foundNotes = {};
+  List fileNames = [];
+  // Sort order
+  // true: ascending, false: descending
+  bool _sortTitleAscending = true;
+
+  @override
+  void initState() {
+    // By default _foundNotes is the full list of notes
+    _foundNotes = widget.notesMap;
+    fileNames = _foundNotes.keys.toList();
+    // Initial sort by title
+    _sortByTitle(_sortTitleAscending);
+    super.initState();
+  }
+
+  void _sortByTitle(bool ascending) {
+    // Sort the items by name
+    setState(() {
+      _sortTitleAscending = ascending;
+      fileNames
+        ..sort((a, b) => _sortTitleAscending
+            ? _foundNotes[a][noteTitlePred]
+                .toLowerCase()
+                .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
+            : _foundNotes[b][noteTitlePred]
+                .toLowerCase()
+                .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
+
+      debugPrint('running _sortByTitle(${_sortTitleAscending.toString()})');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map notesMap = widget.notesMap;
-    List fileNames = notesMap.keys.toList();
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,10 +90,32 @@ class _ListNotesState extends State<ListNotes> {
               style: titleStyle,
             ),
           ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              // Title Sort Label and Button
+              TextButton.icon(
+                onPressed: () {
+                  _sortByTitle(!_sortTitleAscending);
+                },
+                icon: Icon(
+                  _sortTitleAscending
+                      ? Icons.arrow_drop_down
+                      : Icons.arrow_drop_up,
+                  color: Colors.black,
+                ),
+                label: Text(
+                  _sortTitleAscending ? 'Title A to Z' : 'Title Z to A',
+                  style: smallTextStyle,
+                ),
+                iconAlignment: IconAlignment.end,
+              ),
+            ]),
+          ),
           Expanded(
             child: ListView.builder(
                 padding: const EdgeInsets.all(10),
-                itemCount: notesMap.length,
+                itemCount: _foundNotes.length,
                 itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -73,9 +126,10 @@ class _ListNotesState extends State<ListNotes> {
                               AssetImage('assets/images/note-icon.png'),
                         ),
                         //const Icon(Icons.text_snippet_outlined),
-                        title: Text(notesMap[fileNames[index]][noteTitlePred]),
+                        title:
+                            Text(_foundNotes[fileNames[index]][noteTitlePred]),
                         subtitle: Text(
-                            'Created on: ${getDateTimeStr(notesMap[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(notesMap[fileNames[index]][modifiedDateTimePred])}'),
+                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}'),
                         trailing: const Icon(Icons.arrow_forward),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
@@ -84,7 +138,7 @@ class _ListNotesState extends State<ListNotes> {
                               builder: (context) => AppScreen(
                                 title: topBarTitle,
                                 childPage: ViewNote(
-                                  noteData: notesMap[fileNames[index]],
+                                  noteData: _foundNotes[fileNames[index]],
                                 ),
                               ),
                             ),
