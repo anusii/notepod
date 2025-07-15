@@ -99,9 +99,12 @@ class _ListNotesState extends State<ListNotes> {
       // Display all notes if no search string
       results = widget.notesMap;
     } else {
-      // Display notes with title containing search string
+      // Display notes with title or contents containing search string
       results = Map.fromEntries(widget.notesMap.entries.where((note) =>
           (note.value as Map)[noteTitlePred]
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()) ||
+          (note.value as Map)[noteContentPred]
               .toLowerCase()
               .contains(enteredKeyword.toLowerCase())));
     }
@@ -132,7 +135,7 @@ class _ListNotesState extends State<ListNotes> {
                   onChanged: (value) => _searchNotes(value),
                   decoration: const InputDecoration(
                     labelText: 'Search',
-                    hintText: 'Enter title',
+                    hintText: 'Enter string to match title or contents',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
