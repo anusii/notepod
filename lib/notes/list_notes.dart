@@ -74,6 +74,28 @@ class _ListNotesState extends State<ListNotes> {
                 .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
 
       debugPrint('running _sortByTitle(${_sortTitleAscending.toString()})');
+      super.initState();
+    });
+  }
+
+  // Search notes
+  void _searchNotes(String enteredKeyword) {
+    Map results = {};
+    if (enteredKeyword.isEmpty) {
+      // Display all notes if no search string
+      results = widget.notesMap;
+    } else {
+      // Display notes with title containing search string
+      results = Map.fromEntries(widget.notesMap.entries.where((note) =>
+          (note.value as Map)[noteTitlePred]
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase())));
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundNotes = results;
+      fileNames = _foundNotes.keys.toList();
     });
   }
 
@@ -81,13 +103,33 @@ class _ListNotesState extends State<ListNotes> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Text(
-              'My Notes (created by me)',
-              style: titleStyle,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'My Notes (created by me)',
+                  style: titleStyle,
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  onChanged: (value) => _searchNotes(value),
+                  decoration: const InputDecoration(
+                    labelText: 'Search',
+                    hintText: 'Enter title',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                _foundNotes.length > 1 || _foundNotes.isEmpty
+                    ? Text('Found ${_foundNotes.length} notes')
+                    : Text('Found ${_foundNotes.length} note'),
+              ],
             ),
           ),
           Container(
