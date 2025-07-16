@@ -127,7 +127,7 @@ class _ListNotesState extends State<ListNotes> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'My Notes (created by me)',
+                  '$myNotesTitle (created by me)',
                   style: titleStyle,
                 ),
                 const SizedBox(height: 10),

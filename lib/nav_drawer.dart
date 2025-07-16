@@ -139,7 +139,7 @@ class NavDrawer extends StatelessWidget {
                 // ),
                 ListTile(
                   leading: const Icon(Icons.file_open_outlined),
-                  title: const Text('Shared Notes'),
+                  title: const Text(sharedNotesTitle),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,

@@ -24,6 +24,7 @@
 /// Authors: Anushka Vidanage
 
 import 'package:flutter/material.dart';
+import 'package:notepod/constants/app.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:version_widget/version_widget.dart';
@@ -32,6 +33,7 @@ import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class AppScreen extends StatefulWidget {
   /// Initialise widget variables.
@@ -105,7 +107,7 @@ class AppScreenState extends State<AppScreen>
           ),
           const SizedBox(width: 10),
           IconButton(
-            tooltip: 'My Notes',
+            tooltip: 'Go to $myNotesTitle',
             icon: const Icon(
               // TODO 20231217 gjw view_list icon is not rendering on web. In
               // fact, any other icon I choose except the ones originally used
@@ -119,6 +121,26 @@ class AppScreenState extends State<AppScreen>
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
                           childPage: ListNotesScreen(),
+                        )),
+                (Route<dynamic> route) =>
+                    false, // This predicate ensures all previous routes are removed
+              );
+            },
+          ),
+          const SizedBox(width: 10),
+          IconButton(
+            tooltip: 'Go to $sharedNotesTitle',
+            icon: const Icon(
+              // TODO 20250717 jm Test icon rendering on web
+              Icons.file_open_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AppScreen(
+                          childPage: SharedNotesScreen(),
                         )),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed
