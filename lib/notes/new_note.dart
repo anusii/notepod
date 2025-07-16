@@ -1,12 +1,12 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
+// Time-stamp: <Wednesday 2025-07-16 14:43:37 +1000 Graham Williams>
+///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://www.gnu.org/licenses/gpl-3.0.en.html
-//
-// Time-stamp: <Wednesday 2025-07-16 09:27:55 +1000 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -38,19 +38,19 @@ import 'package:notepod/widgets/markdown_editor.dart';
 
 /// The home page for the app.
 
-class Home extends StatefulWidget {
+class NewNote extends StatefulWidget {
   // final String webId;
   // final Map authData;
 
-  const Home({
+  const NewNote({
     super.key,
   });
 
   @override
-  HomeState createState() => HomeState();
+  NewNoteState createState() => NewNoteState();
 }
 
-class HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
@@ -117,7 +117,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 key: formKey,
                 onChanged: () {
                   formKey.currentState!.save();
-                  debugPrint(formKey.currentState!.value.toString());
                 },
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,

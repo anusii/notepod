@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Wednesday 2025-07-16 09:20:50 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 14:49:51 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
@@ -31,8 +31,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/app_screen.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/utils/is_desktop.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 
 /// Main entry point for the NotePod application.
 
@@ -118,8 +119,8 @@ class NotePod extends StatelessWidget {
               'stored in your POD.',
         ),
         child: AppScreen(
-          title: 'Note Taker for your Pod',
-          childPage: Home(),
+          title: topBarTitle,
+          childPage: ListNotesScreen(),
         ),
       ),
     );
