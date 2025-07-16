@@ -33,7 +33,7 @@ import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/utils/save_note.dart';
+import 'package:notepod/widgets/note_save_button.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 
 /// The home page for the app.
@@ -179,27 +179,10 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    await saveNote(context, _textController!, formKey);
-
-                    // Redirect to the home page
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: darkBlue,
-                    backgroundColor: lightBlue, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text(
-                    'SAVE NOTE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                NoteSaveButton(
+                    textController: _textController!,
+                    formKey: formKey,
+                    shared: false),
               ],
             ),
           ),
