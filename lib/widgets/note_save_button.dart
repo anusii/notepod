@@ -31,6 +31,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/view_note.dart';
@@ -38,6 +39,53 @@ import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
+
+/// A stylised save button widget for notes.
+
+class NoteSaveButton extends StatelessWidget {
+  final TextEditingController textController;
+  final GlobalKey<FormBuilderState> formKey;
+  final Map? prevNoteData;
+  final bool shared;
+
+  const NoteSaveButton({
+    Key? key,
+    required this.textController,
+    required this.formKey,
+    this.prevNoteData,
+    required this.shared,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      icon: const Icon(
+        Icons.save,
+        color: Colors.white,
+      ),
+      onPressed: () async {
+        // Save note and redirect to view note page
+        await saveNote(context, textController, formKey, prevNoteData, shared);
+      },
+      style: ElevatedButton.styleFrom(
+        foregroundColor: darkBlue,
+        backgroundColor: lightBlue, // foreground
+        padding: const EdgeInsets.symmetric(
+          // Slightly larger edgeinset than back button to
+          // emphasise save button
+          horizontal: 20,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      label: const Text(
+        'SAVE',
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+  }
+}
 
 Future<void> saveNote(BuildContext context,
     TextEditingController _textController, GlobalKey<FormBuilderState> formKey,
