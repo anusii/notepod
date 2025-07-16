@@ -98,6 +98,7 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
+                          title: topBarTitle,
                           childPage: NewNote(),
                         )),
                 (Route<dynamic> route) =>
@@ -120,6 +121,7 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
+                          title: topBarTitle,
                           childPage: ListNotesScreen(),
                         )),
                 (Route<dynamic> route) =>
@@ -140,6 +142,7 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
+                          title: topBarTitle,
                           childPage: SharedNotesScreen(),
                         )),
                 (Route<dynamic> route) =>
