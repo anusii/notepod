@@ -158,19 +158,6 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
             height: 10,
           ),
           markdownEditor(context, _textController!, _focusNode, data),
-
-          // av: 20250604 - The following code is from the package
-          // markdown_editor_plus. The current version of this gives some errors
-          // when inputting different styles such as checkboxes.
-          // SplittedMarkdownFormField(
-          //   controller: _textController,
-          //   markdownSyntax: '## Headline',
-          //   decoration: const InputDecoration(
-          //     hintText: 'Editable text',
-          //   ),
-          //   emojiConvert: true,
-          // ),
-
           const SizedBox(
             height: 20,
           ),
