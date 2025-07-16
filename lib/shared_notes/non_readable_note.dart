@@ -37,6 +37,7 @@ import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/note_back_button.dart';
 
 class NonReadableNote extends StatefulWidget {
   final Map noteMetaData;
@@ -224,39 +225,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                   width: 5,
                 ),
               ],
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.keyboard_backspace,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AppScreen(
-                              title: topBarTitle,
-                              childPage: SharedNotesScreen(),
-                              // childPage: SharedNotes(),
-                            )),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: titleAsh,
-                  backgroundColor: lightGray, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'BACK',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              NoteBackButton(childPage: SharedNotesScreen()),
             ],
           ),
         ),

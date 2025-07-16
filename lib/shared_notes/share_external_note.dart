@@ -29,11 +29,9 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/widgets/note_back_button.dart';
 
 class ShareExternalNote extends StatefulWidget {
   final Map fullNoteData;
@@ -65,39 +63,7 @@ class ShareExternalNoteState extends State<ShareExternalNote>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 10),
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.keyboard_backspace,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: SharedNotesScreen(),
-                                // childPage: SharedNotes(),
-                              )),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: titleAsh,
-                    backgroundColor: lightGray, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  label: const Text(
-                    'BACK',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                NoteBackButton(childPage: SharedNotesScreen()),
                 const SizedBox(height: 10),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
