@@ -113,6 +113,7 @@ class _ListNotesState extends State<ListNotes> {
             child: ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: _foundNotes.length,
+                itemExtent: listItemHeight,
                 itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),

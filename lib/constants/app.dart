@@ -38,6 +38,8 @@ const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
 const double buttonBorderRadius = 5;
 const double standardSpace = 20.0;
+const double listItemHeight = 88.0;
+const double sharedListItemHeight = 108.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;

@@ -63,6 +63,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
             child: ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: sharedNotesMap.length,
+                itemExtent: sharedListItemHeight,
                 itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
