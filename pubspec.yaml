@@ -61,6 +61,7 @@ dependencies:
 #
 # (gjw 20250429)
 
+  intl: any
 flutter_launcher_icons:
   image_path: "assets/images/notepod.png"
   android: true
