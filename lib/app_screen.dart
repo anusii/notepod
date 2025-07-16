@@ -29,9 +29,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/new_note.dart';
 
 class AppScreen extends StatefulWidget {
   /// Initialise widget variables.

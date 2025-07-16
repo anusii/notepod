@@ -32,8 +32,8 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/utils/is_desktop.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/utils/is_desktop.dart';
 
 /// Main entry point for the NotePod application.
 
