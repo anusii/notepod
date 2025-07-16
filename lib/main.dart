@@ -32,8 +32,8 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/utils/is_desktop.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 
 /// Main entry point for the NotePod application.
 
@@ -120,7 +120,7 @@ class NotePod extends StatelessWidget {
         ),
         child: AppScreen(
           title: topBarTitle,
-          childPage: Home(),
+          childPage: ListNotesScreen(),
         ),
       ),
     );

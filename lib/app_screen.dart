@@ -29,7 +29,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
@@ -96,7 +96,7 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
-                          childPage: Home(),
+                          childPage: NewNote(),
                         )),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed
