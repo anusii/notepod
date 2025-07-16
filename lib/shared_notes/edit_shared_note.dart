@@ -33,9 +33,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
-import 'package:notepod/widgets/note_save_button.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_save_button.dart';
 
 class EditSharedNote extends StatefulWidget {
   final Map fullNoteData;

@@ -33,8 +33,8 @@ import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/widgets/note_save_button.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
+import 'package:notepod/widgets/note_save_button.dart';
 
 /// The home page for the app.
 
