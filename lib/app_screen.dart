@@ -24,11 +24,11 @@
 /// Authors: Anushka Vidanage, Jess Moore
 
 import 'package:flutter/material.dart';
-import 'package:notepod/constants/app.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:version_widget/version_widget.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
@@ -133,7 +133,6 @@ class AppScreenState extends State<AppScreen>
           IconButton(
             tooltip: 'Go to $sharedNotesTitle',
             icon: const Icon(
-              // TODO 20250717 jm Test icon rendering on web
               Icons.file_open_outlined,
               color: Colors.black,
             ),
