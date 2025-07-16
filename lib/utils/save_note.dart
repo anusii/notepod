@@ -32,7 +32,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -148,10 +148,10 @@ Future<void> saveNote(BuildContext context,
             modifiedDateTimeStr, modifiedDateTimeStr, noteTitle, noteText);
 
         // Encrypt note, create TTL and write to file in POD
-        createNoteStatus = await saveNoteToPod(context, noteNewData, Home());
+        createNoteStatus = await saveNoteToPod(context, noteNewData, NewNote());
 
         // Navigate to return page
-        postSaveNav(context, createNoteStatus, Home());
+        postSaveNav(context, createNoteStatus, NewNote());
       } else {
         Navigator.pop(context);
         showErrDialog(context, 'Please enter some note content.');

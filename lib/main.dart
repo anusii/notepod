@@ -31,8 +31,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/app_screen.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/utils/is_desktop.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 
 /// Main entry point for the NotePod application.
 
@@ -118,8 +119,8 @@ class NotePod extends StatelessWidget {
               'stored in your POD.',
         ),
         child: AppScreen(
-          title: 'Note Taker for your Pod',
-          childPage: Home(),
+          title: topBarTitle,
+          childPage: ListNotesScreen(),
         ),
       ),
     );

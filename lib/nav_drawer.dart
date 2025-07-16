@@ -33,7 +33,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/main.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
@@ -99,15 +99,15 @@ class NavDrawer extends StatelessWidget {
               runSpacing: 10,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.home_outlined),
-                  title: const Text('Home'),
+                  leading: const Icon(Icons.note_add_outlined),
+                  title: const Text('New Note'),
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AppScreen(
                           title: topBarTitle,
-                          childPage: Home(),
+                          childPage: NewNote(),
                         ),
                       ),
                       (Route<dynamic> route) =>

@@ -38,19 +38,19 @@ import 'package:notepod/widgets/markdown_editor.dart';
 
 /// The home page for the app.
 
-class Home extends StatefulWidget {
+class NewNote extends StatefulWidget {
   // final String webId;
   // final Map authData;
 
-  const Home({
+  const NewNote({
     super.key,
   });
 
   @override
-  HomeState createState() => HomeState();
+  NewNoteState createState() => NewNoteState();
 }
 
-class HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
