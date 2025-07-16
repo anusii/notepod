@@ -2,7 +2,7 @@
 ///
 // Time-stamp: <Wednesday 2025-07-16 09:20:50 +1000 Graham Williams>
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute, ANU
+/// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
@@ -34,40 +34,44 @@ import 'package:notepod/app_screen.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/utils/is_desktop.dart';
 
+/// Main entry point for the NotePod application.
+
 void main() async {
+  // This is the main entry point for the app. The [async] is required because
+  // we asynchronously [await] the window manager below. Often, `main()` will
+  // include only [runApp].
+
   // Globally remove [debugPrint] messages.
 
   // debugPrint = (String? message, {int? wrapWidth}) {
   //   null;
   // };
 
-  if (isDesktop) {
-    WidgetsFlutterBinding.ensureInitialized();
+  // Ensure Flutter bindings are initialized for async operations
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (isDesktop) {
     await windowManager.ensureInitialized();
 
-    WindowOptions windowOptions = const WindowOptions(
+    const windowOptions = WindowOptions(
+      // Set various desktop window options here.
+
       // Setting [alwaysOnTop] here will ensure the app starts on top of other
-      // apps on the desktop so that it is visible. We later turn it of as we
-      // don't want to force it always on top.
+      // apps on the desktop so that it is visible (otherwise, with GNOME on
+      // Ubuntu the app is often lost below other windows on startup).
+      // We later turn it off as we don't want to force it always on top.
 
       alwaysOnTop: true,
-
-      // The size is overridden in the first instance by linux/my_application.cc
-      // but setting it here then does have effect when Restarting the app.
-
-      // Windows has 1280x720 by default in windows/runner/main.cpp line 29 so
-      // best not to override it here since under windows the 950x600 is too
-      // small.
-
-      //size: Size(750, 873),
 
       // The [title] is used for the window manager's window title.
 
       title: 'NotePod - A note taking app with private PODs',
     );
 
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
+    // Once the window manager is ready we reconfigure it a little.
+
+    await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
       await windowManager.setAlwaysOnTop(false);
@@ -79,6 +83,12 @@ void main() async {
 
   runApp(const NotePod());
 }
+
+// The main widget could be in a separate file, but handy having it in main and
+// the file is not too large. The widget essentially orchestrates the building
+// of other widgets. Generically we set up to build a `Home()` widget containing
+// the App. For SolidPod we wrap the `Home()` widget within the `SolidLogin()`
+// widget so we start with a login screen, though this is optional.
 
 /// The root widget of the NotePod application.
 
