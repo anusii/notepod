@@ -1,6 +1,6 @@
 // App screen.
 ///
-// Time-stamp: <Friday 2025-06-27 14:00:57 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 14:03:07 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -81,7 +81,7 @@ class AppScreenState extends State<AppScreen>
           VersionWidget(
             version: _appVersion,
             changelogUrl:
-                'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
+                'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
             showDate: true,
           ),
           const SizedBox(width: 20),
