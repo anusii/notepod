@@ -148,11 +148,17 @@ Future<void> saveNote(BuildContext context,
             modifiedDateTimeStr, modifiedDateTimeStr, noteTitle, noteText);
 
         // Encrypt note, create TTL and write to file in POD
-        createNoteStatus = await saveNoteToPod(context, noteNewData, Home());
+        createNoteStatus = await saveNoteToPod(
+            context,
+            noteNewData,
+            EditNote(
+              noteData: noteNewData,
+            ));
 
         // Navigate to return page
-        postSaveNav(context, createNoteStatus, Home());
+        postSaveNav(context, createNoteStatus, ViewNote(noteData: noteNewData));
       } else {
+        // Nn note content message
         Navigator.pop(context);
         showErrDialog(context, 'Please enter some note content.');
       }
