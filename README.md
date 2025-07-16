@@ -1,6 +1,6 @@
-# Notepod &mdash; Markdown Notes with Encrypted Pods
+# NotePod &mdash; Encrypted Markdown Notes in your Data Vault
 
-**An ANU Software Innovation Institute demo project for Solid Pods**.
+**An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
@@ -31,7 +31,8 @@ Download the latest version:
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
-Code docs are available from [solid community au](https://solidcommunity.au/docs/notepod)
+Coding documentation is available from [solid community
+au](https://solidcommunity.au/docs/notepod)
 
 ## Introduction
 
