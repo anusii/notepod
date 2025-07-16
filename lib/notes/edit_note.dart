@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Wednesday 2025-07-16 10:20:40 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 14:37:09 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU
 ///
@@ -113,7 +113,6 @@ class EditNoteState extends State<EditNote>
                 key: formKey,
                 onChanged: () {
                   formKey.currentState!.save();
-                  debugPrint(formKey.currentState!.value.toString());
                 },
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
