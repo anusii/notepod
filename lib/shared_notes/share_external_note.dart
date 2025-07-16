@@ -1,12 +1,12 @@
-/// The home page for the app.
+/// NotePod - A note taking app with notes shared through private PODs.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Wednesday 2025-07-16 10:19:41 +1000 Graham Williams>
+///
+/// Copyright (C) 2023-2025, Software Innovation Institute, ANU
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://www.gnu.org/licenses/gpl-3.0.en.html
-//
-// Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Graham Williams
 
 library;
 
