@@ -32,7 +32,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
@@ -188,7 +188,10 @@ class EditSharedNoteState extends State<EditSharedNote>
                 const SizedBox(
                   width: 5,
                 ),
-                NoteBackButton(childPage: SharedNotesScreen()),
+                NoteBackButton(
+                  childPage: ViewSharedNoteScreen(
+                      sharedNoteData: widget.fullNoteData['sharedNoteInfo']),
+                )
               ],
             ),
           ),
