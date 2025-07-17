@@ -33,9 +33,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/utils/save_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_save_button.dart';
 
 /// The edit note page.
 
@@ -150,28 +150,11 @@ class EditNoteState extends State<EditNote>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    await saveNote(
-                        context, _textController!, formKey, widget.noteData);
-
-                    // Redirect to the home page
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: darkBlue,
-                    backgroundColor: lightBlue, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text(
-                    'SAVE CHANGES',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                NoteSaveButton(
+                    textController: _textController!,
+                    formKey: formKey,
+                    prevNoteData: widget.noteData,
+                    shared: false),
                 const SizedBox(
                   width: 5,
                 ),
