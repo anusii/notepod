@@ -2,7 +2,7 @@
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
-*Time-stamp: <Friday 2025-07-18 09:48:32 +1000 Graham Williams>*
+*Time-stamp: <Friday 2025-07-18 09:52:19 +1000 Graham Williams>*
 
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
@@ -65,12 +65,11 @@ even easier to build your first Pods-based Flutter app.
 
 <div style="display: flex; justify-content: center; gap: 80px;">
 	<img
-	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png"
-	alt="Shopping List" width="400"/>
-
-	<img
 	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png"
 	alt="Shopping List" width="200"/>
+	<img
+	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png"
+	alt="Shopping List" width="400"/>
 </div>
 
 ## Obtaining a Pod
