@@ -1,6 +1,8 @@
-/// Colour constants.
+/// NotePod - A note taking app with notes shared through private PODs.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Friday 2025-07-18 06:44:00 +1000 Graham Williams>
+///
+/// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
@@ -25,7 +27,15 @@
 
 library;
 
+/// Colour contants for the app.
+
 import 'package:flutter/material.dart';
+
+/// Shaded colour for meta data in displaying a note.
+
+final metaDataShade = Colors.grey[100];
+
+// Ideally name constants by function.
 
 // const darkGold = Color(0xFFBE830E);
 const darkBlue = Color.fromARGB(255, 7, 87, 153);
@@ -42,10 +52,6 @@ const lighterGray = Color.fromARGB(255, 243, 243, 243);
 const bgOffWhite = Color(0xFFF2F4FC);
 const kTitleTextColor = Color(0xFF30384D);
 const warningRed = Colors.red;
-
-// TODO 20231220 gjw These are not used in the app at present and result in lint
-// messages. Comment them out for now, but eventually they probably go into one
-// of the solid packages.
 
 const lightRed = Color.fromARGB(255, 255, 88, 77);
 const darkRed = Color.fromARGB(255, 139, 38, 30);

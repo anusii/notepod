@@ -1,6 +1,6 @@
 /// DESCRIPTION
 ///
-// Time-stamp: <Friday 2025-07-18 05:48:17 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-07-18 06:44:23 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
@@ -27,12 +27,9 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/misc.dart';
-
-/// Shaded colour for meta data in displaying a note.
-
-final metaDataShade = Colors.grey[100];
 
 /// Display the note metadata.
 
