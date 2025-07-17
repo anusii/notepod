@@ -1,8 +1,8 @@
-// App screen.
+/// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Thursday 2025-07-17 12:16:55 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 12:18:05 +1000 Graham Williams>
 ///
-/// Copyright (C) 2024, Software Innovation Institute, ANU.
+/// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
