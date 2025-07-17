@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Thursday 2025-07-17 12:18:05 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 20:58:03 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
 ///
@@ -139,7 +139,7 @@ class AppScreenState extends State<AppScreen>
           IconButton(
             tooltip: 'Go to $sharedNotesTitle',
             icon: const Icon(
-              Icons.file_open_outlined,
+              Icons.groups,
               color: Colors.black,
             ),
             onPressed: () {
