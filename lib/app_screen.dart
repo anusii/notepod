@@ -1,6 +1,6 @@
 // App screen.
 ///
-// Time-stamp: <Wednesday 2025-07-16 14:03:07 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 10:33:23 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -85,6 +85,7 @@ class AppScreenState extends State<AppScreen>
             changelogUrl:
                 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
             showDate: true,
+            fontSize: 12.0,
           ),
           const SizedBox(width: 20),
           IconButton(
