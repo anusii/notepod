@@ -1,6 +1,6 @@
 // App screen.
 ///
-// Time-stamp: <Thursday 2025-07-17 10:33:23 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 12:16:55 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -83,7 +83,12 @@ class AppScreenState extends State<AppScreen>
           VersionWidget(
             version: _appVersion,
             changelogUrl:
-                'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
+                // Currently (VersionWidget version 1.0.3) for the chrome/web
+                // deployment the first URL results in CORS blocking while the
+                // second works. However the second redners raw text when tapped
+                // while the first renders the Markdown. (20250717 gjw)
+                'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
+            // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
             showDate: true,
             fontSize: 12.0,
           ),
