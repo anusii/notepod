@@ -31,8 +31,8 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
-import 'package:notepod/widgets/note_display_metadata.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
+import 'package:notepod/widgets/note_display_metadata.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
