@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -30,9 +30,9 @@ import 'package:flutter/material.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
-import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
+import 'package:notepod/widgets/note_display_metadata.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -73,86 +73,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             ),
           ],
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Created on: ${getDateTimeStr(sharedNoteContent[createdDateTimePred])}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Last modified on: ${getDateTimeStr(sharedNoteContent[modifiedDateTimePred])}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Owner: ${sharedNoteInfo[noteOwner]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Shared by: ${sharedNoteInfo[permissionGranter]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
-                child: Text(
-                  'Permissions: ${sharedNoteInfo[permissionList]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Display note metadata
+        NoteDisplayMetadata(data: widget.fullNoteData, shared: true),
+        Divider(),
         // Display markdown note content
         noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
         Padding(

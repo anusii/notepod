@@ -36,10 +36,10 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
+import 'package:notepod/widgets/note_display_metadata.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -78,38 +78,9 @@ class _ViewNoteState extends State<ViewNote> {
             ),
           ],
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Created on: ${getDateTimeStr(noteData[createdDateTimePred])}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
-                child: Text(
-                  'Last modified on: ${getDateTimeStr(noteData[modifiedDateTimePred])}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Display note metadata
+        NoteDisplayMetadata(data: noteData, shared: false),
+        Divider(),
         // Display markdown note content
         noteDisplayMarkdown(noteData[noteContentPred]),
         Padding(
