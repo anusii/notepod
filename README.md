@@ -2,6 +2,8 @@
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
+*Time-stamp: <Friday 2025-07-18 09:43:57 +1000 Graham Williams>*
+
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
 *[ANU Software Innovation Institute](https://sii.anu.edu.au)*
@@ -63,8 +65,12 @@ even easier to build your first Pods-based Flutter app.
 
 <div align="center">
 	<img
-	src="images/shopping.png"
-	alt="Login Screen" width="400">
+	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png"
+	alt="Shopping List" width="400">
+
+	<img
+	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png"
+	alt="Shopping List" width="100">
 </div>
 
 ## Obtaining a Pod
@@ -106,7 +112,7 @@ get to know your login details.
 
 <div align="center">
 	<img
-	src="images/login.png"
+	src="	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/login.png"
 	alt="Login Screen" width="400">
 </div>
 
