@@ -1,6 +1,6 @@
 /// DESCRIPTION
 ///
-// Time-stamp: <Friday 2025-07-17 20:39:20 +1000 Jess Moore>
+// Time-stamp: <Friday 2025-07-18 05:39:05 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
@@ -53,91 +53,97 @@ class NoteDisplayMetadata extends StatelessWidget {
       noteContent = data;
     }
 
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Container(
-                  padding: metadataPadding,
-                  child: Text(
-                    'Created on: ${getDateTimeStr(noteContent[createdDateTimePred])}',
-                    style: metadataTextStyle,
+    return Container(
+      color: Colors.grey[100],
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: metadataPadding,
+                    child: Text(
+                      'Created on: ${getDateTimeStr(noteContent[createdDateTimePred])}',
+                      style: metadataTextStyle,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Container(
-                  padding: metadataPadding,
-                  child: Text(
-                    'Last modified on: ${getDateTimeStr(noteContent[modifiedDateTimePred])}',
-                    style: metadataTextStyle,
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: metadataPadding,
+                    child: Text(
+                      'Last modified on: ${getDateTimeStr(noteContent[modifiedDateTimePred])}',
+                      style: metadataTextStyle,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          // Show sharing metadata if shared external file
-          if (shared) accessInfo(noteInfo),
-          SizedBox(height: 10),
-        ]);
+              ],
+            ),
+            // Show sharing metadata if shared external file
+            if (shared) accessInfo(noteInfo),
+            SizedBox(height: 10),
+          ]),
+    );
   }
 }
 
 // Metadata block containing access info (owner, provider, access list)
 Widget accessInfo(noteInfo) {
-  return Column(
-    children: [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              padding: metadataPadding,
-              child: Text(
-                'Owner: ${noteInfo[noteOwner]}',
-                style: metadataTextStyle,
+  return Container(
+    color: Colors.grey[100],
+    child: Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Owner: ${noteInfo[noteOwner]}',
+                  style: metadataTextStyle,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              padding: metadataPadding,
-              child: Text(
-                'Shared by: ${noteInfo[permissionGranter]}',
-                style: metadataTextStyle,
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Shared by: ${noteInfo[permissionGranter]}',
+                  style: metadataTextStyle,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              padding: metadataPadding,
-              child: Text(
-                'Permissions: ${noteInfo[permissionList]}',
-                style: metadataTextStyle,
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Permissions: ${noteInfo[permissionList]}',
+                  style: metadataTextStyle,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    ],
+          ],
+        ),
+      ],
+    ),
   );
 }
