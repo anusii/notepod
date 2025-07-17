@@ -142,29 +142,6 @@ class EditNoteState extends State<EditNote>
             height: 10,
           ),
           markdownEditor(context, _textController!, _focusNode, data),
-
-          // Container(
-          //   padding: const EdgeInsets.all(10),
-          //   child: MarkdownAutoPreview(
-          //     controller: _textController,
-          //     decoration: InputDecoration(
-          //       hintText: 'Input markdown text',
-          //     ),
-          //     emojiConvert: true,
-          //     hintText: 'Tap here to start writing a note!',
-          //     // maxLines: 10,
-          //     // minLines: 1,
-          //     // expands: true,
-          //   ),
-          //   // SplittedMarkdownFormField(
-          //   //   controller: _textController,
-          //   //   markdownSyntax: '## Headline',
-          //   //   decoration: const InputDecoration(
-          //   //     hintText: 'Editable text',
-          //   //   ),
-          //   //   emojiConvert: true,
-          //   // )
-          // ),
           const SizedBox(
             height: 20,
           ),

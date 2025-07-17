@@ -1,6 +1,6 @@
 // App screen.
 ///
-// Time-stamp: <Wednesday 2025-07-16 14:03:07 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 10:33:23 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024, Software Innovation Institute, ANU.
 ///
@@ -21,17 +21,19 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:version_widget/version_widget.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class AppScreen extends StatefulWidget {
   /// Initialise widget variables.
@@ -83,6 +85,7 @@ class AppScreenState extends State<AppScreen>
             changelogUrl:
                 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
             showDate: true,
+            fontSize: 12.0,
           ),
           const SizedBox(width: 20),
           IconButton(
@@ -96,6 +99,7 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
+                          title: topBarTitle,
                           childPage: NewNote(),
                         )),
                 (Route<dynamic> route) =>
@@ -105,7 +109,7 @@ class AppScreenState extends State<AppScreen>
           ),
           const SizedBox(width: 10),
           IconButton(
-            tooltip: 'My Notes',
+            tooltip: 'Go to $myNotesTitle',
             icon: const Icon(
               // TODO 20231217 gjw view_list icon is not rendering on web. In
               // fact, any other icon I choose except the ones originally used
@@ -118,7 +122,28 @@ class AppScreenState extends State<AppScreen>
                 context,
                 MaterialPageRoute(
                     builder: (context) => AppScreen(
+                          title: topBarTitle,
                           childPage: ListNotesScreen(),
+                        )),
+                (Route<dynamic> route) =>
+                    false, // This predicate ensures all previous routes are removed
+              );
+            },
+          ),
+          const SizedBox(width: 10),
+          IconButton(
+            tooltip: 'Go to $sharedNotesTitle',
+            icon: const Icon(
+              Icons.file_open_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: SharedNotesScreen(),
                         )),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed

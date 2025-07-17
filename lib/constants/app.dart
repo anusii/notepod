@@ -69,3 +69,7 @@ const titleStyle = TextStyle(
 const smallTextStyle = TextStyle(
   fontSize: 12,
 );
+
+// Titles for nav widgets to pages
+const String myNotesTitle = 'My Notes';
+const String sharedNotesTitle = 'Shared Notes';

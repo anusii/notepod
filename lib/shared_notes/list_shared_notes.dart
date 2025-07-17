@@ -55,7 +55,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
           Container(
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
             child: Text(
-              'Shared Notes (created by other people)',
+              '$sharedNotesTitle (created by other people)',
               style: titleStyle,
             ),
           ),
