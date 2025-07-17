@@ -27,7 +27,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/app_screen.dart';
@@ -40,6 +39,7 @@ import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_display_markdown.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -110,27 +110,8 @@ class _ViewNoteState extends State<ViewNote> {
             ),
           ],
         ),
-        Expanded(
-          child: SizedBox(
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: SingleChildScrollView(
-                  child: MarkdownBlock(data: noteData[noteContentPred])),
-
-              // MarkdownParse(
-              //   data: noteData[noteContentPred],
-              //   // onTapHastag: (String name, String match) {
-              //   //   // name => hashtag
-              //   //   // match => #hashtag
-              //   // },
-              //   // onTapMention: (String name, String match) {
-              //   //   // name => mention
-              //   //   // match => #mention
-              //   // },
-              // )
-            ),
-          ),
-        ),
+        // Display markdown note content
+        noteDisplayMarkdown(noteData[noteContentPred]),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
