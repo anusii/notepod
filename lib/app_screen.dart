@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Thursday 2025-07-17 20:58:03 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-07-17 21:02:03 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
 ///
@@ -84,9 +84,11 @@ class AppScreenState extends State<AppScreen>
             version: _appVersion,
             changelogUrl:
                 // Currently (VersionWidget version 1.0.3) for the chrome/web
-                // deployment the first URL results in CORS blocking while the
-                // second works. However the second redners raw text when tapped
-                // while the first renders the Markdown. (20250717 gjw)
+                // deployment the first URL below results in CORS blocking while
+                // the second works. However the second renders raw text when
+                // tapped while the first renders the Markdown which is a whole
+                // lot nicer. So with the first on chrome/web the version
+                // checking does not work. (20250717 gjw)
                 'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
             // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
             showDate: true,
@@ -116,9 +118,6 @@ class AppScreenState extends State<AppScreen>
           IconButton(
             tooltip: 'Go to $myNotesTitle',
             icon: const Icon(
-              // TODO 20231217 gjw view_list icon is not rendering on web. In
-              // fact, any other icon I choose except the ones originally used
-              // do not render. Must be an extra step required.
               Icons.view_list,
               color: Colors.black,
             ),
