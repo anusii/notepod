@@ -1,6 +1,6 @@
 /// DESCRIPTION
 ///
-// Time-stamp: <Friday 2025-07-18 05:39:05 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-07-18 05:48:17 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
@@ -30,7 +30,11 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/misc.dart';
 
-// Displays note metadata
+/// Shaded colour for meta data in displaying a note.
+
+final metaDataShade = Colors.grey[100];
+
+/// Display the note metadata.
 
 class NoteDisplayMetadata extends StatelessWidget {
   final Map data;
@@ -54,7 +58,7 @@ class NoteDisplayMetadata extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.grey[100],
+      color: metaDataShade,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,10 +99,11 @@ class NoteDisplayMetadata extends StatelessWidget {
   }
 }
 
-// Metadata block containing access info (owner, provider, access list)
+// Display shared metadata (owner, provider, access list).
+
 Widget accessInfo(noteInfo) {
   return Container(
-    color: Colors.grey[100],
+    color: metaDataShade,
     child: Column(
       children: [
         Row(
