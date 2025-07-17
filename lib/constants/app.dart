@@ -65,6 +65,11 @@ const titleStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+// Text style for metadata
+const metadataTextStyle = TextStyle(
+  fontSize: 14,
+);
+
 // Text style for list sort buttons
 const smallTextStyle = TextStyle(
   fontSize: 12,
@@ -73,3 +78,6 @@ const smallTextStyle = TextStyle(
 // Titles for nav widgets to pages
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
+
+// EdgeInsets for metadata block on view notes
+const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
