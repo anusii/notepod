@@ -30,29 +30,48 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/responsive.dart';
 import 'package:notepod/constants/colours.dart';
 
-Row buildMsgCard(
-  BuildContext context,
-  IconData errIcon,
-  Color errColour,
-  String errTitle,
-  String errBody,
-) {
+Row buildMsgCard(BuildContext context, IconData errIcon, Color errColour,
+    String errTitle, String errBody,
+    {bool isSmall = false}) {
+  // Call buildMsgCard with isSmall=true to use above another widget
+  EdgeInsets paddingMsgCardDef = const EdgeInsets.fromLTRB(60, 50, 60, 20);
+  EdgeInsets paddingMsgCardSmall = const EdgeInsets.fromLTRB(60, 20, 60, 20);
+
+  Map<String, Map<String, double>> msgCardHeightSettings = {
+    'desktop': {'smallmsg': 140, 'normalmsg': 160},
+    'tablet': {'smallmsg': 150, 'normalmsg': 200},
+    'other': {'smallmsg': 160, 'normalmsg': 220},
+  };
+
+  double heightMsgCard = isSmall
+      ? (Responsive.isDesktop(context)
+          ? msgCardHeightSettings['desktop']!['smallmsg'] as double
+          : Responsive.isTablet(context)
+              ? msgCardHeightSettings['tablet']!['smallmsg'] as double
+              : msgCardHeightSettings['other']!['smallmsg'] as double)
+      : (Responsive.isDesktop(context)
+          ? msgCardHeightSettings['desktop']!['normalmsg'] as double
+          : Responsive.isTablet(context)
+              ? msgCardHeightSettings['tablet']!['normalmsg'] as double
+              : msgCardHeightSettings['other']!['normalmsg'] as double);
+
   return Row(
     children: [
       Expanded(
         flex: Responsive.isDesktop(context) ? 10 : 8,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(60, 50, 60, 0),
+          padding: isSmall ? paddingMsgCardSmall : paddingMsgCardDef,
           child: Card(
             elevation: 10,
             shadowColor: Colors.black,
             color: lighterGray,
             child: SizedBox(
-              height: Responsive.isDesktop(context)
-                  ? 160
-                  : Responsive.isTablet(context)
-                      ? 200
-                      : 220,
+              // height: Responsive.isDesktop(context)
+              //     ? 160
+              //     : Responsive.isTablet(context)
+              //         ? 200
+              //         : 220,
+              height: heightMsgCard,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(

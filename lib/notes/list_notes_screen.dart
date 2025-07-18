@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/notes/list_notes.dart';
+import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
@@ -47,12 +48,29 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     super.initState();
   }
 
+  // Load Notes
   Widget _loadedScreen(Map notesMap) {
     return Container(
       color: Colors.white,
       child: ListNotes(
         notesMap: notesMap,
       ),
+    );
+  }
+
+  // Advise user to create their first note
+  Widget _loadNewNote() {
+    return SingleChildScrollView(
+      child: Column(children: <Widget>[
+        buildMsgCard(context, Icons.info, Colors.amber, 'No notes yet!',
+            'Write your first note',
+            // noNotesMsg,
+            isSmall: true),
+        Container(
+          color: Colors.white,
+          child: NewNote(),
+        ),
+      ]),
     );
   }
 
@@ -69,21 +87,8 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                 return snapshot.data == null ||
                         snapshot.data.toString() == 'null' ||
                         snapshot.data.length == 0
-                    ? Center(
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: buildMsgCard(
-                                context,
-                                Icons.info,
-                                Colors.amber,
-                                'No notes yet!',
-                                noNotesMsg,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                    // Show _loadNewNote() to go instead to NewNote() when user has no notes
+                    ? returnVal = _loadNewNote()
                     : returnVal = _loadedScreen(
                         snapshot.data! as Map,
                       );
