@@ -30,27 +30,25 @@ import 'package:flutter/material.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 // Displays note content with MarkdownBlock()
-Expanded noteDisplayMarkdown(
+// Expanded noteDisplayMarkdown(
+Container noteDisplayMarkdown(
   String data,
 ) {
-  return Expanded(
-    child: SizedBox(
-      child: Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.all(10),
-          child: SingleChildScrollView(child: MarkdownBlock(data: data))),
-      // 20250717 jm Alt method retained for reference
-      // MarkdownParse(
-      //   data: noteData[noteContentPred],
-      //   // onTapHastag: (String name, String match) {
-      //   //   // name => hashtag
-      //   //   // match => #hashtag
-      //   // },
-      //   // onTapMention: (String name, String match) {
-      //   //   // name => mention
-      //   //   // match => #mention
-      //   // },
-      // )
-    ),
-  );
+  return Container(
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.all(10),
+      // child: SingleChildScrollView(child: MarkdownBlock(data: data))),
+      child: MarkdownBlock(data: data));
+  // 20250717 jm Alt method retained for reference
+  // MarkdownParse(
+  //   data: noteData[noteContentPred],
+  //   // onTapHastag: (String name, String match) {
+  //   //   // name => hashtag
+  //   //   // match => #hashtag
+  //   // },
+  //   // onTapMention: (String name, String match) {
+  //   //   // name => mention
+  //   //   // match => #mention
+  //   // },
+  // )
 }
