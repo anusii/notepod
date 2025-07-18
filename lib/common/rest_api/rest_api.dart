@@ -180,10 +180,10 @@ Future<Map> getSharedNotes(BuildContext context, Widget childPage,
 // Get the content of a shared note
 Future<Map> getSharedNoteContent(
     BuildContext context, Widget childPage, Map sharedNoteData) async {
-  final shardNoteUrl = sharedNoteData[noteUrl];
+  final sharedNoteUrl = sharedNoteData[noteUrl];
 
   // Get note content
-  final noteContent = await readExternalPod(shardNoteUrl, context, childPage);
+  final noteContent = await readExternalPod(sharedNoteUrl, context, childPage);
 
   final noteContentMap = noteInfoMap(noteContent);
 
