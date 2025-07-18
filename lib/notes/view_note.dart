@@ -40,6 +40,7 @@ import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
+import 'package:notepod/widgets/note_edit_button.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -131,39 +132,10 @@ class _ViewNoteState extends State<ViewNote> {
               const SizedBox(
                 width: 5,
               ),
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AppScreen(
-                        title: topBarTitle,
-                        childPage: EditNote(
-                          noteData: noteData,
-                        ),
-                      ),
-                    ),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkGreen,
-                  backgroundColor: lightGreen, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'EDIT',
-                  style: TextStyle(color: Colors.white),
+              // Edit
+              NoteEditButton(
+                childPage: EditNote(
+                  noteData: noteData,
                 ),
               ),
               const SizedBox(
