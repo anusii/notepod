@@ -40,7 +40,7 @@ import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
 
-class NoteEditScrollView extends StatefulWidget {
+class NoteEditScrollView extends StatelessWidget {
   const NoteEditScrollView({
     super.key,
     required this.formKey,
@@ -60,60 +60,54 @@ class NoteEditScrollView extends StatefulWidget {
   final bool shared;
 
   @override
-  State<NoteEditScrollView> createState() => _NoteEditScrollViewState();
-}
-
-class _NoteEditScrollViewState extends State<NoteEditScrollView> {
-  @override
   Widget build(BuildContext context) {
     String currDateStr = '';
     Map noteContent = {};
     Map noteInfo = {};
 
-    if (widget.prevNoteData == null) {
+    if (prevNoteData == null) {
       // New note: fetch current date for heading
       currDateStr =
           DateFormat('dd MMMM yyyy').format(DateTime.now()).toString();
     } else {
       // Editing existing note (shared/unshared): extract content
-      if (widget.shared) {
-        noteContent = widget.prevNoteData!['sharedNoteContent'];
-        noteInfo = widget.prevNoteData!['sharedNoteInfo'];
+      if (shared) {
+        noteContent = prevNoteData!['sharedNoteContent'];
+        noteInfo = prevNoteData!['sharedNoteInfo'];
       } else {
-        noteContent = widget.prevNoteData as Map<dynamic, dynamic>;
+        noteContent = prevNoteData as Map<dynamic, dynamic>;
       }
     }
 
     Row NoteEditActionBar() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: (widget.prevNoteData == null)
+        children: (prevNoteData == null)
             // New Note: save button only
             ? [
                 NoteSaveButton(
-                    textController: widget._textController!,
-                    formKey: widget.formKey,
-                    shared: widget.shared)
+                    textController: _textController!,
+                    formKey: formKey,
+                    shared: shared)
               ]
             : [
                 // Edit Note: save and back buttons
                 NoteSaveButton(
-                    textController: widget._textController!,
-                    formKey: widget.formKey,
-                    prevNoteData: widget.prevNoteData,
-                    shared: widget.shared),
+                    textController: _textController!,
+                    formKey: formKey,
+                    prevNoteData: prevNoteData,
+                    shared: shared),
                 const SizedBox(
                   width: 5,
                 ),
                 // Nav to view note or view shared note
-                (widget.shared)
+                (shared)
                     ? NoteBackButton(
                         childPage:
                             ViewSharedNoteScreen(sharedNoteData: noteInfo))
                     : NoteBackButton(
                         childPage: ViewNote(
-                            noteData:
-                                widget.prevNoteData as Map<dynamic, dynamic>)),
+                            noteData: prevNoteData as Map<dynamic, dynamic>)),
               ],
       );
     }
@@ -127,16 +121,16 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: FormBuilder(
-                key: widget.formKey,
+                key: formKey,
                 onChanged: () {
-                  widget.formKey.currentState!.save();
+                  formKey.currentState!.save();
                 },
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
                 child: Column(
                   children: [
                     // New note: show current date
-                    if (widget.prevNoteData == null) ...[
+                    if (prevNoteData == null) ...[
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -154,7 +148,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
                     // previous note data
                     FormBuilderTextField(
                       name: noteTitlePred,
-                      initialValue: (widget.prevNoteData != null)
+                      initialValue: (prevNoteData != null)
                           ? noteContent[noteTitlePred]
                           : null,
                       autofocus: true,
@@ -178,8 +172,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
           const SizedBox(
             height: 10,
           ),
-          markdownEditor(
-              context, widget._textController!, widget._focusNode, widget.data),
+          markdownEditor(context, _textController!, _focusNode, data),
           const SizedBox(
             height: 20,
           ),
