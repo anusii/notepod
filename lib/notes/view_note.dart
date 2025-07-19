@@ -57,131 +57,149 @@ class _ViewNoteState extends State<ViewNote> {
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
 
-    return Column(
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                child: Text(
-                  noteData[noteTitlePred],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        // Display note metadata
-        NoteDisplayMetadata(data: noteData, shared: false),
-        Divider(),
-        // Display markdown note content
-        noteDisplayMarkdown(noteData[noteContentPred]),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.share,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  // Get note file path
-                  String noteFilePath =
-                      '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
-                  // redirect
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AppScreen(
-                              title: topBarTitle,
-                              childPage: ShareNote(
-                                noteData: noteData,
-                                noteFilePath: noteFilePath,
-                              ),
-                            )),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkBlue,
-                  backgroundColor: lightBlue, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'SHARE',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AppScreen(
-                        title: topBarTitle,
-                        childPage: EditNote(
-                          noteData: noteData,
-                        ),
-                      ),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                  child: Text(
+                    noteData[noteTitlePred],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
                     ),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkGreen,
-                  backgroundColor: lightGreen, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                label: const Text(
-                  'EDIT',
-                  style: TextStyle(color: Colors.white),
-                ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
-
-              /// Delete button
-              NoteDelButton(noteData: noteData),
-              const SizedBox(
-                width: 5,
-              ),
-              // Back button
-              NoteBackButton(childPage: ListNotesScreen()),
             ],
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+// <<<<<<< HEAD
+//               const SizedBox(
+//                 width: 5,
+//               ),
+
+//               /// Delete button
+//               NoteDelButton(noteData: noteData),
+//               const SizedBox(
+//                 width: 5,
+//               ),
+//               // Back button
+//               NoteBackButton(childPage: ListNotesScreen()),
+// =======
+// >>>>>>> dev
+          //   ],
+          // ),
+          // Display note metadata
+          NoteDisplayMetadata(data: noteData, shared: false),
+          Divider(),
+          // Display markdown note content
+          noteDisplayMarkdown(noteData[noteContentPred]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    // Get note file path
+                    String noteFilePath =
+                        '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+
+                    // redirect
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AppScreen(
+                                title: topBarTitle,
+                                childPage: ShareNote(
+                                  noteData: noteData,
+                                  noteFilePath: noteFilePath,
+                                ),
+                              )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: darkBlue,
+                    backgroundColor: lightBlue, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'SHARE',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppScreen(
+                          title: topBarTitle,
+                          childPage: EditNote(
+                            noteData: noteData,
+                          ),
+                        ),
+                      ),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: darkGreen,
+                    backgroundColor: lightGreen, // foreground
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  label: const Text(
+                    'EDIT',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+
+                /// Delete button
+                NoteDelButton(noteData: noteData),
+                const SizedBox(
+                  width: 5,
+                ),
+                // Back button
+                NoteBackButton(childPage: ListNotesScreen()),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }

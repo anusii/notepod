@@ -28,14 +28,9 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/view_shared_note_screen.dart';
-import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/widgets/note_back_button.dart';
-import 'package:notepod/widgets/note_save_button.dart';
+import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 class EditSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -101,77 +96,12 @@ class EditSharedNoteState extends State<EditSharedNote>
 
   @override
   Widget build(BuildContext context) {
-    Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: FormBuilder(
-                key: formKey,
-                onChanged: () {
-                  formKey.currentState!.save();
-                },
-                autovalidateMode: AutovalidateMode.disabled,
-                skipDisabled: true,
-                child: Column(
-                  children: [
-                    FormBuilderTextField(
-                      name: noteTitlePred,
-                      initialValue: sharedNoteContent[noteTitlePred],
-                      decoration: const InputDecoration(
-                        labelText: 'Note Title',
-                        labelStyle: TextStyle(
-                          color: darkBlue,
-                          letterSpacing: 1.5,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        //errorText: 'error',
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          markdownEditor(context, _textController!, _focusNode, data),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                NoteSaveButton(
-                    textController: _textController!,
-                    formKey: formKey,
-                    prevNoteData: widget.fullNoteData,
-                    shared: true),
-                const SizedBox(
-                  width: 5,
-                ),
-                NoteBackButton(
-                  childPage: ViewSharedNoteScreen(
-                      sharedNoteData: widget.fullNoteData['sharedNoteInfo']),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    );
+    return NoteEditScrollView(
+        formKey: formKey,
+        textController: _textController,
+        focusNode: _focusNode,
+        data: data,
+        prevNoteData: widget.fullNoteData,
+        shared: true);
   }
 }

@@ -67,7 +67,7 @@ const titleStyle = TextStyle(
 
 // Text style for metadata
 const metadataTextStyle = TextStyle(
-  fontSize: 10,
+  fontSize: 12,
 );
 
 // Text style for list sort buttons
