@@ -47,7 +47,7 @@ dependencies:
   rdf_core: ^0.9.2
   rdflib: ^0.2.12
   rename: ^3.1.0
-  solidpod: ^0.6.9
+  solidpod: ^0.6.12
   solid_encrypt: ^0.1.10
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
