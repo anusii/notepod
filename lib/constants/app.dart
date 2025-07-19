@@ -49,7 +49,7 @@ const nonReadableNoteMsg =
 
 const noNotesMsg = 'You do not have any notes yet!';
 
-const noSharedNotesMsg = 'You do not have any shared notes yet!';
+const noSharedNotesMsg = 'You do not have any notes shared with you yet!';
 
 SizedBox standardHeight() {
   return const SizedBox(
