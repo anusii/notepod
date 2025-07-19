@@ -27,17 +27,13 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
-
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
-import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+// import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_share_button.dart';
 
 class NonReadableNote extends StatefulWidget {
@@ -147,6 +143,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // Share button
               if (noteMetaData[permissionList].contains('control')) ...[
                 NoteShareButton(
                   childPage: ShareExternalNote(
@@ -157,79 +154,15 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                   width: 5,
                 ),
               ],
-              if (noteMetaData[permissionList].contains('write')) ...[
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext ctx) {
-                        return AlertDialog(
-                          title: const Text('Please Confirm'),
-                          content: const Text(
-                            'Are you sure you want to delete this note?',
-                          ),
-                          actions: [
-                            // The "Yes" button
-                            TextButton(
-                              onPressed: () async {
-                                showAnimationDialog(
-                                  context,
-                                  17,
-                                  'Deleting the note!',
-                                  false,
-                                );
-
-                                // Call solid delete file function
-                                await deleteExternalFile(noteMetaData[noteUrl]);
-
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AppScreen(
-                                            title: topBarTitle,
-                                            childPage: SharedNotesScreen(),
-                                          )),
-                                  (Route<dynamic> route) =>
-                                      false, // This predicate ensures all previous routes are removed
-                                );
-                              },
-                              child: const Text('Yes'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                // Close the dialog
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('No'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: darkRed,
-                    backgroundColor: lightRed, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  label: const Text(
-                    'DELETE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
+              // /// Delete button
+              // /// 20250719 jesscmoore Commented out as also commented out
+              // /// external note with read-write-control-append access
+              // if (noteMetaData[permissionList].contains('write')) ...[
+              //   NoteDelButton(noteData: noteMetaData, shared: true),
+              //   const SizedBox(
+              //     width: 5,
+              //   ),
+              // ],
               NoteBackButton(childPage: SharedNotesScreen()),
             ],
           ),
