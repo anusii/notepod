@@ -40,6 +40,7 @@ import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
@@ -58,6 +59,10 @@ class _ViewNoteState extends State<ViewNote> {
   @override
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
+
+    // Get note file path
+    String noteFilePath =
+        '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
     return Column(
       children: <Widget>[
@@ -88,46 +93,12 @@ class _ViewNoteState extends State<ViewNote> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.share,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  // Get note file path
-                  String noteFilePath =
-                      '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
-                  // redirect
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AppScreen(
-                              title: topBarTitle,
-                              childPage: ShareNote(
-                                noteData: noteData,
-                                noteFilePath: noteFilePath,
-                              ),
-                            )),
-                    (Route<dynamic> route) =>
-                        false, // This predicate ensures all previous routes are removed
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: darkBlue,
-                  backgroundColor: lightBlue, // foreground
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                label: const Text(
-                  'SHARE',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              // Share button
+              NoteShareButton(
+                  childPage: ShareNote(
+                noteData: noteData,
+                noteFilePath: noteFilePath,
+              )),
               const SizedBox(
                 width: 5,
               ),

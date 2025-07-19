@@ -48,9 +48,8 @@ ElevatedButton shareNote(
             builder: (context) => AppScreen(
                   title: topBarTitle,
                   childPage: ShareExternalNote(
-                    fullNoteData: fullNoteData,
+                    noteMetaData: fullNoteData,
                   ),
-                  // childPage: SharedNotes(),
                 )),
         (Route<dynamic> route) =>
             false, // This predicate ensures all previous routes are removed

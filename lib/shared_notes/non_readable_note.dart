@@ -33,11 +33,13 @@ import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class NonReadableNote extends StatefulWidget {
   final Map noteMetaData;
@@ -147,7 +149,11 @@ class _NonReadableNoteState extends State<NonReadableNote> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (noteMetaData[permissionList].contains('control')) ...[
-                shareNote(context, noteMetaData),
+                NoteShareButton(
+                  childPage: ShareExternalNote(
+                    noteMetaData: noteMetaData,
+                  ),
+                ),
                 const SizedBox(
                   width: 5,
                 ),
