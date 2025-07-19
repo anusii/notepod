@@ -113,7 +113,7 @@ class _ViewNoteState extends State<ViewNote> {
                 ),
 
                 /// Delete button
-                NoteDelButton(noteData: noteData),
+                NoteDelButton(noteData: noteData, shared: false),
                 const SizedBox(
                   width: 5,
                 ),

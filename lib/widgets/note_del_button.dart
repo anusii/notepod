@@ -38,10 +38,12 @@ import 'package:notepod/widgets/loading_animation.dart';
 
 class NoteDelButton extends StatelessWidget {
   final Map noteData;
+  final bool shared;
 
   const NoteDelButton({
     Key? key,
     required this.noteData,
+    required this.shared,
   }) : super(key: key);
 
   @override
@@ -72,12 +74,16 @@ class NoteDelButton extends StatelessWidget {
                     );
 
                     // Delete file
-                    // Create note file path
-                    String noteFilePath =
-                        '$mainResDir/$dataDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+                    if (shared) {
+                      await deleteExternalFile(noteData[noteUrl]);
+                    } else {
+                      // Create note file path
+                      String noteFilePath =
+                          '$mainResDir/$dataDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
-                    // Call solid delete file function
-                    await deleteFile(noteFilePath);
+                      // Call solid delete file function
+                      await deleteFile(noteFilePath);
+                    }
 
                     Navigator.pushAndRemoveUntil(
                       context,
