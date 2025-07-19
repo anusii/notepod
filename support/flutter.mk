@@ -377,7 +377,7 @@ versions:
 
 .PHONY: wc
 wc: lib/*.dart
-	@cat lib/*.dart lib/*/*.dart lib/*/*/*.dart \
+	@cat $(shell find lib -name '*.dart') \
 	| egrep -v '^/' \
 	| egrep -v '^ *$$' \
 	| wc -l

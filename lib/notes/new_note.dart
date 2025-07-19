@@ -28,13 +28,8 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:intl/intl.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
-import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/widgets/note_save_button.dart';
+import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// The home page for the app.
 
@@ -102,82 +97,11 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    String dateStr =
-        DateFormat('dd MMMM yyyy').format(DateTime.now()).toString();
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: FormBuilder(
-                key: formKey,
-                onChanged: () {
-                  formKey.currentState!.save();
-                },
-                autovalidateMode: AutovalidateMode.disabled,
-                skipDisabled: true,
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Date: $dateStr',
-                          style: titleStyle,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    FormBuilderTextField(
-                      name: 'noteTitle',
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Note Title',
-                        labelStyle: TextStyle(
-                          color: darkBlue,
-                          letterSpacing: 1.5,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        //errorText: 'error',
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          markdownEditor(context, _textController!, _focusNode, data),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                NoteSaveButton(
-                    textController: _textController!,
-                    formKey: formKey,
-                    shared: false),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    );
+    return NoteEditScrollView(
+        formKey: formKey,
+        textController: _textController,
+        focusNode: _focusNode,
+        data: data,
+        shared: false);
   }
 }
