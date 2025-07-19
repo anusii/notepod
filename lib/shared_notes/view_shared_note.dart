@@ -28,14 +28,13 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
-// import 'package:notepod/shared_notes/share_external_note.dart';
+import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/edit_shared_note.dart';
-import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-// import 'package:notepod/widgets/note_share_button.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 import 'package:notepod/widgets/note_edit_button.dart';
 
 class ViewSharedNote extends StatefulWidget {
@@ -78,8 +77,6 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
               ),
             ],
           ),
-          //   ],
-          // ),
           // Display note metadata
           NoteDisplayMetadata(data: widget.fullNoteData, shared: true),
           Divider(),
@@ -90,8 +87,14 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Share if control access
                 if (accessList.contains('control')) ...[
-                  shareNote(context, widget.fullNoteData),
+                  NoteShareButton(
+                    childPage: ShareExternalNote(
+                      // noteMetaData: noteMetaData,
+                      fullNoteData: widget.fullNoteData,
+                    ),
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
