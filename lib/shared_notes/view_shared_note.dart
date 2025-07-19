@@ -28,13 +28,15 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/share_external_note.dart';
+// import 'package:notepod/shared_notes/share_external_note.dart';
+import 'package:notepod/shared_notes/edit_shared_note.dart';
 import 'package:notepod/shared_notes/shared_note_controls.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_share_button.dart';
+// import 'package:notepod/widgets/note_share_button.dart';
+import 'package:notepod/widgets/note_edit_button.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -56,60 +58,64 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
     Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
     List accessList = sharedNoteInfo[permissionList].split(',');
 
-    return Column(
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                child: Text(
-                  sharedNoteContent[noteTitlePred],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                  child: Text(
+                    sharedNoteContent[noteTitlePred],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        // Display note metadata
-        NoteDisplayMetadata(data: widget.fullNoteData, shared: true),
-        Divider(),
-        // Display markdown note content
-        noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // Share button if control
-              if (accessList.contains('control')) ...[
-                NoteShareButton(
-                  childPage: ShareExternalNote(
-                    fullNoteData: widget.fullNoteData,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
-              if (accessList.contains('write')) ...[
-                editNote(context, widget.fullNoteData),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
-              NoteBackButton(childPage: SharedNotesScreen()),
             ],
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          //   ],
+          // ),
+          // Display note metadata
+          NoteDisplayMetadata(data: widget.fullNoteData, shared: true),
+          Divider(),
+          // Display markdown note content
+          noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (accessList.contains('control')) ...[
+                  shareNote(context, widget.fullNoteData),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+                // Edit if write access
+                if (accessList.contains('write')) ...[
+                  NoteEditButton(
+                      childPage: EditSharedNote(
+                    fullNoteData: widget.fullNoteData,
+                  )),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  // Back
+                  NoteBackButton(childPage: SharedNotesScreen()),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }

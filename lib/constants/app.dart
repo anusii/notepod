@@ -49,7 +49,7 @@ const nonReadableNoteMsg =
 
 const noNotesMsg = 'You do not have any notes yet!';
 
-const noSharedNotesMsg = 'You do not have any shared notes yet!';
+const noSharedNotesMsg = 'You do not have any notes shared with you yet!';
 
 SizedBox standardHeight() {
   return const SizedBox(
@@ -67,7 +67,7 @@ const titleStyle = TextStyle(
 
 // Text style for metadata
 const metadataTextStyle = TextStyle(
-  fontSize: 10,
+  fontSize: 12,
 );
 
 // Text style for list sort buttons
