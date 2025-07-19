@@ -34,11 +34,14 @@ import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
 class ShareExternalNote extends StatefulWidget {
-  final Map fullNoteData;
+  final Map? fullNoteData;
+  final Map? noteMetaData;
 
   const ShareExternalNote({
     super.key,
-    required this.fullNoteData,
+    // required this.fullNoteData,
+    this.fullNoteData,
+    this.noteMetaData,
   });
 
   @override
@@ -54,6 +57,23 @@ class ShareExternalNoteState extends State<ShareExternalNote>
 
   @override
   Widget build(BuildContext context) {
+    // String notePermission;
+    Map noteMetaData;
+    ShareExternalNote child;
+    // Access including Read: fullData supplied
+    if (widget.fullNoteData != null) {
+      noteMetaData = widget.fullNoteData?['sharedNoteInfo'];
+      child = ShareExternalNote(
+        fullNoteData: widget.fullNoteData,
+      );
+      // Access not including Read: only metadata supplied
+    } else {
+      noteMetaData = widget.noteMetaData as Map<dynamic, dynamic>;
+      child = ShareExternalNote(
+        noteMetaData: widget.noteMetaData,
+      );
+    }
+
     return SingleChildScrollView(
       child: Center(
         child: Padding(
@@ -69,13 +89,10 @@ class ShareExternalNoteState extends State<ShareExternalNote>
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: GrantPermissionUi(
                     showAppBar: false,
-                    fileName: widget.fullNoteData['sharedNoteInfo'][noteUrl],
+                    fileName: noteMetaData[noteUrl],
                     isExternalRes: true,
-                    externalWebId: widget.fullNoteData['sharedNoteInfo']
-                        [noteOwner],
-                    child: ShareExternalNote(
-                      fullNoteData: widget.fullNoteData,
-                    ),
+                    externalWebId: noteMetaData[noteOwner],
+                    child: child,
                   ),
                 ),
               ],
