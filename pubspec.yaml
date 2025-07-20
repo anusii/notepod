@@ -83,10 +83,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  import_order_lint:
-    git:
-      url: https://github.com/anusii/import-order-lint.git
-      ref: main
+  import_order_lint: ^0.1.2
 
 flutter:
   uses-material-design: true
