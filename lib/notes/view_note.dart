@@ -27,9 +27,9 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
+// import 'package:notepod/app_screen.dart';
+// import 'package:notepod/constants/app.dart';
+// import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
@@ -38,6 +38,7 @@ import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 import 'package:notepod/widgets/note_edit_button.dart';
 
 class ViewNote extends StatefulWidget {
@@ -58,62 +59,16 @@ class _ViewNoteState extends State<ViewNote> {
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
 
+    // Get note file path
+    String noteFilePath =
+        '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-// <<<<<<< HEAD
-              // ElevatedButton.icon(
-              //   icon: const Icon(
-              //     Icons.share,
-              //     color: Colors.white,
-              //   ),
-              //   onPressed: () async {
-              //     // Get note file path
-              //     String noteFilePath =
-              //         '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
-              //     // redirect
-              //     Navigator.pushAndRemoveUntil(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => AppScreen(
-              //                 title: topBarTitle,
-              //                 childPage: ShareNote(
-              //                   noteData: noteData,
-              //                   noteFilePath: noteFilePath,
-              //                 ),
-              //               )),
-              //       (Route<dynamic> route) =>
-              //           false, // This predicate ensures all previous routes are removed
-              //     );
-              //   },
-              //   style: ElevatedButton.styleFrom(
-              //     foregroundColor: darkBlue,
-              //     backgroundColor: lightBlue, // foreground
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 15,
-              //     ),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(20),
-              //     ),
-              //   ),
-              //   label: const Text(
-              //     'SHARE',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-              // const SizedBox(
-              //   width: 5,
-              // ),
-              // // Edit
-              // NoteEditButton(
-              //   childPage: EditNote(
-              //     noteData: noteData,
-              //   ),
-// =======
               Flexible(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
@@ -125,26 +80,9 @@ class _ViewNoteState extends State<ViewNote> {
                     ),
                   ),
                 ),
-// >>>>>>> dev
               ),
             ],
           ),
-// <<<<<<< HEAD
-//               const SizedBox(
-//                 width: 5,
-//               ),
-
-//               /// Delete button
-//               NoteDelButton(noteData: noteData),
-//               const SizedBox(
-//                 width: 5,
-//               ),
-//               // Back button
-//               NoteBackButton(childPage: ListNotesScreen()),
-// =======
-// >>>>>>> dev
-          //   ],
-          // ),
           // Display note metadata
           NoteDisplayMetadata(data: noteData, shared: false),
           Divider(),
@@ -155,51 +93,16 @@ class _ViewNoteState extends State<ViewNote> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.share,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    // Get note file path
-                    String noteFilePath =
-                        '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
-                    // redirect
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AppScreen(
-                                title: topBarTitle,
-                                childPage: ShareNote(
-                                  noteData: noteData,
-                                  noteFilePath: noteFilePath,
-                                ),
-                              )),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: darkBlue,
-                    backgroundColor: lightBlue, // foreground
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  label: const Text(
-                    'SHARE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                // Share button
+                NoteShareButton(
+                    childPage: ShareNote(
+                  noteData: noteData,
+                  noteFilePath: noteFilePath,
+                )),
                 const SizedBox(
                   width: 5,
                 ),
-
-                // Edit
+                // Edit button
                 NoteEditButton(
                   childPage: EditNote(
                     noteData: noteData,
@@ -210,7 +113,7 @@ class _ViewNoteState extends State<ViewNote> {
                 ),
 
                 /// Delete button
-                NoteDelButton(noteData: noteData),
+                NoteDelButton(noteData: noteData, shared: false),
                 const SizedBox(
                   width: 5,
                 ),
