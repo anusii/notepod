@@ -33,9 +33,8 @@ import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_back_button.dart';
-// import 'package:notepod/widgets/note_del_button.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class NonReadableNote extends StatefulWidget {
   final Map noteMetaData;
