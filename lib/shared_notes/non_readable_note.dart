@@ -67,16 +67,6 @@ class _NonReadableNoteState extends State<NonReadableNote> {
           'Access Permission!',
           nonReadableNoteMsg,
         ),
-        Expanded(
-          child: SizedBox(
-            child: Container(
-                padding: const EdgeInsets.all(10),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                )),
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
