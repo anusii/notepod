@@ -27,9 +27,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-// import 'package:notepod/app_screen.dart';
-// import 'package:notepod/constants/app.dart';
-// import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
@@ -63,70 +60,81 @@ class _ViewNoteState extends State<ViewNote> {
     String noteFilePath =
         '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
 
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                  child: Text(
-                    noteData[noteTitlePred],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                        child: Text(
+                          noteData[noteTitlePred],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          // Display note metadata
-          NoteDisplayMetadata(data: noteData, shared: false),
-          Divider(),
-          // Display markdown note content
-          noteDisplayMarkdown(noteData[noteContentPred]),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Share button
-                NoteShareButton(
-                    childPage: ShareNote(
-                  noteData: noteData,
-                  noteFilePath: noteFilePath,
-                )),
-                const SizedBox(
-                  width: 5,
-                ),
-                // Edit button
-                NoteEditButton(
-                  childPage: EditNote(
-                    noteData: noteData,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-
-                /// Delete button
-                NoteDelButton(noteData: noteData, shared: false),
-                const SizedBox(
-                  width: 5,
-                ),
-                // Back button
-                NoteBackButton(childPage: ListNotesScreen()),
+                // Display note metadata
+                NoteDisplayMetadata(data: noteData, shared: false),
+                Divider(),
+                // Display markdown note content
+                noteDisplayMarkdown(noteData[noteContentPred]),
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
+        ),
+        // Action buttons - always visible
+        Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Share button
+                  NoteShareButton(
+                      childPage: ShareNote(
+                    noteData: noteData,
+                    noteFilePath: noteFilePath,
+                  )),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  // Edit button
+                  NoteEditButton(
+                    childPage: EditNote(
+                      noteData: noteData,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+
+                  /// Delete button
+                  NoteDelButton(noteData: noteData, shared: false),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  // Back button
+                  NoteBackButton(childPage: ListNotesScreen()),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
