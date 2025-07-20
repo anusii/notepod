@@ -35,8 +35,8 @@ import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 import 'package:notepod/widgets/note_edit_button.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
