@@ -89,6 +89,28 @@ class NavDrawer extends StatelessWidget {
                         const TextStyle(color: backgroundWhite, fontSize: 14),
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: VersionWidget(
+                    version: appVersion,
+                    changelogUrl:
+                        // Currently (VersionWidget version 1.0.3) for the chrome/web
+                        // deployment the first URL below results in CORS blocking while
+                        // the second works. However the second renders raw text when
+                        // tapped while the first renders the Markdown which is a whole
+                        // lot nicer. So with the first on chrome/web the version
+                        // checking does not work. (20250717 gjw)
+                        'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
+                    // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
+                    showDate: true,
+                    // User specified text style - see branch on version_widget package
+                    // fontSize: 12.0,
+                    userTextStyle: TextStyle(
+                      color: backgroundWhite,
+                      fontSize: 12,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -193,28 +215,6 @@ class NavDrawer extends StatelessWidget {
                   },
                 ),
               ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(15),
-            // 20250721 jm: unable to see blue version text on green
-            // background
-            // decoration: const BoxDecoration(
-            //   color: darkGreen,
-            // ),
-            child: VersionWidget(
-              version: appVersion,
-              changelogUrl:
-                  // Currently (VersionWidget version 1.0.3) for the chrome/web
-                  // deployment the first URL below results in CORS blocking while
-                  // the second works. However the second renders raw text when
-                  // tapped while the first renders the Markdown which is a whole
-                  // lot nicer. So with the first on chrome/web the version
-                  // checking does not work. (20250717 gjw)
-                  'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
-              // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
-              showDate: true,
-              fontSize: 12.0,
             ),
           ),
         ],
