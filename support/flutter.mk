@@ -34,6 +34,8 @@ flutter:
   import_order      Run import order checking.
   import_order_fix  Run import order fixing.
 
+  pubspec         Choose actual/local pubspec using meld.
+
   fix             Run `dart fix --apply`.
   format          Run `dart format`.
   analyze         Run `flutter analyze`.
@@ -122,7 +124,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: analyze fix import_order_fix format ignore license todo
+prep: analyze fix import_order_fix format ignore license todo depend
 	@echo "ADVISORY: make tests docs"
 	@echo $(SEPARATOR)
 
@@ -132,6 +134,10 @@ docs::
 	chmod -R go+rX doc
 
 SEPARATOR="------------------------------------------------------------------------"
+
+.PHONY: pubspec
+pubspec:
+	meld pubspec.yaml.actual pubspec.yaml pubspec.yaml.local
 
 .PHONY: fix
 fix:
@@ -163,12 +169,12 @@ analyze:
 #	dart run custom_lint
 	@echo $(SEPARATOR)
 
-# dart pub add dev:dependency_validator
+# dart pub global activate dependency_validator
 
 .PHONY: depend
 depend:
 	@echo "Review pubspec.yaml dependencies."
-	-dart pub global run dependency_validator
+	-dependency_validator
 	@echo $(SEPARATOR)
 
 .PHONY: ignore
@@ -360,6 +366,8 @@ endif
 publish:
 	dart pub publish
 
+# dart pub global activate import_order_lint
+
 .PHONY: import_order
 import_order:
 	@echo "Dart: CHECK IMPORT ORDER"
@@ -369,7 +377,7 @@ import_order:
 .PHONY: import_order_fix
 import_order_fix:
 	@echo "Dart: FIX IMPORT ORDER"
-	dart run import_order_lint:fix_imports --project-name=$(APP) -r lib
+	fix_imports --project-name=$(APP) -r lib
 	@echo $(SEPARATOR)
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP

@@ -27,9 +27,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-// import 'package:notepod/app_screen.dart';
-// import 'package:notepod/constants/app.dart';
-// import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
@@ -38,8 +35,8 @@ import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 import 'package:notepod/widgets/note_edit_button.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class ViewNote extends StatefulWidget {
   final Map noteData;
