@@ -29,6 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
@@ -41,11 +42,9 @@ import 'package:notepod/utils/misc.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
+  final String appVersion;
 
-  const NavDrawer({
-    super.key,
-    required this.webId,
-  });
+  const NavDrawer({super.key, required this.webId, required this.appVersion});
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +193,28 @@ class NavDrawer extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            // 20250721 jm: unable to see blue version text on green
+            // background
+            // decoration: const BoxDecoration(
+            //   color: darkGreen,
+            // ),
+            child: VersionWidget(
+              version: appVersion,
+              changelogUrl:
+                  // Currently (VersionWidget version 1.0.3) for the chrome/web
+                  // deployment the first URL below results in CORS blocking while
+                  // the second works. However the second renders raw text when
+                  // tapped while the first renders the Markdown which is a whole
+                  // lot nicer. So with the first on chrome/web the version
+                  // checking does not work. (20250717 gjw)
+                  'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
+              // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
+              showDate: true,
+              fontSize: 12.0,
             ),
           ),
         ],
