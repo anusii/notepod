@@ -36,7 +36,8 @@ flutter:
 
   fix             Run `dart fix --apply`.
   format          Run `dart format`.
-  analyze         Run flutter analyze.
+  analyze         Run `flutter analyze`.
+  depend	  Run `dart run dependency_validator`.
   ignore          Look for usage of ignore directives.
   license	  Look for missing top license in source code.
 
@@ -160,6 +161,14 @@ analyze:
 	@echo "Futter ANALYZE"
 	-flutter analyze lib
 #	dart run custom_lint
+	@echo $(SEPARATOR)
+
+# dart pub add dev:dependency_validator
+
+.PHONY: depend
+depend:
+	@echo "Review pubspec.yaml dependencies."
+	-dart pub global run dependency_validator
 	@echo $(SEPARATOR)
 
 .PHONY: ignore
