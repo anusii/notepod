@@ -80,8 +80,8 @@ class _ViewNoteState extends State<ViewNote> {
               ),
             ],
           ),
-          // Display note metadata
-          NoteDisplayMetadata(data: noteData, shared: false),
+          // Display note metadata - show dates but not sharing or path info (less useful for own note)
+          NoteDisplayMetadata(noteContent: noteData, showDates: true),
           Divider(),
           // Display markdown note content
           noteDisplayMarkdown(noteData[noteContentPred]),

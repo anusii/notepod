@@ -33,6 +33,7 @@ import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_display_metadata.dart';
 import 'package:notepod/widgets/note_share_button.dart';
 
 class NonReadableNote extends StatefulWidget {
@@ -55,87 +56,15 @@ class _NonReadableNoteState extends State<NonReadableNote> {
 
     return Column(
       children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                child: Text(
-                  'Note file name: ${noteMetaData[noteFileName]}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Sharedy by: ${noteMetaData[noteOwner]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 0),
-                child: Text(
-                  'Note path: ${noteMetaData[noteUrl]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
-                child: Text(
-                  'Permissions: ${noteMetaData[permissionList]}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Display note metadata - show sharing and path info but not dates (as requires noteContent)
+        NoteDisplayMetadata(
+            noteInfo: noteMetaData, showSharing: true, showPathInfo: true),
         buildMsgCard(
           context,
           Icons.info,
           Colors.amber,
           'Access Permission!',
           nonReadableNoteMsg,
-        ),
-        Expanded(
-          child: SizedBox(
-            child: Container(
-                padding: const EdgeInsets.all(10),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                )),
-          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
