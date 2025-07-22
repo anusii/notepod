@@ -112,79 +112,90 @@ class NoteEditScrollView extends StatelessWidget {
       );
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: FormBuilder(
-                key: formKey,
-                onChanged: () {
-                  formKey.currentState!.save();
-                },
-                autovalidateMode: AutovalidateMode.disabled,
-                skipDisabled: true,
-                child: Column(
-                  children: [
-                    // New note: show current date
-                    if (prevNoteData == null) ...[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: FormBuilder(
+                      key: formKey,
+                      onChanged: () {
+                        formKey.currentState!.save();
+                      },
+                      autovalidateMode: AutovalidateMode.disabled,
+                      skipDisabled: true,
+                      child: Column(
                         children: [
-                          Text(
-                            'Date: ${currDateStr}',
-                            style: titleStyle,
+                          // New note: show current date
+                          if (prevNoteData == null) ...[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Date: ${currDateStr}',
+                                  style: titleStyle,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                          // Edit existing note: populated text field with
+                          // previous note data
+                          FormBuilderTextField(
+                            name: noteTitlePred,
+                            initialValue: (prevNoteData != null)
+                                ? noteContent[noteTitlePred]
+                                : null,
+                            autofocus: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Note Title',
+                              labelStyle: TextStyle(
+                                color: darkBlue,
+                                letterSpacing: 1.5,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              //errorText: 'error',
+                            ),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                            ]),
                           ),
                         ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ],
-                    // Edit existing note: populated text field with
-                    // previous note data
-                    FormBuilderTextField(
-                      name: noteTitlePred,
-                      initialValue: (prevNoteData != null)
-                          ? noteContent[noteTitlePred]
-                          : null,
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Note Title',
-                        labelStyle: TextStyle(
-                          color: darkBlue,
-                          letterSpacing: 1.5,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        //errorText: 'error',
-                      ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
-                  ],
-                )),
+                      )),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                markdownEditor(context, _textController!, _focusNode, data),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          markdownEditor(context, _textController!, _focusNode, data),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: NoteEditActionBar(),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
+        ),
+        // Action buttons - always visible
+        Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: NoteEditActionBar(),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
