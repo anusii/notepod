@@ -35,6 +35,8 @@ flutter:
   import_order_fix  Run import order fixing.
 
   pubspec         Choose actual/local pubspec using meld.
+  pubspec.local   Overwrite with local pubspec.
+  pubspec.actual  Overwrite with actual pubspec.
 
   fix             Run `dart fix --apply`.
   format          Run `dart format`.
@@ -138,6 +140,14 @@ SEPARATOR="---------------------------------------------------------------------
 .PHONY: pubspec
 pubspec:
 	meld pubspec.yaml.actual pubspec.yaml pubspec.yaml.local
+
+.PHONY: pubspec.local
+pubspec.local:
+	cp --backup pubspec.yaml.local pubspec.yaml
+
+.PHONY: pubspec.actual
+pubspec.actual:
+	cp --backup pubspec.yaml.actual pubspec.yaml
 
 .PHONY: fix
 fix:
