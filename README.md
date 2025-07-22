@@ -2,7 +2,7 @@
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
-*Time-stamp: <Friday 2025-07-18 09:54:45 +1000 Graham Williams>*
+*Time-stamp: <Tuesday 2025-07-22 21:09:13 +1000 Graham Williams>*
 
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
@@ -13,11 +13,11 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
-[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
-[![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 [![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
+[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
+[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
+[![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
