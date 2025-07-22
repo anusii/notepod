@@ -32,26 +32,41 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/misc.dart';
 
 /// Display the note metadata.
+/// One of fullNoteData, noteContent or noteInfo must be supplied
+/// One of showDates, showSharing or showPathInfo must be supplied
+/// showDates requires fullNoteData or noteContent
+/// showSharing requires fullNoteData or noteInfo
+/// showPathInfo requires fullNoteData or noteInfo
 
 class NoteDisplayMetadata extends StatelessWidget {
-  final Map data;
-  final bool shared;
+  final Map fullNoteData;
+  final Map noteContent;
+  final Map noteInfo;
+  final bool showDates;
+  final bool showSharing;
+  final bool showPathInfo;
 
   const NoteDisplayMetadata({
     Key? key,
-    required this.data,
-    required this.shared,
+    this.fullNoteData = const {},
+    this.noteContent = const {},
+    this.noteInfo = const {},
+    this.showDates = false,
+    this.showSharing = false,
+    this.showPathInfo = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Map noteInfo = {};
-    Map noteContent = {};
-    if (shared) {
-      noteInfo = data['sharedNoteInfo'];
-      noteContent = data['sharedNoteContent'];
-    } else {
-      noteContent = data;
+    Map _noteInfo = {};
+    Map _noteContent = {};
+    if (fullNoteData.isNotEmpty) {
+      _noteInfo = fullNoteData['sharedNoteInfo'];
+      _noteContent = fullNoteData['sharedNoteContent'];
+    } else if (noteInfo.isNotEmpty) {
+      _noteInfo = noteInfo;
+    } else if (noteContent.isNotEmpty) {
+      _noteContent = noteContent;
     }
 
     return Container(
@@ -60,45 +75,21 @@ class NoteDisplayMetadata extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Container(
-                    padding: metadataPadding,
-                    child: Text(
-                      'Created on: ${getDateTimeStr(noteContent[createdDateTimePred])}',
-                      style: metadataTextStyle,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Container(
-                    padding: metadataPadding,
-                    child: Text(
-                      'Last modified on: ${getDateTimeStr(noteContent[modifiedDateTimePred])}',
-                      style: metadataTextStyle,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Show sharing metadata if shared external file
-            if (shared) accessInfo(noteInfo),
+            // ShowDates (created and modified)
+            if (showDates) dateInfo(_noteContent),
+            // Show sharing info (owner, provider, access list)
+            if (showSharing) accessInfo(_noteInfo),
+            // Show path info (filename and path)
+            if (showPathInfo) pathInfo(_noteInfo),
             SizedBox(height: 10),
           ]),
     );
   }
 }
 
-// Display shared metadata (owner, provider, access list).
+// Display sharing metadata (owner, provider, access list).
 
-Widget accessInfo(noteInfo) {
+Widget accessInfo(Map noteInfo) {
   return Container(
     color: metaDataShade,
     child: Column(
@@ -139,6 +130,86 @@ Widget accessInfo(noteInfo) {
                 padding: metadataPadding,
                 child: Text(
                   'Permissions: ${noteInfo[permissionList]}',
+                  style: metadataTextStyle,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+// Display path metadata (filename and path).
+
+Widget pathInfo(Map noteInfo) {
+  return Container(
+    color: metaDataShade,
+    child: Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Note file name: ${noteInfo[noteFileName]}',
+                  style: metadataTextStyle,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Note path: ${noteInfo[noteUrl]}',
+                  style: metadataTextStyle,
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+// Show date metadata (creation date, modified date)
+
+Widget dateInfo(Map noteContent) {
+  return Container(
+    color: metaDataShade,
+    child: Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Created on: ${getDateTimeStr(noteContent[createdDateTimePred])}',
+                  style: metadataTextStyle,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Container(
+                padding: metadataPadding,
+                child: Text(
+                  'Last modified on: ${getDateTimeStr(noteContent[modifiedDateTimePred])}',
                   style: metadataTextStyle,
                 ),
               ),

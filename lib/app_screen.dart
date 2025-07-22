@@ -26,7 +26,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
-import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
@@ -79,22 +78,6 @@ class AppScreenState extends State<AppScreen>
         centerTitle: true,
         title: Text(widget.title),
         actions: <Widget>[
-          const SizedBox(width: 50),
-          VersionWidget(
-            version: _appVersion,
-            changelogUrl:
-                // Currently (VersionWidget version 1.0.3) for the chrome/web
-                // deployment the first URL below results in CORS blocking while
-                // the second works. However the second renders raw text when
-                // tapped while the first renders the Markdown which is a whole
-                // lot nicer. So with the first on chrome/web the version
-                // checking does not work. (20250717 gjw)
-                'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
-            // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
-            showDate: true,
-            fontSize: 12.0,
-          ),
-          const SizedBox(width: 20),
           IconButton(
             tooltip: 'Create a new note',
             icon: const Icon(
@@ -165,6 +148,7 @@ class AppScreenState extends State<AppScreen>
       ),
       drawer: NavDrawer(
         webId: _webId ?? '',
+        appVersion: _appVersion,
       ),
       body: widget.childPage,
     );
