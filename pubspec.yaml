@@ -43,6 +43,12 @@ dev_dependencies:
     sdk: flutter
   import_order_lint: ^0.1.2
 
+flutter:
+  assets:
+    - assets/images/
+    - assets/types/
+  uses-material-design: true
+
 # Define launcher icons for all platforms (except Linux) so icons for
 # the apps can be automatically updated using:
 #
@@ -51,7 +57,7 @@ dev_dependencies:
 # (gjw 20250429)
 
 flutter_launcher_icons:
-  image_path: "assets/images/notepod.png"
+  image_path: "assets/images/app_icon.png"
   android: true
   min_sdk_android: 21
   ios: true
@@ -65,10 +71,4 @@ flutter_launcher_icons:
     theme_color: "#ffffff"
   windows:
     generate: true
-    icon_size: 48
-
-flutter:
-  assets:
-    - assets/images/
-    - assets/types/
-  uses-material-design: true
+    icon_size: 48 # min:48, max:256, default: 48

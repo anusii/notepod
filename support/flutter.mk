@@ -14,7 +14,7 @@
 #   Trivial update or bug fix
 
 ifeq ($(VER),)
-  VER = $(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2)
+  VER = $(if $(wildcard pubspec.yaml),$(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2),)
 endif
 
 define FLUTTER_HELP
@@ -126,7 +126,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: analyze fix import_order_fix format ignore license todo depend
+prep: analyze fix import_order_fix format ignore license todo depend bakfind
 	@echo "ADVISORY: make tests docs"
 	@echo $(SEPARATOR)
 
@@ -162,6 +162,12 @@ format:
 	@echo $(SEPARATOR)
 
 # My emacs IDE is starting to add imports of backups automagically!
+
+.PHONY: bakfind
+bakfind:
+	@echo "Find imports of backups.\n"
+	@-! find lib -type f -name '*.dart' -exec grep '\.dart\.~\([0-9]\)~' {} +
+	@echo $(SEPARATOR)
 
 .PHONY: bakfix
 bakfix:
@@ -402,8 +408,8 @@ versions:
 	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
 	lib/constants/app.dart
 
-.PHONY: wc
-wc: lib/*.dart
+.PHONY: loc
+loc: lib/*.dart
 	@cat $(shell find lib -name '*.dart') \
 	| egrep -v '^ */' \
 	| egrep -v '^ *$$' \

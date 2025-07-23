@@ -30,9 +30,9 @@ import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/utils/is_desktop.dart';
-import 'package:notepod/notepod.dart.~3~';
+import 'package:notepod/notepod.dart';
 
-/// Main entry point for the NotePod application.
+/// Main entry point for the [NotePod] application.
 
 void main() async {
   // This is the main entry point for the app. The [async] is required because
