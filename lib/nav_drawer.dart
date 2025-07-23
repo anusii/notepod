@@ -34,7 +34,7 @@ import 'package:version_widget/version_widget.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/main.dart';
+import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';

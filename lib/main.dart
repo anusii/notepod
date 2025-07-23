@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Wednesday 2025-07-16 14:49:51 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-23 13:19:45 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
@@ -27,13 +27,10 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'package:notepod/app_screen.dart';
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/utils/is_desktop.dart';
+import 'package:notepod/notepod.dart.~3~';
 
 /// Main entry point for the NotePod application.
 
@@ -83,50 +80,4 @@ void main() async {
   // widget tree.
 
   runApp(const NotePod());
-}
-
-// The main widget could be in a separate file, but handy having it in main and
-// the file is not too large. The widget essentially orchestrates the building
-// of other widgets. Generically we set up to build a `Home()` widget containing
-// the App. For SolidPod we wrap the `Home()` widget within the `SolidLogin()`
-// widget so we start with a login screen, though this is optional.
-
-/// The root widget of the NotePod application.
-
-class NotePod extends StatelessWidget {
-  const NotePod({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Note Taker',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.lightGreen,
-          // Make Scrollbars() visible by default
-          // before user starts scrolling
-          scrollbarTheme: ScrollbarThemeData(
-            thumbVisibility: WidgetStateProperty.all(true),
-          )),
-      home: SolidLogin(
-        title: 'NOTEPOD - A Note Taker',
-        appDirectory: 'notepod',
-        image: AssetImage('assets/images/notepod-background.jpg'),
-        logo: AssetImage('assets/images/notepod.png'),
-        link: 'https://github.com/anusii/notepod',
-        webID: 'https://pods.solidcommunity.au',
-        required: false,
-        loginButtonStyle: LoginButtonStyle(
-          background: Colors.lightGreenAccent,
-          tooltip: 'You need to connect to your Solid account\n'
-              'to access the markdown note files\n'
-              'stored in your POD.',
-        ),
-        child: AppScreen(
-          title: topBarTitle,
-          childPage: ListNotesScreen(),
-        ),
-      ),
-    );
-  }
 }
