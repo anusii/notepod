@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// List user's own notes.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -204,7 +204,7 @@ class _ListNotesState extends State<ListNotes> {
             child: ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: _foundNotes.length,
-                itemExtent: listItemHeight,
+                itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -218,7 +218,7 @@ class _ListNotesState extends State<ListNotes> {
                         title:
                             Text(_foundNotes[fileNames[index]][noteTitlePred]),
                         subtitle: Text(
-                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}'),
+                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][noteRecipientPred].length)}'),
                         trailing: const Icon(Icons.arrow_forward),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(

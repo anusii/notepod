@@ -75,3 +75,17 @@ String getDateTimeStr(
   final dateFormat = DateFormat(pattern);
   return dateFormat.format(DateTime.parse(dateTimeStr));
 }
+
+/// Get the number of recipients with access to a file, and return as a
+/// String. Where the number of recipients is the number of webIDs with
+/// file access minus one (to exclude the file owner).
+///
+/// Parameters:
+/// [totalNbr] - The total number of webIDs in the permission table
+///              of a resource.
+///
+String getRecipNbrStr(
+  int totalNbr,
+) {
+  return (totalNbr - 1).toString();
+}

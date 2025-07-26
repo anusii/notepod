@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 library;
 
 // Profile card constant
@@ -40,6 +40,7 @@ String modifiedDateTimePred = 'modifiedDateTime';
 String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
 String encNoteContentPred = 'encNoteContent';
+String noteRecipientPred = 'recipient';
 String mePred = ':me';
 String meKey = '#me';
 
