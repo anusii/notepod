@@ -144,35 +144,3 @@ Future<Map> getSharedNoteContent(
 
   return noteContentMap;
 }
-
-/// Get the map of recipient webIDs and their access permission for each files
-/// in a map of notes [notesMap].
-/// Parameters:
-///   [notesMap] is map of filenames to retrieve permissions for.
-///   [fileFlag] set to true if the resource is a file, false if the resource is a directory.
-///   [child] is the child widget to return to
-///   [isFilePath] Set to true if the filename provided is the full path
-Future<dynamic> addRecipientList(
-  Map<String, dynamic> notesMap,
-  BuildContext context,
-  Widget childPage, {
-  bool fileFlag = true,
-  bool isFilePath = true,
-}) async {
-  final List<String> fileList = notesMap.keys.toList();
-
-  // Read recipients for each file
-  for (final fileName in fileList) {
-    // 20250726 jm: While not an external file, as the file
-    // is a full file path, use isExternalRes true, to avoid
-    // readPermission() prepending the filepath.
-    dynamic permList = await readPermission(
-        fileName, fileFlag, context, childPage,
-        isExternalRes: true);
-
-    // Add recipients map to notesMap
-    notesMap[fileName][noteRecipientPred] = permList;
-  }
-
-  return notesMap;
-}

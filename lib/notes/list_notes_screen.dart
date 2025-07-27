@@ -23,6 +23,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/src/solid/get_access_lists.dart';
+
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/notes/list_notes.dart';
@@ -134,7 +136,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
 
   @override
   void initState() {
-    _asyncRecipientsAdd = addRecipientList(
+    _asyncRecipientsAdd = getAccessLists(
       widget.notesMap,
       context,
       ListRecipientsScreen(

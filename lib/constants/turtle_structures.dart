@@ -37,7 +37,6 @@ String modifiedDateTimePred = 'modifiedDateTime';
 String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
 String encNoteContentPred = 'encNoteContent';
-String noteRecipientPred = 'recipient';
 String mePred = ':me';
 String meKey = '#me';
 

@@ -24,6 +24,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/src/solid/constants/common.dart';
+
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
@@ -218,7 +220,7 @@ class _ListNotesState extends State<ListNotes> {
                         title:
                             Text(_foundNotes[fileNames[index]][noteTitlePred]),
                         subtitle: Text(
-                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][noteRecipientPred].length)}'),
+                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}'),
                         trailing: const Icon(Icons.arrow_forward),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
