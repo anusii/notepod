@@ -27,9 +27,10 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/api/common_permission.dart';
+import 'package:solidpod/src/solid/api/rest_api.dart';
+import 'package:solidpod/src/solid/constants/common.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
@@ -53,9 +54,10 @@ Future<Map<String, dynamic>> getNoteList(
 
     // Check if the directory exists.
 
-    bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
+    final ResourceStatus resExist =
+        await checkResourceStatus(notesDirUrl, fileFlag: false);
 
-    if (resExist) {
+    if (resExist == ResourceStatus.exist) {
       //debugPrint('Data: $dataDirUrl');
       final res = await getResourcesInContainer(notesDirUrl);
       // debugPrint(res.toString());
@@ -73,8 +75,12 @@ Future<Map<String, dynamic>> getNoteList(
       }
       // final filteredMap = filterTreatments(treatmentMap, type);
       return notesMap;
-    } else {
+    } else if (resExist == ResourceStatus.notExist) {
       debugPrint('WARN: No data directory for the notes: $notesDirUrl.');
+      return {};
+    } else {
+      debugPrint(
+          'WARN: error occurred when checking the status of notes directory $notesDirUrl.');
       return {};
     }
   } else {
@@ -101,36 +107,6 @@ Map noteInfoMap(String noteContent) {
   };
 
   return noteInfoMap;
-}
-
-// Check if a resource exists in the POD
-Future<bool> checkResourceStatus(
-  String resUrl, {
-  bool fileFlag = true,
-}) async {
-  final (:accessToken, :dPopToken) = await getTokensForResource(resUrl, 'GET');
-  final response = await http.get(
-    Uri.parse(resUrl),
-    headers: <String, String>{
-      'Content-Type': fileFlag ? '*/*' : 'application/octet-stream',
-      'Authorization': 'DPoP $accessToken',
-      'Link': fileFlag
-          ? '<http://www.w3.org/ns/ldp#Resource>; rel="type"'
-          : '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
-      'DPoP': dPopToken,
-    },
-  );
-
-  if (response.statusCode == 200 || response.statusCode == 204) {
-    return true;
-  } else if (response.statusCode == 404) {
-    return false;
-  } else {
-    debugPrint('WARN: Failed to check resource status.\n'
-        'URL: $resUrl\n'
-        'ERR: ${response.body}');
-    return false;
-  }
 }
 
 // Get the Map of shared notes with the current user. If [filesWithGrantAccess]
