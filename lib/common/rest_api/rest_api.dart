@@ -29,9 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/api/common_permission.dart';
-import 'package:solidpod/src/solid/api/rest_api.dart';
 import 'package:solidpod/src/solid/constants/common.dart';
-
+import 'package:solidpod/src/solid/get_resources.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/rdf.dart';
@@ -40,52 +39,30 @@ import 'package:notepod/utils/rdf.dart';
 
 Future<Map<String, dynamic>> getNoteList(
     BuildContext context, Widget childPage) async {
-  final loggedIn = await loginIfRequired(context);
-  String webId = await getWebId() as String;
-  webId = webId.replaceAll(profCard, '');
+  final List<String> fileList;
 
-  if (loggedIn) {
-    final dataDirPath = await getDataDirPath();
-    final dataDirUrl = await getDirUrl(dataDirPath);
+  // Get list of files in user's Pod
+  fileList = await getResources(context, childPage);
 
-    // Why do we need the additional `/`? (20250714 gjw)
+  try {
+    String webId = await getWebId() as String;
+    webId = webId.replaceAll(profCard, '');
 
-    final notesDirUrl = '$dataDirUrl/';
-
-    // Check if the directory exists.
-
-    final ResourceStatus resExist =
-        await checkResourceStatus(notesDirUrl, fileFlag: false);
-
-    if (resExist == ResourceStatus.exist) {
-      //debugPrint('Data: $dataDirUrl');
-      final res = await getResourcesInContainer(notesDirUrl);
-      // debugPrint(res.toString());
-
-      Map<String, dynamic> notesMap = {};
-      // Loop through the list of files to get the file names
-      for (final fileName in res.files) {
-        // Read file content
-        //debugPrint('Read: $fileName');
-        String noteContent =
-            await readPod(fileName.replaceAll(webId, ''), context, childPage);
-        //debugPrint('NoteInfoMap: $fileName');
-        notesMap[fileName] = noteInfoMap(noteContent);
-        //debugPrint('$fileName => ${notesMap[fileName]}');
-      }
-      // final filteredMap = filterTreatments(treatmentMap, type);
-      return notesMap;
-    } else if (resExist == ResourceStatus.notExist) {
-      debugPrint('WARN: No data directory for the notes: $notesDirUrl.');
-      return {};
-    } else {
-      debugPrint(
-          'WARN: error occurred when checking the status of notes directory $notesDirUrl.');
-      return {};
+    Map<String, dynamic> notesMap = {};
+    // Loop through file list to retrieve note data
+    // for each file
+    for (final fileName in fileList) {
+      // Read file content
+      String noteContent =
+          await readPod(fileName.replaceAll(webId, ''), context, childPage);
+      //debugPrint('NoteInfoMap: $fileName');
+      notesMap[fileName] = noteInfoMap(noteContent);
+      //debugPrint('$fileName => ${notesMap[fileName]}');
     }
-  } else {
-    debugPrint('WARN: Not logged in when finding the list of notes.');
-    return {};
+    return notesMap;
+  } on Object catch (e) {
+    debugPrint(e.toString());
+    rethrow;
   }
 }
 
