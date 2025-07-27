@@ -113,8 +113,11 @@ class NoteEditScrollView extends StatelessWidget {
     }
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
+        // Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: SingleChildScrollView(
             child: Column(
               children: [
