@@ -35,8 +35,9 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/rdf.dart';
 
-// Get the list of notes created by the user.
-
+/// Get the map comprising the list of notes and their data to return notesMap.
+/// Parameters:
+///   [childPage] is the child widget to return to
 Future<Map<String, dynamic>> getNoteList(
     BuildContext context, Widget childPage) async {
   final List<String> fileList;
