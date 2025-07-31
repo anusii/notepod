@@ -32,12 +32,14 @@ import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
-/// Process to fetch the user's notes, retrieving the noteData
-/// map where each key is the ttl note file with an embedded map
-/// comprising different properties of the note including content.
-/// The filenames are passed to _loadedNotesScreen() which calls
-/// ListRecipientsScreen() to add the recipients data to each note.
-
+/// A [StatefulWidget] that fetches the user's notes in their app data folder,
+/// retrieving the note data map containing data and properties of each note
+/// file name.
+/// Following completion, NewNote() is called if no notes are found.
+/// Alternatively, if notes exist, ListRecipientsScreen() is called to
+/// retrieve the access control list for notes (required to support sharing
+/// of notes and display of sharing information).
+// Parameters: none
 class ListNotesScreen extends StatefulWidget {
   const ListNotesScreen({super.key});
 
@@ -56,16 +58,19 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     super.initState();
   }
 
-  // Load Notes if notes found
+  /// Load Notes if notes found.
+  /// Parameters:
+  ///   [notesMap] - list of files with data in a user's app data folder.
   Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
     return Container(
         color: Colors.white,
 
-        // Run add recipients fetching screen
+        // Run to fetch access control list information
         child: ListRecipientsScreen(notesMap: notesMap));
   }
 
-  // Advise user to create their first note if no notes found
+  /// Advise user to create their first note, if no notes found.
+  /// Parameters - none.
   Widget _loadNewNote() {
     return SingleChildScrollView(
       child: Column(children: <Widget>[
@@ -110,14 +115,17 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   }
 }
 
-/// Process to fetch the recipients data for the list of user's notes,
-/// and embed the recipients data with the note data. The ttl filename
-/// of each note is used as the key. The filenames are passed to
-/// _loadedNotesWRecScreen() which calls ListNotes() to display the
-/// list of notes with recipients
-
+/// A [StatefulWidget] that uses the note filenames in [notesMap]
+/// to retrieve the access control list data for each note filename.
+/// This adds the recipients and permissions of all recipients for
+/// each file record in [notesMap].
+/// After completion, run ListNotes() to display the notes.
+/// Parameters:
+///   [notesMap] is the map comprising a list of notes and data in a
+///              user's Pod.
 class ListRecipientsScreen extends StatefulWidget {
   final Map<String, dynamic> notesMap;
+
   const ListRecipientsScreen({
     super.key,
     required this.notesMap,
@@ -146,7 +154,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
     super.initState();
   }
 
-  /// Load Notes with recipients data embedded
+  /// Load Notes with recipients data embedded.
   Widget _loadedNotesWRecScreen(Map notesMap) {
     return Container(
       color: Colors.white,

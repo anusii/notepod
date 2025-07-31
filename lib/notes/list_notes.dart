@@ -32,6 +32,12 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
 
+/// A [StatefulWidget] to list notes owned by the user.
+/// Parameters:
+///   [notesMap] - is the file list map with data of all notes
+///                in the user's app data folder (required to
+///                display sharing information and support
+///                sharing with suggestion list of recipient WebIds).
 class ListNotes extends StatefulWidget {
   final Map notesMap;
 
@@ -230,6 +236,7 @@ class _ListNotesState extends State<ListNotes> {
                                 title: topBarTitle,
                                 childPage: ViewNote(
                                   noteData: _foundNotes[fileNames[index]],
+                                  notesMap: widget.notesMap,
                                 ),
                               ),
                             ),

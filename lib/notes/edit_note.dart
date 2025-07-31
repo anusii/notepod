@@ -32,12 +32,25 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
-/// The edit note page.
-
+/// A [StatefulWidget] to edit notes owned by the user.
+/// Parameters:
+///   [noteData] - is the data of that note.
+///   [notesMap] - is the file list map with data of all notes
+///                in the user's app data folder (required to support
+///                sharing with suggestion list of recipient WebIds)
 class EditNote extends StatefulWidget {
+  /// Map of the data for the selected note.
   final Map noteData;
 
-  const EditNote({super.key, required this.noteData});
+  /// Map comprising filename list and data for all notes in the user's
+  /// app data folder.
+  final Map notesMap;
+
+  const EditNote({
+    super.key,
+    required this.noteData,
+    required this.notesMap,
+  });
 
   @override
   EditNoteState createState() => EditNoteState();
@@ -97,11 +110,13 @@ class EditNoteState extends State<EditNote>
   @override
   Widget build(BuildContext context) {
     return NoteEditScrollView(
-        formKey: formKey,
-        textController: _textController,
-        focusNode: _focusNode,
-        data: data,
-        prevNoteData: widget.noteData,
-        shared: false);
+      formKey: formKey,
+      textController: _textController,
+      focusNode: _focusNode,
+      data: data,
+      prevNoteData: widget.noteData,
+      shared: false,
+      notesMap: widget.notesMap,
+    );
   }
 }

@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/app_screen.dart';
@@ -47,6 +48,7 @@ class NoteSaveButton extends StatelessWidget {
   final GlobalKey<FormBuilderState> formKey;
   final Map? prevNoteData;
   final bool shared;
+  final Map notesMap;
 
   const NoteSaveButton({
     Key? key,
@@ -54,6 +56,7 @@ class NoteSaveButton extends StatelessWidget {
     required this.formKey,
     this.prevNoteData,
     required this.shared,
+    this.notesMap = const {},
   }) : super(key: key);
 
   @override
@@ -65,7 +68,8 @@ class NoteSaveButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Save note and redirect to view note page
-        await saveNote(context, textController, formKey, prevNoteData, shared);
+        await saveNote(
+            context, textController, formKey, prevNoteData, shared, notesMap);
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: darkBlue,
@@ -89,7 +93,7 @@ class NoteSaveButton extends StatelessWidget {
 
 Future<void> saveNote(BuildContext context,
     TextEditingController _textController, GlobalKey<FormBuilderState> formKey,
-    [Map? prevNoteData, bool shared = false]) async {
+    [Map? prevNoteData, bool shared = false, Map notesMap = const {}]) async {
   if (formKey.currentState?.saveAndValidate() ?? false) {
     // Compares to prevNoteData if previous note data provided
     // Adds sharing metadata if shared==true
@@ -168,12 +172,16 @@ Future<void> saveNote(BuildContext context,
               noteNewData,
               EditNote(
                 noteData: noteNewData,
+                notesMap: notesMap,
               ),
               shared);
 
           // Navigate to return page
           postSaveNav(
-              context, createNoteStatus, ViewNote(noteData: noteNewData));
+            context,
+            createNoteStatus,
+            ViewNote(noteData: noteNewData, notesMap: notesMap),
+          );
         }
       }
     } else {
@@ -196,14 +204,17 @@ Future<void> saveNote(BuildContext context,
 
         // Encrypt note, create TTL and write to file in POD
         createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            EditNote(
-              noteData: noteNewData,
-            ));
+          context,
+          noteNewData,
+          ListNotesScreen(),
+        );
 
         // Navigate to return page
-        postSaveNav(context, createNoteStatus, ViewNote(noteData: noteNewData));
+        postSaveNav(
+          context,
+          createNoteStatus,
+          ListNotesScreen(),
+        );
       } else {
         // Nn note content message
         Navigator.pop(context);

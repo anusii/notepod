@@ -32,6 +32,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
+/// A [StatefulWidget] to edit externally owned notes shared to
+/// the user.
+/// Parameters:
+///   [fullNoteData] - is the data of that note, with information
+///                    about the owner, person who shared the note
+///                    to the user, and the user's access rights
+///                    to the note.
 class EditSharedNote extends StatefulWidget {
   final Map fullNoteData;
 
@@ -97,11 +104,13 @@ class EditSharedNoteState extends State<EditSharedNote>
   @override
   Widget build(BuildContext context) {
     return NoteEditScrollView(
-        formKey: formKey,
-        textController: _textController,
-        focusNode: _focusNode,
-        data: data,
-        prevNoteData: widget.fullNoteData,
-        shared: true);
+      formKey: formKey,
+      textController: _textController,
+      focusNode: _focusNode,
+      data: data,
+      prevNoteData: widget.fullNoteData,
+      shared: true,
+      noteInfo: widget.fullNoteData['sharedNoteInfo'],
+    );
   }
 }

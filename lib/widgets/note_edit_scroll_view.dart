@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A widget for creating and editing notes in a SingleChildScrollView()
 ///
 // Time-stamp: <Wednesday 2025-07-18 16:17:37 +1000 Jess Moore>
 ///
@@ -40,6 +40,10 @@ import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
 
+/// A [StatelessWidget] widget setup for calling the
+/// SingleChildScrollView() to edit a note, whether a
+/// new note or a pre-existing note, and whether owned
+/// by the user or shared to the user.
 class NoteEditScrollView extends StatelessWidget {
   const NoteEditScrollView({
     super.key,
@@ -49,6 +53,8 @@ class NoteEditScrollView extends StatelessWidget {
     required this.data,
     this.prevNoteData,
     required this.shared,
+    this.notesMap = const {},
+    this.noteInfo = const {},
   })  : _textController = textController,
         _focusNode = focusNode;
 
@@ -56,14 +62,25 @@ class NoteEditScrollView extends StatelessWidget {
   final TextEditingController? _textController;
   final FocusNode _focusNode;
   final String data;
+
+  /// Existing note data is note already exists
   final Map? prevNoteData;
+
+  /// Sharing metadata about a note
+  final noteInfo;
+
+  /// Boolean describing whether note is shared to pod owner from an
+  /// external source.
   final bool shared;
+
+  /// Map comprising all the note files in a user's app data folder
+  /// on their Pod
+  final Map notesMap;
 
   @override
   Widget build(BuildContext context) {
     String currDateStr = '';
     Map noteContent = {};
-    Map noteInfo = {};
 
     if (prevNoteData == null) {
       // New note: fetch current date for heading
@@ -73,7 +90,7 @@ class NoteEditScrollView extends StatelessWidget {
       // Editing existing note (shared/unshared): extract content
       if (shared) {
         noteContent = prevNoteData!['sharedNoteContent'];
-        noteInfo = prevNoteData!['sharedNoteInfo'];
+        // noteInfo = prevNoteData!['sharedNoteInfo'];
       } else {
         noteContent = prevNoteData as Map<dynamic, dynamic>;
       }
@@ -86,17 +103,21 @@ class NoteEditScrollView extends StatelessWidget {
             // New Note: save button only
             ? [
                 NoteSaveButton(
-                    textController: _textController!,
-                    formKey: formKey,
-                    shared: shared)
+                  textController: _textController!,
+                  formKey: formKey,
+                  shared: shared,
+                  notesMap: notesMap,
+                )
               ]
             : [
                 // Edit Note: save and back buttons
                 NoteSaveButton(
-                    textController: _textController!,
-                    formKey: formKey,
-                    prevNoteData: prevNoteData,
-                    shared: shared),
+                  textController: _textController!,
+                  formKey: formKey,
+                  prevNoteData: prevNoteData,
+                  shared: shared,
+                  notesMap: notesMap,
+                ),
                 const SizedBox(
                   width: 5,
                 ),
@@ -107,7 +128,9 @@ class NoteEditScrollView extends StatelessWidget {
                             ViewSharedNoteScreen(sharedNoteData: noteInfo))
                     : NoteBackButton(
                         childPage: ViewNote(
-                            noteData: prevNoteData as Map<dynamic, dynamic>)),
+                            noteData: prevNoteData as Map<dynamic, dynamic>,
+                            notesMap: notesMap),
+                      ),
               ],
       );
     }
@@ -115,7 +138,6 @@ class NoteEditScrollView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Expanded(
         Flexible(
           fit: FlexFit.loose,
           child: SingleChildScrollView(
