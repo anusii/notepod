@@ -394,7 +394,7 @@ import_order:
 .PHONY: import_order_fix
 import_order_fix:
 	@echo "Dart: FIX IMPORT ORDER"
-	import_order -r lib
+	import_order
 	@echo $(SEPARATOR)
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP
