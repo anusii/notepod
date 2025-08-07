@@ -28,8 +28,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
-import 'package:solidpod/src/solid/constants/common.dart';
-import 'package:solidpod/src/solid/get_resources.dart';
+
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/rdf.dart';
