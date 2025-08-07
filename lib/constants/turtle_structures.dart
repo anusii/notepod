@@ -21,26 +21,22 @@
 /// Authors: Anushka Vidanage, Jess Moore
 library;
 
-// Profile card constant
-const String profCard = 'profile/card#me';
+import 'package:solidpod/src/solid/constants/common.dart';
 
 // Directory name constants.
 const mainResDir = 'notepod';
-const dataDir = 'data';
+
 // const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
 // IRIs (Internationalized Resource Identifiers)
 String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
-String foaf = 'http://xmlns.com/foaf/0.1/';
-String terms = 'http://purl.org/dc/terms/';
 
 String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';
 String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
 String encNoteContentPred = 'encNoteContent';
-String noteRecipientPred = 'recipient';
 String mePred = ':me';
 String meKey = '#me';
 

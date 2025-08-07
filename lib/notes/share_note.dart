@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 
 library;
 
@@ -32,12 +32,24 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
+/// A [StatefulWidget] for sharing a note owned by the user.
+/// Parameters:
+///   [noteData] - is the data of the selected note to be shared.
+///   [noteFilePath] - is the path of the selected note file.
+///   [notesMap] - is the file list map with data of all notes
+///                in the user's app data folder (required to support
+///                sharing with suggestion list of recipient WebIds)
 class ShareNote extends StatefulWidget {
   final Map noteData;
   final String noteFilePath;
+  final Map notesMap;
 
-  const ShareNote(
-      {super.key, required this.noteData, required this.noteFilePath});
+  const ShareNote({
+    super.key,
+    required this.noteData,
+    required this.noteFilePath,
+    this.notesMap = const {},
+  });
 
   @override
   ShareNoteState createState() => ShareNoteState();
@@ -61,17 +73,20 @@ class ShareNoteState extends State<ShareNote>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 10),
-                NoteBackButton(childPage: ViewNote(noteData: widget.noteData)),
+                NoteBackButton(
+                    childPage: ViewNote(
+                        noteData: widget.noteData, notesMap: widget.notesMap)),
                 const SizedBox(height: 10),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: GrantPermissionUi(
                     showAppBar: false,
                     fileName: widget.noteFilePath,
+                    dataFilesMap: widget.notesMap as Map<String, dynamic>,
                     child: ShareNote(
-                      noteData: widget.noteData,
-                      noteFilePath: widget.noteFilePath,
-                    ),
+                        noteData: widget.noteData,
+                        noteFilePath: widget.noteFilePath,
+                        notesMap: widget.notesMap),
                   ),
                 ),
               ],

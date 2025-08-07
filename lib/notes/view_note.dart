@@ -38,12 +38,22 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 import 'package:notepod/widgets/note_edit_button.dart';
 import 'package:notepod/widgets/note_share_button.dart';
 
+/// A [StatefulWidget] to display the text and selected metadata
+/// from the [noteData] of the selected note. Action buttons are
+/// provided to edit and share the note, or go back to the note list.
+/// Parameters:
+///   [noteData] comprises the map of data for the selected note.
+///   [notesMap] comprises the map of data for all note files, owned
+///              by the user in their Pod (required to support
+///              WebId suggestions in note sharing).
 class ViewNote extends StatefulWidget {
   final Map noteData;
+  final Map? notesMap;
 
-  const ViewNote({
+  ViewNote({
     super.key,
     required this.noteData,
+    this.notesMap,
   });
 
   @override
@@ -103,9 +113,9 @@ class _ViewNoteState extends State<ViewNote> {
                   // Share button
                   NoteShareButton(
                       childPage: ShareNote(
-                    noteData: noteData,
-                    noteFilePath: noteFilePath,
-                  )),
+                          noteData: noteData,
+                          noteFilePath: noteFilePath,
+                          notesMap: widget.notesMap as Map<dynamic, dynamic>)),
                   const SizedBox(
                     width: 5,
                   ),
@@ -113,6 +123,7 @@ class _ViewNoteState extends State<ViewNote> {
                   NoteEditButton(
                     childPage: EditNote(
                       noteData: noteData,
+                      notesMap: widget.notesMap as Map<dynamic, dynamic>,
                     ),
                   ),
                   const SizedBox(

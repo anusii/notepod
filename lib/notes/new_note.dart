@@ -31,12 +31,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
-/// The home page for the app.
-
+/// A [Stateful] widget for creating a new note.
+// Parameters: none
 class NewNote extends StatefulWidget {
-  // final String webId;
-  // final Map authData;
-
   const NewNote({
     super.key,
   });
@@ -98,10 +95,11 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return NoteEditScrollView(
-        formKey: formKey,
-        textController: _textController,
-        focusNode: _focusNode,
-        data: data,
-        shared: false);
+      formKey: formKey,
+      textController: _textController,
+      focusNode: _focusNode,
+      data: data,
+      shared: false,
+    );
   }
 }

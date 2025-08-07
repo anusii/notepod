@@ -27,58 +27,41 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/rdf.dart';
 
-// Get the list of notes created by the user.
-
+/// Get the map comprising the list of notes and their data to return notesMap.
+/// Parameters:
+///   [childPage] is the child widget to return to
 Future<Map<String, dynamic>> getNoteList(
     BuildContext context, Widget childPage) async {
-  final loggedIn = await loginIfRequired(context);
-  String webId = await getWebId() as String;
-  webId = webId.replaceAll(profCard, '');
+  final List<String> fileList;
 
-  if (loggedIn) {
-    final dataDirPath = await getDataDirPath();
-    final dataDirUrl = await getDirUrl(dataDirPath);
+  // Get list of files in user's Pod
+  fileList = await getResources(context, childPage);
 
-    // Why do we need the additional `/`? (20250714 gjw)
+  try {
+    String webId = await getWebId() as String;
+    webId = webId.replaceAll(profCard, '');
 
-    final notesDirUrl = '$dataDirUrl/';
-
-    // Check if the directory exists.
-
-    bool resExist = await checkResourceStatus(notesDirUrl, fileFlag: false);
-
-    if (resExist) {
-      //debugPrint('Data: $dataDirUrl');
-      final res = await getResourcesInContainer(notesDirUrl);
-      // debugPrint(res.toString());
-
-      Map<String, dynamic> notesMap = {};
-      // Loop through the list of files to get the file names
-      for (final fileName in res.files) {
-        // Read file content
-        //debugPrint('Read: $fileName');
-        String noteContent =
-            await readPod(fileName.replaceAll(webId, ''), context, childPage);
-        //debugPrint('NoteInfoMap: $fileName');
-        notesMap[fileName] = noteInfoMap(noteContent);
-        //debugPrint('$fileName => ${notesMap[fileName]}');
-      }
-      // final filteredMap = filterTreatments(treatmentMap, type);
-      return notesMap;
-    } else {
-      debugPrint('WARN: No data directory for the notes: $notesDirUrl.');
-      return {};
+    Map<String, dynamic> notesMap = {};
+    // Loop through file list to retrieve note data
+    // for each file
+    for (final fileName in fileList) {
+      // Read file content
+      String noteContent =
+          await readPod(fileName.replaceAll(webId, ''), context, childPage);
+      //debugPrint('NoteInfoMap: $fileName');
+      notesMap[fileName] = noteInfoMap(noteContent);
+      //debugPrint('$fileName => ${notesMap[fileName]}');
     }
-  } else {
-    debugPrint('WARN: Not logged in when finding the list of notes.');
-    return {};
+    return notesMap;
+  } on Object catch (e) {
+    debugPrint(e.toString());
+    rethrow;
   }
 }
 
@@ -100,36 +83,6 @@ Map noteInfoMap(String noteContent) {
   };
 
   return noteInfoMap;
-}
-
-// Check if a resource exists in the POD
-Future<bool> checkResourceStatus(
-  String resUrl, {
-  bool fileFlag = true,
-}) async {
-  final (:accessToken, :dPopToken) = await getTokensForResource(resUrl, 'GET');
-  final response = await http.get(
-    Uri.parse(resUrl),
-    headers: <String, String>{
-      'Content-Type': fileFlag ? '*/*' : 'application/octet-stream',
-      'Authorization': 'DPoP $accessToken',
-      'Link': fileFlag
-          ? '<http://www.w3.org/ns/ldp#Resource>; rel="type"'
-          : '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
-      'DPoP': dPopToken,
-    },
-  );
-
-  if (response.statusCode == 200 || response.statusCode == 204) {
-    return true;
-  } else if (response.statusCode == 404) {
-    return false;
-  } else {
-    debugPrint('WARN: Failed to check resource status.\n'
-        'URL: $resUrl\n'
-        'ERR: ${response.body}');
-    return false;
-  }
 }
 
 // Get the Map of shared notes with the current user. If [filesWithGrantAccess]
@@ -188,36 +141,4 @@ Future<Map> getSharedNoteContent(
   final noteContentMap = noteInfoMap(noteContent);
 
   return noteContentMap;
-}
-
-/// Get the map of recipient webIDs and their access permission for each files
-/// in a map of notes [notesMap].
-/// Parameters:
-///   [notesMap] is map of filenames to retrieve permissions for.
-///   [fileFlag] set to true if the resource is a file, false if the resource is a directory.
-///   [child] is the child widget to return to
-///   [isFilePath] Set to true if the filename provided is the full path
-Future<dynamic> addRecipientList(
-  Map<String, dynamic> notesMap,
-  BuildContext context,
-  Widget childPage, {
-  bool fileFlag = true,
-  bool isFilePath = true,
-}) async {
-  final List<String> fileList = notesMap.keys.toList();
-
-  // Read recipients for each file
-  for (final fileName in fileList) {
-    // 20250726 jm: While not an external file, as the file
-    // is a full file path, use isExternalRes true, to avoid
-    // readPermission() prepending the filepath.
-    dynamic permList = await readPermission(
-        fileName, fileFlag, context, childPage,
-        isExternalRes: true);
-
-    // Add recipients map to notesMap
-    notesMap[fileName][noteRecipientPred] = permList;
-  }
-
-  return notesMap;
 }
