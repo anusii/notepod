@@ -27,7 +27,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/app_screen.dart';
@@ -35,6 +34,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/edit_note.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
