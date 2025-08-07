@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:notepod/main.dart';
+import 'package:notepod/notepod.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

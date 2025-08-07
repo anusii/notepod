@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -36,7 +36,8 @@ import 'package:notepod/utils/rdf.dart';
 
 // Get the list of notes created by the user.
 
-Future<Map> getNoteList(BuildContext context, Widget childPage) async {
+Future<Map<String, dynamic>> getNoteList(
+    BuildContext context, Widget childPage) async {
   final loggedIn = await loginIfRequired(context);
   String webId = await getWebId() as String;
   webId = webId.replaceAll(profCard, '');
@@ -58,7 +59,7 @@ Future<Map> getNoteList(BuildContext context, Widget childPage) async {
       final res = await getResourcesInContainer(notesDirUrl);
       // debugPrint(res.toString());
 
-      Map notesMap = {};
+      Map<String, dynamic> notesMap = {};
       // Loop through the list of files to get the file names
       for (final fileName in res.files) {
         // Read file content
@@ -187,4 +188,36 @@ Future<Map> getSharedNoteContent(
   final noteContentMap = noteInfoMap(noteContent);
 
   return noteContentMap;
+}
+
+/// Get the map of recipient webIDs and their access permission for each files
+/// in a map of notes [notesMap].
+/// Parameters:
+///   [notesMap] is map of filenames to retrieve permissions for.
+///   [fileFlag] set to true if the resource is a file, false if the resource is a directory.
+///   [child] is the child widget to return to
+///   [isFilePath] Set to true if the filename provided is the full path
+Future<dynamic> addRecipientList(
+  Map<String, dynamic> notesMap,
+  BuildContext context,
+  Widget childPage, {
+  bool fileFlag = true,
+  bool isFilePath = true,
+}) async {
+  final List<String> fileList = notesMap.keys.toList();
+
+  // Read recipients for each file
+  for (final fileName in fileList) {
+    // 20250726 jm: While not an external file, as the file
+    // is a full file path, use isExternalRes true, to avoid
+    // readPermission() prepending the filepath.
+    dynamic permList = await readPermission(
+        fileName, fileFlag, context, childPage,
+        isExternalRes: true);
+
+    // Add recipients map to notesMap
+    notesMap[fileName][noteRecipientPred] = permList;
+  }
+
+  return notesMap;
 }
