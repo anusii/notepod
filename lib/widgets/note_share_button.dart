@@ -27,24 +27,32 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
+// import 'package:notepod/constants/colours.dart';
 
 /// A stylised share button widget for notes.
 
 class NoteShareButton extends StatelessWidget {
+  /// Page to display on button click
   final Widget childPage;
+
+  /// Button style
+  /// Used to specify a simpler style without label
+  /// for use when less realestate
+  /// Default false (full button with label)
+  final bool? simple;
 
   const NoteShareButton({
     Key? key,
     required this.childPage,
+    this.simple = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      icon: const Icon(
+      icon: Icon(
         Icons.share,
-        color: Colors.white,
+        color: Colors.white, // simple! ? Colors.black : Colors.white,
       ),
       onPressed: () async {
         // redirect
@@ -59,18 +67,9 @@ class NoteShareButton extends StatelessWidget {
               false, // This predicate ensures all previous routes are removed
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkBlue,
-        backgroundColor: lightBlue, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-      label: const Text(
-        'SHARE',
+      style: simple! ? buttonStyleList : buttonStyleView, // buttonStyleView, //
+      label: Text(
+        simple! ? '' : 'SHARE',
         style: TextStyle(color: Colors.white),
       ),
     );
