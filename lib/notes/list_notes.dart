@@ -29,8 +29,10 @@ import 'package:solidpod/src/solid/constants/common.dart';
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
 /// Parameters:
@@ -227,7 +229,29 @@ class _ListNotesState extends State<ListNotes> {
                             Text(_foundNotes[fileNames[index]][noteTitlePred]),
                         subtitle: Text(
                             'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}'),
-                        trailing: const Icon(Icons.arrow_forward),
+                        // trailing: TrailingIcons(),
+                        // Define width to avoid consuming full width
+                        trailing: SizedBox(
+                          height: 60,
+                          width: 120,
+                          child: Row(
+                            children: [
+                              // Share button
+                              NoteShareButton(
+                                  childPage: ShareNote(
+                                      noteData: _foundNotes[fileNames[index]],
+                                      noteFilePath: // Get note file path
+                                          '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
+                                      notesMap: _foundNotes),
+                                  simple: true),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              // Open note icon
+                              const Icon(Icons.arrow_forward),
+                            ],
+                          ),
+                        ),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -252,3 +276,29 @@ class _ListNotesState extends State<ListNotes> {
     );
   }
 }
+
+// class TrailingIcons extends StatelessWidget {
+//   final Map notesMap;
+//   const TrailingIcons({
+//     super.key,
+//     notesMap,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) => Row(
+//     children: [
+//       // TODO add sharing icon here
+//       // Share button
+//                   NoteShareButton(
+//                       childPage: ShareNote(
+//                           noteData: noteData,
+//                           noteFilePath: noteFilePath,
+//                           notesMap: notesMap)),
+//                   const SizedBox(
+//                     width: 5,
+//                   ),
+//       // Open note icon
+//       const Icon(Icons.arrow_forward),
+//     ],
+//   );
+// }
