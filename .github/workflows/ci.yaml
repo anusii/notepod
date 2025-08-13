@@ -45,7 +45,8 @@ jobs:
           channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
       - run: flutter pub get
-      - run: dart run custom_lint
+      - run: dart pub global activate import_order_lint
+      - run: import_order --check
 
   markdown:
     runs-on: ubuntu-latest
