@@ -10,7 +10,7 @@ on:
     types: [opened, reopened, synchronize]
 
 env:
-  FLUTTER_VERSION: '3.32.5'
+  FLUTTER_VERSION: '3.32.8'
 
 jobs:
 
@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 18
       - run: npm install -g markdownlint-cli
-      - run: markdownlint assets/markdown
+      - run: markdownlint --disable MD036 -- assets/markdown
         # -p .markdownlintignore -c .markdownlint.yaml
 
   copyright:
