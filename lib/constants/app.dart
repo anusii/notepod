@@ -95,16 +95,6 @@ ButtonStyle buttonStyleView = ElevatedButton.styleFrom(
   ),
 );
 
-/// Button style for list pages
-ButtonStyle buttonStyleList = ElevatedButton.styleFrom(
-  // backgroundColor: Colors.green,
-  // foregroundColor: Colors.pink,
-  backgroundColor: Colors.grey, // foreground
-  padding: const EdgeInsets.symmetric(
-    horizontal: 15,
-  ),
-  shape: CircleBorder(),
-  // shape: RoundedRectangleBorder(
-  //   borderRadius: BorderRadius.circular(2),
-  // ),
-);
+/// Button shape decoration for list pages
+ShapeDecoration buttonShapeList =
+    ShapeDecoration(color: Colors.grey, shape: CircleBorder());

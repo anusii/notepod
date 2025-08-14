@@ -56,8 +56,7 @@ class NoteShareButton extends StatelessWidget {
   Center SimpleShareButton(BuildContext context) {
     return Center(
       child: Ink(
-        decoration: ShapeDecoration(
-            color: Colors.grey[400], shape: CircleBorder()), // buttonStyleList,
+        decoration: buttonShapeList,
         child: IconButton(
           icon: const Icon(Icons.share),
           color: Colors.white,
