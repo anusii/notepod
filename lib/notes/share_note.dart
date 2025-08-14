@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
 /// A [StatefulWidget] for sharing a note owned by the user.
@@ -43,12 +42,14 @@ class ShareNote extends StatefulWidget {
   final Map noteData;
   final String noteFilePath;
   final Map notesMap;
+  final Widget backPage;
 
   const ShareNote({
     super.key,
     required this.noteData,
     required this.noteFilePath,
     this.notesMap = const {},
+    required this.backPage,
   });
 
   @override
@@ -74,8 +75,8 @@ class ShareNoteState extends State<ShareNote>
               children: [
                 const SizedBox(height: 10),
                 NoteBackButton(
-                    childPage: ViewNote(
-                        noteData: widget.noteData, notesMap: widget.notesMap)),
+                  childPage: widget.backPage,
+                ),
                 const SizedBox(height: 10),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
@@ -84,9 +85,11 @@ class ShareNoteState extends State<ShareNote>
                     fileName: widget.noteFilePath,
                     dataFilesMap: widget.notesMap as Map<String, dynamic>,
                     child: ShareNote(
-                        noteData: widget.noteData,
-                        noteFilePath: widget.noteFilePath,
-                        notesMap: widget.notesMap),
+                      noteData: widget.noteData,
+                      noteFilePath: widget.noteFilePath,
+                      notesMap: widget.notesMap,
+                      backPage: widget.backPage,
+                    ),
                   ),
                 ),
               ],
