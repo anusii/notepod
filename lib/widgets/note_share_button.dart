@@ -49,29 +49,57 @@ class NoteShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return simple! ? SimpleShareButton(context) : ShareButton(context);
+  }
+
+  /// Simple Share button for using in note lists
+  Center SimpleShareButton(BuildContext context) {
+    return Center(
+      child: Ink(
+        decoration: ShapeDecoration(
+            color: Colors.grey[400], shape: CircleBorder()), // buttonStyleList,
+        child: IconButton(
+          icon: const Icon(Icons.share),
+          color: Colors.white,
+          onPressed: () async {
+            // redirect
+            NavToChildPage(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Elevated Share button with text label for using in note views
+  ElevatedButton ShareButton(BuildContext context) {
     return ElevatedButton.icon(
       icon: Icon(
         Icons.share,
-        color: Colors.white, // simple! ? Colors.black : Colors.white,
+        color: Colors.white,
       ),
       onPressed: () async {
         // redirect
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AppScreen(
-                    title: topBarTitle,
-                    childPage: childPage,
-                  )),
-          (Route<dynamic> route) =>
-              false, // This predicate ensures all previous routes are removed
-        );
+        NavToChildPage(context);
       },
-      style: simple! ? buttonStyleList : buttonStyleView, // buttonStyleView, //
+      style: buttonStyleView,
       label: Text(
-        simple! ? '' : 'SHARE',
+        'SHARE',
         style: TextStyle(color: Colors.white),
       ),
+    );
+  }
+
+  /// Navigate to sharing child page
+  dynamic NavToChildPage(BuildContext context) async {
+    return Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AppScreen(
+                title: topBarTitle,
+                childPage: childPage,
+              )),
+      (Route<dynamic> route) =>
+          false, // This predicate ensures all previous routes are removed
     );
   }
 }
