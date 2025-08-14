@@ -29,8 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
 /// The root widget for the [NotePod] app.

@@ -163,7 +163,7 @@ class NoteEditScrollView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Date: ${currDateStr}',
+                                  'Date: $currDateStr',
                                   style: titleStyle,
                                 ),
                               ],

@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 
@@ -29,10 +30,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
@@ -51,13 +52,13 @@ class NoteSaveButton extends StatelessWidget {
   final Map notesMap;
 
   const NoteSaveButton({
-    Key? key,
+    super.key,
     required this.textController,
     required this.formKey,
     this.prevNoteData,
     required this.shared,
     this.notesMap = const {},
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +93,15 @@ class NoteSaveButton extends StatelessWidget {
 }
 
 Future<void> saveNote(BuildContext context,
-    TextEditingController _textController, GlobalKey<FormBuilderState> formKey,
+    TextEditingController textController, GlobalKey<FormBuilderState> formKey,
     [Map? prevNoteData, bool shared = false, Map notesMap = const {}]) async {
   if (formKey.currentState?.saveAndValidate() ?? false) {
     // Compares to prevNoteData if previous note data provided
     // Adds sharing metadata if shared==true
 
-    final createNoteStatus;
+    final SolidFunctionCallStatus createNoteStatus;
     Map formData = formKey.currentState?.value as Map;
-    String noteText = _textController.text;
+    String noteText = textController.text;
     Map noteNewData = {};
 
     // Previous shared note info only used when saveNote() on edit shared note
@@ -229,14 +230,14 @@ Future<void> saveNote(BuildContext context,
 
 Future<Map> prepNewNoteData(String createdDateTimeStr,
     String modifiedDateTimeStr, String noteTitle, String noteText) async {
-  Map _noteNewData = {};
+  Map noteNewData = {};
 
-  _noteNewData[noteTitlePred] = noteTitle;
-  _noteNewData[createdDateTimePred] = createdDateTimeStr;
-  _noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
-  _noteNewData[noteContentPred] = noteText;
+  noteNewData[noteTitlePred] = noteTitle;
+  noteNewData[createdDateTimePred] = createdDateTimeStr;
+  noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
+  noteNewData[noteContentPred] = noteText;
 
-  return _noteNewData;
+  return noteNewData;
 }
 
 Future<SolidFunctionCallStatus> saveNoteToPod(

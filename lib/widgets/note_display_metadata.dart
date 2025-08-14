@@ -47,26 +47,26 @@ class NoteDisplayMetadata extends StatelessWidget {
   final bool showPathInfo;
 
   const NoteDisplayMetadata({
-    Key? key,
+    super.key,
     this.fullNoteData = const {},
     this.noteContent = const {},
     this.noteInfo = const {},
     this.showDates = false,
     this.showSharing = false,
     this.showPathInfo = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    Map _noteInfo = {};
-    Map _noteContent = {};
+    Map noteInfo = {};
+    Map noteContent = {};
     if (fullNoteData.isNotEmpty) {
-      _noteInfo = fullNoteData['sharedNoteInfo'];
-      _noteContent = fullNoteData['sharedNoteContent'];
+      noteInfo = fullNoteData['sharedNoteInfo'];
+      noteContent = fullNoteData['sharedNoteContent'];
     } else if (noteInfo.isNotEmpty) {
-      _noteInfo = noteInfo;
+      noteInfo = noteInfo;
     } else if (noteContent.isNotEmpty) {
-      _noteContent = noteContent;
+      noteContent = noteContent;
     }
 
     return Container(
@@ -76,11 +76,11 @@ class NoteDisplayMetadata extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // ShowDates (created and modified)
-            if (showDates) dateInfo(_noteContent),
+            if (showDates) dateInfo(noteContent),
             // Show sharing info (owner, provider, access list)
-            if (showSharing) accessInfo(_noteInfo),
+            if (showSharing) accessInfo(noteInfo),
             // Show path info (filename and path)
-            if (showPathInfo) pathInfo(_noteInfo),
+            if (showPathInfo) pathInfo(noteInfo),
             SizedBox(height: 10),
           ]),
     );

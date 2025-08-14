@@ -24,9 +24,9 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 

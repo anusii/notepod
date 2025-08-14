@@ -103,7 +103,6 @@ class EditNoteState extends State<EditNote>
   void _renderMarkdown() {
     setState(() {
       data = _textController!.text;
-      ;
     });
   }
 

@@ -26,9 +26,9 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/src/solid/constants/common.dart';
 
-import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
 
@@ -76,14 +76,13 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByTitle(bool ascending) {
     setState(() {
       _sortTitleAscending = ascending;
-      fileNames
-        ..sort((a, b) => _sortTitleAscending
-            ? _foundNotes[a][noteTitlePred]
-                .toLowerCase()
-                .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
-            : _foundNotes[b][noteTitlePred]
-                .toLowerCase()
-                .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
+      fileNames.sort((a, b) => _sortTitleAscending
+          ? _foundNotes[a][noteTitlePred]
+              .toLowerCase()
+              .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
+          : _foundNotes[b][noteTitlePred]
+              .toLowerCase()
+              .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
     });
   }
 
@@ -91,12 +90,11 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByModDate(bool ascending) {
     setState(() {
       _sortModDateAscending = ascending;
-      fileNames
-        ..sort((a, b) => _sortModDateAscending
-            ? _foundNotes[a][modifiedDateTimePred]
-                .compareTo(_foundNotes[b][modifiedDateTimePred])
-            : _foundNotes[b][modifiedDateTimePred]
-                .compareTo(_foundNotes[a][modifiedDateTimePred]));
+      fileNames.sort((a, b) => _sortModDateAscending
+          ? _foundNotes[a][modifiedDateTimePred]
+              .compareTo(_foundNotes[b][modifiedDateTimePred])
+          : _foundNotes[b][modifiedDateTimePred]
+              .compareTo(_foundNotes[a][modifiedDateTimePred]));
     });
   }
 

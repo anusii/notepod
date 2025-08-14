@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 

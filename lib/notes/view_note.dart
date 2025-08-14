@@ -50,7 +50,7 @@ class ViewNote extends StatefulWidget {
   final Map noteData;
   final Map? notesMap;
 
-  ViewNote({
+  const ViewNote({
     super.key,
     required this.noteData,
     this.notesMap,

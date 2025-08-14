@@ -22,12 +22,13 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Graham Williams, Anuska Vidanage, Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/home.dart';
 
 /// A stylised share button widget for notes.
 
@@ -35,9 +36,9 @@ class NoteShareButton extends StatelessWidget {
   final Widget childPage;
 
   const NoteShareButton({
-    Key? key,
+    super.key,
     required this.childPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

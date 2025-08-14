@@ -88,7 +88,6 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   void _renderMarkdown() {
     setState(() {
       data = _textController!.text;
-      ;
     });
   }
 
