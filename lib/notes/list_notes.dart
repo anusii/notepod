@@ -234,23 +234,10 @@ class _ListNotesState extends State<ListNotes> {
                         trailing: SizedBox(
                           height: 60,
                           width: 120,
-                          child: Row(
-                            children: [
-                              // Share button
-                              NoteShareButton(
-                                  childPage: ShareNote(
-                                      noteData: _foundNotes[fileNames[index]],
-                                      noteFilePath: // Get note file path
-                                          '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
-                                      notesMap: _foundNotes),
-                                  simple: true),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              // Open note icon
-                              const Icon(Icons.arrow_forward),
-                            ],
-                          ),
+                          child: TrailingButtons(
+                              foundNotes: _foundNotes,
+                              fileNames: fileNames,
+                              index: index),
                         ),
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
@@ -277,28 +264,36 @@ class _ListNotesState extends State<ListNotes> {
   }
 }
 
-// class TrailingIcons extends StatelessWidget {
-//   final Map notesMap;
-//   const TrailingIcons({
-//     super.key,
-//     notesMap,
-//   });
+class TrailingButtons extends StatelessWidget {
+  const TrailingButtons({
+    super.key,
+    required Map foundNotes,
+    required this.fileNames,
+    required this.index,
+  }) : _foundNotes = foundNotes;
 
-//   @override
-//   Widget build(BuildContext context) => Row(
-//     children: [
-//       // TODO add sharing icon here
-//       // Share button
-//                   NoteShareButton(
-//                       childPage: ShareNote(
-//                           noteData: noteData,
-//                           noteFilePath: noteFilePath,
-//                           notesMap: notesMap)),
-//                   const SizedBox(
-//                     width: 5,
-//                   ),
-//       // Open note icon
-//       const Icon(Icons.arrow_forward),
-//     ],
-//   );
-// }
+  final Map _foundNotes;
+  final List fileNames;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // Share button
+        NoteShareButton(
+            childPage: ShareNote(
+                noteData: _foundNotes[fileNames[index]],
+                noteFilePath: // Get note file path
+                    '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
+                notesMap: _foundNotes),
+            simple: true),
+        const SizedBox(
+          width: 15,
+        ),
+        // Open note icon
+        const Icon(Icons.arrow_forward),
+      ],
+    );
+  }
+}
