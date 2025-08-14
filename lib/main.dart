@@ -1,6 +1,6 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// NotePod - Define the main entry point for the app.
 ///
-// Time-stamp: <Wednesday 2025-07-23 13:19:45 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-08-15 08:17:36 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
@@ -35,34 +35,33 @@ import 'package:notepod/utils/is_desktop.dart';
 /// Main entry point for the [NotePod] application.
 
 void main() async {
-  // This is the main entry point for the app. The [async] is required because
-  // we asynchronously [await] the window manager below. Often, `main()` will
-  // include only [runApp].
+  // We require [async] because we asynchronously [await] the window manager
+  // below. Often, `main()` will include just the call [runApp].
 
-  // Globally remove [debugPrint] messages.
-
+  // Optionally we can globally remove [debugPrint] messages.
+  //
   // debugPrint = (String? message, {int? wrapWidth}) {
   //   null;
   // };
 
-  // Ensure Flutter bindings are initialized for async operations
+  // Ensure Flutter bindings are initialized for async operations, in particular
+  // to set the Linux desktop window [title].
 
   WidgetsFlutterBinding.ensureInitialized();
-
   if (isDesktop) {
-    await windowManager.ensureInitialized();
+    // await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
-      // Set various desktop window options here.
+      // Set various desktop window options here, specifically the title.
 
       // Setting [alwaysOnTop] here will ensure the app starts on top of other
       // apps on the desktop so that it is visible (otherwise, with GNOME on
       // Ubuntu the app is often lost below other windows on startup).
       // We later turn it off as we don't want to force it always on top.
+      //
+      // 20250815 gjw Staying [alwaysOnTop] on startup seems okay now?
 
-      alwaysOnTop: true,
-
-      // The [title] is used for the window manager's window title.
+      // alwaysOnTop: true,
 
       title: 'NotePod - A note taking app with private PODs',
     );
@@ -70,9 +69,9 @@ void main() async {
     // Once the window manager is ready we reconfigure it a little.
 
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
-      await windowManager.focus();
-      await windowManager.setAlwaysOnTop(false);
+//      await windowManager.show();
+//      await windowManager.focus();
+//      await windowManager.setAlwaysOnTop(false);
     });
   }
 

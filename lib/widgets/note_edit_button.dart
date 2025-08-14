@@ -25,7 +25,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/app_screen.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 
@@ -50,7 +50,7 @@ class NoteEditButton extends StatelessWidget {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => AppScreen(
+            builder: (context) => AppHomePage(
               title: topBarTitle,
               childPage: childPage,
             ),

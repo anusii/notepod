@@ -31,7 +31,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version_widget/version_widget.dart';
 
-import 'package:notepod/app_screen.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/notepod.dart';
@@ -126,7 +126,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: NewNote(),
                         ),
@@ -143,7 +143,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: ListNotesScreen(),
                         ),
@@ -163,7 +163,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: SharedNotesScreen(),
                           // childPage: SharedNotes(),

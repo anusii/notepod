@@ -9,9 +9,7 @@
 
 ARCHIVE
 ignore
-output
 pubspec.yaml.*
-tmp
 
 installers/*.apk
 installers/*.exe
@@ -20,6 +18,8 @@ installers/*.tar.gz
 installers/*-linux.zip
 installers/*-macos.zip
 installers/*-windows.zip
+
+.Rhistory
 
 ########################################################################
 # From https://github.com/flutter/flutter/blob/master/.gitignore
@@ -167,6 +167,8 @@ unlinked_spec.ds
 **/android/key.properties
 *.jks
 
+android/app/.cxx/
+
 #-----------------------------------------------------------------------
 # iOS/XCode related
 #-----------------------------------------------------------------------
@@ -199,6 +201,12 @@ unlinked_spec.ds
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+ios/Flutter/
+ios/Runner.xcodeproj/
+ios/Runner.xcworkspace/
+ios/Runner/
+ios/RunnerTests/
 
 #-----------------------------------------------------------------------
 # macOS
