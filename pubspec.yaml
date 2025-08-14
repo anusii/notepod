@@ -21,7 +21,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_form_builder: ^10.0.1
-  flutter_lints: ^5.0.0
   form_builder_validators: ^11.1.2
   intl: any
   loading_indicator: ^3.1.1
@@ -38,6 +37,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.14
   flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 
