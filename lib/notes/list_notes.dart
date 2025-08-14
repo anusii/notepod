@@ -23,13 +23,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
 
 import 'package:solidpod/src/solid/constants/common.dart';
 
 import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
