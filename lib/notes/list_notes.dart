@@ -23,6 +23,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 
 import 'package:solidpod/src/solid/constants/common.dart';
 
@@ -286,7 +287,8 @@ class TrailingButtons extends StatelessWidget {
                 noteData: _foundNotes[fileNames[index]],
                 noteFilePath: // Get note file path
                     '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
-                notesMap: _foundNotes),
+                notesMap: _foundNotes,
+                backPage: ListNotesScreen()),
             simple: true),
         const SizedBox(
           width: 15,
