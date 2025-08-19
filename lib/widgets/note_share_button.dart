@@ -46,7 +46,7 @@ class NoteShareButton extends StatelessWidget {
     super.key,
     required this.childPage,
     this.simple = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
