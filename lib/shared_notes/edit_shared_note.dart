@@ -97,7 +97,6 @@ class EditSharedNoteState extends State<EditSharedNote>
   void _renderMarkdown() {
     setState(() {
       data = _textController!.text;
-      ;
     });
   }
 

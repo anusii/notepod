@@ -101,7 +101,7 @@ Future<Map> getSharedNotes(BuildContext context, Widget childPage,
 
     Map sharedNotesMap = {};
 
-    if (!sharedNotesLogMap.isEmpty) {
+    if (sharedNotesLogMap.isNotEmpty) {
       for (final sharedFilaUrl in sharedNotesLogMap.keys) {
         final sharedFileDetails = sharedNotesLogMap[sharedFilaUrl];
 

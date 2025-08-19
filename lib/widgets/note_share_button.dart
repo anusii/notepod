@@ -22,10 +22,10 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Graham Williams, Anuska Vidanage, Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 
 // import 'package:notepod/constants/colours.dart';
@@ -43,7 +43,7 @@ class NoteShareButton extends StatelessWidget {
   final bool? simple;
 
   const NoteShareButton({
-    Key? key,
+    super.key,
     required this.childPage,
     this.simple = false,
   }) : super(key: key);

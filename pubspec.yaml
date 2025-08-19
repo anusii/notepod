@@ -6,15 +6,13 @@ version: 0.2.24+6
 environment:
   sdk: ">=3.2.3 <4.0.0"
 
-# To automatically upgrade package dependencies:
+# To automatically upgrade package dependencies to the latest versions:
 #
 #   flutter pub upgrade --major-versions
 #
 # To see which dependencies have newer versions available:
 #
 #   flutter pub outdated
-#
-# (gjw 20250722)
 
 dependencies:
   crypto: ^3.0.3
@@ -39,6 +37,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.14
   flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 

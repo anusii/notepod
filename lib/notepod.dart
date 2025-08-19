@@ -1,12 +1,12 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Wednesday 2025-07-23 12:45:20 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-08-15 09:13:21 +1000 Graham Williams>
 ///
-/// Copyright (C) 2025, Software Innovation Institute, ANU
+/// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
-/// Licensed under the GNU General Public License, Version 3 (the "License");
+/// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -29,8 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
 /// The root widget for the [NotePod] app.
@@ -69,7 +69,7 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
-        child: AppScreen(title: topBarTitle, childPage: ListNotesScreen()),
+        child: AppHomePage(title: topBarTitle, childPage: ListNotesScreen()),
       ),
     );
   }

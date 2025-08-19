@@ -26,7 +26,6 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/src/solid/constants/common.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
@@ -79,14 +78,13 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByTitle(bool ascending) {
     setState(() {
       _sortTitleAscending = ascending;
-      fileNames
-        ..sort((a, b) => _sortTitleAscending
-            ? _foundNotes[a][noteTitlePred]
-                .toLowerCase()
-                .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
-            : _foundNotes[b][noteTitlePred]
-                .toLowerCase()
-                .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
+      fileNames.sort((a, b) => _sortTitleAscending
+          ? _foundNotes[a][noteTitlePred]
+              .toLowerCase()
+              .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
+          : _foundNotes[b][noteTitlePred]
+              .toLowerCase()
+              .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
     });
   }
 
@@ -94,12 +92,11 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByModDate(bool ascending) {
     setState(() {
       _sortModDateAscending = ascending;
-      fileNames
-        ..sort((a, b) => _sortModDateAscending
-            ? _foundNotes[a][modifiedDateTimePred]
-                .compareTo(_foundNotes[b][modifiedDateTimePred])
-            : _foundNotes[b][modifiedDateTimePred]
-                .compareTo(_foundNotes[a][modifiedDateTimePred]));
+      fileNames.sort((a, b) => _sortModDateAscending
+          ? _foundNotes[a][modifiedDateTimePred]
+              .compareTo(_foundNotes[b][modifiedDateTimePred])
+          : _foundNotes[b][modifiedDateTimePred]
+              .compareTo(_foundNotes[a][modifiedDateTimePred]));
     });
   }
 
@@ -244,7 +241,7 @@ class _ListNotesState extends State<ListNotes> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AppScreen(
+                              builder: (context) => AppHomePage(
                                 title: topBarTitle,
                                 childPage: ViewNote(
                                   noteData: _foundNotes[fileNames[index]],

@@ -1,6 +1,6 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// NotePod - The application's home page.
 ///
-// Time-stamp: <Friday 2025-07-18 05:32:29 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-08-15 09:14:37 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
 ///
@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 
@@ -34,18 +35,18 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
-class AppScreen extends StatefulWidget {
+class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
-  const AppScreen({super.key, required this.childPage, this.title = ''});
+  const AppHomePage({super.key, required this.childPage, this.title = ''});
 
   final Widget childPage;
   final String title;
 
   @override
-  AppScreenState createState() => AppScreenState();
+  AppHomePageState createState() => AppHomePageState();
 }
 
-class AppScreenState extends State<AppScreen>
+class AppHomePageState extends State<AppHomePage>
     with SingleTickerProviderStateMixin {
   String? _webId;
 
@@ -88,7 +89,7 @@ class AppScreenState extends State<AppScreen>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppScreen(
+                    builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: NewNote(),
                         )),
@@ -108,7 +109,7 @@ class AppScreenState extends State<AppScreen>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppScreen(
+                    builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: ListNotesScreen(),
                         )),
@@ -134,7 +135,7 @@ class AppScreenState extends State<AppScreen>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppScreen(
+                    builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: SharedNotesScreen(),
                         )),

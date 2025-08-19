@@ -22,16 +22,17 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Jess Moore
+library;
 
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/constants/common.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
@@ -42,10 +43,10 @@ class NoteDelButton extends StatelessWidget {
   final bool shared;
 
   const NoteDelButton({
-    Key? key,
+    super.key,
     required this.noteData,
     required this.shared,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,7 @@ class NoteDelButton extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AppScreen(
+                          builder: (context) => AppHomePage(
                                 title: topBarTitle,
                                 childPage: ListNotesScreen(),
                               )),

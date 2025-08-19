@@ -27,9 +27,9 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/home.dart';
 
 /// A stylised back button widget for notes.
 
@@ -37,9 +37,9 @@ class NoteBackButton extends StatelessWidget {
   final Widget childPage;
 
   const NoteBackButton({
-    Key? key,
+    super.key,
     required this.childPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class NoteBackButton extends StatelessWidget {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) => AppScreen(
+              builder: (context) => AppHomePage(
                     title: topBarTitle,
                     childPage: childPage,
                   )),

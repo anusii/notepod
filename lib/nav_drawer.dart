@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
+library;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version_widget/version_widget.dart';
 
-import 'package:notepod/app_screen.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/home.dart';
 import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
@@ -126,7 +127,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: NewNote(),
                         ),
@@ -143,7 +144,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: ListNotesScreen(),
                         ),
@@ -163,7 +164,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppScreen(
+                        builder: (context) => AppHomePage(
                           title: topBarTitle,
                           childPage: SharedNotesScreen(),
                           // childPage: SharedNotes(),
