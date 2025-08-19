@@ -27,53 +27,79 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
+
+// import 'package:notepod/constants/colours.dart';
 
 /// A stylised share button widget for notes.
 
 class NoteShareButton extends StatelessWidget {
+  /// Page to display on button click
   final Widget childPage;
+
+  /// Button style
+  /// Used to specify a simpler style without label
+  /// for use when less realestate
+  /// Default false (full button with label)
+  final bool? simple;
 
   const NoteShareButton({
     super.key,
     required this.childPage,
-  });
+    this.simple = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return simple! ? SimpleShareButton(context) : ShareButton(context);
+  }
+
+  /// Simple Share button for using in note lists
+  Center SimpleShareButton(BuildContext context) {
+    return Center(
+      child: Ink(
+        decoration: buttonShapeList,
+        child: IconButton(
+          icon: const Icon(Icons.share),
+          color: Colors.white,
+          onPressed: () async {
+            // redirect
+            NavToChildPage(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Elevated Share button with text label for using in note views
+  ElevatedButton ShareButton(BuildContext context) {
     return ElevatedButton.icon(
-      icon: const Icon(
+      icon: Icon(
         Icons.share,
         color: Colors.white,
       ),
       onPressed: () async {
         // redirect
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AppHomePage(
-                    title: topBarTitle,
-                    childPage: childPage,
-                  )),
-          (Route<dynamic> route) =>
-              false, // This predicate ensures all previous routes are removed
-        );
+        NavToChildPage(context);
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkBlue,
-        backgroundColor: lightBlue, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-      label: const Text(
+      style: buttonStyleView,
+      label: Text(
         'SHARE',
         style: TextStyle(color: Colors.white),
       ),
+    );
+  }
+
+  /// Navigate to sharing child page
+  dynamic NavToChildPage(BuildContext context) async {
+    return Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AppScreen(
+                title: topBarTitle,
+                childPage: childPage,
+              )),
+      (Route<dynamic> route) =>
+          false, // This predicate ensures all previous routes are removed
     );
   }
 }

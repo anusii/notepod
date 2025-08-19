@@ -115,7 +115,10 @@ class _ViewNoteState extends State<ViewNote> {
                       childPage: ShareNote(
                           noteData: noteData,
                           noteFilePath: noteFilePath,
-                          notesMap: widget.notesMap as Map<dynamic, dynamic>)),
+                          notesMap: widget.notesMap as Map<dynamic, dynamic>,
+                          backPage: ViewNote(
+                              noteData: widget.noteData,
+                              notesMap: widget.notesMap))),
                   const SizedBox(
                     width: 5,
                   ),

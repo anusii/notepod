@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:notepod/constants/colours.dart';
+
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
 const String topBarTitle = 'Pod Note Taker';
@@ -81,3 +83,19 @@ const String sharedNotesTitle = 'Shared Notes';
 
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
+
+/// Button style for view pages
+ButtonStyle buttonStyleView = ElevatedButton.styleFrom(
+  foregroundColor: darkBlue,
+  backgroundColor: lightBlue, // foreground
+  padding: const EdgeInsets.symmetric(
+    horizontal: 15,
+  ),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20),
+  ),
+);
+
+/// Button shape decoration for list pages
+ShapeDecoration buttonShapeList =
+    ShapeDecoration(color: Colors.grey, shape: CircleBorder());
