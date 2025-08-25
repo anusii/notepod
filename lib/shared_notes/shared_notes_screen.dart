@@ -66,36 +66,37 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
       key: _scaffoldKey,
       body: SafeArea(
         child: FutureBuilder(
-            future: _asyncDataFetch,
-            builder: (context, snapshot) {
-              Widget returnVal;
-              if (snapshot.connectionState == ConnectionState.done) {
-                return snapshot.data == null ||
-                        snapshot.data.toString() == 'null' ||
-                        snapshot.data.length == 0
-                    ? Center(
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: buildMsgCard(
-                                context,
-                                Icons.info,
-                                Colors.amber,
-                                'No shared notes!',
-                                noSharedNotesMsg,
-                              ),
+          future: _asyncDataFetch,
+          builder: (context, snapshot) {
+            Widget returnVal;
+            if (snapshot.connectionState == ConnectionState.done) {
+              return snapshot.data == null ||
+                      snapshot.data.toString() == 'null' ||
+                      snapshot.data.length == 0
+                  ? Center(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: buildMsgCard(
+                              context,
+                              Icons.info,
+                              Colors.amber,
+                              'No shared notes!',
+                              noSharedNotesMsg,
                             ),
-                          ],
-                        ),
-                      )
-                    : returnVal = _loadedScreen(
-                        snapshot.data! as Map,
-                      );
-              } else {
-                returnVal = loadingScreen(normalLoadingScreenHeight);
-              }
-              return returnVal;
-            }),
+                          ),
+                        ],
+                      ),
+                    )
+                  : returnVal = _loadedScreen(
+                      snapshot.data! as Map,
+                    );
+            } else {
+              returnVal = loadingScreen(normalLoadingScreenHeight);
+            }
+            return returnVal;
+          },
+        ),
       ),
     );
   }

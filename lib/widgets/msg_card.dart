@@ -30,9 +30,14 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/responsive.dart';
 import 'package:notepod/constants/colours.dart';
 
-Row buildMsgCard(BuildContext context, IconData errIcon, Color errColour,
-    String errTitle, String errBody,
-    {bool isSmall = false}) {
+Row buildMsgCard(
+  BuildContext context,
+  IconData errIcon,
+  Color errColour,
+  String errTitle,
+  String errBody, {
+  bool isSmall = false,
+}) {
   // Call buildMsgCard with isSmall=true to use above another widget
   EdgeInsets paddingMsgCardDef = const EdgeInsets.fromLTRB(60, 50, 60, 20);
   EdgeInsets paddingMsgCardSmall = const EdgeInsets.fromLTRB(60, 20, 60, 20);

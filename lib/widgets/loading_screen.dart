@@ -41,7 +41,9 @@ Widget loadingScreen(double height) {
         ),
         child: Container(
           decoration: BoxDecoration(
-              color: lightBlue, borderRadius: BorderRadius.circular(25.0)),
+            color: lightBlue,
+            borderRadius: BorderRadius.circular(25.0),
+          ),
           width: 300.0,
           height: height,
           alignment: AlignmentDirectional.center,

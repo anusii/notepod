@@ -35,10 +35,11 @@ Container noteDisplayMarkdown(
   String data,
 ) {
   return Container(
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.all(10),
-      // child: SingleChildScrollView(child: MarkdownBlock(data: data))),
-      child: MarkdownBlock(data: data));
+    alignment: Alignment.topLeft,
+    padding: const EdgeInsets.all(10),
+    // child: SingleChildScrollView(child: MarkdownBlock(data: data))),
+    child: MarkdownBlock(data: data),
+  );
   // 20250717 jm Alt method retained for reference
   // MarkdownParse(
   //   data: noteData[noteContentPred],

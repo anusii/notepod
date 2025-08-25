@@ -33,10 +33,11 @@ import 'package:markdown_widget/markdown_widget.dart';
 import 'package:notepod/constants/app.dart';
 
 Container markdownEditor(
-    BuildContext context,
-    TextEditingController textController,
-    FocusNode focusNode,
-    String markdownData) {
+  BuildContext context,
+  TextEditingController textController,
+  FocusNode focusNode,
+  String markdownData,
+) {
   final cardWidth = (screenWidth(context) / 2) - 20;
 
   return Container(
@@ -80,9 +81,10 @@ Container markdownEditor(
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(width: cardWidth, child: MarkdownBlock(data: markdownData))
+            SizedBox(
+                width: cardWidth, child: MarkdownBlock(data: markdownData)),
           ],
-        )
+        ),
       ],
     ),
   );

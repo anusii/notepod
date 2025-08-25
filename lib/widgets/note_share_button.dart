@@ -95,10 +95,11 @@ class NoteShareButton extends StatelessWidget {
     return Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-          builder: (context) => AppHomePage(
-                title: topBarTitle,
-                childPage: childPage,
-              )),
+        builder: (context) => AppHomePage(
+          title: topBarTitle,
+          childPage: childPage,
+        ),
+      ),
       (Route<dynamic> route) =>
           false, // This predicate ensures all previous routes are removed
     );

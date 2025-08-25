@@ -79,13 +79,15 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByTitle(bool ascending) {
     setState(() {
       _sortTitleAscending = ascending;
-      fileNames.sort((a, b) => _sortTitleAscending
-          ? _foundNotes[a][noteTitlePred]
-              .toLowerCase()
-              .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
-          : _foundNotes[b][noteTitlePred]
-              .toLowerCase()
-              .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()));
+      fileNames.sort(
+        (a, b) => _sortTitleAscending
+            ? _foundNotes[a][noteTitlePred]
+                .toLowerCase()
+                .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
+            : _foundNotes[b][noteTitlePred]
+                .toLowerCase()
+                .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()),
+      );
     });
   }
 
@@ -93,11 +95,13 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByModDate(bool ascending) {
     setState(() {
       _sortModDateAscending = ascending;
-      fileNames.sort((a, b) => _sortModDateAscending
-          ? _foundNotes[a][modifiedDateTimePred]
-              .compareTo(_foundNotes[b][modifiedDateTimePred])
-          : _foundNotes[b][modifiedDateTimePred]
-              .compareTo(_foundNotes[a][modifiedDateTimePred]));
+      fileNames.sort(
+        (a, b) => _sortModDateAscending
+            ? _foundNotes[a][modifiedDateTimePred]
+                .compareTo(_foundNotes[b][modifiedDateTimePred])
+            : _foundNotes[b][modifiedDateTimePred]
+                .compareTo(_foundNotes[a][modifiedDateTimePred]),
+      );
     });
   }
 
@@ -109,13 +113,17 @@ class _ListNotesState extends State<ListNotes> {
       results = widget.notesMap;
     } else {
       // Display notes with title or contents containing search string
-      results = Map.fromEntries(widget.notesMap.entries.where((note) =>
-          (note.value as Map)[noteTitlePred]
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()) ||
-          (note.value as Map)[noteContentPred]
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase())));
+      results = Map.fromEntries(
+        widget.notesMap.entries.where(
+          (note) =>
+              (note.value as Map)[noteTitlePred]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              (note.value as Map)[noteContentPred]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()),
+        ),
+      );
     }
 
     // Refresh the UI
@@ -153,109 +161,112 @@ class _ListNotesState extends State<ListNotes> {
                 ),
                 const SizedBox(height: 5),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Search summary statement
-                      _foundNotes.length > 1 || _foundNotes.isEmpty
-                          ? Text('Found ${_foundNotes.length} notes')
-                          : Text('Found ${_foundNotes.length} note'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // Title Sort Label and Button
-                          TextButton.icon(
-                            onPressed: () {
-                              _sortByTitle(!_sortTitleAscending);
-                            },
-                            icon: Icon(
-                              _sortTitleAscending
-                                  ? Icons.arrow_drop_down
-                                  : Icons.arrow_drop_up,
-                              color: Colors.black,
-                            ),
-                            label: Text(
-                              _sortTitleAscending
-                                  ? 'Title A to Z'
-                                  : 'Title Z to A',
-                              style: smallTextStyle,
-                            ),
-                            iconAlignment: IconAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Search summary statement
+                    _foundNotes.length > 1 || _foundNotes.isEmpty
+                        ? Text('Found ${_foundNotes.length} notes')
+                        : Text('Found ${_foundNotes.length} note'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Title Sort Label and Button
+                        TextButton.icon(
+                          onPressed: () {
+                            _sortByTitle(!_sortTitleAscending);
+                          },
+                          icon: Icon(
+                            _sortTitleAscending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            color: Colors.black,
                           ),
-                          SizedBox(
-                            width: 5.0,
+                          label: Text(
+                            _sortTitleAscending
+                                ? 'Title A to Z'
+                                : 'Title Z to A',
+                            style: smallTextStyle,
                           ),
-                          // Date Sort Label and Button
-                          TextButton.icon(
-                            onPressed: () {
-                              _sortByModDate(!_sortModDateAscending);
-                            },
-                            icon: Icon(
-                              _sortModDateAscending
-                                  ? Icons.arrow_drop_down
-                                  : Icons.arrow_drop_up,
-                              color: Colors.black,
-                            ),
-                            label: Text(
-                              _sortModDateAscending
-                                  ? 'Date First Modified'
-                                  : 'Date Last Modified',
-                              style: smallTextStyle,
-                            ),
-                            iconAlignment: IconAlignment.end,
+                          iconAlignment: IconAlignment.end,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        // Date Sort Label and Button
+                        TextButton.icon(
+                          onPressed: () {
+                            _sortByModDate(!_sortModDateAscending);
+                          },
+                          icon: Icon(
+                            _sortModDateAscending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            color: Colors.black,
                           ),
-                        ],
-                      ),
-                    ]),
+                          label: Text(
+                            _sortModDateAscending
+                                ? 'Date First Modified'
+                                : 'Date Last Modified',
+                            style: smallTextStyle,
+                          ),
+                          iconAlignment: IconAlignment.end,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
           Expanded(
             child: ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: _foundNotes.length,
-                itemExtent: ownListItemHeight,
-                itemBuilder: (context, index) => Card(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                          radius: 26,
-                          backgroundImage:
-                              AssetImage('assets/images/note-icon.png'),
+              padding: const EdgeInsets.all(10),
+              itemCount: _foundNotes.length,
+              itemExtent: ownListItemHeight,
+              itemBuilder: (context, index) => Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    radius: 26,
+                    backgroundImage: AssetImage('assets/images/note-icon.png'),
+                  ),
+                  //const Icon(Icons.text_snippet_outlined),
+                  title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
+                  subtitle: Text(
+                    'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                  ),
+                  // trailing: TrailingIcons(),
+                  // Define width to avoid consuming full width
+                  trailing: SizedBox(
+                    height: 60,
+                    width: 120,
+                    child: TrailingButtons(
+                      foundNotes: _foundNotes,
+                      fileNames: fileNames,
+                      index: index,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppHomePage(
+                          title: topBarTitle,
+                          childPage: ViewNote(
+                            noteData: _foundNotes[fileNames[index]],
+                            notesMap: widget.notesMap,
+                          ),
                         ),
-                        //const Icon(Icons.text_snippet_outlined),
-                        title:
-                            Text(_foundNotes[fileNames[index]][noteTitlePred]),
-                        subtitle: Text(
-                            'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}'),
-                        // trailing: TrailingIcons(),
-                        // Define width to avoid consuming full width
-                        trailing: SizedBox(
-                          height: 60,
-                          width: 120,
-                          child: TrailingButtons(
-                              foundNotes: _foundNotes,
-                              fileNames: fileNames,
-                              index: index),
-                        ),
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppHomePage(
-                                title: topBarTitle,
-                                childPage: ViewNote(
-                                  noteData: _foundNotes[fileNames[index]],
-                                  notesMap: widget.notesMap,
-                                ),
-                              ),
-                            ),
-                            (Route<dynamic> route) =>
-                                false, // This predicate ensures all previous routes are removed
-                          );
-                        },
                       ),
-                    )),
+                      (Route<dynamic> route) =>
+                          false, // This predicate ensures all previous routes are removed
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -281,13 +292,15 @@ class TrailingButtons extends StatelessWidget {
       children: [
         // Share button
         NoteShareButton(
-            childPage: ShareNote(
-                noteData: _foundNotes[fileNames[index]],
-                noteFilePath: // Get note file path
-                    '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
-                notesMap: _foundNotes,
-                backPage: ListNotesScreen()),
-            simple: true),
+          childPage: ShareNote(
+            noteData: _foundNotes[fileNames[index]],
+            noteFilePath: // Get note file path
+                '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
+            notesMap: _foundNotes,
+            backPage: ListNotesScreen(),
+          ),
+          simple: true,
+        ),
         const SizedBox(
           width: 15,
         ),

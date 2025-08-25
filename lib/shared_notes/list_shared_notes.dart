@@ -61,58 +61,63 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
           ),
           Expanded(
             child: ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: sharedNotesMap.length,
-                itemExtent: sharedListItemHeight,
-                itemBuilder: (context, index) => Card(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                          radius: 26,
-                          backgroundImage:
-                              AssetImage('assets/images/note-icon.png'),
+              padding: const EdgeInsets.all(10),
+              itemCount: sharedNotesMap.length,
+              itemExtent: sharedListItemHeight,
+              itemBuilder: (context, index) => Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    radius: 26,
+                    backgroundImage: AssetImage('assets/images/note-icon.png'),
+                  ),
+                  //const Icon(Icons.text_snippet_outlined),
+                  title: Text(
+                    sharedNotesMap[sharedNotesUrlList[index]][noteFileName],
+                  ),
+                  subtitle: Text(
+                    'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}',
+                  ),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () {
+                    String notePermission =
+                        sharedNotesMap[sharedNotesUrlList[index]]
+                            [permissionList];
+                    if (notePermission.contains('read')) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppHomePage(
+                            childPage: ViewSharedNoteScreen(
+                              sharedNoteData:
+                                  sharedNotesMap[sharedNotesUrlList[index]],
+                            ),
+                          ),
                         ),
-                        //const Icon(Icons.text_snippet_outlined),
-                        title: Text(sharedNotesMap[sharedNotesUrlList[index]]
-                            [noteFileName]),
-                        subtitle: Text(
-                            'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}'),
-                        trailing: const Icon(Icons.arrow_forward),
-                        onTap: () {
-                          String notePermission =
-                              sharedNotesMap[sharedNotesUrlList[index]]
-                                  [permissionList];
-                          if (notePermission.contains('read')) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                        childPage: ViewSharedNoteScreen(
-                                          sharedNoteData: sharedNotesMap[
-                                              sharedNotesUrlList[index]],
-                                        ),
-                                      )),
-                              (Route<dynamic> route) =>
-                                  false, // This predicate ensures all previous routes are removed
-                            );
-                          } else {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                        childPage: NonReadableNote(
-                                          noteMetaData: sharedNotesMap[
-                                              sharedNotesUrlList[index]],
-                                        ),
-                                      )),
-                              (Route<dynamic> route) =>
-                                  false, // This predicate ensures all previous routes are removed
-                            );
-                          }
-                        },
-                      ),
-                    )),
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                      );
+                    } else {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppHomePage(
+                            childPage: NonReadableNote(
+                              noteMetaData:
+                                  sharedNotesMap[sharedNotesUrlList[index]],
+                            ),
+                          ),
+                        ),
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
         ],
       ),

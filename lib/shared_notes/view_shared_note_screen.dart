@@ -64,7 +64,7 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
       child: ViewSharedNote(
         fullNoteData: {
           'sharedNoteInfo': widget.sharedNoteData,
-          'sharedNoteContent': sharedNoteContent
+          'sharedNoteContent': sharedNoteContent,
         },
       ),
     );
@@ -76,18 +76,19 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
       key: _scaffoldKey,
       body: SafeArea(
         child: FutureBuilder(
-            future: _asyncDataFetch,
-            builder: (context, snapshot) {
-              Widget returnVal;
-              if (snapshot.connectionState == ConnectionState.done) {
-                returnVal = _loadedScreen(
-                  snapshot.data! as Map,
-                );
-              } else {
-                returnVal = loadingScreen(normalLoadingScreenHeight);
-              }
-              return returnVal;
-            }),
+          future: _asyncDataFetch,
+          builder: (context, snapshot) {
+            Widget returnVal;
+            if (snapshot.connectionState == ConnectionState.done) {
+              returnVal = _loadedScreen(
+                snapshot.data! as Map,
+              );
+            } else {
+              returnVal = loadingScreen(normalLoadingScreenHeight);
+            }
+            return returnVal;
+          },
+        ),
       ),
     );
   }

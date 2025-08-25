@@ -82,9 +82,10 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                 ),
                 // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note pag)
                 NoteDisplayMetadata(
-                    fullNoteData: widget.fullNoteData,
-                    showDates: true,
-                    showSharing: true),
+                  fullNoteData: widget.fullNoteData,
+                  showDates: true,
+                  showSharing: true,
+                ),
                 Divider(),
                 // Display markdown note content
                 noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
@@ -115,9 +116,10 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                   // Edit if write access
                   if (accessList.contains('write')) ...[
                     NoteEditButton(
-                        childPage: EditSharedNote(
-                      fullNoteData: widget.fullNoteData,
-                    )),
+                      childPage: EditSharedNote(
+                        fullNoteData: widget.fullNoteData,
+                      ),
+                    ),
                     const SizedBox(
                       width: 5,
                     ),

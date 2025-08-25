@@ -49,12 +49,13 @@ class NotePod extends StatelessWidget {
       title: 'Note Taker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.lightGreen,
-          // Make Scrollbars() visible by default
-          // before user starts scrolling
-          scrollbarTheme: ScrollbarThemeData(
-            thumbVisibility: WidgetStateProperty.all(true),
-          )),
+        primarySwatch: Colors.lightGreen,
+        // Make Scrollbars() visible by default
+        // before user starts scrolling
+        scrollbarTheme: ScrollbarThemeData(
+          thumbVisibility: WidgetStateProperty.all(true),
+        ),
+      ),
       home: SolidLogin(
         title: 'NOTEPOD - A Note Taker',
         appDirectory: 'notepod',

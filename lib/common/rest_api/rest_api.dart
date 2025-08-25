@@ -39,7 +39,9 @@ import 'package:notepod/utils/rdf.dart';
 /// Parameters:
 ///   [childPage] is the child widget to return to
 Future<Map<String, dynamic>> getNoteList(
-    BuildContext context, Widget childPage) async {
+  BuildContext context,
+  Widget childPage,
+) async {
   final List<String> fileList;
 
   // Get list of files in user's Pod
@@ -80,8 +82,9 @@ Map noteInfoMap(String noteContent) {
     modifiedDateTimePred:
         rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
     noteContentPred: decryptVal(
-        rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
-        rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first),
+      rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
+      rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
+    ),
   };
 
   return noteInfoMap;
@@ -90,8 +93,11 @@ Map noteInfoMap(String noteContent) {
 // Get the Map of shared notes with the current user. If [filesWithGrantAccess]
 // is set to true, the function will only output notes with grant permission
 // access as the latest log entry.
-Future<Map> getSharedNotes(BuildContext context, Widget childPage,
-    {bool filesWithGrantAccess = true}) async {
+Future<Map> getSharedNotes(
+  BuildContext context,
+  Widget childPage, {
+  bool filesWithGrantAccess = true,
+}) async {
   final loggedIn = await loginIfRequired(context);
   String webId = await getWebId() as String;
   webId = webId.replaceAll(profCard, '');
@@ -134,7 +140,10 @@ Future<Map> getSharedNotes(BuildContext context, Widget childPage,
 
 // Get the content of a shared note
 Future<Map> getSharedNoteContent(
-    BuildContext context, Widget childPage, Map sharedNoteData) async {
+  BuildContext context,
+  Widget childPage,
+  Map sharedNoteData,
+) async {
   final sharedNoteUrl = sharedNoteData[noteUrl];
 
   // Get note content

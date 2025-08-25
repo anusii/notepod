@@ -63,26 +63,31 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   ///   [notesMap] - list of files with data in a user's app data folder.
   Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
     return Container(
-        color: Colors.white,
+      color: Colors.white,
 
-        // Run to fetch access control list information
-        child: ListRecipientsScreen(notesMap: notesMap));
+      // Run to fetch access control list information
+      child: ListRecipientsScreen(notesMap: notesMap),
+    );
   }
 
   /// Advise user to create their first note, if no notes found.
   /// Parameters - none.
   Widget _loadNewNote() {
     return SingleChildScrollView(
-      child: Column(children: <Widget>[
-        buildMsgCard(context, Icons.info, Colors.amber, 'No notes yet!',
+      child: Column(
+        children: <Widget>[
+          buildMsgCard(
+            context, Icons.info, Colors.amber, 'No notes yet!',
             'Write your first note',
             // noNotesMsg,
-            isSmall: true),
-        Container(
-          color: Colors.white,
-          child: NewNote(),
-        ),
-      ]),
+            isSmall: true,
+          ),
+          Container(
+            color: Colors.white,
+            child: NewNote(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -92,24 +97,25 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
       key: _scaffoldKey,
       body: SafeArea(
         child: FutureBuilder(
-            future: _asyncDataFetch,
-            builder: (context, snapshot) {
-              Widget returnVal;
-              if (snapshot.connectionState == ConnectionState.done) {
-                return snapshot.data == null ||
-                        snapshot.data.toString() == 'null' ||
-                        snapshot.data.length == 0
-                    // Show _loadNewNote() to go instead to NewNote() when user has no notes
-                    ? returnVal = _loadNewNote()
-                    // Else load notes list
-                    : returnVal = _loadedNotesScreen(
-                        snapshot.data! as Map<String, dynamic>,
-                      );
-              } else {
-                returnVal = loadingScreen(normalLoadingScreenHeight);
-              }
-              return returnVal;
-            }),
+          future: _asyncDataFetch,
+          builder: (context, snapshot) {
+            Widget returnVal;
+            if (snapshot.connectionState == ConnectionState.done) {
+              return snapshot.data == null ||
+                      snapshot.data.toString() == 'null' ||
+                      snapshot.data.length == 0
+                  // Show _loadNewNote() to go instead to NewNote() when user has no notes
+                  ? returnVal = _loadNewNote()
+                  // Else load notes list
+                  : returnVal = _loadedNotesScreen(
+                      snapshot.data! as Map<String, dynamic>,
+                    );
+            } else {
+              returnVal = loadingScreen(normalLoadingScreenHeight);
+            }
+            return returnVal;
+          },
+        ),
       ),
     );
   }
@@ -165,12 +171,16 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
   /// Load error window
   Widget _loadNotesWRecError() {
     return SingleChildScrollView(
-      child: Column(children: <Widget>[
-        buildMsgCard(context, Icons.info, Colors.amber,
+      child: Column(
+        children: <Widget>[
+          buildMsgCard(
+            context, Icons.info, Colors.amber,
             'Error adding recipients to notes!', 'Yikes',
             // noNotesMsg,
-            isSmall: true),
-      ]),
+            isSmall: true,
+          ),
+        ],
+      ),
     );
   }
 
@@ -181,23 +191,24 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
       key: _scaffoldKey,
       body: SafeArea(
         child: FutureBuilder(
-            future: _asyncRecipientsAdd,
-            builder: (context, snapshot) {
-              Widget returnVal;
-              if (snapshot.connectionState == ConnectionState.done) {
-                debugPrint(
-                    'Finished running _asyncRecipientsAdd to get recipients of each file');
-                // Show error if null returned as null indicates error
-                return snapshot.data == null ||
-                        snapshot.data.toString() == 'null'
-                    ? returnVal = _loadNotesWRecError()
-                    // Else load notes list (which now includes recipients)
-                    : returnVal = _loadedNotesWRecScreen(snapshot.data! as Map);
-              } else {
-                returnVal = loadingScreen(normalLoadingScreenHeight);
-              }
-              return returnVal;
-            }),
+          future: _asyncRecipientsAdd,
+          builder: (context, snapshot) {
+            Widget returnVal;
+            if (snapshot.connectionState == ConnectionState.done) {
+              debugPrint(
+                'Finished running _asyncRecipientsAdd to get recipients of each file',
+              );
+              // Show error if null returned as null indicates error
+              return snapshot.data == null || snapshot.data.toString() == 'null'
+                  ? returnVal = _loadNotesWRecError()
+                  // Else load notes list (which now includes recipients)
+                  : returnVal = _loadedNotesWRecScreen(snapshot.data! as Map);
+            } else {
+              returnVal = loadingScreen(normalLoadingScreenHeight);
+            }
+            return returnVal;
+          },
+        ),
       ),
     );
   }

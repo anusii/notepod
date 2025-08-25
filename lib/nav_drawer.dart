@@ -111,7 +111,7 @@ class NavDrawer extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -236,57 +236,60 @@ Widget _aboutDialog(String appName, String appVersion) {
     applicationVersion: appVersion,
     // applicationLegalese: "© Copyright Michelphoenix 2020",
     children: <Widget>[
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        RichText(
-          text: TextSpan(
-            text: 'An ',
-            style: const TextStyle(color: Colors.black),
-            children: [
-              TextSpan(
-                text: 'ANU Software Innovation Institute',
-                style: const TextStyle(color: Colors.blue),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(Uri.parse(siiUrl));
-                  },
-              ),
-              const TextSpan(
-                text: ' demo project for Solid PODs.',
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(
+              text: 'An ',
+              style: const TextStyle(color: Colors.black),
+              children: [
+                TextSpan(
+                  text: 'ANU Software Innovation Institute',
+                  style: const TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(Uri.parse(siiUrl));
+                    },
+                ),
+                const TextSpan(
+                  text: ' demo project for Solid PODs.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        RichText(
-          text: TextSpan(
-            children: [
-              const TextSpan(
-                text: 'For more information see the ',
-                style: TextStyle(color: Colors.black),
-              ),
-              TextSpan(
-                text: capitalize(appName),
-                style: const TextStyle(color: Colors.blue),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(Uri.parse(applicationRepo));
-                  },
-              ),
-              const TextSpan(
-                text: ' github repository.',
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
+          const SizedBox(
+            height: 20,
           ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        const Text(authors),
-      ]),
+          RichText(
+            text: TextSpan(
+              children: [
+                const TextSpan(
+                  text: 'For more information see the ',
+                  style: TextStyle(color: Colors.black),
+                ),
+                TextSpan(
+                  text: capitalize(appName),
+                  style: const TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(Uri.parse(applicationRepo));
+                    },
+                ),
+                const TextSpan(
+                  text: ' github repository.',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Text(authors),
+        ],
+      ),
     ],
   );
 }

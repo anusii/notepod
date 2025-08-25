@@ -107,7 +107,7 @@ class NoteEditScrollView extends StatelessWidget {
                   formKey: formKey,
                   shared: shared,
                   notesMap: notesMap,
-                )
+                ),
               ]
             : [
                 // Edit Note: save and back buttons
@@ -125,11 +125,13 @@ class NoteEditScrollView extends StatelessWidget {
                 (shared)
                     ? NoteBackButton(
                         childPage:
-                            ViewSharedNoteScreen(sharedNoteData: noteInfo))
+                            ViewSharedNoteScreen(sharedNoteData: noteInfo),
+                      )
                     : NoteBackButton(
                         childPage: ViewNote(
-                            noteData: prevNoteData as Map<dynamic, dynamic>,
-                            notesMap: notesMap),
+                          noteData: prevNoteData as Map<dynamic, dynamic>,
+                          notesMap: notesMap,
+                        ),
                       ),
               ],
       );
@@ -149,53 +151,54 @@ class NoteEditScrollView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: FormBuilder(
-                      key: formKey,
-                      onChanged: () {
-                        formKey.currentState!.save();
-                      },
-                      autovalidateMode: AutovalidateMode.disabled,
-                      skipDisabled: true,
-                      child: Column(
-                        children: [
-                          // New note: show current date
-                          if (prevNoteData == null) ...[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Date: $currDateStr',
-                                  style: titleStyle,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                          // Edit existing note: populated text field with
-                          // previous note data
-                          FormBuilderTextField(
-                            name: noteTitlePred,
-                            initialValue: (prevNoteData != null)
-                                ? noteContent[noteTitlePred]
-                                : null,
-                            autofocus: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Note Title',
-                              labelStyle: TextStyle(
-                                color: darkBlue,
-                                letterSpacing: 1.5,
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold,
+                    key: formKey,
+                    onChanged: () {
+                      formKey.currentState!.save();
+                    },
+                    autovalidateMode: AutovalidateMode.disabled,
+                    skipDisabled: true,
+                    child: Column(
+                      children: [
+                        // New note: show current date
+                        if (prevNoteData == null) ...[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Date: $currDateStr',
+                                style: titleStyle,
                               ),
-                              //errorText: 'error',
-                            ),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                         ],
-                      )),
+                        // Edit existing note: populated text field with
+                        // previous note data
+                        FormBuilderTextField(
+                          name: noteTitlePred,
+                          initialValue: (prevNoteData != null)
+                              ? noteContent[noteTitlePred]
+                              : null,
+                          autofocus: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Note Title',
+                            labelStyle: TextStyle(
+                              color: darkBlue,
+                              letterSpacing: 1.5,
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            //errorText: 'error',
+                          ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                          ]),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,

@@ -90,10 +90,11 @@ class NoteDelButton extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AppHomePage(
-                                title: topBarTitle,
-                                childPage: ListNotesScreen(),
-                              )),
+                        builder: (context) => AppHomePage(
+                          title: topBarTitle,
+                          childPage: ListNotesScreen(),
+                        ),
+                      ),
                       (Route<dynamic> route) =>
                           false, // This predicate ensures all previous routes are removed
                     );

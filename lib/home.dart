@@ -89,10 +89,11 @@ class AppHomePageState extends State<AppHomePage>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: NewNote(),
-                        )),
+                  builder: (context) => AppHomePage(
+                    title: topBarTitle,
+                    childPage: NewNote(),
+                  ),
+                ),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed
               );
@@ -109,10 +110,11 @@ class AppHomePageState extends State<AppHomePage>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: ListNotesScreen(),
-                        )),
+                  builder: (context) => AppHomePage(
+                    title: topBarTitle,
+                    childPage: ListNotesScreen(),
+                  ),
+                ),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed
               );
@@ -135,10 +137,11 @@ class AppHomePageState extends State<AppHomePage>
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: SharedNotesScreen(),
-                        )),
+                  builder: (context) => AppHomePage(
+                    title: topBarTitle,
+                    childPage: SharedNotesScreen(),
+                  ),
+                ),
                 (Route<dynamic> route) =>
                     false, // This predicate ensures all previous routes are removed
               );

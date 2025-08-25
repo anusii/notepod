@@ -72,17 +72,18 @@ class NoteDisplayMetadata extends StatelessWidget {
     return Container(
       color: metaDataShade,
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // ShowDates (created and modified)
-            if (showDates) dateInfo(noteContent),
-            // Show sharing info (owner, provider, access list)
-            if (showSharing) accessInfo(noteInfo),
-            // Show path info (filename and path)
-            if (showPathInfo) pathInfo(noteInfo),
-            SizedBox(height: 10),
-          ]),
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // ShowDates (created and modified)
+          if (showDates) dateInfo(noteContent),
+          // Show sharing info (owner, provider, access list)
+          if (showSharing) accessInfo(noteInfo),
+          // Show path info (filename and path)
+          if (showPathInfo) pathInfo(noteInfo),
+          SizedBox(height: 10),
+        ],
+      ),
     );
   }
 }
@@ -175,7 +176,7 @@ Widget pathInfo(Map noteInfo) {
               ),
             ),
           ],
-        )
+        ),
       ],
     ),
   );

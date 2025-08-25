@@ -58,7 +58,10 @@ class _NonReadableNoteState extends State<NonReadableNote> {
       children: <Widget>[
         // Display note metadata - show sharing and path info but not dates (as requires noteContent)
         NoteDisplayMetadata(
-            noteInfo: noteMetaData, showSharing: true, showPathInfo: true),
+          noteInfo: noteMetaData,
+          showSharing: true,
+          showPathInfo: true,
+        ),
         buildMsgCard(
           context,
           Icons.info,
