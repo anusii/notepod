@@ -1,14 +1,4 @@
-# NotePod &mdash; Encrypted Markdown Notes in your Data Vault
-
-**An ANU Software Innovation Institute demonstrator for your Data Vault**.
-
-*Time-stamp: <Tuesday 2025-07-22 21:12:19 +1000 Graham Williams>*
-
-*Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
-
-*[ANU Software Innovation Institute](https://sii.anu.edu.au)*
-
-*License: GNU GPL V3*
+<!-- markdownlint-disable MD013 MD033 MD041 -->
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
@@ -18,6 +8,18 @@
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+
+# NotePod &mdash; Encrypted Markdown Notes in your Data Vault
+
+**An ANU Software Innovation Institute demonstrator for your Data Vault**.
+
+*Time-stamp: <Monday 2025-08-25 11:31:49 +1000 Graham Williams>*
+
+*Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
+
+*[ANU Software Innovation Institute](https://sii.anu.edu.au)*
+
+*License: GNU GPL V3*
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
@@ -66,17 +68,17 @@ even easier to build your first Pods-based Flutter app.
 Desktop version:
 
 <div style="left">
-	<img
-	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png"
-	alt="Shopping List" width="400"/>
+    <img
+    src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png"
+    alt="Shopping List" width="400"/>
 </div>
 
 Mobile Phone version:
 
 <div style="left">
-	<img
-	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png"
-	alt="Shopping List" width="200"/>
+    <img
+    src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png"
+    alt="Shopping List" width="200"/>
 </div>
 
 ## Obtaining a Pod
@@ -90,7 +92,8 @@ Providers](https://solidproject.org/users/get-a-pod) world wide.
 
 ## Online Demo
 
-Once you have your own Pod visit https://notepod.solidcommunity.au
+Once you have your own Pod visit
+[https://notepod.solidcommunity.au](https://notepod.solidcommunity.au)
 and login to your Pod. Write and save a few notes, edit saved notes,
 and maybe share some notes with other users. That's it! Simple but
 useful.
@@ -117,9 +120,9 @@ on the Solid server of choice, not on the device. The device does not
 get to know your login details.
 
 <div align="center">
-	<img
-	src="	src="https://raw.githubusercontent.com/anusii/notepod/dev/images/login.png"
-	alt="Login Screen" width="400">
+    <img
+    src="   src="https://raw.githubusercontent.com/anusii/notepod/dev/images/login.png"
+    alt="Login Screen" width="400">
 </div>
 
 ## Install Flutter and Notepod<a name="install"></a>
@@ -137,7 +140,7 @@ After setup, run `flutter doctor` to check your setup, and `flutter
 devices` to see which devices you have configured, with the device
 name in the 2nd column
 
-```
+```console
 flutter devices
 Found 4 connected devices:
   iPhone 15 Pro Max (mobile)      • 8978937B-AC64-44B8-8B26-CA6142091678 • ios            • com.apple.CoreSimulator.SimRuntime.iOS-17-0 (simulator)
@@ -152,7 +155,7 @@ Run the notepod app in debug mode on your chosen device by specifying
 enough of the device name to be uniquely identifiable. E.g. for chrome
 use:
 
-```
+```shell
 flutter run -d chrome
 ```
 
@@ -165,7 +168,7 @@ you can create a Pod, make and share notes.
 Running the app on MacOS requires, additional configuration in
 Xcode. Open the project macos folder in Xcode with
 
-```
+```shell
 cd notepod/macos
 xed .
 ```
@@ -183,7 +186,7 @@ the iOS version on your simulator.
 Open the Simulator app, select your simulated device with `File` ->
 `Open Simulator` -> pick a device.
 
-```
+```shell
 open -a Simulator
 ```
 
@@ -194,14 +197,13 @@ iOS.
 Open the project iOS folder in Xcode and add the iOS version used by
 your simulator.
 
-```
+```shell
 cd notepod/ios
 xed .
 ```
 
 Select `General`. In `iOS`, change it to match the Simulator iOS
 version, e.g. `v17.0`.
-
 
 ## Useful resources
 
@@ -231,7 +233,6 @@ of Pods-based apps with flutter
   instances, create a graph to store triples, export graph to ttl,
   etc.
 
-
 ## Related Apps
 
-https://notepod.vincenttunru.com/
+[https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)

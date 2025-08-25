@@ -1,7 +1,5 @@
 # A Guide to Building and PODs Based App Using Flutter
 
-
-
 ## Setup Github
 
 NOTE TO SET UP GITHUB TO MANAGE DEVELOPMENT
@@ -21,4 +19,3 @@ flutter create notepod
 ## Connection to the Solid Server
 
 ## Protecting Data on the Server
-

@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # NotePod Installers
 
 Flutter supports multiple platform targets. Flutter based apps can run
@@ -103,7 +105,8 @@ app should then run without the warning next time.
 ## Web -- No Installation Required
 
 No installer is required for a browser based experience of
-Notepod. Simply visit https://notepod.solidcommunity.au.
+Notepod. Simply visit
+[https://notepod.solidcommunity.au](https://notepod.solidcommunity.au).
 
 Also, your Web browser will provide an option in its menus to install
 the app locally, which can add an icon to your home screen to start
