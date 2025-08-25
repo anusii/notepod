@@ -1,16 +1,29 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
+# Configure the analyzer for static analysis of Dart code.
 #
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+# Add the following to pubspec.yaml:
+#
+#   dev_dependencies:
+#     flutter_lints: ^6.0.0
+#
+# Invoke the analyzer from the command line:
+#
+#   flutter analyze
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
+# Activate recommended lints for Flutter apps, packages, and plugins
+# designed to encourage good coding practices.
 
 include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    avoid_print: false
+    avoid_print: true
     prefer_single_quotes: true
+    require_trailing_commas: true
+    directives_ordering: false
+
+# Identify directories to ignore.
+
+analyzer:
+  exclude:
+    - ignore/**
+    - ignore/
