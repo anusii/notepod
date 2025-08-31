@@ -82,7 +82,9 @@ Container markdownEditor(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-                width: cardWidth, child: MarkdownBlock(data: markdownData)),
+              width: cardWidth,
+              child: MarkdownBlock(data: markdownData),
+            ),
           ],
         ),
       ],
