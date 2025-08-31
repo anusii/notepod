@@ -38,6 +38,22 @@ jobs:
       - run: flutter pub get
       - run: dart format --set-exit-if-changed .
 
+  dart_code_metrics:
+    runs-on: ubuntu-latest
+    if: github.event.repository.private == false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{env.FLUTTER_VERSION}}
+      - run: flutter pub get
+      - run: dart pub global activate dart_code_metrics
+      - run: metrics check-unnecessary-nullable --disable-sunset-warning lib
+      - run: metrics check-unused-code --disable-sunset-warning lib
+      - run: metrics check-unused-files --disable-sunset-warning lib
+      - run: metrics analyze --disable-sunset-warning lib --reporter=console
+
   import_order:
     runs-on: ubuntu-latest
     if: github.event.repository.private == false
@@ -62,6 +78,16 @@ jobs:
       - run: npm install -g markdownlint-cli
       - run: markdownlint --disable MD036 -- *.md lib assets installers
         # -p .markdownlintignore -c .markdownlint.yaml
+
+  locmax:
+    runs-on: ubuntu-latest
+    if: github.event.repository.private == false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: make locmax-enforce
 
   copyright:
     runs-on: ubuntu-latest
