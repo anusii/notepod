@@ -87,17 +87,19 @@ class NoteDelButton extends StatelessWidget {
                       await deleteFile(noteFilePath);
                     }
 
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: ListNotesScreen(),
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppHomePage(
+                            title: topBarTitle,
+                            childPage: ListNotesScreen(),
+                          ),
                         ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                      );
+                    }
                   },
                   child: const Text('Yes'),
                 ),
