@@ -51,11 +51,11 @@ class NoteShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return simple! ? SimpleShareButton(context) : ShareButton(context);
+    return simple! ? simpleShareButton(context) : shareButton(context);
   }
 
   /// Simple Share button for using in note lists
-  Center SimpleShareButton(BuildContext context) {
+  Center simpleShareButton(BuildContext context) {
     return Center(
       child: Ink(
         decoration: buttonShapeList,
@@ -64,7 +64,7 @@ class NoteShareButton extends StatelessWidget {
           color: Colors.white,
           onPressed: () async {
             // redirect
-            NavToChildPage(context);
+            navToChildPage(context);
           },
         ),
       ),
@@ -72,7 +72,7 @@ class NoteShareButton extends StatelessWidget {
   }
 
   /// Elevated Share button with text label for using in note views
-  ElevatedButton ShareButton(BuildContext context) {
+  ElevatedButton shareButton(BuildContext context) {
     return ElevatedButton.icon(
       icon: Icon(
         Icons.share,
@@ -80,7 +80,7 @@ class NoteShareButton extends StatelessWidget {
       ),
       onPressed: () async {
         // redirect
-        NavToChildPage(context);
+        navToChildPage(context);
       },
       style: buttonStyleView,
       label: Text(
@@ -91,7 +91,7 @@ class NoteShareButton extends StatelessWidget {
   }
 
   /// Navigate to sharing child page
-  dynamic NavToChildPage(BuildContext context) async {
+  dynamic navToChildPage(BuildContext context) async {
     return Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
