@@ -1,16 +1,14 @@
 name: Lint Checks
 
-# Always run the checks on a push to dev and a PR.
+# Always run the checks on a push and a PR.
 
 on:
   push:
-    branches:
-      - dev
   pull_request:
     types: [opened, reopened, synchronize]
 
 env:
-  FLUTTER_VERSION: '3.35.1'
+  FLUTTER_VERSION: '3.35.3'
 
 jobs:
 
@@ -84,9 +82,6 @@ jobs:
     if: github.event.repository.private == false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
       - run: make locmax-enforce
 
   copyright:
