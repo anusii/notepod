@@ -19,6 +19,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
+
 library;
 
 import 'package:solidpod/src/solid/constants/common.dart';
@@ -36,7 +37,7 @@ String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';
 String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
-String encNoteContentPred = 'encNoteContent';
+//String encNoteContentPred = 'encNoteContent';
 String mePred = ':me';
 String meKey = '#me';
 
