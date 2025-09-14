@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Monday 2025-09-15 05:47:08 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-09-15 09:30:12 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -62,7 +62,7 @@ class NotePod extends StatelessWidget {
         image: AssetImage('assets/images/notepod-background.jpg'),
         logo: AssetImage('assets/images/notepod.png'),
         link: 'https://github.com/anusii/notepod',
-        webID: 'https://pods.dev.solidcommunity.au',
+        webID: 'https://pods.solidcommunity.au',
         required: false,
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,
