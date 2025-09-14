@@ -1,6 +1,11 @@
 name: Lint Checks
 
 # Always run the checks on a push and a PR.
+#
+# 20250914 gjw Run the tests as separate jobs so we see the individual
+# results. We can instead run then as a single job with multiple
+# steps, but then it stops on the first fail and so not as
+# informative.
 
 on:
   push:
