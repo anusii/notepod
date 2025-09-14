@@ -31,12 +31,15 @@ import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/misc.dart';
 
-/// Display the note metadata.
-/// One of fullNoteData, noteContent or noteInfo must be supplied
-/// One of showDates, showSharing or showPathInfo must be supplied
-/// showDates requires fullNoteData or noteContent
-/// showSharing requires fullNoteData or noteInfo
-/// showPathInfo requires fullNoteData or noteInfo
+/// Display the metadata of the note.
+/// One of fullNoteData, noteContent or noteInfo must be supplied.
+/// One of showDates, showSharing or showPathInfo must be supplied.
+/// showDates requires fullNoteData or noteContent.
+/// showSharing requires fullNoteData or noteInfo.
+/// showPathInfo requires fullNoteData or noteInfo.
+/// Variables thisNoteContent and thisNoteInfo are assigned the noteContent
+/// and noteInfo data from one or more of fullNoteData, noteContent and
+/// noteInfo, depending on which was provided.
 
 class NoteDisplayMetadata extends StatelessWidget {
   final Map fullNoteData;
@@ -58,15 +61,15 @@ class NoteDisplayMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map noteInfo = {};
-    Map noteContent = {};
+    Map thisNoteInfo = {};
+    Map thisNoteContent = {};
     if (fullNoteData.isNotEmpty) {
-      noteInfo = fullNoteData['sharedNoteInfo'];
-      noteContent = fullNoteData['sharedNoteContent'];
+      thisNoteInfo = fullNoteData['sharedNoteInfo'];
+      thisNoteContent = fullNoteData['sharedNoteContent'];
     } else if (noteInfo.isNotEmpty) {
-      noteInfo = noteInfo;
+      thisNoteInfo = noteInfo;
     } else if (noteContent.isNotEmpty) {
-      noteContent = noteContent;
+      thisNoteContent = noteContent;
     }
 
     return Container(
@@ -76,11 +79,11 @@ class NoteDisplayMetadata extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // ShowDates (created and modified)
-          if (showDates) dateInfo(noteContent),
+          if (showDates) dateInfo(thisNoteContent),
           // Show sharing info (owner, provider, access list)
-          if (showSharing) accessInfo(noteInfo),
+          if (showSharing) accessInfo(thisNoteInfo),
           // Show path info (filename and path)
-          if (showPathInfo) pathInfo(noteInfo),
+          if (showPathInfo) pathInfo(thisNoteInfo),
           SizedBox(height: 10),
         ],
       ),
@@ -90,7 +93,7 @@ class NoteDisplayMetadata extends StatelessWidget {
 
 // Display sharing metadata (owner, provider, access list).
 
-Widget accessInfo(Map noteInfo) {
+Widget accessInfo(Map thisNoteInfo) {
   return Container(
     color: metaDataShade,
     child: Column(
@@ -102,7 +105,7 @@ Widget accessInfo(Map noteInfo) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Owner: ${noteInfo[noteOwner]}',
+                  'Owner: ${thisNoteInfo[noteOwner]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -116,7 +119,7 @@ Widget accessInfo(Map noteInfo) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Shared by: ${noteInfo[permissionGranter]}',
+                  'Shared by: ${thisNoteInfo[permissionGranter]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -130,7 +133,7 @@ Widget accessInfo(Map noteInfo) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Permissions: ${noteInfo[permissionList]}',
+                  'Permissions: ${thisNoteInfo[permissionList]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -144,7 +147,7 @@ Widget accessInfo(Map noteInfo) {
 
 // Display path metadata (filename and path).
 
-Widget pathInfo(Map noteInfo) {
+Widget pathInfo(Map thisNoteInfo) {
   return Container(
     color: metaDataShade,
     child: Column(
@@ -156,7 +159,7 @@ Widget pathInfo(Map noteInfo) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Note file name: ${noteInfo[noteFileName]}',
+                  'Note file name: ${thisNoteInfo[noteFileName]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -170,7 +173,7 @@ Widget pathInfo(Map noteInfo) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Note path: ${noteInfo[noteUrl]}',
+                  'Note path: ${thisNoteInfo[noteUrl]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -184,7 +187,7 @@ Widget pathInfo(Map noteInfo) {
 
 // Show date metadata (creation date, modified date)
 
-Widget dateInfo(Map noteContent) {
+Widget dateInfo(Map thisNoteContent) {
   return Container(
     color: metaDataShade,
     child: Column(
@@ -196,7 +199,7 @@ Widget dateInfo(Map noteContent) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Created on: ${getDateTimeStr(noteContent[createdDateTimePred])}',
+                  'Created on: ${getDateTimeStr(thisNoteContent[createdDateTimePred])}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -210,7 +213,7 @@ Widget dateInfo(Map noteContent) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Last modified on: ${getDateTimeStr(noteContent[modifiedDateTimePred])}',
+                  'Last modified on: ${getDateTimeStr(thisNoteContent[modifiedDateTimePred])}',
                   style: metadataTextStyle,
                 ),
               ),
