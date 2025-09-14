@@ -207,12 +207,14 @@ class NavDrawer extends StatelessWidget {
                     String appName = packageInfo.appName;
                     String version = packageInfo.version;
 
-                    showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return _aboutDialog(appName, version);
-                      },
-                    );
+                    if (context.mounted) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return _aboutDialog(appName, version);
+                        },
+                      );
+                    }
                   },
                 ),
               ],

@@ -164,43 +164,51 @@ Future<void> saveNote(
             'sharedNoteContent': noteNewData,
           };
           // Encrypt note, create TTL, update file in POD
-          createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            ViewSharedNote(
-              fullNoteData: newFullNoteData,
-            ),
-            shared,
-            prevSharedNoteInfo,
-          );
+          if (context.mounted) {
+            createNoteStatus = await saveNoteToPod(
+              context,
+              noteNewData,
+              ViewSharedNote(
+                fullNoteData: newFullNoteData,
+              ),
+              shared,
+              prevSharedNoteInfo,
+            );
 
-          // Navigate to return page
-          postSaveNav(
-            context,
-            createNoteStatus,
-            ViewSharedNote(
-              fullNoteData: newFullNoteData,
-            ),
-          );
+            // Navigate to return page
+            postSaveNav(
+              // context.mounted checked already
+              // ignore: use_build_context_synchronously
+              context,
+              createNoteStatus,
+              ViewSharedNote(
+                fullNoteData: newFullNoteData,
+              ),
+            );
+          }
         } else {
           // Non-shared edited note
           // Encrypt note, create TTL, update file in POD
-          createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            EditNote(
-              noteData: noteNewData,
-              notesMap: notesMap,
-            ),
-            shared,
-          );
+          if (context.mounted) {
+            createNoteStatus = await saveNoteToPod(
+              context,
+              noteNewData,
+              EditNote(
+                noteData: noteNewData,
+                notesMap: notesMap,
+              ),
+              shared,
+            );
 
-          // Navigate to return page
-          postSaveNav(
-            context,
-            createNoteStatus,
-            ViewNote(noteData: noteNewData, notesMap: notesMap),
-          );
+            // Navigate to return page
+            postSaveNav(
+              // context.mounted checked already
+              // ignore: use_build_context_synchronously
+              context,
+              createNoteStatus,
+              ViewNote(noteData: noteNewData, notesMap: notesMap),
+            );
+          }
         }
       }
     } else {
@@ -226,18 +234,22 @@ Future<void> saveNote(
         );
 
         // Encrypt note, create TTL and write to file in POD
-        createNoteStatus = await saveNoteToPod(
-          context,
-          noteNewData,
-          ListNotesScreen(),
-        );
+        if (context.mounted) {
+          createNoteStatus = await saveNoteToPod(
+            context,
+            noteNewData,
+            ListNotesScreen(),
+          );
 
-        // Navigate to return page
-        postSaveNav(
-          context,
-          createNoteStatus,
-          ListNotesScreen(),
-        );
+          // Navigate to return page
+          postSaveNav(
+            // context.mounted checked already
+            // ignore: use_build_context_synchronously
+            context,
+            createNoteStatus,
+            ListNotesScreen(),
+          );
+        }
       } else {
         // Nn note content message
         Navigator.pop(context);

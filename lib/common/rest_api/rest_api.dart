@@ -56,11 +56,13 @@ Future<Map<String, dynamic>> getNoteList(
     // for each file
     for (final fileName in fileList) {
       // Read file content
-      String noteContent =
-          await readPod(fileName.replaceAll(webId, ''), context, childPage);
-      //debugPrint('NoteInfoMap: $fileName');
-      notesMap[fileName] = noteInfoMap(noteContent);
-      //debugPrint('$fileName => ${notesMap[fileName]}');
+      if (context.mounted) {
+        String noteContent =
+            await readPod(fileName.replaceAll(webId, ''), context, childPage);
+        //debugPrint('NoteInfoMap: $fileName');
+        notesMap[fileName] = noteInfoMap(noteContent);
+        //debugPrint('$fileName => ${notesMap[fileName]}');
+      }
     }
     return notesMap;
   } on Object catch (e) {
@@ -102,7 +104,7 @@ Future<Map> getSharedNotes(
   String webId = await getWebId() as String;
   webId = webId.replaceAll(profCard, '');
 
-  if (loggedIn) {
+  if (loggedIn && context.mounted) {
     Map sharedNotesLogMap = await sharedResources(context, childPage);
 
     Map sharedNotesMap = {};
