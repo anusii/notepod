@@ -36,28 +36,28 @@ const String topBarTitle = 'Pod Note Taker';
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
 
-const kDefaultPadding = 20.0;
+//const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
-const double buttonBorderRadius = 5;
-const double standardSpace = 20.0;
+//const double buttonBorderRadius = 5;
+//const double standardSpace = 20.0;
 const double ownListItemHeight = 108.0;
 const double sharedListItemHeight = 108.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
-double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+//double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
 const nonReadableNoteMsg =
     'You do not have read access to this note and therefore cannot view that. However, you can delete it or share it with others.';
 
-const noNotesMsg = 'You do not have any notes yet!';
+//const noNotesMsg = 'You do not have any notes yet!';
 
 const noSharedNotesMsg = 'You do not have any notes shared with you yet!';
 
-SizedBox standardHeight() {
-  return const SizedBox(
-    height: standardSpace / 2,
-  );
-}
+// SizedBox standardHeight() {
+//   return const SizedBox(
+//     height: standardSpace / 2,
+//   );
+// }
 
 const double desktopWidthThreshold = 960;
 
