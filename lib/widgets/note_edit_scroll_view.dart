@@ -67,7 +67,7 @@ class NoteEditScrollView extends StatelessWidget {
   final Map? prevNoteData;
 
   /// Sharing metadata about a note
-  final noteInfo;
+  final Map noteInfo;
 
   /// Boolean describing whether note is shared to pod owner from an
   /// external source.
