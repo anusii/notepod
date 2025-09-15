@@ -467,6 +467,8 @@ publish:
 .PHONY: import_order
 import_order:
 	@echo "Dart: CHECK IMPORT ORDER"
+	@which import_order > /dev/null 2>&1 \
+	|| { echo "Error: Install with 'dart pub global activate import_order_lint'."; exit 1; }
 	import_order --check
 	@echo $(SEPARATOR)
 
