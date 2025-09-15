@@ -475,7 +475,7 @@ import_order:
 .PHONY: import_order_fix
 import_order_fix:
 	@echo "Dart: FIX IMPORT ORDER"
-	import_order
+	@import_order --check || import_order
 	@echo $(SEPARATOR)
 
 # dart pub global activate dart_code_metrics
