@@ -1,9 +1,11 @@
-// Encryption functions.
-//
-// Copyright (C) 2025, Software Innovation Institute, ANU.
-//
-// Licensed under the GNU General Public License, Version 3 (the "License").
-//
+/// Encryption functions.
+///
+// Time-stamp: <Tuesday 2025-09-16 08:09:34 +1000 Graham Williams>
+///
+/// Copyright (C) 2025, Software Innovation Institute, ANU.
+///
+/// Licensed under the GNU General Public License, Version 3 (the "License").
+///
 // License: https://www.gnu.org/licenses/gpl-3.0.en.html.
 //
 // This program is free software: you can redistribute it and/or modify it under
@@ -18,8 +20,10 @@
 //
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
-//
-// Authors: Anushka Vidanage
+///
+/// Authors: Anushka Vidanage
+
+library;
 
 import 'dart:convert';
 import 'dart:typed_data';

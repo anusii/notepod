@@ -281,7 +281,7 @@ todo:
 license:
 	@echo "Files without a LICENSE:\n"
 	@-output=$$(find lib -type f -not -name '*~' -not -name 'README*' -not -name '*.g.dart' \
-	! -exec grep -qE '^(///? Copyright|///? Licensed)' {} \; -print | xargs printf "\t%s\n"); \
+	! -exec grep -qE '^(/// Copyright|/// Licensed)' {} \; -print | xargs printf "\t%s\n"); \
 	if [ $$(echo "$$output" | wc -w) -ne 0 ]; then \
 		echo "$$output"; \
 		echo "\n$(CROSS) Error: Files with no license found."; \
