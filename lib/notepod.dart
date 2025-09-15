@@ -51,12 +51,11 @@ class NotePod extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
         // Make Scrollbars() visible by default
-        // before user starts scrolling
-        // JM 2025/09/15: setting thumbVisibility in each instance
-        // as global setting in theme is not being applied.
-        // scrollbarTheme: ScrollbarThemeData(
-        //   thumbVisibility: WidgetStateProperty.all(true),
-        // ),
+        // before user starts scrolling in pages
+        // where content exceeds container
+        scrollbarTheme: ScrollbarThemeData(
+          thumbVisibility: WidgetStateProperty.all(true),
+        ),
       ),
       home: SolidLogin(
         title: 'NOTEPOD - A Note Taker',
