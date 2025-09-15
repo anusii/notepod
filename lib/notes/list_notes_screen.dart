@@ -73,20 +73,23 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Advise user to create their first note, if no notes found.
   /// Parameters - none.
   Widget _loadNewNote() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          buildMsgCard(
-            context, Icons.info, Colors.amber, 'No notes yet!',
-            'Write your first note',
-            // noNotesMsg,
-            isSmall: true,
-          ),
-          Container(
-            color: Colors.white,
-            child: NewNote(),
-          ),
-        ],
+    return Scrollbar(
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            buildMsgCard(
+              context, Icons.info, Colors.amber, 'No notes yet!',
+              'Write your first note',
+              // noNotesMsg,
+              isSmall: true,
+            ),
+            Container(
+              color: Colors.white,
+              child: NewNote(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -170,16 +173,19 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
 
   /// Load error window
   Widget _loadNotesWRecError() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          buildMsgCard(
-            context, Icons.info, Colors.amber,
-            'Error adding recipients to notes!', 'Yikes',
-            // noNotesMsg,
-            isSmall: true,
-          ),
-        ],
+    return Scrollbar(
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            buildMsgCard(
+              context, Icons.info, Colors.amber,
+              'Error adding recipients to notes!', 'Yikes',
+              // noNotesMsg,
+              isSmall: true,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -34,11 +34,14 @@ Future<void> showErrDialog(BuildContext context, String errMsg) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('ERROR!'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text(errMsg),
-            ],
+        content: Scrollbar(
+          thumbVisibility: true,
+          child: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(errMsg),
+              ],
+            ),
           ),
         ),
         actions: <Widget>[

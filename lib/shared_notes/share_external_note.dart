@@ -74,28 +74,31 @@ class ShareExternalNoteState extends State<ShareExternalNote>
       );
     }
 
-    return SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                NoteBackButton(childPage: SharedNotesScreen()),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: GrantPermissionUi(
-                    showAppBar: false,
-                    fileName: noteMetaData[noteUrl],
-                    isExternalRes: true,
-                    externalWebId: noteMetaData[noteOwner],
-                    child: child,
+    return Scrollbar(
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  NoteBackButton(childPage: SharedNotesScreen()),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: GrantPermissionUi(
+                      showAppBar: false,
+                      fileName: noteMetaData[noteUrl],
+                      isExternalRes: true,
+                      externalWebId: noteMetaData[noteOwner],
+                      child: child,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

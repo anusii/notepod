@@ -73,32 +73,35 @@ class _ViewNoteState extends State<ViewNote> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                        child: Text(
-                          noteData[noteTitlePred],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+          child: Scrollbar(
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                          child: Text(
+                            noteData[noteTitlePred],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                // Display note metadata
-                NoteDisplayMetadata(noteContent: noteData, showDates: true),
-                Divider(),
-                // Display markdown note content
-                noteDisplayMarkdown(noteData[noteContentPred]),
-              ],
+                    ],
+                  ),
+                  // Display note metadata
+                  NoteDisplayMetadata(noteContent: noteData, showDates: true),
+                  Divider(),
+                  // Display markdown note content
+                  noteDisplayMarkdown(noteData[noteContentPred]),
+                ],
+              ),
             ),
           ),
         ),

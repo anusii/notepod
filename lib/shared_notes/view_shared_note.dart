@@ -60,36 +60,39 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                        child: Text(
-                          sharedNoteContent[noteTitlePred],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+          child: Scrollbar(
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                          child: Text(
+                            sharedNoteContent[noteTitlePred],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note pag)
-                NoteDisplayMetadata(
-                  fullNoteData: widget.fullNoteData,
-                  showDates: true,
-                  showSharing: true,
-                ),
-                Divider(),
-                // Display markdown note content
-                noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
-              ],
+                    ],
+                  ),
+                  // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note pag)
+                  NoteDisplayMetadata(
+                    fullNoteData: widget.fullNoteData,
+                    showDates: true,
+                    showSharing: true,
+                  ),
+                  Divider(),
+                  // Display markdown note content
+                  noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
+                ],
+              ),
             ),
           ),
         ),
