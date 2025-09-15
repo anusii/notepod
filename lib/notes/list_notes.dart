@@ -65,6 +65,9 @@ class _ListNotesState extends State<ListNotes> {
   // First button press will change to sort by last modified first
   bool _sortModDateAscending = true;
 
+  /// Scroll controller for single child scroll view
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     // By default _foundNotes is the full list of notes
@@ -219,51 +222,57 @@ class _ListNotesState extends State<ListNotes> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(10),
-              itemCount: _foundNotes.length,
-              itemExtent: ownListItemHeight,
-              itemBuilder: (context, index) => Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: ListTile(
-                  leading: const CircleAvatar(
-                    radius: 26,
-                    backgroundImage: AssetImage('assets/images/note-icon.png'),
+            child: Scrollbar(
+              thumbVisibility: true,
+              controller: _scrollController,
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(10),
+                itemCount: _foundNotes.length,
+                itemExtent: ownListItemHeight,
+                itemBuilder: (context, index) => Card(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
-                  //const Icon(Icons.text_snippet_outlined),
-                  title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
-                  subtitle: Text(
-                    'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
-                  ),
-                  // trailing: TrailingIcons(),
-                  // Define width to avoid consuming full width
-                  trailing: SizedBox(
-                    height: 60,
-                    width: 120,
-                    child: TrailingButtons(
-                      foundNotes: _foundNotes,
-                      fileNames: fileNames,
-                      index: index,
+                  child: ListTile(
+                    leading: const CircleAvatar(
+                      radius: 26,
+                      backgroundImage:
+                          AssetImage('assets/images/note-icon.png'),
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: ViewNote(
-                            noteData: _foundNotes[fileNames[index]],
-                            notesMap: widget.notesMap,
+                    //const Icon(Icons.text_snippet_outlined),
+                    title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
+                    subtitle: Text(
+                      'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \nLast modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\nShared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                    ),
+                    // trailing: TrailingIcons(),
+                    // Define width to avoid consuming full width
+                    trailing: SizedBox(
+                      height: 60,
+                      width: 120,
+                      child: TrailingButtons(
+                        foundNotes: _foundNotes,
+                        fileNames: fileNames,
+                        index: index,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppHomePage(
+                            title: topBarTitle,
+                            childPage: ViewNote(
+                              noteData: _foundNotes[fileNames[index]],
+                              notesMap: widget.notesMap,
+                            ),
                           ),
                         ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
-                    );
-                  },
+                        (Route<dynamic> route) =>
+                            false, // This predicate ensures all previous routes are removed
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
