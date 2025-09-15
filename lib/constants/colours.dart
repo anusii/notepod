@@ -1,6 +1,6 @@
 /// NotePod - A note taking app with notes shared through private PODs.
 ///
-// Time-stamp: <Friday 2025-07-18 06:44:00 +1000 Graham Williams>
+// Time-stamp: <Monday 2025-09-15 08:31:39 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
@@ -49,14 +49,14 @@ const titleAsh = Color(0xFF30384D);
 const backgroundWhite = Color(0xFFF5F6FC);
 const lightGray = Color(0xFF8793B2);
 const lighterGray = Color.fromARGB(255, 243, 243, 243);
-const bgOffWhite = Color(0xFFF2F4FC);
-const kTitleTextColor = Color(0xFF30384D);
-const warningRed = Colors.red;
+//const bgOffWhite = Color(0xFFF2F4FC);
+//const kTitleTextColor = Color(0xFF30384D);
+//const warningRed = Colors.red;
 
 const lightRed = Color.fromARGB(255, 255, 88, 77);
 const darkRed = Color.fromARGB(255, 139, 38, 30);
 
-const confirmGreen = Colors.green;
+//const confirmGreen = Colors.green;
 
 List<Color> defaultNotepodColors = const [
   darkBlue,
