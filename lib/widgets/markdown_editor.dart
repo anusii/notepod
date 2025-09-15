@@ -35,7 +35,7 @@ import 'package:notepod/constants/app.dart';
 Container markdownEditor(
   BuildContext context,
   TextEditingController textController,
-  FocusNode focusNode,
+  FocusNode focusContent,
   String markdownData,
 ) {
   final cardWidth = (screenWidth(context) / 2) - 20;
@@ -52,7 +52,7 @@ Container markdownEditor(
               child: TextField(
                 // autofocus: true,
                 controller: textController,
-                focusNode: focusNode,
+                focusNode: focusContent,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: InputDecoration(
@@ -70,7 +70,7 @@ Container markdownEditor(
                 useIncludedTextField:
                     false, // Because we want to use our own, set useIncludedTextField to false
                 controller: textController, // Add the _controller
-                focusNode: focusNode, // Add the _focusNode
+                focusNode: focusContent, // Add the _focusContent
               ),
             ),
           ],
