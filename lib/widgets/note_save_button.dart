@@ -251,8 +251,7 @@ Future<void> saveNote(
           );
         }
       } else {
-        // Nn note content message
-        Navigator.pop(context);
+        // No note content message
         showErrDialog(context, 'Please enter some note content.');
       }
     }
@@ -356,7 +355,6 @@ Future<void> postSaveNav(
           false, // This predicate ensures all previous routes are removed
     );
   } else {
-    Navigator.pop(context);
     showErrDialog(
       context,
       'Failed to store the note file in your POD. Try again!',
