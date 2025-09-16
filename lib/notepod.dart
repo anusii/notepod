@@ -53,6 +53,9 @@ class NotePod extends StatelessWidget {
         // Make Scrollbars() visible by default
         // before user starts scrolling in pages
         // where content exceeds container
+        // jm 20250916: Known issue with scrollbarTheme not applying
+        // in iOS https://github.com/flutter/flutter/issues/143926
+        // thumbVisibility: true still required in Scrollbar() instances
         scrollbarTheme: ScrollbarThemeData(
           thumbVisibility: WidgetStateProperty.all(true),
         ),
