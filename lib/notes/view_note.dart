@@ -62,6 +62,21 @@ class ViewNote extends StatefulWidget {
 }
 
 class _ViewNoteState extends State<ViewNote> {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
@@ -73,32 +88,37 @@ class _ViewNoteState extends State<ViewNote> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                        child: Text(
-                          noteData[noteTitlePred],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+          child: Scrollbar(
+            thumbVisibility: true,
+            controller: _scrollController,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
+                          child: Text(
+                            noteData[noteTitlePred],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                // Display note metadata
-                NoteDisplayMetadata(noteContent: noteData, showDates: true),
-                Divider(),
-                // Display markdown note content
-                noteDisplayMarkdown(noteData[noteContentPred]),
-              ],
+                    ],
+                  ),
+                  // Display note metadata
+                  NoteDisplayMetadata(noteContent: noteData, showDates: true),
+                  Divider(),
+                  // Display markdown note content
+                  noteDisplayMarkdown(noteData[noteContentPred]),
+                ],
+              ),
             ),
           ),
         ),

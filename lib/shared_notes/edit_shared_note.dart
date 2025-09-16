@@ -54,7 +54,14 @@ class EditSharedNoteState extends State<EditSharedNote>
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
+
+  /// Scroll controller for single child scroll view.
+  late final ScrollController _scrollController;
+
+  /// Focus node for note title text field.
   late final FocusNode _focusTitle;
+
+  /// Focus node for note content text field.
   late final FocusNode _focusContent;
 
   String data = '';
@@ -67,6 +74,7 @@ class EditSharedNoteState extends State<EditSharedNote>
         widget.fullNoteData['sharedNoteContent'][noteContentPred];
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
+    _scrollController = ScrollController();
     // Focus node for the title text field
     // If 'TAB' key press, move to note content text field
     _focusTitle = FocusNode(
@@ -108,6 +116,7 @@ class EditSharedNoteState extends State<EditSharedNote>
   @override
   void dispose() {
     _textController!.dispose(); // Dispose the TextEditingController
+    _scrollController.dispose(); // Dispose the ScrollController
     _focusTitle.dispose(); // Dispose the title focus node
     _focusContent.dispose(); // Dispose the content focus node
     super.dispose();
@@ -124,6 +133,7 @@ class EditSharedNoteState extends State<EditSharedNote>
     return NoteEditScrollView(
       formKey: formKey,
       textController: _textController,
+      scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
       data: data,
