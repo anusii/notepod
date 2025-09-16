@@ -51,6 +51,23 @@ class ViewSharedNote extends StatefulWidget {
 }
 
 class _ViewSharedNoteState extends State<ViewSharedNote> {
+  // /// Scroll controller for single child scroll view
+  // final ScrollController _scrollController = ScrollController();
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
@@ -62,7 +79,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
         Expanded(
           child: Scrollbar(
             thumbVisibility: true,
+            controller: _scrollController,
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: <Widget>[
                   Row(

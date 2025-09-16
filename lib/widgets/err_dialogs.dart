@@ -37,6 +37,7 @@ Future<void> showErrDialog(BuildContext context, String errMsg) async {
         content: Scrollbar(
           thumbVisibility: true,
           child: SingleChildScrollView(
+            primary: true,
             child: ListBody(
               children: <Widget>[
                 Text(errMsg),

@@ -66,7 +66,7 @@ class _ListNotesState extends State<ListNotes> {
   bool _sortModDateAscending = true;
 
   /// Scroll controller for single child scroll view
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -75,7 +75,14 @@ class _ListNotesState extends State<ListNotes> {
     fileNames = _foundNotes.keys.toList();
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
+    _scrollController = ScrollController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
   }
 
   // Sort alphanumerically on note title field

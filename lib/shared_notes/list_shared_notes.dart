@@ -45,12 +45,25 @@ class ListSharedNotes extends StatefulWidget {
 
 class _ListSharedNotesState extends State<ListSharedNotes> {
   /// Scroll controller for single child scroll view
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     Map sharedNotesMap = widget.sharedNotesMap;
     List sharedNotesUrlList = sharedNotesMap.keys.toList();
+
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,6 +80,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
               thumbVisibility: true,
               controller: _scrollController,
               child: ListView.builder(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(10),
                 itemCount: sharedNotesMap.length,
                 itemExtent: sharedListItemHeight,

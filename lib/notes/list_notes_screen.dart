@@ -50,12 +50,25 @@ class ListNotesScreen extends StatefulWidget {
 class _ListNotesScreenState extends State<ListNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Future comprising notesData
   static Future? _asyncDataFetch;
+
+  // /// Scroll controller for single child scroll view
+  // final ScrollController _scrollController = ScrollController();
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     _asyncDataFetch = getNoteList(context, ListNotesScreen());
     super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
   }
 
   /// Load Notes if notes found.
@@ -75,7 +88,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   Widget _loadNewNote() {
     return Scrollbar(
       thumbVisibility: true,
+      controller: _scrollController,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: <Widget>[
             buildMsgCard(
@@ -148,8 +163,12 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Future comprising notesData with recipients added
-
   static Future? _asyncRecipientsAdd;
+
+  // /// Scroll controller for single child scroll view
+  // final ScrollController _scrollController = ScrollController();
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -160,7 +179,14 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         notesMap: widget.notesMap,
       ),
     );
+    _scrollController = ScrollController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
   }
 
   /// Load Notes with recipients data embedded.
@@ -174,8 +200,10 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
   /// Load error window
   Widget _loadNotesWRecError() {
     return Scrollbar(
-      thumbVisibility: true,
+      // thumbVisibility: true,
+      controller: _scrollController,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: <Widget>[
             buildMsgCard(

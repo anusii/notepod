@@ -46,6 +46,9 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
+
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
   late final FocusNode _focusNode;
 
   String data = '';
@@ -54,6 +57,7 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    _scrollController = ScrollController();
 
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
@@ -81,6 +85,7 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     _textController!.dispose(); // Dispose the TextEditingController
+    _scrollController.dispose(); // Dispose the ScrollController
     _focusNode.dispose(); // Dispose the FocusNode
     super.dispose();
   }
@@ -96,6 +101,7 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
     return NoteEditScrollView(
       formKey: formKey,
       textController: _textController,
+      scrollController: _scrollController,
       focusNode: _focusNode,
       data: data,
       shared: false,

@@ -61,6 +61,9 @@ class EditNoteState extends State<EditNote>
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
+
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
   late final FocusNode _focusNode;
 
   String data = '';
@@ -72,6 +75,7 @@ class EditNoteState extends State<EditNote>
     _textController!.text = widget.noteData[noteContentPred];
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
+    _scrollController = ScrollController();
     _focusNode = FocusNode();
     // To enable the ENTER => SAVE functionality within a note, replace the
     // above line with the following. For now we will stay with current
@@ -96,6 +100,7 @@ class EditNoteState extends State<EditNote>
   @override
   void dispose() {
     _textController!.dispose(); // Dispose the TextEditingController
+    _scrollController.dispose(); // Dispose the ScrollController
     _focusNode.dispose(); // Dispose the FocusNode
     super.dispose();
   }
@@ -111,6 +116,7 @@ class EditNoteState extends State<EditNote>
     return NoteEditScrollView(
       formKey: formKey,
       textController: _textController,
+      scrollController: _scrollController,
       focusNode: _focusNode,
       data: data,
       prevNoteData: widget.noteData,

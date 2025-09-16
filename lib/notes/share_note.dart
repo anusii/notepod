@@ -58,16 +58,28 @@ class ShareNote extends StatefulWidget {
 
 class ShareNoteState extends State<ShareNote>
     with SingleTickerProviderStateMixin {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
       thumbVisibility: true,
+      controller: _scrollController,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(0),

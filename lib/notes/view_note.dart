@@ -62,6 +62,21 @@ class ViewNote extends StatefulWidget {
 }
 
 class _ViewNoteState extends State<ViewNote> {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Map noteData = widget.noteData;
@@ -75,7 +90,9 @@ class _ViewNoteState extends State<ViewNote> {
         Expanded(
           child: Scrollbar(
             thumbVisibility: true,
+            controller: _scrollController,
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: <Widget>[
                   Row(

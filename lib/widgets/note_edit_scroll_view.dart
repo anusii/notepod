@@ -49,6 +49,7 @@ class NoteEditScrollView extends StatelessWidget {
     super.key,
     required this.formKey,
     required TextEditingController? textController,
+    required ScrollController scrollController,
     required FocusNode focusNode,
     required this.data,
     this.prevNoteData,
@@ -56,10 +57,15 @@ class NoteEditScrollView extends StatelessWidget {
     this.notesMap = const {},
     this.noteInfo = const {},
   })  : _textController = textController,
+        _scrollController = scrollController,
         _focusNode = focusNode;
 
   final GlobalKey<FormBuilderState> formKey;
   final TextEditingController? _textController;
+
+  /// Scroll controller for single child scroll view
+  final ScrollController _scrollController;
+
   final FocusNode _focusNode;
   final String data;
 
@@ -144,7 +150,9 @@ class NoteEditScrollView extends StatelessWidget {
           fit: FlexFit.loose,
           child: Scrollbar(
             thumbVisibility: true,
+            controller: _scrollController,
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   const SizedBox(
