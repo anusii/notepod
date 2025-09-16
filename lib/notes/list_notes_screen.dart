@@ -23,7 +23,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/src/solid/get_access_lists.dart';
+import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
