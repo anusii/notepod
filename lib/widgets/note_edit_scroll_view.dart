@@ -50,7 +50,8 @@ class NoteEditScrollView extends StatelessWidget {
     required this.formKey,
     required TextEditingController? textController,
     required ScrollController scrollController,
-    required FocusNode focusNode,
+    required FocusNode focusTitle,
+    required FocusNode focusContent,
     required this.data,
     this.prevNoteData,
     required this.shared,
@@ -58,7 +59,8 @@ class NoteEditScrollView extends StatelessWidget {
     this.noteInfo = const {},
   })  : _textController = textController,
         _scrollController = scrollController,
-        _focusNode = focusNode;
+        _focusTitle = focusTitle,
+        _focusContent = focusContent;
 
   final GlobalKey<FormBuilderState> formKey;
   final TextEditingController? _textController;
@@ -66,7 +68,11 @@ class NoteEditScrollView extends StatelessWidget {
   /// Scroll controller for single child scroll view
   final ScrollController _scrollController;
 
-  final FocusNode _focusNode;
+  /// Focus node for note title field
+  final FocusNode _focusTitle;
+
+  /// Focus node for note contents text field
+  final FocusNode _focusContent;
   final String data;
 
   /// Existing note data is note already exists
@@ -191,7 +197,9 @@ class NoteEditScrollView extends StatelessWidget {
                             initialValue: (prevNoteData != null)
                                 ? noteContent[noteTitlePred]
                                 : null,
+                            // Initial focus in title field
                             autofocus: true,
+                            focusNode: _focusTitle,
                             decoration: const InputDecoration(
                               labelText: 'Note Title',
                               labelStyle: TextStyle(
@@ -213,7 +221,12 @@ class NoteEditScrollView extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  markdownEditor(context, _textController!, _focusNode, data),
+                  markdownEditor(
+                    context,
+                    _textController!,
+                    _focusContent,
+                    data,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),

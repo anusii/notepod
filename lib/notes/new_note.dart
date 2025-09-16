@@ -26,6 +26,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -47,9 +48,14 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
 
   TextEditingController? _textController;
 
-  /// Scroll controller for single child scroll view
+  /// Scroll controller for single child scroll view.
   late final ScrollController _scrollController;
-  late final FocusNode _focusNode;
+
+  /// Focus node for note title text field.
+  late final FocusNode _focusTitle;
+
+  /// Focus node for note content text field.
+  late final FocusNode _focusContent;
 
   String data = '';
 
@@ -61,12 +67,28 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
 
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
-    _focusNode = FocusNode();
+    // Focus node for the title text field
+    // If 'TAB' key press, move to note content text field
+    _focusTitle = FocusNode(
+      onKeyEvent: (FocusNode node, KeyEvent evt) {
+        if (evt.logicalKey == LogicalKeyboardKey.tab) {
+          if (evt is KeyDownEvent) {
+            // Move focus
+            _focusContent.requestFocus();
+          }
+          return KeyEventResult.handled;
+        } else {
+          return KeyEventResult.ignored;
+        }
+      },
+    );
+    // Focus node for the note content markdown editor
+    _focusContent = FocusNode();
     // To enable the ENTER => SAVE functionality within a note replace the above
     // line with the following. For now we will stay with current
     // behaviour. (20250714 gjw).
     //
-    // _focusNode = FocusNode(
+    // _focusContent = FocusNode(
     //   onKeyEvent: (FocusNode node, KeyEvent evt) {
     //     if (!HardwareKeyboard.instance.isShiftPressed &&
     //         evt.logicalKey.keyLabel == 'Enter') {
@@ -86,7 +108,8 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   void dispose() {
     _textController!.dispose(); // Dispose the TextEditingController
     _scrollController.dispose(); // Dispose the ScrollController
-    _focusNode.dispose(); // Dispose the FocusNode
+    _focusTitle.dispose(); // Dispose the title focus node
+    _focusContent.dispose(); // Dispose the content focus node
     super.dispose();
   }
 
@@ -102,7 +125,8 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
       formKey: formKey,
       textController: _textController,
       scrollController: _scrollController,
-      focusNode: _focusNode,
+      focusTitle: _focusTitle,
+      focusContent: _focusContent,
       data: data,
       shared: false,
     );
