@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
@@ -70,7 +69,7 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
-        child: AppHomePage(title: topBarTitle, childPage: ListNotesScreen()),
+        child: AppHomePage(childPage: ListNotesScreen()),
       ),
     );
   }

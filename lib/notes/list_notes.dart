@@ -253,7 +253,6 @@ class _ListNotesState extends State<ListNotes> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AppHomePage(
-                          title: topBarTitle,
                           childPage: ViewNote(
                             noteData: _foundNotes[fileNames[index]],
                             notesMap: widget.notesMap,

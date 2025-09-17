@@ -96,7 +96,6 @@ class NoteShareButton extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => AppHomePage(
-          title: topBarTitle,
           childPage: childPage,
         ),
       ),

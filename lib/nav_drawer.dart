@@ -128,7 +128,6 @@ class NavDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AppHomePage(
-                          title: topBarTitle,
                           childPage: NewNote(),
                         ),
                       ),
@@ -145,7 +144,6 @@ class NavDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AppHomePage(
-                          title: topBarTitle,
                           childPage: ListNotesScreen(),
                         ),
                       ),
@@ -165,7 +163,6 @@ class NavDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AppHomePage(
-                          title: topBarTitle,
                           childPage: SharedNotesScreen(),
                           // childPage: SharedNotes(),
                         ),

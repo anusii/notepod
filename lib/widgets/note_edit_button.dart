@@ -26,7 +26,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
 
@@ -52,7 +51,6 @@ class NoteEditButton extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => AppHomePage(
-              title: topBarTitle,
               childPage: childPage,
             ),
           ),

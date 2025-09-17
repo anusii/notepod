@@ -28,6 +28,8 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
@@ -37,10 +39,9 @@ import 'package:notepod/shared_notes/shared_notes_screen.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
-  const AppHomePage({super.key, required this.childPage, this.title = ''});
+  const AppHomePage({super.key, required this.childPage});
 
   final Widget childPage;
-  final String title;
 
   @override
   AppHomePageState createState() => AppHomePageState();
@@ -73,11 +74,11 @@ class AppHomePageState extends State<AppHomePage>
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
-    return Scaffold(
+    return SolidScaffold(
       appBar: AppBar(
         backgroundColor: lightGreen,
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(topBarTitle),
         actions: <Widget>[
           IconButton(
             tooltip: 'Create a new note',
@@ -90,7 +91,6 @@ class AppHomePageState extends State<AppHomePage>
                 context,
                 MaterialPageRoute(
                   builder: (context) => AppHomePage(
-                    title: topBarTitle,
                     childPage: NewNote(),
                   ),
                 ),
@@ -111,7 +111,6 @@ class AppHomePageState extends State<AppHomePage>
                 context,
                 MaterialPageRoute(
                   builder: (context) => AppHomePage(
-                    title: topBarTitle,
                     childPage: ListNotesScreen(),
                   ),
                 ),
@@ -138,7 +137,6 @@ class AppHomePageState extends State<AppHomePage>
                 context,
                 MaterialPageRoute(
                   builder: (context) => AppHomePage(
-                    title: topBarTitle,
                     childPage: SharedNotesScreen(),
                   ),
                 ),

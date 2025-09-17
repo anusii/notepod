@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidpod/src/solid/constants/common.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
@@ -92,7 +91,6 @@ class NoteDelButton extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AppHomePage(
-                            title: topBarTitle,
                             childPage: ListNotesScreen(),
                           ),
                         ),
