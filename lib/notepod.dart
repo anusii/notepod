@@ -29,6 +29,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
@@ -45,7 +46,7 @@ class NotePod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Note Taker',
+      title: shortTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
@@ -56,12 +57,12 @@ class NotePod extends StatelessWidget {
         ),
       ),
       home: SolidLogin(
-        title: 'NOTEPOD - A Note Taker',
-        appDirectory: 'notepod',
-        image: AssetImage('assets/images/notepod-background.jpg'),
-        logo: AssetImage('assets/images/notepod.png'),
-        link: 'https://github.com/anusii/notepod',
-        webID: 'https://pods.solidcommunity.au',
+        title: longTitle,
+        appDirectory: appDir,
+        image: backgroundImg,
+        logo: logoImg,
+        link: applicationRepo,
+        webID: defWebID,
         required: false,
         loginButtonStyle: LoginButtonStyle(
           background: Colors.lightGreenAccent,

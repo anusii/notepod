@@ -31,10 +31,19 @@ import 'package:notepod/constants/colours.dart';
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
+const String defWebID = 'https://pods.solidcommunity.au';
 const String topBarTitle = 'Pod Note Taker';
+const String shortTitle = 'Note Taker';
+const String longTitle = 'NOTEPOD - A Note Taker';
 
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
+
+const String appDir = 'notepod';
+
+const AssetImage backgroundImg =
+    AssetImage('assets/images/notepod-background.jpg');
+const AssetImage logoImg = AssetImage('assets/images/notepod.png');
 
 //const kDefaultPadding = 20.0;
 const double normalLoadingScreenHeight = 200.0;
