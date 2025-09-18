@@ -36,6 +36,11 @@ const String topBarTitle = 'Pod Note Taker';
 const String shortTitle = 'Note Taker';
 const String longTitle = 'NOTEPOD - A Note Taker';
 
+const String appOwner = '''© 2025 Software Innovation Institute''';
+
+const String aboutText =
+    '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
+
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
 
