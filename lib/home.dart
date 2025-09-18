@@ -33,6 +33,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
+import 'package:notepod/app_bar.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
@@ -75,82 +76,26 @@ class AppHomePageState extends State<AppHomePage>
 
   Widget _build(BuildContext context) {
     return SolidScaffold(
-      appBar: AppBar(
-        backgroundColor: lightGreen,
-        centerTitle: true,
-        title: Text(topBarTitle),
-        actions: <Widget>[
-          IconButton(
-            tooltip: 'Create a new note',
-            icon: const Icon(
-              Icons.add_circle,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    childPage: NewNote(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
-              );
-            },
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-            tooltip: 'Go to $myNotesTitle',
-            icon: const Icon(
-              Icons.view_list,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    childPage: ListNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
-              );
-            },
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-            tooltip: 'Go to $sharedNotesTitle',
-            icon: const Icon(
-              // Also tried (20250718 gjw)
-              // Icons.people,
-              // Icons.share,
-              // Icons.group,
-              // Icons.supervisor_account,
-              // Icons.share_rounded,
-              Icons.groups,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    childPage: SharedNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
-              );
-            },
-          ),
-          const SizedBox(width: 10),
-        ],
-      ),
+      appBar: navAppBar(context),
       drawer: NavDrawer(
         webId: _webId ?? '',
         appVersion: _appVersion,
+      ),
+      statusBar: SolidStatusBarConfig(
+        serverInfo: SolidServerInfo(
+          serverUri: 'https://your-pod-server.com',
+        ),
+        securityKeyStatus: SolidSecurityKeyStatus(),
+        showOnNarrowScreens: true,
+      ),
+      themeToggle: const SolidThemeToggleConfig(
+        enabled: true,
+      ),
+      aboutConfig: SolidAboutConfig(
+        applicationName: topBarTitle,
+        applicationIcon: Icon(Icons.apps, size: 64),
+        applicationLegalese: appOwner,
+        text: aboutText,
       ),
       body: widget.childPage,
     );
