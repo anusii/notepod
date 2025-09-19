@@ -30,6 +30,8 @@ import 'package:flutter/material.dart';
 import 'package:notepod/constants/colours.dart';
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
+const String appChangeLog =
+    'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
 const String siiUrl = 'https://sii.anu.edu.au';
 const String defWebID = 'https://pods.solidcommunity.au';
 const String topBarTitle = 'Pod Note Taker';
@@ -92,6 +94,7 @@ const smallTextStyle = TextStyle(
 );
 
 // Titles for nav widgets to pages
+const String newNoteTitle = 'New Note';
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
 
