@@ -39,6 +39,11 @@ SolidAppBarConfig navAppBar(BuildContext context) {
   return SolidAppBarConfig(
     title: topBarTitle,
     backgroundColor: lightGreen,
+    versionConfig: SolidVersionConfig(
+      changelogUrl: appChangeLog,
+      showDate: true,
+      tooltip: 'Custom version tooltip',
+    ),
     actions: [
       // Create new note
       SolidAppBarAction(
