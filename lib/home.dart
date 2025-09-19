@@ -31,7 +31,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/nav_drawer.dart';
+// import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/app_bar.dart';
 
 import 'package:notepod/notes/list_notes_screen.dart';
