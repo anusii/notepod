@@ -31,8 +31,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 // import 'package:notepod/nav_drawer.dart';
-import 'package:notepod/app_bar.dart';
+// import 'package:notepod/app_bar.dart';
 
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
@@ -86,7 +87,23 @@ class AppHomePageState extends State<AppHomePage>
     debugPrint('AppInfo: $AppInfo');
 
     return SolidScaffold(
-      appBar: navAppBar(context),
+      appBar: SolidAppBarConfig(
+        title: topBarTitle,
+        backgroundColor: lightGreen,
+        versionConfig: SolidVersionConfig(
+          changelogUrl: appChangeLog,
+          showDate: true,
+          // tooltip: 'Custom version tooltip',
+        ),
+        actions: [
+          // Login/logout
+          SolidAppBarAction(
+            icon: _webId != null ? Icons.logout : Icons.login,
+            tooltip: _webId != null ? 'Logout' : 'Login',
+            onPressed: _toggleLogin,
+          ),
+        ],
+      ),
       menu: [
         // My Notes
         SolidMenuItem(
