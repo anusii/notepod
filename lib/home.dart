@@ -34,6 +34,10 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/app_bar.dart';
 
+import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/shared_notes/shared_notes_screen.dart';
+
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
   const AppHomePage({super.key, required this.childPage});
@@ -57,7 +61,6 @@ class AppHomePageState extends State<AppHomePage>
   }
 
   /// Loads the app name and version from package_info_plus.
-
   Future<void> _loadAppInfo() async {
     final appInfo = await getAppNameVersion();
     if (mounted) {
@@ -67,21 +70,61 @@ class AppHomePageState extends State<AppHomePage>
     }
   }
 
+  // Toggle login status
+  void _toggleLogin() {
+    setState(() {
+      _webId = _webId == null ? 'user@example.com' : null;
+    });
+  }
+
   Future<({String name, String? webId})> _getInfo() async =>
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
+    debugPrint('Webid: $_webId');
+    debugPrint('Appversion: $_appVersion');
+    debugPrint('AppInfo: $AppInfo');
+
     return SolidScaffold(
       appBar: navAppBar(context),
-      drawer: NavDrawer(
-        webId: _webId ?? '',
-        appVersion: _appVersion,
-      ),
+      menu: [
+        // My Notes
+        SolidMenuItem(
+          title: myNotesTitle,
+          icon: Icons.view_list,
+          child: ListNotesScreen(),
+          tooltip: 'Navigate to $myNotesTitle',
+        ),
+        // New Note
+        SolidMenuItem(
+          title: newNoteTitle,
+          icon: Icons.note_add_outlined,
+          child: NewNote(),
+          tooltip: 'Navigate to $newNoteTitle',
+        ),
+        // Shared Notes
+        SolidMenuItem(
+          title: sharedNotesTitle,
+          icon: Icons.groups,
+          child: SharedNotesScreen(),
+          tooltip: 'Navigate to $sharedNotesTitle',
+        ),
+      ],
       statusBar: SolidStatusBarConfig(
         serverInfo: SolidServerInfo(
-          serverUri: 'https://your-pod-server.com',
+          serverUri: _webId!,
         ),
-        securityKeyStatus: SolidSecurityKeyStatus(),
+        securityKeyStatus: SolidSecurityKeyStatus(
+          tooltip: 'Manage security keys',
+        ),
+        loginStatus: SolidLoginStatus(
+          webId: _webId,
+          onTap: _toggleLogin,
+          loggedInText: 'Logged In',
+          loggedOutText: 'Not Logged In',
+          loggedInTooltip: 'Click to log out',
+          loggedOutTooltip: 'Click to log in',
+        ),
         showOnNarrowScreens: true,
       ),
       themeToggle: const SolidThemeToggleConfig(
