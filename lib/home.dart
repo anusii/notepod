@@ -82,10 +82,6 @@ class AppHomePageState extends State<AppHomePage>
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
-    debugPrint('Webid: $_webId');
-    debugPrint('Appversion: $_appVersion');
-    debugPrint('AppInfo: $AppInfo');
-
     return SolidScaffold(
       appBar: SolidAppBarConfig(
         title: topBarTitle,
