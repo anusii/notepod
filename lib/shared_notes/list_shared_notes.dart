@@ -59,6 +59,14 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
     super.dispose();
   }
 
+  /// Return id part of a webId
+  String getId(webId) {
+    final Uri uri = Uri.parse(webId);
+    final String id = uri.pathSegments.first;
+
+    return id;
+  }
+
   @override
   Widget build(BuildContext context) {
     Map sharedNotesMap = widget.sharedNotesMap;
@@ -99,7 +107,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                       sharedNotesMap[sharedNotesUrlList[index]][noteFileName],
                     ),
                     subtitle: Text(
-                      'Owner: ${sharedNotesMap[sharedNotesUrlList[index]][noteOwner]} \nShared by: ${sharedNotesMap[sharedNotesUrlList[index]][permissionGranter]} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}',
+                      'Owner: ${getId(sharedNotesMap[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(sharedNotesMap[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}',
                     ),
                     trailing: const Icon(Icons.arrow_forward),
                     onTap: () {
