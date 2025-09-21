@@ -28,7 +28,9 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
+import 'package:notepod/shared_notes/share_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
+import 'package:notepod/widgets/note_share_button.dart';
 
 class ListSharedNotes extends StatefulWidget {
   final Map sharedNotesMap;
@@ -134,6 +136,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
       // Display all notes if no search string
       results = widget.sharedNotesMap;
     } else {
+      // Search for matches in filename, owner, permission granter or permission list
       results = Map.fromEntries(
         widget.sharedNotesMap.entries.where(
           (note) =>
@@ -207,7 +210,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Title Sort Label and Button
+                        // Filename Sort Label and Button
                         TextButton.icon(
                           onPressed: () {
                             _sortByFilename(!_sortFilenameAscending);
@@ -296,19 +299,27 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                       backgroundImage:
                           AssetImage('assets/images/note-icon.png'),
                     ),
-                    //const Icon(Icons.text_snippet_outlined),
                     title: Text(
                       _foundNotes[sharedNotesUrlList[index]][noteFileName],
                     ),
                     subtitle: Text(
                       'Owner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
                     ),
-                    trailing: const Icon(Icons.arrow_forward),
+                    // Define width to avoid consuming full width
+                    trailing: SizedBox(
+                      height: 60,
+                      width: 120,
+                      child: SharedTrailingButtons(
+                        foundNotes: _foundNotes,
+                        fileNames: sharedNotesUrlList,
+                        index: index,
+                      ),
+                    ),
                     onTap: () {
-                      String notePermission =
-                          _foundNotes[sharedNotesUrlList[index]]
-                              [permissionList];
-                      if (notePermission.contains('read')) {
+                      // Open note if read in permissions
+                      String access = _foundNotes[sharedNotesUrlList[index]]
+                          [permissionList];
+                      if (access.contains('read')) {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -345,6 +356,43 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class SharedTrailingButtons extends StatelessWidget {
+  const SharedTrailingButtons({
+    super.key,
+    required Map foundNotes,
+    required this.fileNames,
+    required this.index,
+  }) : _foundNotes = foundNotes;
+
+  final Map _foundNotes;
+  final List fileNames;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    List accessList = _foundNotes[fileNames[index]][permissionList].split(',');
+
+    return Row(
+      children: [
+        // Share button if control in permissions
+        if (accessList.contains('control')) ...[
+          NoteShareButton(
+            childPage: ShareExternalNoteScreen(
+              sharedNoteData: _foundNotes[fileNames[index]],
+            ),
+            simple: true,
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+        ],
+        // Open note icon
+        const Icon(Icons.arrow_forward),
+      ],
     );
   }
 }
