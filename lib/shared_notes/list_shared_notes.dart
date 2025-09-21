@@ -44,6 +44,21 @@ class ListSharedNotes extends StatefulWidget {
 }
 
 class _ListSharedNotesState extends State<ListSharedNotes> {
+  /// Filtered map of notes.
+  Map _foundNotes = {};
+
+  /// Filtered note url lists which are the keys of the map of notes.
+  List sharedNotesUrlList = [];
+
+  /// Initial sort by note filename order.
+  bool _sortFilenameAscending = true;
+
+  /// Initial sort by note owner order.
+  bool _sortOwnerAscending = true;
+
+  /// Initial sort by note owner order.
+  bool _sortPermissionAscending = true;
+
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -51,12 +66,98 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    // By default _foundNotes is the full list of notes
+    _foundNotes = widget.sharedNotesMap;
+    sharedNotesUrlList = _foundNotes.keys.toList();
+    // Initial sort by filename alphabetically
+    _sortByFilename(_sortFilenameAscending);
   }
 
   @override
   void dispose() {
     _scrollController.dispose(); // Dispose the ScrollController
     super.dispose();
+  }
+
+  /// Sort alphanumerically on note filename
+  void _sortByFilename(bool ascending) {
+    setState(() {
+      _sortFilenameAscending = ascending;
+      sharedNotesUrlList.sort(
+        (a, b) => _sortFilenameAscending
+            ? _foundNotes[a][noteFileName]
+                .toLowerCase()
+                .compareTo(_foundNotes[b][noteFileName].toLowerCase())
+            : _foundNotes[b][noteFileName]
+                .toLowerCase()
+                .compareTo(_foundNotes[a][noteFileName].toLowerCase()),
+      );
+    });
+  }
+
+  /// Sort alphanumerically on note owner
+  void _sortByOwner(bool ascending) {
+    setState(() {
+      _sortOwnerAscending = ascending;
+      sharedNotesUrlList.sort(
+        (a, b) => _sortOwnerAscending
+            ? _foundNotes[a][noteOwner]
+                .toLowerCase()
+                .compareTo(_foundNotes[b][noteOwner].toLowerCase())
+            : _foundNotes[b][noteOwner]
+                .toLowerCase()
+                .compareTo(_foundNotes[a][noteOwner].toLowerCase()),
+      );
+    });
+  }
+
+  /// Sort alphanumerically on note permissions
+  void _sortByPermission(bool ascending) {
+    setState(() {
+      _sortPermissionAscending = ascending;
+      sharedNotesUrlList.sort(
+        (a, b) => _sortPermissionAscending
+            ? _foundNotes[a][permissionList]
+                .toLowerCase()
+                .compareTo(_foundNotes[b][permissionList].toLowerCase())
+            : _foundNotes[b][permissionList]
+                .toLowerCase()
+                .compareTo(_foundNotes[a][permissionList].toLowerCase()),
+      );
+    });
+  }
+
+  /// Search notes
+  void _searchNotes(String enteredKeyword) {
+    Map results = {};
+    if (enteredKeyword.isEmpty) {
+      // Display all notes if no search string
+      results = widget.sharedNotesMap;
+    } else {
+      results = Map.fromEntries(
+        widget.sharedNotesMap.entries.where(
+          (note) =>
+              (note.value as Map)[noteFileName]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              (note.value as Map)[noteOwner]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              (note.value as Map)[permissionGranter]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              (note.value as Map)[permissionList]
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()),
+        ),
+      );
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundNotes = results;
+      sharedNotesUrlList = _foundNotes.keys.toList();
+    });
   }
 
   /// Return id part of a webId
@@ -69,18 +170,111 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
 
   @override
   Widget build(BuildContext context) {
-    Map sharedNotesMap = widget.sharedNotesMap;
-    List sharedNotesUrlList = sharedNotesMap.keys.toList();
-
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Text(
-              '$sharedNotesTitle (created by other people)',
-              style: titleStyle,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$sharedNotesTitle (created by other people)',
+                  style: titleStyle,
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  onChanged: (value) => _searchNotes(value),
+                  decoration: const InputDecoration(
+                    labelText: 'Search',
+                    hintText:
+                        'Enter string to match filename, owner, permission granter or permission type',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Search summary statement
+                    _foundNotes.length > 1 || _foundNotes.isEmpty
+                        ? Text('Found ${_foundNotes.length} notes')
+                        : Text('Found ${_foundNotes.length} note'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Title Sort Label and Button
+                        TextButton.icon(
+                          onPressed: () {
+                            _sortByFilename(!_sortFilenameAscending);
+                          },
+                          icon: Icon(
+                            _sortFilenameAscending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            color: Colors.black,
+                          ),
+                          label: Text(
+                            _sortFilenameAscending
+                                ? 'Filename A to Z'
+                                : 'Filename Z to A',
+                            style: smallTextStyle,
+                          ),
+                          iconAlignment: IconAlignment.end,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        // Owner Sort Label and Button
+                        TextButton.icon(
+                          onPressed: () {
+                            _sortByOwner(!_sortOwnerAscending);
+                          },
+                          icon: Icon(
+                            _sortOwnerAscending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            color: Colors.black,
+                          ),
+                          label: Text(
+                            _sortOwnerAscending
+                                ? 'Owner A to Z'
+                                : 'Owner Z to A',
+                            style: smallTextStyle,
+                          ),
+                          iconAlignment: IconAlignment.end,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        // Permission Sort Label and Button
+                        TextButton.icon(
+                          onPressed: () {
+                            _sortByPermission(!_sortPermissionAscending);
+                          },
+                          icon: Icon(
+                            _sortPermissionAscending
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            color: Colors.black,
+                          ),
+                          label: Text(
+                            _sortPermissionAscending
+                                ? 'Permission A to Z'
+                                : 'Permission Z to A',
+                            style: smallTextStyle,
+                          ),
+                          iconAlignment: IconAlignment.end,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -90,7 +284,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
               child: ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.all(10),
-                itemCount: sharedNotesMap.length,
+                itemCount: _foundNotes.length, // sharedNotesMap.length,
                 itemExtent: sharedListItemHeight,
                 itemBuilder: (context, index) => Card(
                   shape: const RoundedRectangleBorder(
@@ -104,15 +298,15 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     ),
                     //const Icon(Icons.text_snippet_outlined),
                     title: Text(
-                      sharedNotesMap[sharedNotesUrlList[index]][noteFileName],
+                      _foundNotes[sharedNotesUrlList[index]][noteFileName],
                     ),
                     subtitle: Text(
-                      'Owner: ${getId(sharedNotesMap[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(sharedNotesMap[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${sharedNotesMap[sharedNotesUrlList[index]][permissionList]}',
+                      'Owner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
                     ),
                     trailing: const Icon(Icons.arrow_forward),
                     onTap: () {
                       String notePermission =
-                          sharedNotesMap[sharedNotesUrlList[index]]
+                          _foundNotes[sharedNotesUrlList[index]]
                               [permissionList];
                       if (notePermission.contains('read')) {
                         Navigator.pushAndRemoveUntil(
@@ -121,7 +315,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             builder: (context) => AppHomePage(
                               childPage: ViewSharedNoteScreen(
                                 sharedNoteData:
-                                    sharedNotesMap[sharedNotesUrlList[index]],
+                                    _foundNotes[sharedNotesUrlList[index]],
                               ),
                             ),
                           ),
@@ -135,7 +329,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             builder: (context) => AppHomePage(
                               childPage: NonReadableNote(
                                 noteMetaData:
-                                    sharedNotesMap[sharedNotesUrlList[index]],
+                                    _foundNotes[sharedNotesUrlList[index]],
                               ),
                             ),
                           ),
