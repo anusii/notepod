@@ -49,7 +49,7 @@ Where has the issue been observed:
 App Version:
 Flutter Version:
 
-## Closing Crieria
+## Closing Criteria
 
 Checklist for closing the issue:
 
