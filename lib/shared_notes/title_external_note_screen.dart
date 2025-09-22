@@ -44,17 +44,35 @@ class TitleExternalNoteScreen extends StatefulWidget {
 
 class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
   static Future? _asyncDataFetch;
+  Map _sharedNoteData = {};
 
   @override
   void initState() {
-    Map sharedNoteData = widget.sharedNoteData;
+    _sharedNoteData = widget.sharedNoteData;
 
     _asyncDataFetch = getSharedNoteContent(
       context,
       SharedNotesScreen(),
-      sharedNoteData,
+      _sharedNoteData,
     );
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant TitleExternalNoteScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Fetch data when the widget configuration changes (eg new data).
+    _sharedNoteData = widget.sharedNoteData;
+    _asyncDataFetch = getSharedNoteContent(
+      context,
+      SharedNotesScreen(),
+      _sharedNoteData,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Widget _loadedScreen(Map sharedNoteContent) {
