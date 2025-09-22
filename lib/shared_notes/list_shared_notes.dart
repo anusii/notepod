@@ -29,6 +29,7 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note_screen.dart';
+import 'package:notepod/shared_notes/title_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/note_share_button.dart';
 
@@ -191,8 +192,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                   onChanged: (value) => _searchNotes(value),
                   decoration: const InputDecoration(
                     labelText: 'Search',
-                    hintText:
-                        'Enter string to match filename, owner, permission granter or permission type',
+                    hintText: 'Enter string to match metadata',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -299,11 +299,14 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                       backgroundImage:
                           AssetImage('assets/images/note-icon.png'),
                     ),
-                    title: Text(
-                      _foundNotes[sharedNotesUrlList[index]][noteFileName],
+                    // Define width to avoid consuming full width
+                    title: TitleExternalNote(
+                      foundNotes: _foundNotes,
+                      fileNames: sharedNotesUrlList,
+                      index: index,
                     ),
                     subtitle: Text(
-                      'Owner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
+                      'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileName]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
                     ),
                     // Define width to avoid consuming full width
                     trailing: SizedBox(
@@ -356,6 +359,36 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TitleExternalNote extends StatelessWidget {
+  const TitleExternalNote({
+    super.key,
+    required Map foundNotes,
+    required this.fileNames,
+    required this.index,
+  }) : _foundNotes = foundNotes;
+
+  final Map _foundNotes;
+  final List fileNames;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    List accessList = _foundNotes[fileNames[index]][permissionList].split(',');
+
+    return Row(
+      children: [
+        if (accessList.contains('read')) ...[
+          TitleExternalNoteScreen(
+            sharedNoteData: _foundNotes[fileNames[index]],
+          ),
+        ] else ...[
+          Text('Title access requires read permission'),
+        ],
+      ],
     );
   }
 }
