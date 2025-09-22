@@ -24,6 +24,8 @@ linter:
 # Identify directories to ignore.
 
 analyzer:
+  errors:
+    unintended_html_in_doc_comment: ignore
   exclude:
     - ignore/**
     - ignore/
