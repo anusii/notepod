@@ -33,7 +33,7 @@ EOL
 
 # Create desktop entry.
 
-cat > ${APP}_${VER}_amd64/usr/share/applications/${APP}.desktop << EOL
+cat > ${APP}_${VER}_amd64/usr/share/applications/com.togaware.${APP}.desktop << EOL
 [Desktop Entry]
 Name=Notepod
 Comment=Note taking with notes stored in Pods

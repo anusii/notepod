@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Wednesday 2025-09-10 07:53:27 +1000 Graham Williams>
+# Time-stamp: <Monday 2025-09-22 11:27:58 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -30,7 +30,7 @@ DEST=/var/www/html/$(APP)
 
 REPO=solidcommunity.au
 RLOC=/var/www/html/installers/
-DWLD=https://$(REPO)/installers
+DWLD=https://$(REPO)/installers/
 
 ########################################################################
 # Supported Makefile modules.
@@ -117,7 +117,7 @@ deb:
 	(cd installers; make $@)
 	rsync -avzh installers/$(APP)_$(VER)_amd64.deb $(REPO):$(RLOC)$(APP)_amd64.deb
 	ssh $(REPO) chmod a+r $(RLOC)$(APP)_amd64.deb
-	wget $(DWLD)/$(APP)_amd64.deb -O $(APP)_amd64.deb
+	wget $(DWLD)$(APP)_amd64.deb -O $(APP)_amd64.deb
 	wajig install $(APP)_amd64.deb
 	rm -f $(APP)_amd64.deb
 	mv -f installers/$(APP)_*.deb installers/ARCHIVE/
