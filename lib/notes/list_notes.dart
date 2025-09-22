@@ -161,8 +161,8 @@ class _ListNotesState extends State<ListNotes> {
                 TextField(
                   onChanged: (value) => _searchNotes(value),
                   decoration: const InputDecoration(
-                    labelText: 'Search',
-                    hintText: 'Enter string to match title or contents',
+                    labelText: 'Search title or text',
+                    hintText: 'Enter string to match note contents',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
