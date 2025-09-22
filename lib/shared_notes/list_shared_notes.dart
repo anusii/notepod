@@ -161,6 +161,8 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
     setState(() {
       _foundNotes = results;
       sharedNotesUrlList = _foundNotes.keys.toList();
+      // Sort results by filename
+      _sortByFilename(_sortFilenameAscending);
     });
   }
 
@@ -191,8 +193,9 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                 TextField(
                   onChanged: (value) => _searchNotes(value),
                   decoration: const InputDecoration(
-                    labelText: 'Search',
-                    hintText: 'Enter string to match metadata',
+                    labelText:
+                        'Search filename, owner, permission granter, permissions',
+                    hintText: 'Enter string to match note metadata',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -287,7 +290,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
               child: ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.all(10),
-                itemCount: _foundNotes.length, // sharedNotesMap.length,
+                itemCount: _foundNotes.length,
                 itemExtent: sharedListItemHeight,
                 itemBuilder: (context, index) => Card(
                   shape: const RoundedRectangleBorder(
@@ -301,9 +304,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     ),
                     // Define width to avoid consuming full width
                     title: TitleExternalNote(
-                      foundNotes: _foundNotes,
-                      fileNames: sharedNotesUrlList,
-                      index: index,
+                      sharedNoteData: _foundNotes[sharedNotesUrlList[index]],
                     ),
                     subtitle: Text(
                       'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileName]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
@@ -313,9 +314,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                       height: 60,
                       width: 120,
                       child: SharedTrailingButtons(
-                        foundNotes: _foundNotes,
-                        fileNames: sharedNotesUrlList,
-                        index: index,
+                        sharedNoteData: _foundNotes[sharedNotesUrlList[index]],
                       ),
                     ),
                     onTap: () {
@@ -364,26 +363,22 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
 }
 
 class TitleExternalNote extends StatelessWidget {
+  final Map _sharedNoteData;
+
   const TitleExternalNote({
     super.key,
-    required Map foundNotes,
-    required this.fileNames,
-    required this.index,
-  }) : _foundNotes = foundNotes;
-
-  final Map _foundNotes;
-  final List fileNames;
-  final int index;
+    required sharedNoteData,
+  }) : _sharedNoteData = sharedNoteData;
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _foundNotes[fileNames[index]][permissionList].split(',');
+    List accessList = _sharedNoteData[permissionList].split(',');
 
     return Row(
       children: [
         if (accessList.contains('read')) ...[
           TitleExternalNoteScreen(
-            sharedNoteData: _foundNotes[fileNames[index]],
+            sharedNoteData: _sharedNoteData,
           ),
         ] else ...[
           Text('Title access requires read permission'),
@@ -396,18 +391,14 @@ class TitleExternalNote extends StatelessWidget {
 class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({
     super.key,
-    required Map foundNotes,
-    required this.fileNames,
-    required this.index,
-  }) : _foundNotes = foundNotes;
+    required Map sharedNoteData,
+  }) : _sharedNoteData = sharedNoteData;
 
-  final Map _foundNotes;
-  final List fileNames;
-  final int index;
+  final Map _sharedNoteData;
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _foundNotes[fileNames[index]][permissionList].split(',');
+    List accessList = _sharedNoteData[permissionList].split(',');
 
     return Row(
       children: [
@@ -415,7 +406,7 @@ class SharedTrailingButtons extends StatelessWidget {
         if (accessList.contains('control')) ...[
           NoteShareButton(
             childPage: ShareExternalNoteScreen(
-              sharedNoteData: _foundNotes[fileNames[index]],
+              sharedNoteData: _sharedNoteData,
             ),
             simple: true,
           ),
