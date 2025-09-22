@@ -41,7 +41,8 @@ const double normalLoadingScreenHeight = 200.0;
 //const double buttonBorderRadius = 5;
 //const double standardSpace = 20.0;
 const double ownListItemHeight = 108.0;
-const double sharedListItemHeight = 108.0;
+const double sharedListItemHeight =
+    130.0; // (with 4 row subtitle) // 108.0 (with 3 row subtitle)
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 //double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
