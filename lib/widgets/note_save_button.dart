@@ -22,6 +22,7 @@
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
 /// Authors: Jess Moore
+
 library;
 
 import 'package:flutter/material.dart';
@@ -68,6 +69,7 @@ class NoteSaveButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Save note and redirect to view note page
+
         await saveNote(
           context,
           textController,
@@ -79,10 +81,11 @@ class NoteSaveButton extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: darkBlue,
-        backgroundColor: lightBlue, // foreground
+        backgroundColor: lightBlue, // Foreground.
         padding: const EdgeInsets.symmetric(
-          // Slightly larger edgeinset than back button to
-          // emphasise save button
+          // A slightly larger edgeinset than back button to emphasise the save
+          // button.
+
           horizontal: 20,
         ),
         shape: RoundedRectangleBorder(
@@ -163,28 +166,31 @@ Future<void> saveNote(
             'sharedNoteContent': noteNewData,
           };
           // Encrypt note, create TTL, update file in POD
-          if (context.mounted) {
-            createNoteStatus = await saveNoteToPod(
-              context,
-              noteNewData,
-              ViewSharedNote(
-                fullNoteData: newFullNoteData,
-              ),
-              shared,
-              prevSharedNoteInfo,
-            );
+          if (!context.mounted) return;
 
-            // Navigate to return page
-            postSaveNav(
-              // context.mounted checked already
-              // ignore: use_build_context_synchronously
-              context,
-              createNoteStatus,
-              ViewSharedNote(
-                fullNoteData: newFullNoteData,
-              ),
-            );
-          }
+          createNoteStatus = await saveNoteToPod(
+            context,
+            noteNewData,
+            ViewSharedNote(
+              fullNoteData: newFullNoteData,
+            ),
+            shared,
+            prevSharedNoteInfo,
+          );
+
+          if (!context.mounted) return;
+
+          // Navigate to return page
+
+          postSaveNav(
+            // context.mounted checked already
+            // : use_build_context_synchronously
+            context,
+            createNoteStatus,
+            ViewSharedNote(
+              fullNoteData: newFullNoteData,
+            ),
+          );
         } else {
           // Non-shared edited note
           // Encrypt note, create TTL, update file in POD
@@ -200,9 +206,11 @@ Future<void> saveNote(
             );
 
             // Navigate to return page
+
+            if (!context.mounted) return;
+
             postSaveNav(
               // context.mounted checked already
-              // ignore: use_build_context_synchronously
               context,
               createNoteStatus,
               ViewNote(noteData: noteNewData, notesMap: notesMap),
@@ -233,25 +241,25 @@ Future<void> saveNote(
         );
 
         // Encrypt note, create TTL and write to file in POD
-        if (context.mounted) {
-          createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            ListNotesScreen(),
-          );
+        if (!context.mounted) return;
 
-          // Navigate to return page
-          postSaveNav(
-            // context.mounted checked already
-            // ignore: use_build_context_synchronously
-            context,
-            createNoteStatus,
-            ListNotesScreen(),
-          );
-        }
+        createNoteStatus = await saveNoteToPod(
+          context,
+          noteNewData,
+          ListNotesScreen(),
+        );
+
+        // Navigate to return page
+
+        if (!context.mounted) return;
+
+        postSaveNav(
+          context,
+          createNoteStatus,
+          ListNotesScreen(),
+        );
       } else {
-        // Nn note content message
-        Navigator.pop(context);
+        // No note content message
         showErrDialog(context, 'Please enter some note content.');
       }
     }
@@ -354,7 +362,6 @@ Future<void> postSaveNav(
           false, // This predicate ensures all previous routes are removed
     );
   } else {
-    Navigator.pop(context);
     showErrDialog(
       context,
       'Failed to store the note file in your POD. Try again!',

@@ -3,15 +3,20 @@
 
 #define MyAppName "NotePod"
 #define MyAppVersion "dev-windows-inno"
-#define MyAppPublisher "ANU Software Innovation Institute"
-#define MyAppURL "https://notepod.solidcommunity.au/"
+#define MyAppPublisher "Software Innovation Institute ANU"
+#define MyAppURL "https://github.com/anusii/notepod
 #define MyAppExeName "notepod.exe"
 
 [Setup]
+;
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 ; (On Ubuntu run `uuidgen` to generate a unique AppId.)
+;
+; Also notice the consecutive "{" characters required, it seems. Looks
+; like it is for embedding a single "{" and not a constant.
+;
 AppId={{6B5EF861-CA64-4E55-91B0-1ED4544ABF98}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -22,7 +27,21 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=..\LICENSE
-PrivilegesRequiredOverridesAllowed=dialog
+;
+; Uncomment the following line to run in non administrative install mode
+; (install for current user only.) Otherwise it runs as admin to install
+; for all users.
+;
+;PrivilegesRequired=lowest
+;
+; If the following is `dialog` then when installed from the command line the
+; user is prompted through a POPUP to install for current user or system.
+; By setting it to `commandline` then from the command line the choice can
+; be `/ALLUSERS` or `/CURRENTUSER`. The default is `/ALLUSERS`.
+;
+;PrivilegesRequiredOverridesAllowed=dialog
+;
+PrivilegesRequiredOverridesAllowed=commandline
 OutputDir=installers
 OutputBaseFilename=notepod-{#MyAppVersion}
 SetupIconFile=..\windows\runner\resources\app_icon.ico
@@ -36,10 +55,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+; Check the DIR command in the workflow to see what DLLs get generated.
+
 [Files]
 Source: "..\build\windows\x64\runner\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\build\windows\x64\runner\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\build\windows\x64\runner\Release\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
+; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

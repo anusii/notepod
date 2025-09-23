@@ -49,6 +49,7 @@ class NoteEditScrollView extends StatelessWidget {
     super.key,
     required this.formKey,
     required TextEditingController? textController,
+    required ScrollController scrollController,
     required FocusNode focusTitle,
     required FocusNode focusContent,
     required this.data,
@@ -57,12 +58,20 @@ class NoteEditScrollView extends StatelessWidget {
     this.notesMap = const {},
     this.noteInfo = const {},
   })  : _textController = textController,
+        _scrollController = scrollController,
         _focusTitle = focusTitle,
         _focusContent = focusContent;
 
   final GlobalKey<FormBuilderState> formKey;
   final TextEditingController? _textController;
+
+  /// Scroll controller for single child scroll view
+  final ScrollController _scrollController;
+
+  /// Focus node for note title field
   final FocusNode _focusTitle;
+
+  /// Focus node for note contents text field
   final FocusNode _focusContent;
   final String data;
 
@@ -145,74 +154,84 @@ class NoteEditScrollView extends StatelessWidget {
       children: [
         Flexible(
           fit: FlexFit.loose,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: FormBuilder(
-                    key: formKey,
-                    onChanged: () {
-                      formKey.currentState!.save();
-                    },
-                    autovalidateMode: AutovalidateMode.disabled,
-                    skipDisabled: true,
-                    child: Column(
-                      children: [
-                        // New note: show current date
-                        if (prevNoteData == null) ...[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Date: $currDateStr',
-                                style: titleStyle,
+          child: Scrollbar(
+            thumbVisibility: true,
+            controller: _scrollController,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FormBuilder(
+                      key: formKey,
+                      onChanged: () {
+                        formKey.currentState!.save();
+                      },
+                      autovalidateMode: AutovalidateMode.disabled,
+                      skipDisabled: true,
+                      child: Column(
+                        children: [
+                          // New note: show current date
+                          if (prevNoteData == null) ...[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Date: $currDateStr',
+                                  style: titleStyle,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                          // Edit existing note: populated text field with
+                          // previous note data
+                          FormBuilderTextField(
+                            name: noteTitlePred,
+                            initialValue: (prevNoteData != null)
+                                ? noteContent[noteTitlePred]
+                                : null,
+                            // Initial focus in title field
+                            autofocus: true,
+                            focusNode: _focusTitle,
+                            decoration: const InputDecoration(
+                              labelText: 'Note Title',
+                              labelStyle: TextStyle(
+                                color: darkBlue,
+                                letterSpacing: 1.5,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
+                              //errorText: 'error',
+                            ),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                            ]),
                           ),
                         ],
-                        // Edit existing note: populated text field with
-                        // previous note data
-                        FormBuilderTextField(
-                          name: noteTitlePred,
-                          initialValue: (prevNoteData != null)
-                              ? noteContent[noteTitlePred]
-                              : null,
-                          // Initial focus in title field
-                          autofocus: true,
-                          focusNode: _focusTitle,
-                          decoration: const InputDecoration(
-                            labelText: 'Note Title',
-                            labelStyle: TextStyle(
-                              color: darkBlue,
-                              letterSpacing: 1.5,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            //errorText: 'error',
-                          ),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                markdownEditor(context, _textController!, _focusContent, data),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  markdownEditor(
+                    context,
+                    _textController!,
+                    _focusContent,
+                    data,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

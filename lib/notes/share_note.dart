@@ -58,41 +58,56 @@ class ShareNote extends StatefulWidget {
 
 class ShareNoteState extends State<ShareNote>
     with SingleTickerProviderStateMixin {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                NoteBackButton(
-                  childPage: widget.backPage,
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: GrantPermissionUi(
-                    showAppBar: false,
-                    fileName: widget.noteFilePath,
-                    dataFilesMap: widget.notesMap as Map<String, dynamic>,
-                    child: ShareNote(
-                      noteData: widget.noteData,
-                      noteFilePath: widget.noteFilePath,
-                      notesMap: widget.notesMap,
-                      backPage: widget.backPage,
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _scrollController,
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  NoteBackButton(
+                    childPage: widget.backPage,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: GrantPermissionUi(
+                      showAppBar: false,
+                      fileName: widget.noteFilePath,
+                      dataFilesMap: widget.notesMap as Map<String, dynamic>,
+                      child: ShareNote(
+                        noteData: widget.noteData,
+                        noteFilePath: widget.noteFilePath,
+                        notesMap: widget.notesMap,
+                        backPage: widget.backPage,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
