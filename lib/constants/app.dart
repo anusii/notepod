@@ -82,6 +82,19 @@ const smallTextStyle = TextStyle(
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
 
+// Note messages
+/// Note saving message
+const String savingNoteMsg = 'Saving the note!';
+
+/// Note deleting message
+const String deletingNoteMsg = 'Deleting the note!';
+
+/// Confirm delete message
+const String confirmDeleteMsg = 'Are you sure you want to delete this note?';
+
+/// Please confirm message
+const String plsConfirmMsg = 'Please Confirm';
+
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 

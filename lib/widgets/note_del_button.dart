@@ -59,9 +59,9 @@ class NoteDelButton extends StatelessWidget {
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
-              title: const Text('Please Confirm'),
+              title: const Text(plsConfirmMsg),
               content: const Text(
-                'Are you sure you want to delete this note?',
+                confirmDeleteMsg,
               ),
               actions: [
                 // The "Yes" button
@@ -70,7 +70,7 @@ class NoteDelButton extends StatelessWidget {
                     showAnimationDialog(
                       context,
                       17,
-                      'Deleting the note!',
+                      deletingNoteMsg,
                       false,
                     );
 

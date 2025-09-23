@@ -144,7 +144,7 @@ Future<void> saveNote(
         showAnimationDialog(
           context,
           17,
-          'Saving the note!',
+          savingNoteMsg,
           false,
         );
 
@@ -228,7 +228,7 @@ Future<void> saveNote(
         showAnimationDialog(
           context,
           17,
-          'Saving the note!',
+          savingNoteMsg,
           false,
         );
 
