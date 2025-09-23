@@ -82,18 +82,38 @@ const smallTextStyle = TextStyle(
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
 
-// Note messages
-/// Note saving message
-const String savingNoteMsg = 'Saving the note!';
+/// Note action messages
+class Msg {
+  /// Note saving message
+  static const String savingNote = 'Saving the note!';
 
-/// Note deleting message
-const String deletingNoteMsg = 'Deleting the note!';
+  /// Note deleting message
+  static const String deletingNote = 'Deleting the note!';
 
-/// Confirm delete message
-const String confirmDeleteMsg = 'Are you sure you want to delete this note?';
+  /// Confirm delete note message
+  static const String confirmDelete =
+      'Are you sure you want to delete this note?';
 
-/// Please confirm message
-const String plsConfirmMsg = 'Please Confirm';
+  // Please confirm message
+  static const String plsConfirm = 'Please Confirm';
+}
+
+/// Error messages for errors occuring on note actions
+class ErrMsg {
+  /// No changes to note error.
+  static const String noChanges = 'You have no new changes!';
+
+  /// No note content.
+  static const String noContent = 'Please enter some note content.';
+
+  /// Invalid note name.
+  static const String invalidName =
+      'Note name validation failed! Try using a different name.';
+
+  /// Error message when fails to save note file to POD
+  static const String saveFailed =
+      'Failed to store the note file in your POD. Try again!';
+}
 
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);

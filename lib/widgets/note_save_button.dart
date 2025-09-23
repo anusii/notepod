@@ -138,13 +138,13 @@ Future<void> saveNote(
     if (prevNoteData != null) {
       if (noteTitle == prevNoteData[noteTitlePred] &&
           noteText == prevNoteData[noteContentPred]) {
-        showErrDialog(context, 'You have no new changes!');
+        showErrDialog(context, ErrMsg.noChanges);
       } else {
         // Loading animation
         showAnimationDialog(
           context,
           17,
-          savingNoteMsg,
+          Msg.savingNote,
           false,
         );
 
@@ -228,7 +228,7 @@ Future<void> saveNote(
         showAnimationDialog(
           context,
           17,
-          savingNoteMsg,
+          Msg.savingNote,
           false,
         );
 
@@ -261,13 +261,13 @@ Future<void> saveNote(
         );
       } else {
         // No note content message
-        showErrDialog(context, 'Please enter some note content.');
+        showErrDialog(context, ErrMsg.noContent);
       }
     }
   } else {
     showErrDialog(
       context,
-      'Note name validation failed! Try using a different name.',
+      ErrMsg.invalidName,
     );
   }
 }
@@ -366,7 +366,7 @@ Future<void> postSaveNav(
   } else {
     showErrDialog(
       context,
-      'Failed to store the note file in your POD. Try again!',
+      ErrMsg.saveFailed,
     );
   }
 }
