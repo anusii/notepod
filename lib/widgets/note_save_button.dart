@@ -147,12 +147,9 @@ Future<void> saveNote(
           false,
         );
 
-        // Update existing note
-        String createdDateTimeStr = prevNoteData[createdDateTimePred];
-
         // Format new note data structure
-        noteNewData = await prepNewNoteData(
-          createdDateTimeStr,
+        noteNewData = makeNewNoteData(
+          prevNoteData[createdDateTimePred], // prev note creation date
           modifiedDateTimeStr,
           noteTitle,
           noteText,
@@ -232,7 +229,7 @@ Future<void> saveNote(
 
         // Format new note data structure
         // As new note, use modoifiedDateTimeStr for creation datetimestamp
-        noteNewData = await prepNewNoteData(
+        noteNewData = makeNewNoteData(
           modifiedDateTimeStr,
           modifiedDateTimeStr,
           noteTitle,
@@ -270,13 +267,14 @@ Future<void> saveNote(
   }
 }
 
-Future<Map> prepNewNoteData(
+/// Create note json data
+Map<String, dynamic> makeNewNoteData(
   String createdDateTimeStr,
   String modifiedDateTimeStr,
   String noteTitle,
   String noteText,
-) async {
-  Map noteNewData = {};
+) {
+  Map<String, dynamic> noteNewData = {};
 
   noteNewData[noteTitlePred] = noteTitle;
   noteNewData[createdDateTimePred] = createdDateTimeStr;
