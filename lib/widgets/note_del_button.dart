@@ -69,7 +69,6 @@ class NoteDelButton extends StatelessWidget {
                   onPressed: () async {
                     showAnimationDialog(
                       context,
-                      17,
                       Msg.deletingNote,
                       false,
                     );

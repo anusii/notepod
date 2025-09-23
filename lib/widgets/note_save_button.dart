@@ -143,7 +143,6 @@ Future<void> saveNote(
         // Loading animation
         showAnimationDialog(
           context,
-          17,
           Msg.savingNote,
           false,
         );
@@ -227,7 +226,6 @@ Future<void> saveNote(
         // Loading animation
         showAnimationDialog(
           context,
-          17,
           Msg.savingNote,
           false,
         );
