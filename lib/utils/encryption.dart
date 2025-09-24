@@ -29,7 +29,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypter_plus/encrypter_plus.dart';
 
 /// A function for ecrypting a plaintext value
 ///

@@ -33,7 +33,6 @@ import 'package:notepod/constants/colours.dart';
 
 showAnimationDialog(
   BuildContext context,
-  int animationIndex,
   String alertMsg,
   bool showPathBackground,
 ) {
@@ -55,7 +54,7 @@ showAnimationDialog(
             child: Column(
               children: [
                 LoadingIndicator(
-                  indicatorType: Indicator.values[animationIndex],
+                  indicatorType: Indicator.ballScaleRipple,
                   colors: defaultNotepodColors,
                   strokeWidth: 4.0,
                   pathBackgroundColor: showPathBackground
