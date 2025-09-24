@@ -117,7 +117,6 @@ class NoteEditScrollView extends StatelessWidget {
                 NoteSaveButton(
                   textController: _textController!,
                   formKey: formKey,
-                  shared: shared,
                   notesMap: notesMap,
                 ),
               ]
@@ -126,9 +125,9 @@ class NoteEditScrollView extends StatelessWidget {
                 NoteSaveButton(
                   textController: _textController!,
                   formKey: formKey,
+                  notesMap: notesMap,
                   prevNoteData: prevNoteData,
                   shared: shared,
-                  notesMap: notesMap,
                 ),
                 const SizedBox(
                   width: 5,

@@ -51,25 +51,25 @@ import 'package:notepod/widgets/loading_animation.dart';
 /// - `NoteSaveButton(textController: _textController!, formKey: formKey, prevNoteData: prevNoteData, shared: shared, notesMap: notesMap)` save the updated metadata and content of an existing note to the owner's Pod (whether that be the user or an external owner).
 ///
 /// - [textController] - Text controller of the note text content editor.
-/// - [formKey] - Key of the form to edit note metadata
-/// - [prevNoteData] - Map of previous data of an existing note. Optional, required for existing notes
-/// - [shared] - Boolean denoting whether external note
-/// - [notesMap] - Map of current data of note to write to Pod
+/// - [formKey] - Key of the form to edit the note metadata
+/// - [notesMap] - Map of current data of the note to write to Pod
+/// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes
+/// - [shared] - Optional boolean denoting whether external note (default: false)
 
 class NoteSaveButton extends StatelessWidget {
   final TextEditingController textController;
   final GlobalKey<FormBuilderState> formKey;
+  final Map notesMap;
   final Map? prevNoteData;
   final bool shared;
-  final Map notesMap;
 
   const NoteSaveButton({
     super.key,
     required this.textController,
     required this.formKey,
+    required this.notesMap,
     this.prevNoteData,
-    required this.shared,
-    this.notesMap = const {},
+    this.shared = false,
   });
 
   @override
@@ -112,6 +112,18 @@ class NoteSaveButton extends StatelessWidget {
   }
 }
 
+/// Function that starts a waiting indicator, calls steps to save note,
+/// and then navigates to the appropriate return page.
+///
+/// Examples:
+/// - `saveNote(ontext, textController, formKey, prevNoteData, shared, notesMap)`
+///
+/// - [context] - The build context
+/// - [textController] - Text controller of the note text content editor.
+/// - [formKey] - Key of the form to edit note metadata
+/// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes (default: null)
+/// - [shared] - Optional boolean denoting whether external note (default: false)
+/// - [notesMap] - Map of current data of note to write to Pod
 Future<void> saveNote(
   BuildContext context,
   TextEditingController textController,
@@ -129,7 +141,7 @@ Future<void> saveNote(
     String noteText = textController.text;
     Map noteNewData = {};
 
-    // Previous shared note info only used when saveNote() on edit shared note
+    // Previous external note info, required for saving an external note
     Map prevSharedNoteInfo = {};
 
     // Note title need to be spaceless as we are using that name
@@ -294,8 +306,8 @@ Map<String, dynamic> makeNewNoteData(
 /// - [context] - The build context
 /// - [noteNewData] - The map of note data to be encrypted and written to Pod
 /// - [returnPage] - The destination widget to navigate to after note is saved
-/// - [shared] - Boolean defining whether updating an existing external note (default: false)
-/// - [prevSharedNoteInfo] - Map of existing note information, required for updating existing external notes (default: {})
+/// - [shared] - Optional boolean defining whether updating an existing external note (default: false)
+/// - [prevSharedNoteInfo] - Optional map of existing note information. Required for updating existing external notes (default: {})
 Future<void> saveNoteToPod(
   BuildContext context,
   Map noteNewData,
