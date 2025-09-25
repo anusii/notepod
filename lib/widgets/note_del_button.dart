@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
@@ -58,9 +59,9 @@ class NoteDelButton extends StatelessWidget {
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
-              title: const Text('Please Confirm'),
+              title: const Text(Msg.plsConfirm),
               content: const Text(
-                'Are you sure you want to delete this note?',
+                Msg.confirmDelete,
               ),
               actions: [
                 // The "Yes" button
@@ -68,8 +69,7 @@ class NoteDelButton extends StatelessWidget {
                   onPressed: () async {
                     showAnimationDialog(
                       context,
-                      17,
-                      'Deleting the note!',
+                      Msg.deletingNote,
                       false,
                     );
 

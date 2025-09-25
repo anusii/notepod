@@ -17,7 +17,7 @@ environment:
 dependencies:
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2 # An asset repository.
-  encrypt: ^5.0.3
+  encrypter_plus: ^5.1.0
   flutter:
     sdk: flutter
   flutter_form_builder: ^10.0.1
@@ -28,11 +28,17 @@ dependencies:
   markdown_widget: ^2.3.2+8
   package_info_plus: ^8.3.0
   rdflib: ^0.2.12
-  solidpod: ^0.7.10
-  solidui:
+  # solidpod: ^0.7.10
+  solidpod:
     git:
-      url: https://github.com/anusii/solidui.git
-      ref: dev
+      url: https://github.com/anusii/solidpod.git
+      ref: jess/point_solid_auth_to_dev
+  # solidui:
+  #   git:
+  #     url: https://github.com/anusii/solidui.git
+  #     ref: dev
+  solidui:
+    path: ../solidui
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.4

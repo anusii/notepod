@@ -31,10 +31,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
-import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -42,22 +42,34 @@ import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
-/// A stylised save button widget for notes.
+/// A stylised save button widget which on click saves the note content
+/// Pod. External notes are written to the note owner's Pod. Notes created
+/// by the user are written to the user's Pod.
+///
+/// Examples
+/// - `NoteSaveButton(textController: _textController!, formKey: formKey, shared: shared, notesMap: notesMap)` save the metadata and content of a new note to user's Pod.
+/// - `NoteSaveButton(textController: _textController!, formKey: formKey, prevNoteData: prevNoteData, shared: shared, notesMap: notesMap)` save the updated metadata and content of an existing note to the owner's Pod (whether that be the user or an external owner).
+///
+/// - [textController] - Text controller of the note text content editor.
+/// - [formKey] - Key of the form to edit the note metadata
+/// - [notesMap] - Map of current data of the note to write to Pod
+/// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes
+/// - [shared] - Optional boolean denoting whether external note (default: false)
 
 class NoteSaveButton extends StatelessWidget {
   final TextEditingController textController;
   final GlobalKey<FormBuilderState> formKey;
+  final Map notesMap;
   final Map? prevNoteData;
   final bool shared;
-  final Map notesMap;
 
   const NoteSaveButton({
     super.key,
     required this.textController,
     required this.formKey,
+    required this.notesMap,
     this.prevNoteData,
-    required this.shared,
-    this.notesMap = const {},
+    this.shared = false,
   });
 
   @override
@@ -100,6 +112,18 @@ class NoteSaveButton extends StatelessWidget {
   }
 }
 
+/// Function that starts a waiting indicator, calls steps to save note,
+/// and then navigates to the appropriate return page.
+///
+/// Examples:
+/// - `saveNote(ontext, textController, formKey, prevNoteData, shared, notesMap)`
+///
+/// - [context] - The build context
+/// - [textController] - Text controller of the note text content editor.
+/// - [formKey] - Key of the form to edit note metadata
+/// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes (default: null)
+/// - [shared] - Optional boolean denoting whether external note (default: false)
+/// - [notesMap] - Map of current data of note to write to Pod
 Future<void> saveNote(
   BuildContext context,
   TextEditingController textController,
@@ -112,12 +136,12 @@ Future<void> saveNote(
     // Compares to prevNoteData if previous note data provided
     // Adds sharing metadata if shared==true
 
-    final SolidFunctionCallStatus createNoteStatus;
+    // final SolidFunctionCallStatus createNoteStatus;
     Map formData = formKey.currentState?.value as Map;
     String noteText = textController.text;
     Map noteNewData = {};
 
-    // Previous shared note info only used when saveNote() on edit shared note
+    // Previous external note info, required for saving an external note
     Map prevSharedNoteInfo = {};
 
     // Note title need to be spaceless as we are using that name
@@ -137,84 +161,69 @@ Future<void> saveNote(
     if (prevNoteData != null) {
       if (noteTitle == prevNoteData[noteTitlePred] &&
           noteText == prevNoteData[noteContentPred]) {
-        showErrDialog(context, 'You have no new changes!');
+        showErrDialog(context, ErrMsg.noChanges);
       } else {
-        // Loading animation
-        showAnimationDialog(
-          context,
-          17,
-          'Saving the note!',
-          false,
-        );
+        try {
+          // Loading animation
+          showAnimationDialog(
+            context,
+            Msg.savingNote,
+            false,
+          );
 
-        // Update existing note
-        String createdDateTimeStr = prevNoteData[createdDateTimePred];
-
-        // Format new note data structure
-        noteNewData = await prepNewNoteData(
-          createdDateTimeStr,
-          modifiedDateTimeStr,
-          noteTitle,
-          noteText,
-        );
+          // Format new note data structure
+          noteNewData = makeNewNoteData(
+            prevNoteData[createdDateTimePred], // prev note creation date
+            modifiedDateTimeStr,
+            noteTitle,
+            noteText,
+          );
+        } on Exception catch (e) {
+          debugPrint('Exception (formatting update to existing note):\n $e');
+        }
 
         if (shared) {
           // Shared edited note
           // New full note data
-          Map newFullNoteData = {
-            'sharedNoteInfo': prevSharedNoteInfo,
-            'sharedNoteContent': noteNewData,
-          };
-          // Encrypt note, create TTL, update file in POD
-          if (!context.mounted) return;
-
-          createNoteStatus = await saveNoteToPod(
-            context,
-            noteNewData,
-            ViewSharedNote(
-              fullNoteData: newFullNoteData,
-            ),
-            shared,
-            prevSharedNoteInfo,
-          );
-
-          if (!context.mounted) return;
-
-          // Navigate to return page
-
-          postSaveNav(
-            // context.mounted checked already
-            // : use_build_context_synchronously
-            context,
-            createNoteStatus,
-            ViewSharedNote(
-              fullNoteData: newFullNoteData,
-            ),
-          );
-        } else {
-          // Non-shared edited note
-          // Encrypt note, create TTL, update file in POD
-          if (context.mounted) {
-            createNoteStatus = await saveNoteToPod(
-              context,
-              noteNewData,
-              EditNote(
-                noteData: noteNewData,
-                notesMap: notesMap,
-              ),
-              shared,
-            );
-
-            // Navigate to return page
+          try {
+            Map newFullNoteData = {
+              'sharedNoteInfo': prevSharedNoteInfo,
+              'sharedNoteContent': noteNewData,
+            };
 
             if (!context.mounted) return;
 
-            postSaveNav(
-              // context.mounted checked already
+            // External note
+            // Encrypt note, create TTL, update file in POD
+            await saveNoteToPod(
               context,
-              createNoteStatus,
-              ViewNote(noteData: noteNewData, notesMap: notesMap),
+              noteNewData,
+              ViewSharedNote(
+                fullNoteData: newFullNoteData,
+              ),
+              shared,
+              prevSharedNoteInfo,
             );
+          } on Exception catch (e) {
+            debugPrint('Exception (saving existing external note):\n $e');
+          }
+        } else {
+          // Edited my note
+          // Encrypt note, create TTL, update file in POD
+          try {
+            if (!context.mounted) return;
+
+            await saveNoteToPod(
+              context,
+              noteNewData,
+              ViewNote(
+                noteData: noteNewData,
+                notesMap: notesMap,
+              ),
+              // shared,
+            );
+          } on Exception catch (e) {
+            debugPrint('Exception (saving existing my note):\n $e');
           }
         }
       }
@@ -223,61 +232,61 @@ Future<void> saveNote(
 
       // Check note content is not empty
       if (noteText.trim() != '') {
-        // Loading animation
-        showAnimationDialog(
-          context,
-          17,
-          'Saving the note!',
-          false,
-        );
+        try {
+          // Loading animation
+          showAnimationDialog(
+            context,
+            Msg.savingNote,
+            false,
+          );
 
-        // Format new note data structure
-        // As new note, use modoifiedDateTimeStr for creation datetimestamp
-        noteNewData = await prepNewNoteData(
-          modifiedDateTimeStr,
-          modifiedDateTimeStr,
-          noteTitle,
-          noteText,
-        );
+          // Format new note data structure
+          // As new note, modoifiedDateTimeStr = creation datetimestamp
+          noteNewData = makeNewNoteData(
+            modifiedDateTimeStr,
+            modifiedDateTimeStr,
+            noteTitle,
+            noteText,
+          );
 
-        // Encrypt note, create TTL and write to file in POD
-        if (!context.mounted) return;
+          // Encrypt note, create TTL and write to file in POD
+          if (!context.mounted) return;
 
-        createNoteStatus = await saveNoteToPod(
-          context,
-          noteNewData,
-          ListNotesScreen(),
-        );
-
-        // Navigate to return page
-
-        if (!context.mounted) return;
-
-        postSaveNav(
-          context,
-          createNoteStatus,
-          ListNotesScreen(),
-        );
+          // createNoteStatus = await saveNoteToPod(
+          await saveNoteToPod(
+            context,
+            noteNewData,
+            ListNotesScreen(),
+          );
+        } on Exception catch (e) {
+          debugPrint('Exception (saving new my note):\n $e');
+        }
       } else {
         // No note content message
-        showErrDialog(context, 'Please enter some note content.');
+        showErrDialog(context, ErrMsg.noContent);
       }
     }
   } else {
     showErrDialog(
       context,
-      'Note name validation failed! Try using a different name.',
+      ErrMsg.invalidName,
     );
   }
 }
 
-Future<Map> prepNewNoteData(
+/// Format the note data in json key-value structure used for notes, where keys are [noteTitlePred], [createdDateTimePred], [modifiedDateTimePred], and [noteContentPred].
+///
+/// - [createdDateTimeStr] - date time stamp of file creation time
+/// - [modifiedDateTimeStr] - data time stamp of last file modification time
+/// - [noteTitle] - note title
+/// - [noteText] - text of note content
+Map<String, dynamic> makeNewNoteData(
   String createdDateTimeStr,
   String modifiedDateTimeStr,
   String noteTitle,
   String noteText,
-) async {
-  Map noteNewData = {};
+) {
+  Map<String, dynamic> noteNewData = {};
 
   noteNewData[noteTitlePred] = noteTitle;
   noteNewData[createdDateTimePred] = createdDateTimeStr;
@@ -287,84 +296,102 @@ Future<Map> prepNewNoteData(
   return noteNewData;
 }
 
-Future<SolidFunctionCallStatus> saveNoteToPod(
+/// Write note to Pod and navigate to return page or display error dialog
+/// if write to Pod failed to return a successful SolidCallFunctionStatus.
+///
+/// Examples:
+/// - `await saveNoteToPod(context, noteNewData, ListNotesScreen())` writes metadata and encrypted content of a note owned by user to a turtle file (with filename based on the file creation date) in the user's Pod. On successful completion returns to my notes list.
+/// - `await saveNoteToPod(context, noteNewData, ViewSharedNote(fullNoteData: newFullNoteData), shared, prevSharedNoteInfo)` writes metadata and encrypted content of an external note to the owner's Pod file. On successful completion returns to view that external note.
+///
+/// - [context] - The build context
+/// - [noteNewData] - The map of note data to be encrypted and written to Pod
+/// - [returnPage] - The destination widget to navigate to after note is saved
+/// - [shared] - Optional boolean defining whether updating an existing external note (default: false)
+/// - [prevSharedNoteInfo] - Optional map of existing note information. Required for updating existing external notes (default: {})
+Future<void> saveNoteToPod(
   BuildContext context,
   Map noteNewData,
   Widget returnPage, [
   bool shared = false,
   Map prevSharedNoteInfo = const {},
 ]) async {
-  // Encrypt note text using created time as the key
-  // av: 20250519 - We need to encrypt the note text because
-  // at the moment rdflib cannot parse multiline text with
-  // # (hash) values in them.
-  String encNoteText = encryptVal(
-    noteNewData[noteContentPred],
-    noteNewData[createdDateTimePred],
-  );
+  /// The returned status of the Solid function call to write
+  /// data to Pod
+  final SolidFunctionCallStatus createNoteStatus;
 
-  // Create note file name
-  // String noteFileName =
-  //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
-  String noteFileName =
-      '$noteFileNamePrefix${noteNewData[createdDateTimePred]}.ttl';
-
-  // Create TTL body for note
-  final noteTTLStr = genNoteTTLStr(
-    noteNewData[createdDateTimePred],
-    noteNewData[modifiedDateTimePred],
-    noteNewData[noteTitlePred],
-    encNoteText,
-  );
-
-  if (shared) {
-    // Get note url
-    String noteFileUrl = prevSharedNoteInfo[noteUrl];
-
-    // Get note owner webId
-    String noteOwnerWebId = prevSharedNoteInfo[noteOwner];
-
-    return await writeExternalPod(
-      noteFileUrl,
-      noteTTLStr,
-      noteOwnerWebId,
-      context,
-      returnPage,
+  try {
+    // Encrypt note text using created time as the key
+    // av: 20250519 - We need to encrypt the note text because
+    // at the moment rdflib cannot parse multiline text with
+    // # (hash) values in them.
+    String encNoteText = encryptVal(
+      noteNewData[noteContentPred],
+      noteNewData[createdDateTimePred],
     );
-  } else {
-// Write note to POD
-    return await writePod(
-      noteFileName,
-      noteTTLStr,
-      context,
-      returnPage,
-      //encrypted: false, // save in plain text for now
+
+    // Create TTL body for note
+    final noteTTLStr = genNoteTTLStr(
+      noteNewData[createdDateTimePred],
+      noteNewData[modifiedDateTimePred],
+      noteNewData[noteTitlePred],
+      encNoteText,
     );
-  }
-}
 
-Future<void> postSaveNav(
-  BuildContext context,
-  SolidFunctionCallStatus createNoteStatus,
-  Widget returnPage,
-) async {
-  if (createNoteStatus == SolidFunctionCallStatus.success) {
-    //Navigator.pop(context);
+    if (shared) {
+      // Url of existing external note
+      String noteFileUrl = prevSharedNoteInfo[noteUrl];
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AppHomePage(
-          childPage: returnPage,
+      // WebId of note owner of existing external note
+      String noteOwnerWebId = prevSharedNoteInfo[noteOwner];
+
+      createNoteStatus = await writeExternalPod(
+        noteFileUrl,
+        noteTTLStr,
+        noteOwnerWebId,
+        context,
+        returnPage,
+      );
+    } else {
+      // Create note file name
+      // String noteFileName =
+      //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
+      String noteFileName =
+          '$noteFileNamePrefix${noteNewData[createdDateTimePred]}.ttl';
+
+      // Write note to POD
+      createNoteStatus = await writePod(
+        noteFileName,
+        noteTTLStr,
+        context,
+        returnPage,
+        //encrypted: false, // save in plain text for now
+      );
+    }
+
+    if (createNoteStatus == SolidFunctionCallStatus.success) {
+      if (!context.mounted) return;
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppHomePage(
+            childPage: returnPage,
+          ),
         ),
-      ),
-      (Route<dynamic> route) =>
-          false, // This predicate ensures all previous routes are removed
-    );
-  } else {
-    showErrDialog(
-      context,
-      'Failed to store the note file in your POD. Try again!',
+        (Route<dynamic> route) =>
+            false, // This predicate ensures all previous routes are removed
+      );
+    } else {
+      if (!context.mounted) return;
+
+      showErrDialog(
+        context,
+        ErrMsg.saveFailed,
+      );
+    }
+  } on Exception catch (e) {
+    debugPrint(
+      'Exception (encrypting and saving note, and navigating to return page):\n $e',
     );
   }
 }
