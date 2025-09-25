@@ -56,6 +56,12 @@ class NavDrawer extends StatelessWidget {
       name = 'Not logged in';
     }
 
+    String url = '';
+    if (webId.isNotEmpty) {
+      Uri uri = Uri.parse(webId);
+      url = '${uri.scheme}://${uri.host}';
+    }
+
     return Drawer(
       shape: Border(),
       child: ListView(
@@ -85,7 +91,7 @@ class NavDrawer extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    webId,
+                    url,
                     style:
                         const TextStyle(color: backgroundWhite, fontSize: 14),
                   ),
