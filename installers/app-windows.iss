@@ -3,7 +3,7 @@
 
 #define MyAppName "NotePod"
 #define MyAppVersion "dev-windows-inno"
-#define MyAppPublisher "Software Innovation Institute ANU"
+#define MyAppPublisher "ANU Software Innovation Institute"
 #define MyAppURL "https://github.com/anusii/notepod
 #define MyAppExeName "notepod.exe"
 

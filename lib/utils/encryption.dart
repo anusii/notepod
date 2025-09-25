@@ -1,6 +1,6 @@
 /// Encryption functions.
 ///
-// Time-stamp: <Tuesday 2025-09-16 08:09:34 +1000 Graham Williams>
+// Time-stamp: <Thursday 2025-09-25 15:12:22 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
