@@ -32,6 +32,9 @@ Future<void> showErrDialog(BuildContext context, String errMsg) async {
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
+      // Print error message for redundancy
+      debugPrint('Error: $errMsg');
+
       return AlertDialog(
         title: const Text('ERROR!'),
         content: Scrollbar(
