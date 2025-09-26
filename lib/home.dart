@@ -88,6 +88,23 @@ class AppHomePageState extends State<AppHomePage>
           // tooltip: 'Custom version tooltip',
         ),
         actions: [
+          // New Note
+          SolidAppBarAction(
+            icon: Icons.add_circle,
+            tooltip: 'Navigate to $newNoteTitle',
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AppHomePage(
+                    childPage: NewNote(),
+                  ),
+                ),
+                (Route<dynamic> route) =>
+                    false, // This predicate ensures all previous routes are removed
+              );
+            },
+          ),
           // Login/logout
           SolidAppBarAction(
             icon: _webId != null ? Icons.logout : Icons.login,
@@ -103,13 +120,6 @@ class AppHomePageState extends State<AppHomePage>
           icon: Icons.view_list,
           child: ListNotesScreen(),
           tooltip: 'Navigate to $myNotesTitle',
-        ),
-        // New Note
-        SolidMenuItem(
-          title: newNoteTitle,
-          icon: Icons.note_add_outlined,
-          child: NewNote(),
-          tooltip: 'Navigate to $newNoteTitle',
         ),
         // Shared Notes
         SolidMenuItem(
