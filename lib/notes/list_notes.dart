@@ -68,6 +68,35 @@ class _ListNotesState extends State<ListNotes> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Index of selected notes
+  List<Element> indexList = [];
+
+  /// Count of selected notes
+  int selectedCount = 0;
+
+  /// Update selected list
+  void updateSelected(index) {
+    updateElementSelected(index);
+    if (indexList.contains(index)) {
+      indexList.remove(index);
+    } else {
+      indexList.add(Element(isSelected: true));
+    }
+  }
+
+  /// Update status of selected element in selected list
+  /// and update count of selected
+  updateElementSelected(int index) {
+    setState(() {
+      if (indexList[index].isSelected) {
+        selectedCount--;
+      } else {
+        selectedCount++;
+      }
+      indexList[index].isSelected = !indexList[index].isSelected;
+    });
+  }
+
   @override
   void initState() {
     // By default _foundNotes is the full list of notes
@@ -145,6 +174,11 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   Widget build(BuildContext context) {
+    // Create selected note list when list is built
+    for (var i = 0; i < _foundNotes.length; i++) {
+      indexList.add(Element(isSelected: false));
+    }
+
     return SizedBox(
       child: Column(
         children: [
@@ -153,6 +187,11 @@ class _ListNotesState extends State<ListNotes> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Count of selected notes
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Center(child: Text('$selectedCount')),
+                ),
                 Text(
                   '$myNotesTitle (created by me)',
                   style: titleStyle,
@@ -238,15 +277,50 @@ class _ListNotesState extends State<ListNotes> {
                 itemCount: _foundNotes.length,
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
+                  // TODO: Add selection status to data such that it is sorted with the data
+                  // TODO: swap elevation to Container box decoration
+                  elevation: indexList[index].isSelected ? 10 : 0,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: ListTile(
-                    leading: const CircleAvatar(
-                      radius: 26,
-                      backgroundImage:
-                          AssetImage('assets/images/note-icon.png'),
-                    ),
+                    // TODO: wrap button as SelectNoteButton() SizedBox Widget
+                    leading: indexList[index].isSelected
+                        ? SizedBox(
+                            width: 55,
+                            child: Center(
+                              child: Ink(
+                                decoration: buttonShapeList,
+                                child: IconButton(
+                                  icon: const Icon(Icons.done),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    updateSelected(index);
+                                  },
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            width: 55,
+                            child: Center(
+                              child: Ink(
+                                decoration: buttonShapeList,
+                                child: IconButton(
+                                  icon: const Icon(Icons.edit_document),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    updateSelected(index);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                    // leading: const CircleAvatar(
+                    //   radius: 26,
+                    //   backgroundImage:
+                    //       AssetImage('assets/images/note-icon.png'),
+                    // ),
                     //const Icon(Icons.text_snippet_outlined),
                     title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
                     subtitle: Text(
@@ -327,4 +401,9 @@ class TrailingButtons extends StatelessWidget {
       ],
     );
   }
+}
+
+class Element {
+  Element({required this.isSelected});
+  bool isSelected;
 }
