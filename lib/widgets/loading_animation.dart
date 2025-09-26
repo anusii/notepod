@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:loading_indicator/loading_indicator.dart';
+import 'package:new_loading_indicator/new_loading_indicator.dart';
 
 import 'package:notepod/constants/colours.dart';
 
