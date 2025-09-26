@@ -86,6 +86,9 @@ class NoteDelButton extends StatelessWidget {
                     }
 
                     if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true)
+                          .pop(); // Dismiss the deleting note dialog
+
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -103,8 +106,8 @@ class NoteDelButton extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
+                    Navigator.of(context, rootNavigator: true)
+                        .pop(); // Dismiss the deleting note dialog
                   },
                   child: const Text('No'),
                 ),
