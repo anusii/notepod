@@ -28,7 +28,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
-import 'package:notepod/shared_notes/share_external_note_screen.dart';
+import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/title_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/note_share_button.dart';
@@ -405,8 +405,8 @@ class SharedTrailingButtons extends StatelessWidget {
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
           NoteShareButton(
-            childPage: ShareExternalNoteScreen(
-              sharedNoteData: _sharedNoteData,
+            childPage: ShareExternalNote(
+              noteMetaData: _sharedNoteData,
             ),
             simple: true,
           ),
