@@ -22,8 +22,7 @@
 
 library;
 
-// import 'package:solidpod/solidpod.dart';
-import 'package:solidpod/src/solid/constants/common.dart';
+import 'package:solidpod/solidpod.dart';
 
 // Directory name constants.
 
