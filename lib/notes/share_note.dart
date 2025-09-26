@@ -56,8 +56,7 @@ class ShareNote extends StatefulWidget {
   ShareNoteState createState() => ShareNoteState();
 }
 
-class ShareNoteState extends State<ShareNote>
-    with SingleTickerProviderStateMixin {
+class ShareNoteState extends State<ShareNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 

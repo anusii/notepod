@@ -48,8 +48,7 @@ class ShareExternalNote extends StatefulWidget {
   ShareExternalNoteState createState() => ShareExternalNoteState();
 }
 
-class ShareExternalNoteState extends State<ShareExternalNote>
-    with SingleTickerProviderStateMixin {
+class ShareExternalNoteState extends State<ShareExternalNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 

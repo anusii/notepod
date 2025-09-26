@@ -43,7 +43,7 @@ class NewNote extends StatefulWidget {
   NewNoteState createState() => NewNoteState();
 }
 
-class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
+class NewNoteState extends State<NewNote> {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
