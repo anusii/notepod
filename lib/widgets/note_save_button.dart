@@ -371,6 +371,9 @@ Future<void> saveNoteToPod(
     if (createNoteStatus == SolidFunctionCallStatus.success) {
       if (!context.mounted) return;
 
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Dismiss the saving note dialog
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -383,12 +386,24 @@ Future<void> saveNoteToPod(
             false, // This predicate ensures all previous routes are removed
       );
     } else {
+      // Show SolidFunctionCallStatus after writePod() if not success
+      debugPrint(
+        'SolidFunctionCallStatus: ${createNoteStatus.toString()}',
+      );
+
       if (!context.mounted) return;
+
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Dismiss the saving note dialog
 
       showErrDialog(
         context,
         ErrMsg.saveFailed,
       );
+    }
+
+    if (!context.mounted) {
+      throw Exception('Context not found');
     }
   } on Exception catch (e) {
     debugPrint(
