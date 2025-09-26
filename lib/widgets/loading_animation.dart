@@ -43,11 +43,6 @@ showAnimationDialog(
       return Padding(
         padding: const EdgeInsets.all(50),
         child: Center(
-          // child: SpinKitThreeBounce(
-          //   color: anuCopper,
-          //   size: 100.0,
-          //   //controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
-          // ),
           child: SizedBox(
             width: 150,
             height: 250,
