@@ -49,22 +49,11 @@ class AppHomePageState extends State<AppHomePage>
     with SingleTickerProviderStateMixin {
   String? _webId;
 
-  String _appVersion = '';
+  // String _appVersion = '';
 
   @override
   void initState() {
     super.initState();
-    _loadAppInfo();
-  }
-
-  /// Loads the app name and version from package_info_plus.
-  Future<void> _loadAppInfo() async {
-    final appInfo = await getAppNameVersion();
-    if (mounted) {
-      setState(() {
-        _appVersion = appInfo.version;
-      });
-    }
   }
 
   // Toggle login status
