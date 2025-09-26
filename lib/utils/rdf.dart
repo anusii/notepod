@@ -25,27 +25,36 @@
 
 library;
 
+import 'package:flutter/material.dart';
+
 import 'package:rdflib/rdflib.dart';
 
 Map<String, dynamic> parseTTLMap(String ttlContent) {
   final g = Graph();
-  g.parseTurtle(ttlContent);
-  final dataMap = <String, dynamic>{};
-  for (final t in g.triples) {
-    final sub = t.sub.value as String;
-    final pre = t.pre.value as String;
-    final obj = t.obj.value as String;
-    if (dataMap.containsKey(sub)) {
-      if ((dataMap[sub] as Map).containsKey(pre)) {
-        dataMap[sub][pre].add(obj);
+
+  try {
+    g.parseTurtle(ttlContent);
+    final dataMap = <String, dynamic>{};
+    for (final t in g.triples) {
+      final sub = t.sub.value as String;
+      final pre = t.pre.value as String;
+      final obj = t.obj.value as String;
+      if (dataMap.containsKey(sub)) {
+        if ((dataMap[sub] as Map).containsKey(pre)) {
+          dataMap[sub][pre].add(obj);
+        } else {
+          dataMap[sub][pre] = {obj};
+        }
       } else {
-        dataMap[sub][pre] = {obj};
+        dataMap[sub] = {
+          pre: {obj},
+        };
       }
-    } else {
-      dataMap[sub] = {
-        pre: {obj},
-      };
     }
+    return dataMap;
+  } on Object catch (e, s) {
+    debugPrint('Exception details:\n $e');
+    debugPrint('Stack trace:\n $s');
+    rethrow;
   }
-  return dataMap;
 }

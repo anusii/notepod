@@ -69,25 +69,49 @@ Future<Map<String, dynamic>> getNoteList(
   }
 }
 
-// Creates and outputs a map containing the content of a note
+/// Parses note content from turtle format, decrypts the note text, and formats as json map
+///
+/// - [noteContent] - note content in turtle map format
 Map noteInfoMap(String noteContent) {
-  // Parse turtle file
-  final rdfMap = parseTTLMap(noteContent);
+  try {
+    // Parse turtle file
+    final rdfMap = parseTTLMap(noteContent);
 
-  // Create note info map
-  Map noteInfoMap = {
-    noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
-    createdDateTimePred:
+    assert(
+      rdfMap.isNotEmpty,
+      'rdfMap should not be empty',
+    );
+
+    if (rdfMap[meKey] == null) {
+      debugPrint(
+        '[noteInfoMap() rdfMap[meKey] == null]: ${rdfMap.toString()}',
+      );
+    }
+
+    assert(
+      rdfMap[meKey] != null,
+      'rdfMap must have key "#me"',
+    );
+
+    // Create note info map
+    Map noteInfoMap = {
+      noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
+      createdDateTimePred:
+          rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
+      modifiedDateTimePred:
+          rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
+      noteContentPred: decryptVal(
+        rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
         rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    modifiedDateTimePred:
-        rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
-    noteContentPred: decryptVal(
-      rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
-      rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    ),
-  };
+      ),
+    };
 
-  return noteInfoMap;
+    return noteInfoMap;
+  } on Object catch (e, s) {
+    debugPrint('Exception details:\n $e');
+    debugPrint('Stack trace:\n $s');
+    rethrow;
+  }
 }
 
 // Get the Map of shared notes with the current user. If [filesWithGrantAccess]
@@ -138,7 +162,11 @@ Future<Map> getSharedNotes(
   }
 }
 
-// Get the content of a shared note
+/// Get the content of a shared note using the url of the external note which is part of the external note metadata.
+///
+/// - [context] - The build context.
+/// - [childPage] - The widget return page.
+/// - [sharedNoteData] - The metadata of an external note.
 Future<Map> getSharedNoteContent(
   BuildContext context,
   Widget childPage,
@@ -146,10 +174,23 @@ Future<Map> getSharedNoteContent(
 ) async {
   final sharedNoteUrl = sharedNoteData[noteUrl];
 
-  // Get note content
-  final noteContent = await readExternalPod(sharedNoteUrl, context, childPage);
+  try {
+    // Get note content
+    final noteContent =
+        await readExternalPod(sharedNoteUrl, context, childPage);
 
-  final noteContentMap = noteInfoMap(noteContent);
+    assert(
+      noteContent != null &&
+          noteContent != {} &&
+          noteContent != SolidFunctionCallStatus.notLoggedIn,
+      'Note content should not be null or empty or a SolidFunctionCallStatus',
+    );
 
-  return noteContentMap;
+    final noteContentMap = noteInfoMap(noteContent);
+    return noteContentMap;
+  } on Object catch (e, s) {
+    debugPrint('Exception details:\n $e');
+    debugPrint('Stack trace:\n $s');
+    rethrow;
+  }
 }
