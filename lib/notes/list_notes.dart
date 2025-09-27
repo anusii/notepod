@@ -90,9 +90,6 @@ class _ListNotesState extends State<ListNotes> {
       // Swap selected status of file
       _foundNotes[fileNames[index]]['isSelected'] =
           !_foundNotes[fileNames[index]]['isSelected'];
-      debugPrint(
-        'Changed: ${_foundNotes[fileNames[index]][noteTitlePred]}, selected: ${_foundNotes[fileNames[index]]['isSelected']}',
-      );
     });
   }
 
