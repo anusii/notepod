@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Graham Williams, Anushka Vidanage
+/// Authors: Graham Williams, Anushka Vidanage, Jess Moore
 
 library;
 
@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
@@ -40,26 +41,31 @@ import 'package:notepod/notes/list_notes_screen.dart';
 /// App. For SolidPod we wrap the Home widget within [SolidLogin] to start with
 /// a login screen, though this is optional.
 
-class NotePod extends StatelessWidget {
+class NotePod extends StatefulWidget {
   const NotePod({super.key});
+
+  @override
+  State<NotePod> createState() => _NotePodState();
+}
+
+class _NotePodState extends State<NotePod> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _themeMode = ThemeMode.light;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Note Taker',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-        // Make Scrollbars() visible by default
-        // before user starts scrolling in pages
-        // where content exceeds container
-        // jm 20250916: Known issue with scrollbarTheme not applying
-        // in iOS https://github.com/flutter/flutter/issues/143926
-        // thumbVisibility: true still required in Scrollbar() instances
-        scrollbarTheme: ScrollbarThemeData(
-          thumbVisibility: WidgetStateProperty.all(true),
-        ),
-      ),
+      theme: lightThemeData(context),
+      darkTheme: darkThemeData(context),
+      themeMode: _themeMode,
       home: SolidLogin(
         title: 'NOTEPOD - A Note Taker',
         appDirectory: 'notepod',

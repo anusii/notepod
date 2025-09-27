@@ -65,3 +65,54 @@ List<Color> defaultNotepodColors = const [
   titleAsh,
   lightBlue,
 ];
+
+// Light theme
+ThemeData lightThemeData(BuildContext context) {
+  return ThemeData(
+    useMaterial3: true, // Enable Material 3 design
+    brightness: Brightness.light,
+    primarySwatch:
+        Colors.green, // Colors.blue, // Generates various shades of blue
+    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.green[300], // Colors.blue,
+      foregroundColor: Colors.black, // Colors.white,
+    ),
+    primaryColor: Colors.green[300],
+    // Define other colors as needed, e.g., accentColor, textTheme, etc.
+    // Make Scrollbars() visible by default
+    // before user starts scrolling in pages
+    // where content exceeds container
+    // jm 20250916: Known issue with scrollbarTheme not applying
+    // in iOS https://github.com/flutter/flutter/issues/143926
+    // thumbVisibility: true still required in Scrollbar() instances
+    scrollbarTheme: ScrollbarThemeData(
+      thumbVisibility: WidgetStateProperty.all(true),
+    ),
+  );
+}
+
+// Dark theme
+ThemeData darkThemeData(BuildContext context) {
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    primarySwatch: Colors.indigo, // Different primary color for dark theme
+    scaffoldBackgroundColor: Colors.grey[900],
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.green[900],
+      foregroundColor: Colors.white,
+    ),
+    primaryColor: Colors.green[300],
+    // Define other colors for dark theme
+    // Make Scrollbars() visible by default
+    // before user starts scrolling in pages
+    // where content exceeds container
+    // jm 20250916: Known issue with scrollbarTheme not applying
+    // in iOS https://github.com/flutter/flutter/issues/143926
+    // thumbVisibility: true still required in Scrollbar() instances
+    scrollbarTheme: ScrollbarThemeData(
+      thumbVisibility: WidgetStateProperty.all(true),
+    ),
+  );
+}
