@@ -68,32 +68,30 @@ class _ListNotesState extends State<ListNotes> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
-  /// Index of selected notes
-  List<Element> indexList = [];
-
   /// Count of selected notes
   int selectedCount = 0;
 
-  /// Update selected list
-  void updateSelected(index) {
-    updateElementSelected(index);
-    if (indexList.contains(index)) {
-      indexList.remove(index);
-    } else {
-      indexList.add(Element(isSelected: true));
-    }
-  }
+  // TODO: Standardise sort of notes after search box is emptied,
+  // this likely returns it to the initial order, suggesting that initial
+  // sort should happen at the start of initState()
 
-  /// Update status of selected element in selected list
-  /// and update count of selected
-  updateElementSelected(int index) {
+  /// Update selected status and count of selected
+  void updateSelected(int index) {
     setState(() {
-      if (indexList[index].isSelected) {
+      // Increment/decrement selected count
+      if (_foundNotes[fileNames[index]]['isSelected']) {
         selectedCount--;
+        // _foundNotes[fileNames[index]]['isSelected'] = false;
       } else {
         selectedCount++;
+        // _foundNotes[fileNames[index]]['isSelected'] = true;
       }
-      indexList[index].isSelected = !indexList[index].isSelected;
+      // Swap selected status of file
+      _foundNotes[fileNames[index]]['isSelected'] =
+          !_foundNotes[fileNames[index]]['isSelected'];
+      debugPrint(
+        'Changed: ${_foundNotes[fileNames[index]][noteTitlePred]}, selected: ${_foundNotes[fileNames[index]]['isSelected']}',
+      );
     });
   }
 
@@ -105,6 +103,12 @@ class _ListNotesState extends State<ListNotes> {
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
     _scrollController = ScrollController();
+
+    // Create selected note list when list is built
+    for (var i = 0; i < _foundNotes.length; i++) {
+      _foundNotes[fileNames[i]]['isSelected'] = false;
+    }
+
     super.initState();
   }
 
@@ -174,11 +178,6 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   Widget build(BuildContext context) {
-    // Create selected note list when list is built
-    for (var i = 0; i < _foundNotes.length; i++) {
-      indexList.add(Element(isSelected: false));
-    }
-
     return SizedBox(
       child: Column(
         children: [
@@ -274,9 +273,9 @@ class _ListNotesState extends State<ListNotes> {
                 itemCount: _foundNotes.length,
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
-                  // TODO: Add selection status to data such that it is sorted with the data
                   child: Container(
-                    decoration: (indexList[index].isSelected)
+                    decoration: _foundNotes[fileNames[index]]
+                            ['isSelected'] // (indexList[index].isSelected)
                         ? BoxDecoration(
                             color: Colors.green[200],
                             borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -292,7 +291,8 @@ class _ListNotesState extends State<ListNotes> {
                           child: Ink(
                             decoration: buttonShapeList,
                             child: IconButton(
-                              icon: indexList[index].isSelected
+                              icon: _foundNotes[fileNames[index]][
+                                      'isSelected'] //indexList[index].isSelected
                                   ? const Icon(Icons.done)
                                   : const Icon(Icons.edit_document),
                               color: Colors.white,
@@ -382,9 +382,4 @@ class TrailingButtons extends StatelessWidget {
       ],
     );
   }
-}
-
-class Element {
-  Element({required this.isSelected});
-  bool isSelected;
 }
