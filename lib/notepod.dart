@@ -41,22 +41,10 @@ import 'package:notepod/notes/list_notes_screen.dart';
 /// App. For SolidPod we wrap the Home widget within [SolidLogin] to start with
 /// a login screen, though this is optional.
 
-class NotePod extends StatefulWidget {
+class NotePod extends StatelessWidget {
   const NotePod({super.key});
 
-  @override
-  State<NotePod> createState() => _NotePodState();
-}
-
-class _NotePodState extends State<NotePod> {
-  ThemeMode _themeMode = ThemeMode.system;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _themeMode = ThemeMode.light;
-  }
+  final ThemeMode _themeMode = ThemeMode.light;
 
   @override
   Widget build(BuildContext context) {
