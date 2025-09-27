@@ -57,6 +57,7 @@ class ListNotes extends StatefulWidget {
 class _ListNotesState extends State<ListNotes> {
   Map _foundNotes = {};
   List fileNames = [];
+
   // Sort order
   // true: ascending (A-Z), false: descending (Z-A)
   // Initial sort will sort alphabetically
@@ -71,20 +72,14 @@ class _ListNotesState extends State<ListNotes> {
   /// Count of selected notes
   int selectedCount = 0;
 
-  // TODO: Standardise sort of notes after search box is emptied,
-  // this likely returns it to the initial order, suggesting that initial
-  // sort should happen at the start of initState()
-
   /// Update selected status and count of selected
   void updateSelected(int index) {
     setState(() {
       // Increment/decrement selected count
       if (_foundNotes[fileNames[index]]['isSelected']) {
         selectedCount--;
-        // _foundNotes[fileNames[index]]['isSelected'] = false;
       } else {
         selectedCount++;
-        // _foundNotes[fileNames[index]]['isSelected'] = true;
       }
       // Swap selected status of file
       _foundNotes[fileNames[index]]['isSelected'] =
@@ -97,19 +92,21 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   void initState() {
+    super.initState();
+
     // By default _foundNotes is the full list of notes
     _foundNotes = widget.notesMap;
     fileNames = _foundNotes.keys.toList();
+
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
+
     _scrollController = ScrollController();
 
     // Create selected note list when list is built
     for (var i = 0; i < _foundNotes.length; i++) {
       _foundNotes[fileNames[i]]['isSelected'] = false;
     }
-
-    super.initState();
   }
 
   @override
@@ -174,6 +171,9 @@ class _ListNotesState extends State<ListNotes> {
       _foundNotes = results;
       fileNames = _foundNotes.keys.toList();
     });
+
+    debugPrint('sortTitleAscending: $_sortTitleAscending');
+    _sortByTitle(_sortTitleAscending);
   }
 
   @override
