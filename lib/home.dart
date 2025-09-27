@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
@@ -55,6 +54,7 @@ class AppHomePageState extends State<AppHomePage>
   @override
   void initState() {
     super.initState();
+
     _loadAppInfo();
   }
 
@@ -74,8 +74,10 @@ class AppHomePageState extends State<AppHomePage>
 
   Widget _build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: lightGreen,
+        backgroundColor:
+            Theme.of(context).appBarTheme.backgroundColor, // lightGreen,
         centerTitle: true,
         title: Text(widget.title),
         actions: <Widget>[
@@ -83,7 +85,6 @@ class AppHomePageState extends State<AppHomePage>
             tooltip: 'Create a new note',
             icon: const Icon(
               Icons.add_circle,
-              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -104,7 +105,6 @@ class AppHomePageState extends State<AppHomePage>
             tooltip: 'Go to $myNotesTitle',
             icon: const Icon(
               Icons.view_list,
-              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -131,7 +131,6 @@ class AppHomePageState extends State<AppHomePage>
               // Icons.supervisor_account,
               // Icons.share_rounded,
               Icons.groups,
-              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pushAndRemoveUntil(
