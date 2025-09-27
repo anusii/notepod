@@ -34,20 +34,25 @@ import 'package:notepod/home.dart';
 
 class NoteShareButton extends StatelessWidget {
   /// Page to display on button click
-
   final Widget childPage;
 
-  /// Button style.
+  /// Simple button style option.
   ///
   /// Used to specify a simpler style without label for use when
   /// less real estate is available.Default false (full button with label)
-
   final bool? simple;
+
+  /// isSelected note status option.
+  ///
+  /// Used to specify whether this button should adopt the
+  /// style of a selected note in a note list
+  final bool isSelected;
 
   const NoteShareButton({
     super.key,
     required this.childPage,
     this.simple = false,
+    this.isSelected = false,
   });
 
   @override
@@ -63,7 +68,9 @@ class NoteShareButton extends StatelessWidget {
         decoration: buttonShapeList,
         child: IconButton(
           icon: const Icon(Icons.share),
-          color: Colors.white,
+          color: isSelected
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).iconTheme.color,
           onPressed: () async {
             // Redirect.
             navToChildPage(context);
@@ -79,7 +86,7 @@ class NoteShareButton extends StatelessWidget {
     return ElevatedButton.icon(
       icon: Icon(
         Icons.share,
-        color: Colors.white,
+        color: Theme.of(context).iconTheme.color,
       ),
       onPressed: () async {
         // Redirect.

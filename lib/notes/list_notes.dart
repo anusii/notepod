@@ -76,6 +76,8 @@ class _ListNotesState extends State<ListNotes> {
   /// Count of selected notes
   int selectedCount = 0;
 
+  // TODO: replace 'isSelected' with isSelectedPred
+
   /// Update selected status and count of selected
   void updateSelected(int index) {
     setState(() {
@@ -242,7 +244,6 @@ class _ListNotesState extends State<ListNotes> {
                             _sortTitleAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortTitleAscending
@@ -264,7 +265,6 @@ class _ListNotesState extends State<ListNotes> {
                             _sortModDateAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortModDateAscending
@@ -309,11 +309,12 @@ class _ListNotesState extends State<ListNotes> {
                           child: Ink(
                             decoration: buttonShapeList,
                             child: IconButton(
-                              icon: _foundNotes[fileNames[index]][
-                                      'isSelected'] //indexList[index].isSelected
+                              icon: _foundNotes[fileNames[index]]['isSelected']
                                   ? const Icon(Icons.done)
                                   : const Icon(Icons.edit_document),
-                              color: Colors.white,
+                              color: _foundNotes[fileNames[index]]['isSelected']
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).iconTheme.color,
                               onPressed: () {
                                 updateSelected(index);
                               },
@@ -335,6 +336,8 @@ class _ListNotesState extends State<ListNotes> {
                           foundNotes: _foundNotes,
                           fileNames: fileNames,
                           index: index,
+                          isSelected: _foundNotes[fileNames[index]]
+                              ['isSelected'],
                         ),
                       ),
                       onTap: () {
@@ -371,11 +374,13 @@ class TrailingButtons extends StatelessWidget {
     required Map foundNotes,
     required this.fileNames,
     required this.index,
+    required this.isSelected,
   }) : _foundNotes = foundNotes;
 
   final Map _foundNotes;
   final List fileNames;
   final int index;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -391,12 +396,13 @@ class TrailingButtons extends StatelessWidget {
             backPage: ListNotesScreen(),
           ),
           simple: true,
+          isSelected: isSelected,
         ),
         const SizedBox(
           width: 15,
         ),
         // Open note icon
-        const Icon(Icons.arrow_forward),
+        Icon(Icons.arrow_forward, color: Theme.of(context).primaryColor),
       ],
     );
   }

@@ -77,8 +77,14 @@ ThemeData lightThemeData(BuildContext context) {
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.green[300], // Colors.blue,
       foregroundColor: Colors.black, // Colors.white,
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
     ),
-    primaryColor: Colors.green[300],
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    primaryColor: Colors.black,
     // Define other colors as needed, e.g., accentColor, textTheme, etc.
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
@@ -102,8 +108,14 @@ ThemeData darkThemeData(BuildContext context) {
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.green[900],
       foregroundColor: Colors.white,
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
     ),
-    primaryColor: Colors.green[300],
+    iconTheme: IconThemeData(
+      color: Colors.black,
+    ),
+    primaryColor: Colors.black,
     // Define other colors for dark theme
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
