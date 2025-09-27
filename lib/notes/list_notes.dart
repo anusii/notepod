@@ -66,6 +66,10 @@ class _ListNotesState extends State<ListNotes> {
   // First button press will change to sort by last modified first
   bool _sortModDateAscending = true;
 
+  /// Current note sort method
+  /// Initialised to sort by title
+  String currSortMethod = '';
+
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -101,9 +105,12 @@ class _ListNotesState extends State<ListNotes> {
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
 
+    // Initialise sorting method
+    currSortMethod = 'sortByTitle';
+
     _scrollController = ScrollController();
 
-    // Create selected note list when list is built
+    // Add selected status to note map
     for (var i = 0; i < _foundNotes.length; i++) {
       _foundNotes[fileNames[i]]['isSelected'] = false;
     }
@@ -128,6 +135,9 @@ class _ListNotesState extends State<ListNotes> {
                 .toLowerCase()
                 .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByTitle';
     });
   }
 
@@ -142,6 +152,9 @@ class _ListNotesState extends State<ListNotes> {
             : _foundNotes[b][modifiedDateTimePred]
                 .compareTo(_foundNotes[a][modifiedDateTimePred]),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByModDate';
     });
   }
 
@@ -172,8 +185,13 @@ class _ListNotesState extends State<ListNotes> {
       fileNames = _foundNotes.keys.toList();
     });
 
-    debugPrint('sortTitleAscending: $_sortTitleAscending');
-    _sortByTitle(_sortTitleAscending);
+    // Sort by current sort method and polarity
+    switch (currSortMethod) {
+      case 'sortByTitle':
+        _sortByTitle(_sortTitleAscending);
+      case 'sortByModDate':
+        _sortByModDate(_sortModDateAscending);
+    }
   }
 
   @override
