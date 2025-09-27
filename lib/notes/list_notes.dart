@@ -275,62 +275,67 @@ class _ListNotesState extends State<ListNotes> {
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
                   // TODO: Add selection status to data such that it is sorted with the data
-                  // TODO: swap elevation to Container box decoration
-                  elevation: indexList[index].isSelected ? 10 : 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: ListTile(
-                    // Select note button
-                    leading: SizedBox(
-                      width: NoteIconSize.width,
-                      child: Center(
-                        child: Ink(
-                          decoration: buttonShapeList,
-                          child: IconButton(
-                            icon: indexList[index].isSelected
-                                ? const Icon(Icons.done)
-                                : const Icon(Icons.edit_document),
-                            color: Colors.white,
-                            onPressed: () {
-                              updateSelected(index);
-                            },
+                  child: Container(
+                    decoration: (indexList[index].isSelected)
+                        ? BoxDecoration(
+                            color: Colors.green[200],
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
-                        ),
-                      ),
-                    ),
-                    title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
-                    subtitle: Text(
-                      'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
-                      'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
-                      'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
-                    ),
-                    // Define width to avoid consuming full width
-                    trailing: SizedBox(
-                      height: NoteIconSize.height,
-                      width: NoteIconSize.twoIconWidth,
-                      child: TrailingButtons(
-                        foundNotes: _foundNotes,
-                        fileNames: fileNames,
-                        index: index,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppHomePage(
-                            title: topBarTitle,
-                            childPage: ViewNote(
-                              noteData: _foundNotes[fileNames[index]],
-                              notesMap: widget.notesMap,
+                    child: ListTile(
+                      // Select note button
+                      leading: SizedBox(
+                        width: NoteIconSize.width,
+                        child: Center(
+                          child: Ink(
+                            decoration: buttonShapeList,
+                            child: IconButton(
+                              icon: indexList[index].isSelected
+                                  ? const Icon(Icons.done)
+                                  : const Icon(Icons.edit_document),
+                              color: Colors.white,
+                              onPressed: () {
+                                updateSelected(index);
+                              },
                             ),
                           ),
                         ),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
-                    },
+                      ),
+                      title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
+                      subtitle: Text(
+                        'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
+                        'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
+                        'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                      ),
+                      // Define width to avoid consuming full width
+                      trailing: SizedBox(
+                        height: NoteIconSize.height,
+                        width: NoteIconSize.twoIconWidth,
+                        child: TrailingButtons(
+                          foundNotes: _foundNotes,
+                          fileNames: fileNames,
+                          index: index,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppHomePage(
+                              title: topBarTitle,
+                              childPage: ViewNote(
+                                noteData: _foundNotes[fileNames[index]],
+                                notesMap: widget.notesMap,
+                              ),
+                            ),
+                          ),
+                          (Route<dynamic> route) =>
+                              false, // This predicate ensures all previous routes are removed
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
