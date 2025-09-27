@@ -187,11 +187,6 @@ class _ListNotesState extends State<ListNotes> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Count of selected notes
-                Padding(
-                  padding: const EdgeInsets.only(right: 15.0),
-                  child: Center(child: Text('$selectedCount')),
-                ),
                 Text(
                   '$myNotesTitle (created by me)',
                   style: titleStyle,
@@ -212,10 +207,12 @@ class _ListNotesState extends State<ListNotes> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Search summary statement
-                    _foundNotes.length > 1 || _foundNotes.isEmpty
-                        ? Text('Found ${_foundNotes.length} notes')
-                        : Text('Found ${_foundNotes.length} note'),
+                    // Count statement
+                    selectedCount > 0
+                        ? Text('Selected: $selectedCount notes')
+                        : _foundNotes.length > 1 || _foundNotes.isEmpty
+                            ? Text('Found ${_foundNotes.length} notes')
+                            : Text('Found ${_foundNotes.length} note'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -284,55 +281,34 @@ class _ListNotesState extends State<ListNotes> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: ListTile(
-                    // TODO: wrap button as SelectNoteButton() SizedBox Widget
-                    leading: indexList[index].isSelected
-                        ? SizedBox(
-                            width: 55,
-                            child: Center(
-                              child: Ink(
-                                decoration: buttonShapeList,
-                                child: IconButton(
-                                  icon: const Icon(Icons.done),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    updateSelected(index);
-                                  },
-                                ),
-                              ),
-                            ),
-                          )
-                        : SizedBox(
-                            width: 55,
-                            child: Center(
-                              child: Ink(
-                                decoration: buttonShapeList,
-                                child: IconButton(
-                                  icon: const Icon(Icons.edit_document),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    updateSelected(index);
-                                  },
-                                ),
-                              ),
-                            ),
+                    // Select note button
+                    leading: SizedBox(
+                      width: NoteIconSize.width,
+                      child: Center(
+                        child: Ink(
+                          decoration: buttonShapeList,
+                          child: IconButton(
+                            icon: indexList[index].isSelected
+                                ? const Icon(Icons.done)
+                                : const Icon(Icons.edit_document),
+                            color: Colors.white,
+                            onPressed: () {
+                              updateSelected(index);
+                            },
                           ),
-                    // leading: const CircleAvatar(
-                    //   radius: 26,
-                    //   backgroundImage:
-                    //       AssetImage('assets/images/note-icon.png'),
-                    // ),
-                    //const Icon(Icons.text_snippet_outlined),
+                        ),
+                      ),
+                    ),
                     title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
                     subtitle: Text(
                       'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
                       'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
                       'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
                     ),
-                    // trailing: TrailingIcons(),
                     // Define width to avoid consuming full width
                     trailing: SizedBox(
-                      height: 60,
-                      width: 120,
+                      height: NoteIconSize.height,
+                      width: NoteIconSize.twoIconWidth,
                       child: TrailingButtons(
                         foundNotes: _foundNotes,
                         fileNames: fileNames,

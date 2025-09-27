@@ -25,6 +25,8 @@
 
 library;
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/colours.dart';
@@ -113,6 +115,13 @@ class ErrMsg {
   /// Error message when fails to save note file to POD
   static const String saveFailed =
       'Failed to store the note file in your POD. Try again!';
+}
+
+class NoteIconSize {
+  static const double width = 50;
+  static const double height = 50;
+  static const double twoIconWidth = (width * 2) + gap;
+  static const double gap = 15;
 }
 
 // EdgeInsets for metadata block on view notes
