@@ -85,6 +85,9 @@ ThemeData lightThemeData(BuildContext context) {
       color: Colors.white,
     ),
     primaryColor: Colors.black,
+    // colorScheme: const ColorScheme.light().copyWith(
+    //   surfaceTint: Colors.transparent,
+    // ),
     // Define other colors as needed, e.g., accentColor, textTheme, etc.
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
@@ -116,6 +119,9 @@ ThemeData darkThemeData(BuildContext context) {
       color: Colors.black,
     ),
     primaryColor: Colors.black,
+    // colorScheme: const ColorScheme.dark().copyWith(
+    //     // surfaceTint: Colors.transparent,
+    //     ),
     // Define other colors for dark theme
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
