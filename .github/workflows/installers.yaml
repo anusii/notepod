@@ -14,7 +14,7 @@ on:
 env:
   APP: notepod
   LINUX_PKGS: libsecret-1-dev
-  FLUTTER_VERSION: '3.35.3'
+  FLUTTER_VERSION: '3.35.4'
 
 jobs:
 
@@ -206,20 +206,26 @@ jobs:
       - name: Build Flutter Windows app
         run: flutter build windows --release
 
-      # Package as ZIP
+      - name: Check the files location
+        run: |
+          dir
+          dir installers
 
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: ${{ env.APP }}-${{github.ref_name}}-windows.zip
-          directory: build/windows/x64/runner/Release
 
-      - name: Upload Artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP }}-windows-zip
-          path: build/windows/x64/runner/Release/${{ env.APP }}-${{github.ref_name}}-windows.zip
+      # # Package as ZIP
+
+      # - name: Archive Release
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     type: 'zip'
+      #     filename: ${{ env.APP }}-${{github.ref_name}}-windows.zip
+      #     directory: build/windows/x64/runner/Release
+
+      # - name: Upload Artefact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.APP }}-windows-zip
+      #     path: build/windows/x64/runner/Release/${{ env.APP }}-${{github.ref_name}}-windows.zip
 
       # Package as EXE
 
