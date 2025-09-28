@@ -2,7 +2,6 @@
 
 **Table of Contents**
 
-
 - [Exercise 4: Getting started - PODs app development with Flutter](#exercise-4-getting-started---pods-app-development-with-flutter)
   - [Install Flutter](#install-flutter)
     - [Flutter SDK](#flutter-sdk)
@@ -18,32 +17,32 @@
     - [Tackle a Notepod issue](#tackle-a-notepod-issue)
   - [More resources](#more-resources)
 
-
 This exercise provides resources to install Flutter and get started developing PODs based apps with Flutter.
 
 You will have the opportunity to build and run the Notepod app on your local machine, and add small features to the Notepod app.
 
-You do not need to run a Solid server, as the Notepod app uses the Community Solid Server open source software running on the Solid Community AU server https://pods.solidcommunity.au
-
+You do not need to run a Solid server, as the Notepod app uses the Community Solid Server open source software running on the Solid Community AU server <https://pods.solidcommunity.au>
 
 ## Install Flutter<a name="install_flutter"></a>
 
 To get setup, you will first need to install Flutter. Installing Flutter for app development is a lengthy process. You will need to install the following:
 
 ### Flutter SDK<a name="flutter-sdk"></a>
+
 - Follow the Flutter Dev instructions to install flutter for your preferred platform at [Flutter Dev Getting Started](https://docs.flutter.dev/get-started/install)
 - Flutter can be installed on Windows, MacOS, Linux, and ChromeOS
 - With Flutter SDK installation Dart SDK will also get automatically installed
 - After installing FLutter SDK you will also need to add the `<path to Flutter bin>` to your environment variables
 
-
 ### IDE<a name="ide"></a>
+
 - VS Code is the recommended IDE for flutter development
 - Go to the [VS Code Download](https://code.visualstudio.com/Download) section and download and install VS Code to your respective platform
 - After installing, run VS Code and go to extensions. Search for `Flutter` and install the first extension in the search results
 - Installing this extension will also automatically install Dart extension for VS Code
 
 ### Android Studio (Optional)<a name="android-studio"></a>
+
 *Android app development only*
 
 - Go to [Android studio web page](https://developer.android.com/studio) and download the installation file
@@ -57,6 +56,7 @@ To get setup, you will first need to install Flutter. Installing Flutter for app
   ```flutter doctor --android-licenses```
 
 ### Visual Studio (Optional)<a name="visual-studio"></a>
+
 *Windows app development only*
 
 - You will also need to install Visual Studio if you are developing Windows apps
@@ -64,16 +64,15 @@ To get setup, you will first need to install Flutter. Installing Flutter for app
 - When installing Visual Studio or only the Build Tools, you need the `Desktop development with C++` workload installed for building windows, including all of its default components.
 
 ### MacOS development (Optional)<a name="macos"></a>
+
 *MacOS app development only*
 
 - After installing the flutter SDK for MacOS, you will need to follow the additional [Extra Setup for MacOS](../README.md#extra_for_macos) to configure Xcode for PODs based app development.
 - If you experiment errors building for macos with `flutter run -d macos`, it is likely a mismatch between your macOS version, Xcode version, and flutter version. MacOS Sonoma and more recent versions of MacOS Venturer require Xcode version >= v15.0.1, and flutter version >= 3.18. To develop flutter apps with macOS, we recommend updating to MacOS Sonoma, Xcode >= 15.0.1, and using `flutter channel beta` (flutter channel stable is awaiting updates for Xcode 15.0.1).
 
-
 ### iOS development (Optional)<a name="ios"></a>
 
 - After installing the flutter SDK for MacOS including the iOS steps, you will need to follow the additional [Extra Setup for iOS](../README.md#extra_for_ios) to configure Xcode for PODs based app development.
-
 
 ### Flutter doctor <a name="doctor"></a>
 
@@ -81,12 +80,13 @@ After the above setup, you should now have all the required software and tools i
 
 Open a command line and enter the following command to check your setup.
 
-```
+```bash
 flutter doctor
 ```
+
 This will then perform checks on all the installed components and will give you an output like the following.
 
-```
+```bash
 [√] Flutter (Channel stable, 3.16.2, on Microsoft Windows [Version 10.0.22621.2715], locale en-US)
 [√] Windows Version (Installed version of Windows is version 10 or higher)
 [√] Android toolchain - develop for Android devices (Android SDK version 31.0.0)
@@ -97,6 +97,7 @@ This will then perform checks on all the installed components and will give you 
 [√] Connected device (3 available)
 [√] Network resources
 ```
+
 If you have any errors in any of the above components, follow the given instructions to fix those issues.
 
 You can also run `flutter --version` to check the installed version of the Flutter and `flutter devices` to list the configured devices for running apps.
@@ -107,15 +108,16 @@ You can also run `flutter --version` to check the installed version of the Flutt
 
 You can also check your flutter install by running the flutter demo app on your preferred device - see [Test drive flutter](https://docs.flutter.dev/get-started/test-drive?tab=terminal)
 
-
 ## Get Notepod code<a name="get_notepod"></a>
 
 Now lets get the Notepod project setup in your flutter development environment.
 
 Go to [Notepod repo](https://github.com/anusii/notepod). You can either Clone the repo by
-```
+
+```bash
 git clone https://github.com/anusii/notepod.git
 ```
+
 or you can fork it to your own GitHub account.
 
 Now open your VS Code IDE. Go to `File -> Open Folder` and select the local notepod directory.
@@ -131,13 +133,16 @@ Open the Terminal in the VS Code (if not open by default at the bottom of the wi
 
 Go to the `notepod` directory and run the following command.
 
-```
+```bash
 flutter run -d [your_device]
 ```
+
 Add the name of the device you want the app to run on. For instance, if you want to run the app as a Windows app use the command
-```
+
+```bash
 flutter run -d Windows
 ```
+
 When running for the first time it will ask to setup Windows device for the app. Simply follow the steps to set that up.
 
 **Option 2**
@@ -162,7 +167,6 @@ Feel free to also log an issue, providing details of your platform and how to re
 
 *Congratulations, you are now part of the Solid Community!!*
 
-
 ## More resources<a name="more"></a>
 
 There are a wealth of resources online.
@@ -171,12 +175,11 @@ Solid:
 
 - [Solid server (Togaware)](https://survivor.togaware.com/gnulinux/solid.html)
   + [Links to Solid Resources (Togaware)](https://survivor.togaware.com/gnulinux/solid-resources.html)
-- [Getting started as a Solid developer (Solidproject.org)](https://solidproject.org/developers/tutorials/getting-started)
+- [Resources for Solid developers (Solidproject.org)](https://solidproject.org/for_developers)
 - [Solid forum (Solidproject.org)](https://forum.solidproject.org/)
 - [solid-auth](https://pub.dev/packages/solid_auth) package: Implementation of Solid-OIDC flow which can be used to authenticate a client application to a Solid POD. Solid OIDC is built on top of OpenID Connect 1.0.
 - [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: Implementation of data encryption which can be used to encrypt the content in turtle files stored in a Solid POD.
 - [rdflib](https://pub.dev/packages/rdflib) package: A dart package for working with RDF. Features include find and create triple instances, create a graph to store triples, export graph to ttl, etc.
-
 
 Flutter:
 
