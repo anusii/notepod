@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage
 

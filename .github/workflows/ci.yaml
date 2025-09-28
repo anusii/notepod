@@ -13,7 +13,7 @@ on:
     types: [opened, reopened, synchronize]
 
 env:
-  FLUTTER_VERSION: '3.35.3'
+  FLUTTER_VERSION: '3.35.4'
 
 jobs:
 
@@ -104,6 +104,7 @@ jobs:
         id: lychee
         uses: lycheeverse/lychee-action@v2
         with: # Don't fail for now but then create an issue - useful?
+          args: --verbose --no-progress 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart'
           fail: false
 
       - name: Create Issue From File
