@@ -86,7 +86,7 @@ Mobile Phone version:
 To use the app you will need your own Pod hosted on a Solid server. To
 try it out you can get yourself a Pod at our experimental server, the
 [Australian Solid Community Pod
-Server](https://pods.solidcommunity.au/.account/login/password/register/)
+Server](https://pods.solidcommunity.au)
 or any one of the available [Pod
 Providers](https://solidproject.org/users/get-a-pod) world wide.
 
