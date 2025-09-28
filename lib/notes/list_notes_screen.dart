@@ -94,10 +94,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               // noNotesMsg,
               isSmall: true,
             ),
-            Container(
-              color: Colors.white,
-              child: NewNote(),
-            ),
+            NewNote(),
           ],
         ),
       ),

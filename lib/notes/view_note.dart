@@ -114,7 +114,6 @@ class _ViewNoteState extends State<ViewNote> {
                   ),
                   // Display note metadata
                   NoteDisplayMetadata(noteContent: noteData, showDates: true),
-                  Divider(),
                   // Display markdown note content
                   noteDisplayMarkdown(noteData[noteContentPred]),
                 ],
