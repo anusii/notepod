@@ -69,6 +69,25 @@ List<Color> defaultNotepodColors = const [
 /// Colour for list tiles
 const surfaceTintLight = Color.fromARGB(41, 222, 234, 216);
 
+/// Background colours of action buttons in note view
+/// pages
+class ButtonBackgroundColor {
+  /// Share button colour
+  static const Color share = darkBlue;
+
+  /// Back button colour
+  static const Color back = lightGray;
+
+  /// Edit button colour
+  static const Color edit = lightGreen;
+
+  /// Delete button colour
+  static const Color delete = lightRed;
+
+  /// Save button colour
+  static const Color save = lightBlue;
+}
+
 // Light theme
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
@@ -90,6 +109,18 @@ ThemeData lightThemeData(BuildContext context) {
       iconColor: Theme.of(context).colorScheme.primary,
       tileColor: surfaceTintLight,
       textColor: Theme.of(context).colorScheme.primary,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
     ),
     primaryColor: Colors.black,
     // colorScheme: const ColorScheme.light().copyWith(
@@ -129,6 +160,18 @@ ThemeData darkThemeData(BuildContext context) {
       iconColor: Theme.of(context).colorScheme.onPrimary,
       tileColor: surfaceTintLight,
       textColor: Theme.of(context).colorScheme.onPrimary,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
     ),
     primaryColor: Colors.black,
     // colorScheme: const ColorScheme.dark().copyWith(

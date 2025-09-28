@@ -44,9 +44,10 @@ class NoteBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: const Icon(
         Icons.keyboard_backspace,
-        color: Colors.white,
       ),
       onPressed: () {
         Navigator.pushAndRemoveUntil(
@@ -61,19 +62,12 @@ class NoteBackButton extends StatelessWidget {
               false, // This predicate ensures all previous routes are removed
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: titleAsh,
-        backgroundColor: lightGray, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.back),
+          ),
       label: const Text(
         'BACK',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

@@ -50,9 +50,10 @@ class NoteDelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: const Icon(
         Icons.delete,
-        color: Colors.white,
       ),
       onPressed: () {
         showDialog(
@@ -116,19 +117,12 @@ class NoteDelButton extends StatelessWidget {
           },
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkRed,
-        backgroundColor: lightRed, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.delete),
+          ),
       label: const Text(
         'DELETE',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

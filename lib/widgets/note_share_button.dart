@@ -28,6 +28,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
 
 /// A stylised share button widget for notes.
@@ -74,18 +75,21 @@ class NoteShareButton extends StatelessWidget {
 
   ElevatedButton shareButton(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: Icon(
         Icons.share,
-        color: Theme.of(context).iconTheme.color,
       ),
       onPressed: () async {
         // Redirect.
         navToChildPage(context);
       },
-      style: buttonStyleView,
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.share),
+          ),
       label: Text(
         'SHARE',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }
