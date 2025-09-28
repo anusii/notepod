@@ -329,8 +329,6 @@ class _ListNotesState extends State<ListNotes> {
                           foundNotes: _foundNotes,
                           fileNames: fileNames,
                           index: index,
-                          isSelected: _foundNotes[fileNames[index]]
-                              [isSelectedPred],
                         ),
                       ),
                       onTap: () {
@@ -367,13 +365,11 @@ class TrailingButtons extends StatelessWidget {
     required Map foundNotes,
     required this.fileNames,
     required this.index,
-    required this.isSelected,
   }) : _foundNotes = foundNotes;
 
   final Map _foundNotes;
   final List fileNames;
   final int index;
-  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
