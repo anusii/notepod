@@ -66,17 +66,19 @@ List<Color> defaultNotepodColors = const [
   lightBlue,
 ];
 
+/// Colour for list tiles
+const surfaceTintLight = Color.fromARGB(41, 222, 234, 216);
+
 // Light theme
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
-    useMaterial3: true, // Enable Material 3 design
+    useMaterial3: true,
     brightness: Brightness.light,
-    primarySwatch:
-        Colors.green, // Colors.blue, // Generates various shades of blue
+    primarySwatch: Colors.green,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.green[300], // Colors.blue,
-      foregroundColor: Colors.black, // Colors.white,
+      backgroundColor: Colors.green[300],
+      foregroundColor: Colors.black,
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
@@ -84,9 +86,14 @@ ThemeData lightThemeData(BuildContext context) {
     iconTheme: IconThemeData(
       color: Colors.white,
     ),
+    listTileTheme: ListTileThemeData(
+      iconColor: Theme.of(context).colorScheme.primary,
+      tileColor: surfaceTintLight,
+      textColor: Theme.of(context).colorScheme.primary,
+    ),
     primaryColor: Colors.black,
     // colorScheme: const ColorScheme.light().copyWith(
-    //   surfaceTint: Colors.transparent,
+    //   surfaceTint: Colors.black, //  surfaceTintLight,
     // ),
     // Define other colors as needed, e.g., accentColor, textTheme, etc.
     // Make Scrollbars() visible by default
@@ -117,6 +124,11 @@ ThemeData darkThemeData(BuildContext context) {
     ),
     iconTheme: IconThemeData(
       color: Colors.black,
+    ),
+    listTileTheme: ListTileThemeData(
+      iconColor: Theme.of(context).colorScheme.onPrimary,
+      tileColor: surfaceTintLight,
+      textColor: Theme.of(context).colorScheme.onPrimary,
     ),
     primaryColor: Colors.black,
     // colorScheme: const ColorScheme.dark().copyWith(

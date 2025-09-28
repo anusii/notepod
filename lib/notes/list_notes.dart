@@ -289,10 +289,10 @@ class _ListNotesState extends State<ListNotes> {
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
                   child: Container(
-                    decoration: _foundNotes[fileNames[index]]
-                            ['isSelected'] // (indexList[index].isSelected)
+                    decoration: _foundNotes[fileNames[index]]['isSelected']
                         ? BoxDecoration(
-                            color: Colors.green[200],
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           )
                         : BoxDecoration(
@@ -309,9 +309,6 @@ class _ListNotesState extends State<ListNotes> {
                               icon: _foundNotes[fileNames[index]]['isSelected']
                                   ? const Icon(Icons.done)
                                   : const Icon(Icons.edit_document),
-                              color: _foundNotes[fileNames[index]]['isSelected']
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).iconTheme.color,
                               onPressed: () {
                                 updateSelected(index);
                               },
@@ -393,13 +390,14 @@ class TrailingButtons extends StatelessWidget {
             backPage: ListNotesScreen(),
           ),
           simple: true,
-          isSelected: isSelected,
         ),
         const SizedBox(
           width: 15,
         ),
         // Open note icon
-        Icon(Icons.arrow_forward, color: Theme.of(context).primaryColor),
+        Icon(
+          Icons.arrow_forward,
+        ),
       ],
     );
   }

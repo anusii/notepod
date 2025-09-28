@@ -42,17 +42,10 @@ class NoteShareButton extends StatelessWidget {
   /// less real estate is available.Default false (full button with label)
   final bool? simple;
 
-  /// isSelected note status option.
-  ///
-  /// Used to specify whether this button should adopt the
-  /// style of a selected note in a note list
-  final bool isSelected;
-
   const NoteShareButton({
     super.key,
     required this.childPage,
     this.simple = false,
-    this.isSelected = false,
   });
 
   @override
@@ -68,9 +61,6 @@ class NoteShareButton extends StatelessWidget {
         decoration: buttonShapeList,
         child: IconButton(
           icon: const Icon(Icons.share),
-          color: isSelected
-              ? Theme.of(context).primaryColor
-              : Theme.of(context).iconTheme.color,
           onPressed: () async {
             // Redirect.
             navToChildPage(context);
