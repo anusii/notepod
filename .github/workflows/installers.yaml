@@ -240,7 +240,7 @@ jobs:
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
-          path: D:\a\${{ env.APP }}\${{ env.APP }}\installers/app-windows.iss
+          path: D:\a\${{ env.APP }}\${{ env.APP }}\installers\app-windows.iss
           options: /O+
 
       - name: Upload Artefact
