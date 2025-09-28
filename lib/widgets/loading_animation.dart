@@ -53,6 +53,7 @@ showAnimationDialog(
             height: 250,
             child: Column(
               children: [
+                // Colours work in light and dark themes
                 LoadingIndicator(
                   indicatorType: Indicator.ballScaleRipple,
                   colors: defaultNotepodColors,

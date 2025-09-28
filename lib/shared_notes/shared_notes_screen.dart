@@ -77,6 +77,7 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
                       child: Row(
                         children: <Widget>[
                           Expanded(
+                            // MsgCard style works in light and dark themes
                             child: buildMsgCard(
                               context,
                               Icons.info,

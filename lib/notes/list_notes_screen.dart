@@ -88,6 +88,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber, 'No notes yet!',
               'Write your first note',
@@ -195,6 +196,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber,
               'Error adding recipients to notes!', 'Yikes',
