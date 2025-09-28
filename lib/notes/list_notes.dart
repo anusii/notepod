@@ -76,20 +76,18 @@ class _ListNotesState extends State<ListNotes> {
   /// Count of selected notes
   int selectedCount = 0;
 
-  // TODO: replace 'isSelected' with isSelectedPred
-
   /// Update selected status and count of selected
   void updateSelected(int index) {
     setState(() {
       // Increment/decrement selected count
-      if (_foundNotes[fileNames[index]]['isSelected']) {
+      if (_foundNotes[fileNames[index]][isSelectedPred]) {
         selectedCount--;
       } else {
         selectedCount++;
       }
       // Swap selected status of file
-      _foundNotes[fileNames[index]]['isSelected'] =
-          !_foundNotes[fileNames[index]]['isSelected'];
+      _foundNotes[fileNames[index]][isSelectedPred] =
+          !_foundNotes[fileNames[index]][isSelectedPred];
     });
   }
 
@@ -111,7 +109,7 @@ class _ListNotesState extends State<ListNotes> {
 
     // Add selected status to note map
     for (var i = 0; i < _foundNotes.length; i++) {
-      _foundNotes[fileNames[i]]['isSelected'] = false;
+      _foundNotes[fileNames[i]][isSelectedPred] = false;
     }
   }
 
@@ -289,7 +287,7 @@ class _ListNotesState extends State<ListNotes> {
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
                   child: Container(
-                    decoration: _foundNotes[fileNames[index]]['isSelected']
+                    decoration: _foundNotes[fileNames[index]][isSelectedPred]
                         ? BoxDecoration(
                             color:
                                 Theme.of(context).colorScheme.onInverseSurface,
@@ -306,7 +304,8 @@ class _ListNotesState extends State<ListNotes> {
                           child: Ink(
                             decoration: buttonShapeList,
                             child: IconButton(
-                              icon: _foundNotes[fileNames[index]]['isSelected']
+                              icon: _foundNotes[fileNames[index]]
+                                      [isSelectedPred]
                                   ? const Icon(Icons.done)
                                   : const Icon(Icons.edit_document),
                               onPressed: () {
@@ -331,7 +330,7 @@ class _ListNotesState extends State<ListNotes> {
                           fileNames: fileNames,
                           index: index,
                           isSelected: _foundNotes[fileNames[index]]
-                              ['isSelected'],
+                              [isSelectedPred],
                         ),
                       ),
                       onTap: () {
