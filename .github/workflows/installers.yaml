@@ -181,7 +181,7 @@ jobs:
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build windows')
-    runs-on: windows-latest
+    runs-on: windows-latest # randomly not working (choco fails) with inno 1.2.7
 
     steps:
       - name: Clone Repository
@@ -206,26 +206,20 @@ jobs:
       - name: Build Flutter Windows app
         run: flutter build windows --release
 
-      - name: Check the files location
-        run: |
-          dir
-          dir installers
+      # Package as ZIP
 
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: ${{ env.APP }}-${{github.ref_name}}-windows.zip
+          directory: build/windows/x64/runner/Release
 
-      # # Package as ZIP
-
-      # - name: Archive Release
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     type: 'zip'
-      #     filename: ${{ env.APP }}-${{github.ref_name}}-windows.zip
-      #     directory: build/windows/x64/runner/Release
-
-      # - name: Upload Artefact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ env.APP }}-windows-zip
-      #     path: build/windows/x64/runner/Release/${{ env.APP }}-${{github.ref_name}}-windows.zip
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-windows-zip
+          path: build/windows/x64/runner/Release/${{ env.APP }}-${{github.ref_name}}-windows.zip
 
       # Package as EXE
 
@@ -240,7 +234,7 @@ jobs:
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
-          path: D:\a\${{ env.APP }}\${{ env.APP }}\installers\app-windows.iss
+          path: installers/app-windows.iss
           options: /O+
 
       - name: Upload Artefact
