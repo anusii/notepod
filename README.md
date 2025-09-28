@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD013 MD033 MD041 -->
+<!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
@@ -59,7 +59,7 @@ much more.
 
 The current notepod code base includes a lot of low level code that
 is being migrated to the
-[solidpod](https://github.com/anusii/solidpodq) package for
+[solidpod](https://github.com/anusii/solidpod) package for
 [Flutter](https://pub.dev/packages/solidpod). Once migrated it will be
 even easier to build your first Pods-based Flutter app.
 

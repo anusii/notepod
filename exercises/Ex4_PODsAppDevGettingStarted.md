@@ -1,5 +1,7 @@
 # Exercise 4: Getting started - PODs app development with Flutter
 
+<!-- markdownlint-disable MD004 MD007 MD013 MD033 MD036 MD041 -->
+
 **Table of Contents**
 
 - [Exercise 4: Getting started - PODs app development with Flutter](#exercise-4-getting-started---pods-app-development-with-flutter)
