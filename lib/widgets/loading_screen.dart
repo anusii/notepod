@@ -36,9 +36,6 @@ Widget loadingScreen(double height) {
     children: <Widget>[
       Container(
         alignment: AlignmentDirectional.center,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
         child: Container(
           decoration: BoxDecoration(
             color: lightBlue,

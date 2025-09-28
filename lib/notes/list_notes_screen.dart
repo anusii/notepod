@@ -75,12 +75,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Parameters:
   ///   [notesMap] - list of files with data in a user's app data folder.
   Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
-    return Container(
-      color: Colors.white,
-
-      // Run to fetch access control list information
-      child: ListRecipientsScreen(notesMap: notesMap),
-    );
+    return ListRecipientsScreen(notesMap: notesMap);
   }
 
   /// Advise user to create their first note, if no notes found.
@@ -191,10 +186,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
 
   /// Load Notes with recipients data embedded.
   Widget _loadedNotesWRecScreen(Map notesMap) {
-    return Container(
-      color: Colors.white,
-      child: ListNotes(notesMap: notesMap),
-    );
+    return ListNotes(notesMap: notesMap);
   }
 
   /// Load error window
