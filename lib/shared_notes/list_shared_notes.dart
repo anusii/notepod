@@ -222,7 +222,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortFilenameAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortFilenameAscending
@@ -244,7 +243,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortOwnerAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortOwnerAscending
@@ -266,7 +264,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortPermissionAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortPermissionAscending

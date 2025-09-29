@@ -59,14 +59,11 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
   }
 
   Widget _loadedScreen(Map sharedNoteContent) {
-    return Container(
-      color: Colors.white,
-      child: ViewSharedNote(
-        fullNoteData: {
-          'sharedNoteInfo': widget.sharedNoteData,
-          'sharedNoteContent': sharedNoteContent,
-        },
-      ),
+    return ViewSharedNote(
+      fullNoteData: {
+        'sharedNoteInfo': widget.sharedNoteData,
+        'sharedNoteContent': sharedNoteContent,
+      },
     );
   }
 

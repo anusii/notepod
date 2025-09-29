@@ -50,13 +50,8 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
   }
 
   Widget _loadedScreen(Map sharedNotesMap) {
-    Widget nextScreen;
-    nextScreen = ListSharedNotes(
+    return ListSharedNotes(
       sharedNotesMap: sharedNotesMap,
-    );
-    return Container(
-      color: Colors.white,
-      child: nextScreen,
     );
   }
 
