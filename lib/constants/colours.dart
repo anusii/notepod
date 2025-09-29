@@ -23,7 +23,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://www.gnu.org/licenses/>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -88,35 +88,37 @@ class ButtonBackgroundColor {
   static const Color save = lightBlue;
 }
 
-// 20250529 JM: is foreground colour affecting list tiles
-// text and icon color
+// 20250529 JM: Additional settings commented below as options
 
 // Light theme
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    primarySwatch: Colors.green,
-    scaffoldBackgroundColor: Colors.white,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: darkGreen, // Colors.green,
+      brightness: Brightness.light,
+    ),
+    scaffoldBackgroundColor: backgroundWhite,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.green[300],
-      foregroundColor: Colors.black,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
+      backgroundColor: darkGreen, // Colors.green[300],
+      //   foregroundColor: Colors.black,
+      //   iconTheme: IconThemeData(
+      //     color: Colors.black,
+      //   ),
     ),
-    iconTheme: IconThemeData(
-      color: Colors.white,
-    ),
-    listTileTheme: ListTileThemeData(
-      iconColor: Theme.of(context).colorScheme.primary,
-      tileColor: surfaceTintLight,
-      textColor: Theme.of(context).colorScheme.primary,
-    ),
+    // iconTheme: IconThemeData(
+    //   color: Colors.white,
+    // ),
+    // listTileTheme: ListTileThemeData(
+    //   iconColor: Theme.of(context).colorScheme.primary,
+    //   tileColor: surfaceTintLight,
+    //   textColor: Theme.of(context).colorScheme.primary,
+    // ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
-        foregroundColor: Colors.white,
+        foregroundColor: backgroundWhite,
         backgroundColor: Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
@@ -126,27 +128,23 @@ ThemeData lightThemeData(BuildContext context) {
         ),
       ),
     ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        // Label and icon use foreground colour
-        foregroundColor: Colors.black,
-        textStyle: TextStyle(
-          fontSize: 12,
-        ),
-      ),
-    ),
-    dividerTheme: DividerThemeData(
-      color: titleAsh,
-    ),
-    textTheme: TextTheme(
-      bodyMedium: TextStyle(
-        color: Colors.black,
-      ),
-    ),
-    // colorScheme: const ColorScheme.light().copyWith(
-    //   surfaceTint: Colors.black, //  surfaceTintLight,
+    // textButtonTheme: TextButtonThemeData(
+    //   style: TextButton.styleFrom(
+    //     // Label and icon use foreground colour
+    //     foregroundColor: Colors.black,
+    //     textStyle: TextStyle(
+    //       fontSize: 12,
+    //     ),
+    //   ),
     // ),
-    // Define other colors as needed, e.g., accentColor, textTheme, etc.
+    // dividerTheme: DividerThemeData(
+    //   color: titleAsh,
+    // ),
+    // textTheme: TextTheme(
+    //   bodyMedium: TextStyle(
+    //     color: Colors.black,
+    //   ),
+    // ),
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
     // where content exceeds container
@@ -164,27 +162,31 @@ ThemeData darkThemeData(BuildContext context) {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    primarySwatch: Colors.indigo, // Different primary color for dark theme
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.green,
+      brightness: Brightness.dark,
+    ),
     scaffoldBackgroundColor: Colors.grey[900],
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.green[900],
-      foregroundColor: Colors.white,
-      iconTheme: IconThemeData(
-        color: Colors.white,
-      ),
+      backgroundColor: darkGreen, // Colors.green[900],
+      // foregroundColor: Colors.white,
+      // iconTheme: IconThemeData(
+      //   color: Colors.white,
+      // ),
     ),
-    iconTheme: IconThemeData(
-      color: Colors.black,
-    ),
-    listTileTheme: ListTileThemeData(
-      iconColor: Theme.of(context).colorScheme.onPrimary,
-      tileColor: surfaceTintLight,
-      textColor: Theme.of(context).colorScheme.onPrimary,
-    ),
+    // iconTheme: IconThemeData(
+    //   color: Colors.black,
+    // ),
+    // listTileTheme: ListTileThemeData(
+    //   iconColor: Theme.of(context).colorScheme.onPrimary,
+    //   tileColor: surfaceTintLight,
+    //   textColor: Theme.of(context).colorScheme.onPrimary,
+    // ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
-        foregroundColor: Colors.white,
+        foregroundColor: backgroundWhite,
+        backgroundColor: Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
@@ -193,27 +195,23 @@ ThemeData darkThemeData(BuildContext context) {
         ),
       ),
     ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        // Label and icon use foreground colour
-        foregroundColor: Colors.white,
-        textStyle: TextStyle(
-          fontSize: 12,
-        ),
-      ),
-    ),
-    dividerTheme: DividerThemeData(
-      color: backgroundWhite,
-    ),
-    textTheme: TextTheme(
-      bodyMedium: TextStyle(
-        color: Colors.white,
-      ),
-    ),
-    // colorScheme: const ColorScheme.dark().copyWith(
-    //     // surfaceTint: Colors.transparent,
+    // textButtonTheme: TextButtonThemeData(
+    //   style: TextButton.styleFrom(
+    //     // Label and icon use foreground colour
+    //     foregroundColor: Colors.white,
+    //     textStyle: TextStyle(
+    //       fontSize: 12,
     //     ),
-    // Define other colors for dark theme
+    //   ),
+    // ),
+    // dividerTheme: DividerThemeData(
+    //   color: backgroundWhite,
+    // ),
+    // textTheme: TextTheme(
+    //   bodyMedium: TextStyle(
+    //     color: Colors.white,
+    //   ),
+    // ),
     // Make Scrollbars() visible by default
     // before user starts scrolling in pages
     // where content exceeds container
