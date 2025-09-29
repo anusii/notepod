@@ -31,10 +31,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-/// Shaded colour for meta data in displaying a note.
-
-final metaDataShade = Colors.grey[100];
-
 // Ideally name constants by function.
 
 // const darkGold = Color(0xFFBE830E);
@@ -54,7 +50,7 @@ const lighterGray = Color.fromARGB(255, 243, 243, 243);
 //const warningRed = Colors.red;
 
 const lightRed = Color.fromARGB(255, 255, 88, 77);
-const darkRed = Color.fromARGB(255, 139, 38, 30);
+// const darkRed = Color.fromARGB(255, 139, 38, 30);
 
 //const confirmGreen = Colors.green;
 
@@ -65,9 +61,6 @@ List<Color> defaultNotepodColors = const [
   titleAsh,
   lightBlue,
 ];
-
-/// Colour for list tiles
-const surfaceTintLight = Color.fromARGB(41, 222, 234, 216);
 
 /// Background colours of action buttons in note view
 /// pages
