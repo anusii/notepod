@@ -222,11 +222,27 @@ class _ListNotesState extends State<ListNotes> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Count statement
+                    // Match color scheme of sorting TextButtons
                     selectedCount > 0
-                        ? Text('Selected: $selectedCount notes')
+                        ? Text(
+                            'Selected: $selectedCount notes',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
                         : _foundNotes.length > 1 || _foundNotes.isEmpty
-                            ? Text('Found ${_foundNotes.length} notes')
-                            : Text('Found ${_foundNotes.length} note'),
+                            ? Text(
+                                'Found ${_foundNotes.length} notes',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              )
+                            : Text(
+                                'Found ${_foundNotes.length} note',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

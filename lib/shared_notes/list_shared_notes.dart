@@ -206,10 +206,21 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Search summary statement
+                    // Count statement
+                    // Match color scheme of sorting TextButtons
                     _foundNotes.length > 1 || _foundNotes.isEmpty
-                        ? Text('Found ${_foundNotes.length} notes')
-                        : Text('Found ${_foundNotes.length} note'),
+                        ? Text(
+                            'Found ${_foundNotes.length} notes',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
+                        : Text(
+                            'Found ${_foundNotes.length} note',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
