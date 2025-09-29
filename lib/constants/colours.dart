@@ -135,6 +135,9 @@ ThemeData lightThemeData(BuildContext context) {
         ),
       ),
     ),
+    dividerTheme: DividerThemeData(
+      color: titleAsh,
+    ),
     textTheme: TextTheme(
       bodyMedium: TextStyle(
         color: Colors.black,
@@ -198,6 +201,9 @@ ThemeData darkThemeData(BuildContext context) {
           fontSize: 12,
         ),
       ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: backgroundWhite,
     ),
     textTheme: TextTheme(
       bodyMedium: TextStyle(

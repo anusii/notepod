@@ -181,9 +181,7 @@ class NavDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
+                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Settings'),
@@ -201,9 +199,7 @@ class NavDrawer extends StatelessWidget {
                           await logoutPopup(context, const NotePod());
                         },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
+                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
