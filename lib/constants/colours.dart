@@ -117,6 +117,7 @@ ThemeData lightThemeData(BuildContext context) {
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
         foregroundColor: Colors.white,
+        backgroundColor: Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
@@ -128,10 +129,15 @@ ThemeData lightThemeData(BuildContext context) {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         // Label and icon use foreground colour
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.black,
         textStyle: TextStyle(
           fontSize: 12,
         ),
+      ),
+    ),
+    textTheme: TextTheme(
+      bodyMedium: TextStyle(
+        color: Colors.black,
       ),
     ),
     // colorScheme: const ColorScheme.light().copyWith(
@@ -191,6 +197,11 @@ ThemeData darkThemeData(BuildContext context) {
         textStyle: TextStyle(
           fontSize: 12,
         ),
+      ),
+    ),
+    textTheme: TextTheme(
+      bodyMedium: TextStyle(
+        color: Colors.white,
       ),
     ),
     // colorScheme: const ColorScheme.dark().copyWith(

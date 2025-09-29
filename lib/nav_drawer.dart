@@ -217,7 +217,7 @@ class NavDrawer extends StatelessWidget {
                       showDialog<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          return _aboutDialog(appName, version);
+                          return _aboutDialog(appName, version, context);
                         },
                       );
                     }
@@ -233,7 +233,7 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Make About Dialog
-Widget _aboutDialog(String appName, String appVersion) {
+Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
   return AboutDialog(
     applicationName: capitalize(appName),
     applicationIcon: SizedBox(
@@ -249,9 +249,9 @@ Widget _aboutDialog(String appName, String appVersion) {
         children: [
           RichText(
             text: TextSpan(
-              text: 'An ',
-              style: const TextStyle(color: Colors.black),
+              style: Theme.of(context).textTheme.bodyMedium,
               children: [
+                TextSpan(text: 'An '),
                 TextSpan(
                   text: 'ANU Software Innovation Institute',
                   style: const TextStyle(color: Colors.blue),
@@ -262,7 +262,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' demo project for Solid PODs.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -272,10 +271,10 @@ Widget _aboutDialog(String appName, String appVersion) {
           ),
           RichText(
             text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium,
               children: [
                 const TextSpan(
                   text: 'For more information see the ',
-                  style: TextStyle(color: Colors.black),
                 ),
                 TextSpan(
                   text: capitalize(appName),
@@ -287,7 +286,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' github repository.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
