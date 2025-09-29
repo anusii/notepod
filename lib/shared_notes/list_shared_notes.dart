@@ -294,10 +294,10 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: ListTile(
-                    leading: const CircleAvatar(
+                    leading: CircleAvatar(
                       radius: 26,
-                      backgroundImage:
-                          AssetImage('assets/images/note-icon.png'),
+                      backgroundColor: Colors.grey,
+                      child: Icon(Icons.edit_document),
                     ),
                     // Define width to avoid consuming full width
                     title: TitleExternalNote(
