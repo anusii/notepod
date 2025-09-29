@@ -244,7 +244,6 @@ class _ListNotesState extends State<ListNotes> {
                             _sortTitleAscending
                                 ? 'Title A to Z'
                                 : 'Title Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -265,7 +264,6 @@ class _ListNotesState extends State<ListNotes> {
                             _sortModDateAscending
                                 ? 'Date First Modified'
                                 : 'Date Last Modified',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),

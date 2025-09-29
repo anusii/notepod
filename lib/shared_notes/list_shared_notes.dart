@@ -227,7 +227,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortFilenameAscending
                                 ? 'Filename A to Z'
                                 : 'Filename Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -248,7 +247,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortOwnerAscending
                                 ? 'Owner A to Z'
                                 : 'Owner Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -269,7 +267,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortPermissionAscending
                                 ? 'Permission A to Z'
                                 : 'Permission Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),

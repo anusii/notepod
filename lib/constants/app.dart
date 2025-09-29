@@ -71,11 +71,6 @@ const metadataTextStyle = TextStyle(
   fontSize: 12,
 );
 
-// Text style for list sort buttons
-const smallTextStyle = TextStyle(
-  fontSize: 12,
-);
-
 // Titles for nav widgets to pages
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';

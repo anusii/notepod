@@ -88,6 +88,9 @@ class ButtonBackgroundColor {
   static const Color save = lightBlue;
 }
 
+// 20250529 JM: is foreground colour affecting list tiles
+// text and icon color
+
 // Light theme
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
@@ -122,7 +125,15 @@ ThemeData lightThemeData(BuildContext context) {
         ),
       ),
     ),
-    primaryColor: Colors.black,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(
+          fontSize: 12,
+        ),
+      ),
+    ),
     // colorScheme: const ColorScheme.light().copyWith(
     //   surfaceTint: Colors.black, //  surfaceTintLight,
     // ),
@@ -173,7 +184,15 @@ ThemeData darkThemeData(BuildContext context) {
         ),
       ),
     ),
-    primaryColor: Colors.black,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(
+          fontSize: 12,
+        ),
+      ),
+    ),
     // colorScheme: const ColorScheme.dark().copyWith(
     //     // surfaceTint: Colors.transparent,
     //     ),
