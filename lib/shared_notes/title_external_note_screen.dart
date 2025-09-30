@@ -86,13 +86,10 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     return FutureBuilder(
       future: _asyncDataFetch,
       builder: (context, snapshot) {
-        // Widget returnVal;
-
         switch (snapshot.connectionState) {
           case (ConnectionState.waiting || ConnectionState.active):
             return CircularProgressIndicator(
               value: null,
-              color: Colors.black,
               strokeWidth: 7.0,
             );
           case ConnectionState.done:
