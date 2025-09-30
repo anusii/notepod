@@ -50,13 +50,8 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
   }
 
   Widget _loadedScreen(Map sharedNotesMap) {
-    Widget nextScreen;
-    nextScreen = ListSharedNotes(
+    return ListSharedNotes(
       sharedNotesMap: sharedNotesMap,
-    );
-    return Container(
-      color: Colors.white,
-      child: nextScreen,
     );
   }
 
@@ -77,6 +72,7 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
                       child: Row(
                         children: <Widget>[
                           Expanded(
+                            // MsgCard style works in light and dark themes
                             child: buildMsgCard(
                               context,
                               Icons.info,

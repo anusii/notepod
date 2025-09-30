@@ -80,17 +80,14 @@ class _ListNotesState extends State<ListNotes> {
   void updateSelected(int index) {
     setState(() {
       // Increment/decrement selected count
-      if (_foundNotes[fileNames[index]]['isSelected']) {
+      if (_foundNotes[fileNames[index]][isSelectedPred]) {
         selectedCount--;
       } else {
         selectedCount++;
       }
       // Swap selected status of file
-      _foundNotes[fileNames[index]]['isSelected'] =
-          !_foundNotes[fileNames[index]]['isSelected'];
-      debugPrint(
-        'Changed: ${_foundNotes[fileNames[index]][noteTitlePred]}, selected: ${_foundNotes[fileNames[index]]['isSelected']}',
-      );
+      _foundNotes[fileNames[index]][isSelectedPred] =
+          !_foundNotes[fileNames[index]][isSelectedPred];
     });
   }
 
@@ -112,7 +109,7 @@ class _ListNotesState extends State<ListNotes> {
 
     // Add selected status to note map
     for (var i = 0; i < _foundNotes.length; i++) {
-      _foundNotes[fileNames[i]]['isSelected'] = false;
+      _foundNotes[fileNames[i]][isSelectedPred] = false;
     }
   }
 
@@ -225,11 +222,27 @@ class _ListNotesState extends State<ListNotes> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Count statement
+                    // Match color scheme of sorting TextButtons
                     selectedCount > 0
-                        ? Text('Selected: $selectedCount notes')
+                        ? Text(
+                            'Selected: $selectedCount notes',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
                         : _foundNotes.length > 1 || _foundNotes.isEmpty
-                            ? Text('Found ${_foundNotes.length} notes')
-                            : Text('Found ${_foundNotes.length} note'),
+                            ? Text(
+                                'Found ${_foundNotes.length} notes',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              )
+                            : Text(
+                                'Found ${_foundNotes.length} note',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -242,13 +255,11 @@ class _ListNotesState extends State<ListNotes> {
                             _sortTitleAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortTitleAscending
                                 ? 'Title A to Z'
                                 : 'Title Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -264,13 +275,11 @@ class _ListNotesState extends State<ListNotes> {
                             _sortModDateAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortModDateAscending
                                 ? 'Date First Modified'
                                 : 'Date Last Modified',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -292,10 +301,10 @@ class _ListNotesState extends State<ListNotes> {
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
                   child: Container(
-                    decoration: _foundNotes[fileNames[index]]
-                            ['isSelected'] // (indexList[index].isSelected)
+                    decoration: _foundNotes[fileNames[index]][isSelectedPred]
                         ? BoxDecoration(
-                            color: Colors.green[200],
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           )
                         : BoxDecoration(
@@ -309,11 +318,10 @@ class _ListNotesState extends State<ListNotes> {
                           child: Ink(
                             decoration: buttonShapeList,
                             child: IconButton(
-                              icon: _foundNotes[fileNames[index]][
-                                      'isSelected'] //indexList[index].isSelected
+                              icon: _foundNotes[fileNames[index]]
+                                      [isSelectedPred]
                                   ? const Icon(Icons.done)
                                   : const Icon(Icons.edit_document),
-                              color: Colors.white,
                               onPressed: () {
                                 updateSelected(index);
                               },
@@ -396,7 +404,9 @@ class TrailingButtons extends StatelessWidget {
           width: 15,
         ),
         // Open note icon
-        const Icon(Icons.arrow_forward),
+        Icon(
+          Icons.arrow_forward,
+        ),
       ],
     );
   }

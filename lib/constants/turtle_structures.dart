@@ -73,3 +73,6 @@ String genNoteTTLStr(
 
   return noteTTLStr;
 }
+
+/// Selection status of notes
+const String isSelectedPred = 'isSelected';

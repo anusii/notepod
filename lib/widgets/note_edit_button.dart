@@ -43,9 +43,10 @@ class NoteEditButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: const Icon(
         Icons.edit,
-        color: Colors.white,
       ),
       onPressed: () async {
         Navigator.pushAndRemoveUntil(
@@ -60,19 +61,12 @@ class NoteEditButton extends StatelessWidget {
               false, // This predicate ensures all previous routes are removed
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkGreen,
-        backgroundColor: lightGreen, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.edit),
+          ),
       label: const Text(
         'EDIT',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

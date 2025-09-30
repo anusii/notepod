@@ -30,15 +30,13 @@ import 'package:flutter/material.dart';
 import 'package:notepod/constants/colours.dart';
 
 Widget loadingScreen(double height) {
+  // Colours used work in light and dark themes
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
       Container(
         alignment: AlignmentDirectional.center,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
         child: Container(
           decoration: BoxDecoration(
             color: lightBlue,

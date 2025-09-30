@@ -75,12 +75,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Parameters:
   ///   [notesMap] - list of files with data in a user's app data folder.
   Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
-    return Container(
-      color: Colors.white,
-
-      // Run to fetch access control list information
-      child: ListRecipientsScreen(notesMap: notesMap),
-    );
+    return ListRecipientsScreen(notesMap: notesMap);
   }
 
   /// Advise user to create their first note, if no notes found.
@@ -93,16 +88,14 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber, 'No notes yet!',
               'Write your first note',
               // noNotesMsg,
               isSmall: true,
             ),
-            Container(
-              color: Colors.white,
-              child: NewNote(),
-            ),
+            NewNote(),
           ],
         ),
       ),
@@ -191,10 +184,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
 
   /// Load Notes with recipients data embedded.
   Widget _loadedNotesWRecScreen(Map notesMap) {
-    return Container(
-      color: Colors.white,
-      child: ListNotes(notesMap: notesMap),
-    );
+    return ListNotes(notesMap: notesMap);
   }
 
   /// Load error window
@@ -206,6 +196,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber,
               'Error adding recipients to notes!', 'Yikes',

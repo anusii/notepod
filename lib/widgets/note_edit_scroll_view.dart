@@ -32,7 +32,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
@@ -202,7 +201,6 @@ class NoteEditScrollView extends StatelessWidget {
                             decoration: const InputDecoration(
                               labelText: 'Note Title',
                               labelStyle: TextStyle(
-                                color: darkBlue,
                                 letterSpacing: 1.5,
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.bold,

@@ -75,13 +75,13 @@ class NoteSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color and padding
       icon: const Icon(
         Icons.save,
-        color: Colors.white,
       ),
       onPressed: () async {
         // Save note and redirect to view note page
-
         await saveNote(
           context,
           textController,
@@ -91,22 +91,16 @@ class NoteSaveButton extends StatelessWidget {
           notesMap,
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkBlue,
-        backgroundColor: lightBlue, // Foreground.
-        padding: const EdgeInsets.symmetric(
-          // A slightly larger edgeinset than back button to emphasise the save
-          // button.
-
-          horizontal: 20,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.save),
+            // Larger edgeinsets to emphasise save button
+            padding: WidgetStateProperty.all<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: 20),
+            ),
+          ),
       label: const Text(
         'SAVE',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

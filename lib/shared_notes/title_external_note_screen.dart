@@ -102,7 +102,6 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
         } else {
           returnVal = CircularProgressIndicator(
             value: null,
-            color: Colors.black,
             strokeWidth: 7.0,
           );
         }

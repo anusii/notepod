@@ -107,7 +107,6 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                     showDates: true,
                     showSharing: true,
                   ),
-                  Divider(),
                   // Display markdown note content
                   noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
                 ],

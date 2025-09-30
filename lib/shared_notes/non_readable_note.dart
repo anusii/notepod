@@ -62,6 +62,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
           showSharing: true,
           showPathInfo: true,
         ),
+        // MsgCard style works in light and dark themes
         buildMsgCard(
           context,
           Icons.info,
