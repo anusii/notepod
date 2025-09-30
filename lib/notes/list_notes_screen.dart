@@ -29,6 +29,7 @@ import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
@@ -53,8 +54,6 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Future comprising notesData
   static Future? _asyncDataFetch;
 
-  // /// Scroll controller for single child scroll view
-  // final ScrollController _scrollController = ScrollController();
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -110,21 +109,45 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         child: FutureBuilder(
           future: _asyncDataFetch,
           builder: (context, snapshot) {
-            Widget returnVal;
-            if (snapshot.connectionState == ConnectionState.done) {
-              return snapshot.data == null ||
-                      snapshot.data.toString() == 'null' ||
-                      snapshot.data.length == 0
-                  // Show _loadNewNote() to go instead to NewNote() when user has no notes
-                  ? returnVal = _loadNewNote()
-                  // Else load notes list
-                  : returnVal = _loadedNotesScreen(
-                      snapshot.data! as Map<String, dynamic>,
-                    );
-            } else {
-              returnVal = loadingScreen(normalLoadingScreenHeight);
+            switch (snapshot.connectionState) {
+              case (ConnectionState.waiting || ConnectionState.active):
+                return loadingScreen(normalLoadingScreenHeight);
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  // future failed with error
+                  debugPrint('Error: ${snapshot.error.toString()}');
+                  return errCard(
+                    context,
+                    'Error: data loading failed',
+                  );
+                } else if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data.length > 0) {
+                  // Notes found
+                  return _loadedNotesScreen(
+                    snapshot.data! as Map<String, dynamic>,
+                  );
+                } else if (snapshot.data == null ||
+                    snapshot.data.toString() == 'null' ||
+                    snapshot.data.length == 0) {
+                  // No notes found
+                  return _loadNewNote();
+                } else {
+                  // Unknown error
+                  return errCard(
+                    context,
+                    'Unknown error',
+                  );
+                }
+
+              // Connection none error
+              case ConnectionState.none:
+                debugPrint('Error: Builder has ConnectionState.none');
+                return errCard(
+                  context,
+                  'Connection error',
+                );
             }
-            return returnVal;
           },
         ),
       ),
@@ -158,11 +181,6 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
   /// Future comprising notesData with recipients added
   static Future? _asyncRecipientsAdd;
 
-  // /// Scroll controller for single child scroll view
-  // final ScrollController _scrollController = ScrollController();
-  /// Scroll controller for single child scroll view
-  late final ScrollController _scrollController;
-
   @override
   void initState() {
     _asyncRecipientsAdd = getAccessLists(
@@ -172,41 +190,13 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         notesMap: widget.notesMap,
       ),
     );
-    _scrollController = ScrollController();
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose(); // Dispose the ScrollController
     super.dispose();
-  }
-
-  /// Load Notes with recipients data embedded.
-  Widget _loadedNotesWRecScreen(Map notesMap) {
-    return ListNotes(notesMap: notesMap);
-  }
-
-  /// Load error window
-  Widget _loadNotesWRecError() {
-    return Scrollbar(
-      // thumbVisibility: true,
-      controller: _scrollController,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: <Widget>[
-            // MsgCard style works in light and dark themes
-            buildMsgCard(
-              context, Icons.info, Colors.amber,
-              'Error adding recipients to notes!', 'Yikes',
-              // noNotesMsg,
-              isSmall: true,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   // Fetch note recipient data and add to notes map
@@ -218,20 +208,46 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         child: FutureBuilder(
           future: _asyncRecipientsAdd,
           builder: (context, snapshot) {
-            Widget returnVal;
-            if (snapshot.connectionState == ConnectionState.done) {
-              debugPrint(
-                'Finished running _asyncRecipientsAdd to get recipients of each file',
-              );
-              // Show error if null returned as null indicates error
-              return snapshot.data == null || snapshot.data.toString() == 'null'
-                  ? returnVal = _loadNotesWRecError()
-                  // Else load notes list (which now includes recipients)
-                  : returnVal = _loadedNotesWRecScreen(snapshot.data! as Map);
-            } else {
-              returnVal = loadingScreen(normalLoadingScreenHeight);
+            switch (snapshot.connectionState) {
+              case (ConnectionState.waiting || ConnectionState.active):
+                return loadingScreen(normalLoadingScreenHeight);
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  // future failed with error
+                  debugPrint('Error: ${snapshot.error.toString()}');
+                  return errCard(
+                    context,
+                    'Error: data loading failed',
+                  );
+                } else if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data.length > 0) {
+                  // Notes found
+                  return ListNotes(notesMap: snapshot.data! as Map);
+                } else if (snapshot.data == null ||
+                    snapshot.data.toString() == 'null' ||
+                    snapshot.data.length == 0) {
+                  // No note recipients found
+                  return errCard(
+                    context,
+                    'Error adding recipients to notes!',
+                  );
+                } else {
+                  // Unknown error
+                  return errCard(
+                    context,
+                    'Unknown error',
+                  );
+                }
+
+              // Connection none error
+              case ConnectionState.none:
+                debugPrint('Error: Builder has ConnectionState.none');
+                return errCard(
+                  context,
+                  'Connection error',
+                );
             }
-            return returnVal;
           },
         ),
       ),

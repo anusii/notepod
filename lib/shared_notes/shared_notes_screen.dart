@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// List shared notes screen
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Anushka Vidanage
+/// Authors: Anushka Vidanage, Jess Moore
 library;
 
 import 'package:flutter/material.dart';
@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/shared_notes/list_shared_notes.dart';
+import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
@@ -49,6 +50,25 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
     super.initState();
   }
 
+  Center _noSharedNotes() {
+    return Center(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            // MsgCard style works in light and dark themes
+            child: buildMsgCard(
+              context,
+              Icons.info,
+              Colors.amber,
+              'No shared notes!',
+              noSharedNotesMsg,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _loadedScreen(Map sharedNotesMap) {
     return ListSharedNotes(
       sharedNotesMap: sharedNotesMap,
@@ -63,34 +83,45 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
         child: FutureBuilder(
           future: _asyncDataFetch,
           builder: (context, snapshot) {
-            Widget returnVal;
-            if (snapshot.connectionState == ConnectionState.done) {
-              return snapshot.data == null ||
-                      snapshot.data.toString() == 'null' ||
-                      snapshot.data.length == 0
-                  ? Center(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            // MsgCard style works in light and dark themes
-                            child: buildMsgCard(
-                              context,
-                              Icons.info,
-                              Colors.amber,
-                              'No shared notes!',
-                              noSharedNotesMsg,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : returnVal = _loadedScreen(
-                      snapshot.data! as Map,
-                    );
-            } else {
-              returnVal = loadingScreen(normalLoadingScreenHeight);
+            switch (snapshot.connectionState) {
+              case (ConnectionState.waiting || ConnectionState.active):
+                return loadingScreen(normalLoadingScreenHeight);
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  // Future failed with error
+                  debugPrint('Error: ${snapshot.error.toString()}');
+                  return errCard(
+                    context,
+                    'Error: data loading failed',
+                  );
+                } else if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data.length > 0) {
+                  // Notes found
+                  return _loadedScreen(
+                    snapshot.data! as Map,
+                  );
+                } else if (snapshot.data == null ||
+                    snapshot.data.toString() == 'null' ||
+                    snapshot.data.length == 0) {
+                  // No shared notes found
+                  return _noSharedNotes();
+                } else {
+                  // Unknown error
+                  return errCard(
+                    context,
+                    'Unknown error',
+                  );
+                }
+
+              // Connection none error
+              case ConnectionState.none:
+                debugPrint('Error: Builder has ConnectionState.none');
+                return errCard(
+                  context,
+                  'Connection error',
+                );
             }
-            return returnVal;
           },
         ),
       ),
