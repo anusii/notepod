@@ -32,7 +32,7 @@ const mainResDir = 'notepod';
 const noteFileNamePrefix = 'note-';
 
 // IRIs (Internationalized Resource Identifiers)
-String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
+String notepodTerms = 'https://solidcommunity.au/' 'predicates/terms#';
 
 String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';
