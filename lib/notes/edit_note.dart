@@ -57,8 +57,7 @@ class EditNote extends StatefulWidget {
   EditNoteState createState() => EditNoteState();
 }
 
-class EditNoteState extends State<EditNote>
-    with SingleTickerProviderStateMixin {
+class EditNoteState extends State<EditNote> {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;

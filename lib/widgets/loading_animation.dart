@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:loading_indicator/loading_indicator.dart';
+import 'package:new_loading_indicator/new_loading_indicator.dart';
 
 import 'package:notepod/constants/colours.dart';
 
@@ -43,11 +43,6 @@ showAnimationDialog(
       return Padding(
         padding: const EdgeInsets.all(50),
         child: Center(
-          // child: SpinKitThreeBounce(
-          //   color: anuCopper,
-          //   size: 100.0,
-          //   //controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
-          // ),
           child: SizedBox(
             width: 150,
             height: 250,

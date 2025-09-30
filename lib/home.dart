@@ -45,8 +45,7 @@ class AppHomePage extends StatefulWidget {
   AppHomePageState createState() => AppHomePageState();
 }
 
-class AppHomePageState extends State<AppHomePage>
-    with SingleTickerProviderStateMixin {
+class AppHomePageState extends State<AppHomePage> {
   String? _webId;
 
   String _appVersion = '';
