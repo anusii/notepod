@@ -118,7 +118,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                   debugPrint('Error: ${snapshot.error.toString()}');
                   return errCard(
                     context,
-                    'Error: ${snapshot.error.toString()}',
+                    'Error: data loading failed',
                   );
                 } else if (snapshot.hasData &&
                     snapshot.data != null &&
@@ -217,7 +217,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
                   debugPrint('Error: ${snapshot.error.toString()}');
                   return errCard(
                     context,
-                    'Error: ${snapshot.error.toString()}',
+                    'Error: data loading failed',
                   );
                 } else if (snapshot.hasData &&
                     snapshot.data != null &&
