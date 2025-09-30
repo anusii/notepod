@@ -57,9 +57,9 @@ Future<Map<String, dynamic>> getNoteList(
       if (context.mounted) {
         String noteContent =
             await readPod(fileName.replaceAll(webId, ''), context, childPage);
-        //debugPrint('NoteInfoMap: $fileName');
+
+        // Extract ttl data to notesMap
         notesMap[fileName] = noteInfoMap(noteContent);
-        //debugPrint('$fileName => ${notesMap[fileName]}');
       }
     }
     return notesMap;
@@ -91,6 +91,11 @@ Map noteInfoMap(String noteContent) {
     assert(
       rdfMap[meKey] != null,
       'rdfMap must have key "#me"',
+    );
+
+    assert(
+      rdfMap[meKey]['$notepodTerms$noteTitlePred'] != null,
+      'rdfMap[meKey] keys must contain $notepodTerms$noteTitlePred',
     );
 
     // Create note info map
