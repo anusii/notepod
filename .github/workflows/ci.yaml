@@ -111,7 +111,6 @@ jobs:
             'assets/**/*.html'
             'lib/**/*.dart'
             --exclude 'predicates/terms' # Uses regex
-          # args: --verbose --no-progress 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart'
           fail: false
 
       - name: Create Issue From File
