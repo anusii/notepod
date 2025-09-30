@@ -26,8 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/shared_notes/list_shared_notes.dart';
-import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/err_card.dart';
+import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
 class SharedNotesScreen extends StatefulWidget {
