@@ -115,6 +115,13 @@ class ErrMsg {
       'Failed to store the note file in your POD. Try again!';
 }
 
+class NoteIconSize {
+  static const double width = 50;
+  static const double height = 50;
+  static const double twoIconWidth = (width * 2) + gap;
+  static const double gap = 15;
+}
+
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 
