@@ -86,7 +86,6 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     return FutureBuilder(
       future: _asyncDataFetch,
       builder: (context, snapshot) {
-<<<<<<< HEAD
         // Widget returnVal;
 
         switch (snapshot.connectionState) {
@@ -113,26 +112,6 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
           case ConnectionState.none:
             debugPrint('Error: No future set in title call.}');
             return Text('Error: Title not loaded, please reload');
-=======
-        Widget returnVal;
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            returnVal = Text('Error: ${snapshot.error}');
-          } else {
-            snapshot.data == null ||
-                    snapshot.data.toString() == 'null' ||
-                    snapshot.data.length == 0
-                ? returnVal = Text('Error: title is empty')
-                : returnVal = _loadedScreen(
-                    snapshot.data! as Map,
-                  );
-          }
-        } else {
-          returnVal = CircularProgressIndicator(
-            value: null,
-            strokeWidth: 7.0,
-          );
->>>>>>> dev
         }
       },
     );
