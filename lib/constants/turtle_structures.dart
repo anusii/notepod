@@ -32,7 +32,7 @@ const mainResDir = 'notepod';
 const noteFileNamePrefix = 'note-';
 
 // IRIs (Internationalized Resource Identifiers). Split the string to avoid
-// lychee link check issue.
+// lychee link check errors.
 
 String notepodTerms = 'https://solidcommunity.au/' 'predicates/terms#';
 
