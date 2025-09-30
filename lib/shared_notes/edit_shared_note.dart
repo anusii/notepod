@@ -49,8 +49,7 @@ class EditSharedNote extends StatefulWidget {
   EditSharedNoteState createState() => EditSharedNoteState();
 }
 
-class EditSharedNoteState extends State<EditSharedNote>
-    with SingleTickerProviderStateMixin {
+class EditSharedNoteState extends State<EditSharedNote> {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
