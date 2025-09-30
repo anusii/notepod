@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Jess Moore
 library;
@@ -50,9 +50,10 @@ class NoteDelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: const Icon(
         Icons.delete,
-        color: Colors.white,
       ),
       onPressed: () {
         showDialog(
@@ -86,6 +87,9 @@ class NoteDelButton extends StatelessWidget {
                     }
 
                     if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true)
+                          .pop(); // Dismiss the deleting note dialog
+
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -103,8 +107,8 @@ class NoteDelButton extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
+                    Navigator.of(context, rootNavigator: true)
+                        .pop(); // Dismiss the deleting note dialog
                   },
                   child: const Text('No'),
                 ),
@@ -113,19 +117,12 @@ class NoteDelButton extends StatelessWidget {
           },
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkRed,
-        backgroundColor: lightRed, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.delete),
+          ),
       label: const Text(
         'DELETE',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

@@ -13,7 +13,7 @@ on:
     types: [opened, reopened, synchronize]
 
 env:
-  FLUTTER_VERSION: '3.35.3'
+  FLUTTER_VERSION: '3.35.4'
 
 jobs:
 
@@ -91,6 +91,29 @@ jobs:
       - run: npm install -g markdownlint-cli
       - run: markdownlint --disable MD036 -- *.md lib assets installers
         # -p .markdownlintignore -c .markdownlint.yaml
+
+  link_checker:
+    runs-on: ubuntu-latest
+    if: github.event.repository.private == false
+    permissions:
+      issues: write # required for peter-evans/create-issue-from-file
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Link Checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with: # Don't fail for now but then create an issue - useful?
+          args: --verbose --no-progress 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart'
+          fail: false
+
+      - name: Create Issue From File
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: Link Checker Report
+          content-filepath: ./lychee/out.md
+          labels: report, automated issue
 
   locmax:
     runs-on: ubuntu-latest

@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -19,15 +19,13 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
 import 'package:flutter/material.dart';
-
-import 'package:notepod/constants/colours.dart';
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
@@ -73,11 +71,6 @@ const metadataTextStyle = TextStyle(
   fontSize: 12,
 );
 
-// Text style for list sort buttons
-const smallTextStyle = TextStyle(
-  fontSize: 12,
-);
-
 // Titles for nav widgets to pages
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
@@ -115,20 +108,15 @@ class ErrMsg {
       'Failed to store the note file in your POD. Try again!';
 }
 
+class NoteIconSize {
+  static const double width = 50;
+  static const double height = 50;
+  static const double twoIconWidth = (width * 2) + gap;
+  static const double gap = 15;
+}
+
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
-
-/// Button style for view pages
-ButtonStyle buttonStyleView = ElevatedButton.styleFrom(
-  foregroundColor: darkBlue,
-  backgroundColor: lightBlue, // foreground
-  padding: const EdgeInsets.symmetric(
-    horizontal: 15,
-  ),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(20),
-  ),
-);
 
 /// Button shape decoration for list pages
 ShapeDecoration buttonShapeList =

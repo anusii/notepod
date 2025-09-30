@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Jess Moore
 library;
@@ -27,7 +27,6 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/utils/misc.dart';
 
@@ -73,17 +72,17 @@ class NoteDisplayMetadata extends StatelessWidget {
     }
 
     return Container(
-      color: metaDataShade,
+      color: Theme.of(context).colorScheme.onInverseSurface,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // ShowDates (created and modified)
-          if (showDates) dateInfo(thisNoteContent),
+          if (showDates) dateInfo(thisNoteContent, context),
           // Show sharing info (owner, provider, access list)
-          if (showSharing) accessInfo(thisNoteInfo),
+          if (showSharing) accessInfo(thisNoteInfo, context),
           // Show path info (filename and path)
-          if (showPathInfo) pathInfo(thisNoteInfo),
+          if (showPathInfo) pathInfo(thisNoteInfo, context),
           SizedBox(height: 10),
         ],
       ),
@@ -91,11 +90,10 @@ class NoteDisplayMetadata extends StatelessWidget {
   }
 }
 
-// Display sharing metadata (owner, provider, access list).
-
-Widget accessInfo(Map thisNoteInfo) {
+/// Display sharing metadata (owner, provider, access list).
+Widget accessInfo(Map thisNoteInfo, BuildContext context) {
   return Container(
-    color: metaDataShade,
+    color: Theme.of(context).colorScheme.onInverseSurface,
     child: Column(
       children: [
         Row(
@@ -145,11 +143,10 @@ Widget accessInfo(Map thisNoteInfo) {
   );
 }
 
-// Display path metadata (filename and path).
-
-Widget pathInfo(Map thisNoteInfo) {
+/// Display path metadata (filename and path).
+Widget pathInfo(Map thisNoteInfo, BuildContext context) {
   return Container(
-    color: metaDataShade,
+    color: Theme.of(context).colorScheme.onInverseSurface,
     child: Column(
       children: [
         Row(
@@ -185,11 +182,10 @@ Widget pathInfo(Map thisNoteInfo) {
   );
 }
 
-// Show date metadata (creation date, modified date)
-
-Widget dateInfo(Map thisNoteContent) {
+/// Show date metadata (creation date, modified date)
+Widget dateInfo(Map thisNoteContent, BuildContext context) {
   return Container(
-    color: metaDataShade,
+    color: Theme.of(context).colorScheme.onInverseSurface,
     child: Column(
       children: [
         Row(

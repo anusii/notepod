@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 library;
@@ -181,9 +181,7 @@ class NavDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
+                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Settings'),
@@ -201,9 +199,7 @@ class NavDrawer extends StatelessWidget {
                           await logoutPopup(context, const NotePod());
                         },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
+                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
@@ -217,7 +213,7 @@ class NavDrawer extends StatelessWidget {
                       showDialog<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          return _aboutDialog(appName, version);
+                          return _aboutDialog(appName, version, context);
                         },
                       );
                     }
@@ -233,7 +229,7 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Make About Dialog
-Widget _aboutDialog(String appName, String appVersion) {
+Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
   return AboutDialog(
     applicationName: capitalize(appName),
     applicationIcon: SizedBox(
@@ -249,9 +245,9 @@ Widget _aboutDialog(String appName, String appVersion) {
         children: [
           RichText(
             text: TextSpan(
-              text: 'An ',
-              style: const TextStyle(color: Colors.black),
+              style: Theme.of(context).textTheme.bodyMedium,
               children: [
+                TextSpan(text: 'An '),
                 TextSpan(
                   text: 'ANU Software Innovation Institute',
                   style: const TextStyle(color: Colors.blue),
@@ -262,7 +258,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' demo project for Solid PODs.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -272,10 +267,10 @@ Widget _aboutDialog(String appName, String appVersion) {
           ),
           RichText(
             text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium,
               children: [
                 const TextSpan(
                   text: 'For more information see the ',
-                  style: TextStyle(color: Colors.black),
                 ),
                 TextSpan(
                   text: capitalize(appName),
@@ -287,7 +282,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' github repository.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),

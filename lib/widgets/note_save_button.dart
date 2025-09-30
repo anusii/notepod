@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2025-07-16 08:32:47 +1100 Jess Moore>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Jess Moore
 
@@ -75,13 +75,13 @@ class NoteSaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color and padding
       icon: const Icon(
         Icons.save,
-        color: Colors.white,
       ),
       onPressed: () async {
         // Save note and redirect to view note page
-
         await saveNote(
           context,
           textController,
@@ -91,22 +91,16 @@ class NoteSaveButton extends StatelessWidget {
           notesMap,
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkBlue,
-        backgroundColor: lightBlue, // Foreground.
-        padding: const EdgeInsets.symmetric(
-          // A slightly larger edgeinset than back button to emphasise the save
-          // button.
-
-          horizontal: 20,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.save),
+            // Larger edgeinsets to emphasise save button
+            padding: WidgetStateProperty.all<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: 20),
+            ),
+          ),
       label: const Text(
         'SAVE',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }
@@ -371,6 +365,9 @@ Future<void> saveNoteToPod(
     if (createNoteStatus == SolidFunctionCallStatus.success) {
       if (!context.mounted) return;
 
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Dismiss the saving note dialog
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -383,12 +380,24 @@ Future<void> saveNoteToPod(
             false, // This predicate ensures all previous routes are removed
       );
     } else {
+      // Show SolidFunctionCallStatus after writePod() if not success
+      debugPrint(
+        'SolidFunctionCallStatus: ${createNoteStatus.toString()}',
+      );
+
       if (!context.mounted) return;
+
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Dismiss the saving note dialog
 
       showErrDialog(
         context,
         ErrMsg.saveFailed,
       );
+    }
+
+    if (!context.mounted) {
+      throw Exception('Context not found');
     }
   } on Exception catch (e) {
     debugPrint(

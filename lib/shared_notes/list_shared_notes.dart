@@ -3,7 +3,7 @@
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
 /// License: GNU General Public License, Version 3 (the "License")
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -16,7 +16,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 
@@ -206,10 +206,21 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Search summary statement
+                    // Count statement
+                    // Match color scheme of sorting TextButtons
                     _foundNotes.length > 1 || _foundNotes.isEmpty
-                        ? Text('Found ${_foundNotes.length} notes')
-                        : Text('Found ${_foundNotes.length} note'),
+                        ? Text(
+                            'Found ${_foundNotes.length} notes',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
+                        : Text(
+                            'Found ${_foundNotes.length} note',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -222,13 +233,11 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortFilenameAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortFilenameAscending
                                 ? 'Filename A to Z'
                                 : 'Filename Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -244,13 +253,11 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortOwnerAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortOwnerAscending
                                 ? 'Owner A to Z'
                                 : 'Owner Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -266,13 +273,11 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             _sortPermissionAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortPermissionAscending
                                 ? 'Permission A to Z'
                                 : 'Permission Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -297,10 +302,10 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: ListTile(
-                    leading: const CircleAvatar(
+                    leading: CircleAvatar(
                       radius: 26,
-                      backgroundImage:
-                          AssetImage('assets/images/note-icon.png'),
+                      backgroundColor: Colors.grey,
+                      child: Icon(Icons.edit_document),
                     ),
                     // Define width to avoid consuming full width
                     title: TitleExternalNote(

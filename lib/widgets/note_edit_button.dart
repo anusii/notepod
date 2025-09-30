@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2025-07-18 20:34:12 +1100 Jess Moore>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Anuska Vidanage, Jess Moore
 library;
@@ -43,9 +43,10 @@ class NoteEditButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      // Uses Theme elevatedButtonTheme for all properties
+      // except background color
       icon: const Icon(
         Icons.edit,
-        color: Colors.white,
       ),
       onPressed: () async {
         Navigator.pushAndRemoveUntil(
@@ -60,19 +61,12 @@ class NoteEditButton extends StatelessWidget {
               false, // This predicate ensures all previous routes are removed
         );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: darkGreen,
-        backgroundColor: lightGreen, // foreground
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
+      style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor:
+                WidgetStateProperty.all<Color>(ButtonBackgroundColor.edit),
+          ),
       label: const Text(
         'EDIT',
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

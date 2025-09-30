@@ -3,7 +3,7 @@
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
 /// License: GNU General Public License, Version 3 (the "License")
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -16,7 +16,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 library;
@@ -75,12 +75,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Parameters:
   ///   [notesMap] - list of files with data in a user's app data folder.
   Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
-    return Container(
-      color: Colors.white,
-
-      // Run to fetch access control list information
-      child: ListRecipientsScreen(notesMap: notesMap),
-    );
+    return ListRecipientsScreen(notesMap: notesMap);
   }
 
   /// Advise user to create their first note, if no notes found.
@@ -93,16 +88,14 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber, 'No notes yet!',
               'Write your first note',
               // noNotesMsg,
               isSmall: true,
             ),
-            Container(
-              color: Colors.white,
-              child: NewNote(),
-            ),
+            NewNote(),
           ],
         ),
       ),
@@ -191,10 +184,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
 
   /// Load Notes with recipients data embedded.
   Widget _loadedNotesWRecScreen(Map notesMap) {
-    return Container(
-      color: Colors.white,
-      child: ListNotes(notesMap: notesMap),
-    );
+    return ListNotes(notesMap: notesMap);
   }
 
   /// Load error window
@@ -206,6 +196,7 @@ class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
         controller: _scrollController,
         child: Column(
           children: <Widget>[
+            // MsgCard style works in light and dark themes
             buildMsgCard(
               context, Icons.info, Colors.amber,
               'Error adding recipients to notes!', 'Yikes',

@@ -3,7 +3,7 @@
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
 /// License: GNU General Public License, Version 3 (the "License")
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -16,7 +16,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 
@@ -57,6 +57,7 @@ class ListNotes extends StatefulWidget {
 class _ListNotesState extends State<ListNotes> {
   Map _foundNotes = {};
   List fileNames = [];
+
   // Sort order
   // true: ascending (A-Z), false: descending (Z-A)
   // Initial sort will sort alphabetically
@@ -65,18 +66,51 @@ class _ListNotesState extends State<ListNotes> {
   // First button press will change to sort by last modified first
   bool _sortModDateAscending = true;
 
+  /// Current note sort method
+  /// Initialised to sort by title
+  String currSortMethod = '';
+
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Count of selected notes
+  int selectedCount = 0;
+
+  /// Update selected status and count of selected
+  void updateSelected(int index) {
+    setState(() {
+      // Increment/decrement selected count
+      if (_foundNotes[fileNames[index]][isSelectedPred]) {
+        selectedCount--;
+      } else {
+        selectedCount++;
+      }
+      // Swap selected status of file
+      _foundNotes[fileNames[index]][isSelectedPred] =
+          !_foundNotes[fileNames[index]][isSelectedPred];
+    });
+  }
+
   @override
   void initState() {
+    super.initState();
+
     // By default _foundNotes is the full list of notes
     _foundNotes = widget.notesMap;
     fileNames = _foundNotes.keys.toList();
+
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
+
+    // Initialise sorting method
+    currSortMethod = 'sortByTitle';
+
     _scrollController = ScrollController();
-    super.initState();
+
+    // Add selected status to note map
+    for (var i = 0; i < _foundNotes.length; i++) {
+      _foundNotes[fileNames[i]][isSelectedPred] = false;
+    }
   }
 
   @override
@@ -98,6 +132,9 @@ class _ListNotesState extends State<ListNotes> {
                 .toLowerCase()
                 .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByTitle';
     });
   }
 
@@ -112,6 +149,9 @@ class _ListNotesState extends State<ListNotes> {
             : _foundNotes[b][modifiedDateTimePred]
                 .compareTo(_foundNotes[a][modifiedDateTimePred]),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByModDate';
     });
   }
 
@@ -141,6 +181,14 @@ class _ListNotesState extends State<ListNotes> {
       _foundNotes = results;
       fileNames = _foundNotes.keys.toList();
     });
+
+    // Sort by current sort method and polarity
+    switch (currSortMethod) {
+      case 'sortByTitle':
+        _sortByTitle(_sortTitleAscending);
+      case 'sortByModDate':
+        _sortByModDate(_sortModDateAscending);
+    }
   }
 
   @override
@@ -173,10 +221,28 @@ class _ListNotesState extends State<ListNotes> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Search summary statement
-                    _foundNotes.length > 1 || _foundNotes.isEmpty
-                        ? Text('Found ${_foundNotes.length} notes')
-                        : Text('Found ${_foundNotes.length} note'),
+                    // Count statement
+                    // Match color scheme of sorting TextButtons
+                    selectedCount > 0
+                        ? Text(
+                            'Selected: $selectedCount notes',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
+                        : _foundNotes.length > 1 || _foundNotes.isEmpty
+                            ? Text(
+                                'Found ${_foundNotes.length} notes',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              )
+                            : Text(
+                                'Found ${_foundNotes.length} note',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -189,13 +255,11 @@ class _ListNotesState extends State<ListNotes> {
                             _sortTitleAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortTitleAscending
                                 ? 'Title A to Z'
                                 : 'Title Z to A',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -211,13 +275,11 @@ class _ListNotesState extends State<ListNotes> {
                             _sortModDateAscending
                                 ? Icons.arrow_drop_down
                                 : Icons.arrow_drop_up,
-                            color: Colors.black,
                           ),
                           label: Text(
                             _sortModDateAscending
                                 ? 'Date First Modified'
                                 : 'Date Last Modified',
-                            style: smallTextStyle,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -238,49 +300,68 @@ class _ListNotesState extends State<ListNotes> {
                 itemCount: _foundNotes.length,
                 itemExtent: ownListItemHeight,
                 itemBuilder: (context, index) => Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: ListTile(
-                    leading: const CircleAvatar(
-                      radius: 26,
-                      backgroundImage:
-                          AssetImage('assets/images/note-icon.png'),
-                    ),
-                    //const Icon(Icons.text_snippet_outlined),
-                    title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
-                    subtitle: Text(
-                      'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
-                      'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
-                      'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
-                    ),
-                    // trailing: TrailingIcons(),
-                    // Define width to avoid consuming full width
-                    trailing: SizedBox(
-                      height: 60,
-                      width: 120,
-                      child: TrailingButtons(
-                        foundNotes: _foundNotes,
-                        fileNames: fileNames,
-                        index: index,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppHomePage(
-                            title: topBarTitle,
-                            childPage: ViewNote(
-                              noteData: _foundNotes[fileNames[index]],
-                              notesMap: widget.notesMap,
+                  child: Container(
+                    decoration: _foundNotes[fileNames[index]][isSelectedPred]
+                        ? BoxDecoration(
+                            color:
+                                Theme.of(context).colorScheme.onInverseSurface,
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                    child: ListTile(
+                      // Select note button
+                      leading: SizedBox(
+                        width: NoteIconSize.width,
+                        child: Center(
+                          child: Ink(
+                            decoration: buttonShapeList,
+                            child: IconButton(
+                              icon: _foundNotes[fileNames[index]]
+                                      [isSelectedPred]
+                                  ? const Icon(Icons.done)
+                                  : const Icon(Icons.edit_document),
+                              onPressed: () {
+                                updateSelected(index);
+                              },
                             ),
                           ),
                         ),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
-                    },
+                      ),
+                      title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
+                      subtitle: Text(
+                        'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
+                        'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
+                        'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                      ),
+                      // Define width to avoid consuming full width
+                      trailing: SizedBox(
+                        height: NoteIconSize.height,
+                        width: NoteIconSize.twoIconWidth,
+                        child: TrailingButtons(
+                          foundNotes: _foundNotes,
+                          fileNames: fileNames,
+                          index: index,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppHomePage(
+                              title: topBarTitle,
+                              childPage: ViewNote(
+                                noteData: _foundNotes[fileNames[index]],
+                                notesMap: widget.notesMap,
+                              ),
+                            ),
+                          ),
+                          (Route<dynamic> route) =>
+                              false, // This predicate ensures all previous routes are removed
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -323,7 +404,9 @@ class TrailingButtons extends StatelessWidget {
           width: 15,
         ),
         // Open note icon
-        const Icon(Icons.arrow_forward),
+        Icon(
+          Icons.arrow_forward,
+        ),
       ],
     );
   }
