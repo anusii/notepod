@@ -31,10 +31,15 @@ const mainResDir = 'notepod';
 // const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
+<<<<<<< HEAD
 // IRIs (Internationalized Resource Identifiers). Split the string to avoid
 // lychee link check errors.
 
 String notepodTerms = 'https://solidcommunity.au/' 'predicates/terms#';
+=======
+// IRIs (Internationalized Resource Identifiers)
+String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
+>>>>>>> dev
 
 String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';
