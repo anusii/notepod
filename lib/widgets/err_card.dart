@@ -42,7 +42,7 @@ Center errCard(
           // MsgCard style works in light and dark themes
           child: buildMsgCard(
             context,
-            Icons.info,
+            Icons.error,
             Colors.amber,
             'Error',
             errBody,
