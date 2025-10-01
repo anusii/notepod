@@ -31,9 +31,17 @@ const mainResDir = 'notepod';
 // const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
-// IRIs (Internationalized Resource Identifiers). Split the string to avoid
-// [20251001 jm] lychee link check excluded (see ci.yaml, flutter.mk)
-String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
+// IRIs (Internationalized Resource Identifiers).
+//
+// 20251001 gjw Split the string to avoid lychee link check excluded.
+//
+// 20251001 jess The exclusions could be made as special cases in ci.yaml,
+// flutter.mk.
+//
+// 20251001 gjw But those are tempalted files and checking for special cases
+// there is awkward.
+
+String notepodTerms = 'https://solidcommunity.au/' 'predicates/terms#';
 
 String createdDateTimePred = 'createdDateTime';
 String modifiedDateTimePred = 'modifiedDateTime';

@@ -110,7 +110,6 @@ jobs:
             'assets/**/*.md'
             'assets/**/*.html'
             'lib/**/*.dart'
-            --exclude 'predicates/terms' # Uses regex
           fail: false
 
       - name: Create Issue From File
