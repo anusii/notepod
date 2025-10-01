@@ -508,7 +508,7 @@ unused_files:
 .PHONY: lychee
 lychee:
 	@echo "Lychee: CHECK LINKS."
-	-lychee --no-progress --format compact 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart'
+	-lychee --no-progress --format compact 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart' --exclude 'predicates/terms'
 	@echo $(SEPARATOR)
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP

@@ -31,7 +31,8 @@ const mainResDir = 'notepod';
 // const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
-// IRIs (Internationalized Resource Identifiers)
+// IRIs (Internationalized Resource Identifiers). Split the string to avoid
+// [20251001 jm] lychee link check excluded (see ci.yaml, flutter.mk)
 String notepodTerms = 'https://solidcommunity.au/predicates/terms#';
 
 String createdDateTimePred = 'createdDateTime';
