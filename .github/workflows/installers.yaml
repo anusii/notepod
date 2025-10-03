@@ -106,16 +106,16 @@ jobs:
 
     steps:
       - name: Clone Repository
-        if: (hashFiles('snap/**') != '')
+        if: hashFiles('snap/**') != ''
         uses: actions/checkout@v4
 
       - name: Build snap
-        if: (hashFiles('snap/**') != '')
+        if: hashFiles('snap/**') != ''
         uses: snapcore/action-build@v1
         id: build
 
       - name: Upload snap artifact
-        if: (hashFiles('snap/**') != '')
+        if: hashFiles('snap/**') != ''
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-linux-snap
