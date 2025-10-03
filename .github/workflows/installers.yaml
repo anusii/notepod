@@ -105,20 +105,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
       - name: Check if snap folder exists
         id: snap_check
         run: |
           pwd
-          ls snap
+          ls
           if [ -d "snap" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Clone Repository
-        if: steps.snap_check.outputs.exists == 'true'
-        uses: actions/checkout@v4
 
       - name: Build snap
         if: steps.snap_check.outputs.exists == 'true'
