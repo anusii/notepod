@@ -105,17 +105,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check if snap folder exists
+        id: snap_check
+        run: |
+          if [ -d "snap" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Clone Repository
-        if: hashFiles('snap/**') != ''
+        if: steps.snap_check.outputs.exists == 'true'
         uses: actions/checkout@v4
 
       - name: Build snap
-        if: hashFiles('snap/**') != ''
+        if: steps.snap_check.outputs.exists == 'true'
         uses: snapcore/action-build@v1
         id: build
 
       - name: Upload snap artifact
-        if: hashFiles('snap/**') != ''
+        if: steps.snap_check.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-linux-snap
