@@ -74,6 +74,23 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     echo ""
 
+    echo '***** UPLOAD LINUX SNAP.'
+
+    ## gh run download ${bumpId} --name ${APP}-linux-snap
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-linux-snap")) | .id' | head -n 1)
+    # TODO 20251003 gjw Only continue if a snap artefact was found
+    echo "artifact id: $artifactId"
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
+    unzip artifact.zip
+    rm -f artifact.zip
+
+    rsync -avzh ${APP}_${versoion}_amd64.snap ${DEST}
+    mv -f ${APP}_${version}_amd64.snap ARCHIVE/${APP}_${version}_amd64.snap
+
+    echo ""
+
     echo '***** UPLOAD MACOS DMG'
 
     ## gh run download ${bumpId} --name ${APP}-macos-zip
