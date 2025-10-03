@@ -1,4 +1,5 @@
 name: notepod
+base: core22
 version: '1.0.0'
 summary: Privacy preserving note taking app using PODs.
 description: |
@@ -9,14 +10,13 @@ description: |
   list with the family so whoever is next at the shops has it at their
   finger tips.
 
-base: core22
-confinement: strict
 grade: stable
+confinement: strict
 
 apps:
   notepod:
     command: notepod
-    extensions: [gnome]
+    extensions: [desktop-gtk3]
     plugs:
       - network
       - home
