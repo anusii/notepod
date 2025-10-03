@@ -58,7 +58,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
     echo "Uploads are going to ${DEST}."
     echo
 
-    echo '***** UPLOAD LINUX ZIP.'
+    echo '***** UPLOAD LINUX ZIP'
 
     ## gh run download ${bumpId} --name ${APP}-linux-zip
 
@@ -74,7 +74,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     echo ""
 
-    echo '***** UPLOAD LINUX SNAP.'
+    echo '***** UPLOAD LINUX SNAP'
 
     ## gh run download ${bumpId} --name ${APP}-linux-snap
 
@@ -83,11 +83,11 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
     # TODO 20251003 gjw Only continue if a snap artefact was found
     echo "artifact id: $artifactId"
     gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
-    unzip artifact.zip
+    unzip -oq artifact.zip
     rm -f artifact.zip
 
-    rsync -avzh ${APP}_${versoion}_amd64.snap ${DEST}
-    mv -f ${APP}_${version}_amd64.snap ARCHIVE/${APP}_${version}_amd64.snap
+    scp ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
+    mv -f ${APP}_${version%%+*}_amd64.snap ARCHIVE/${APP}_${version%%+*}_amd64.snap
 
     echo ""
 
