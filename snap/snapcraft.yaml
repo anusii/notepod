@@ -1,4 +1,4 @@
-name: com.togaware.notepod
+name: notepod
 version: '1.0.0'
 summary: Privacy preserving note taking app using PODs.
 description: |
