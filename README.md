@@ -25,11 +25,13 @@ Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Download the latest version:
 **GNU/Linux**
+[snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
 [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
 [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
 **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 **macOS**
+[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg);
 [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
 **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
