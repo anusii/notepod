@@ -9,6 +9,8 @@ description: |
   list with the family so whoever is next at the shops has it at their
   finger tips.
 
+icon: installers/app.png
+
 base: core22
 confinement: strict
 grade: stable
