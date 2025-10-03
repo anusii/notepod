@@ -1,5 +1,7 @@
 <!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
+*Time-stamp: <Saturday 2025-10-04 06:07:33 +1000 Graham Williams>*
+
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
@@ -12,8 +14,6 @@
 # NotePod &mdash; Encrypted Markdown Notes in your Data Vault
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
-
-*Time-stamp: <Monday 2025-08-25 11:31:49 +1000 Graham Williams>*
 
 *Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
 
