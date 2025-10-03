@@ -24,7 +24,7 @@ dependencies:
   form_builder_validators: ^11.1.2
   intl: any
   # loading_indicator: ^3.1.1
-  new_loading_indicator: 1.0.2
+  new_loading_indicator: ^1.0.2
   markdown_toolbar: ^0.5.0
   markdown_widget: ^2.3.2+8
   package_info_plus: ^8.3.0
