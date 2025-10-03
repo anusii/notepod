@@ -96,24 +96,26 @@ jobs:
 
 
   package-linux-snap:
-    if: >
-      (hashFiles('snap/**') != '') &&
-      (contains(github.event.head_commit.message, 'bump version') ||
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build linux') ||
-      contains(github.event.head_commit.message, 'build snap'))
+      contains(github.event.head_commit.message, 'build snap')
 
     runs-on: ubuntu-latest
 
     steps:
       - name: Clone Repository
+        if: hashFiles('snap/**') != '')
         uses: actions/checkout@v4
 
       - name: Build snap
+        if: hashFiles('snap/**') != '')
         uses: snapcore/action-build@v1
         id: build
 
       - name: Upload snap artifact
+        if: hashFiles('snap/**') != '')
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-linux-snap
