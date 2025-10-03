@@ -108,6 +108,8 @@ jobs:
       - name: Check if snap folder exists
         id: snap_check
         run: |
+          pwd
+          ls snap
           if [ -d "snap" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
