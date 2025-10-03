@@ -31,7 +31,7 @@ Download the latest version:
 **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 **macOS**
-[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg);
+[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
 [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
 **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
