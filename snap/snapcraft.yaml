@@ -21,7 +21,7 @@ architectures:
 apps:
   notepod:
     command: notepod
-    extensions: [flutter-stable]
+    extensions: [gnome]
     plugs:
       - network
       - home
