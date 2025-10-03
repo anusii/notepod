@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Notepod
+Version=1.0
+Terminal=false
+Type=Application
+Exec=notepod
+Icon=${SNAP}/meta/gui/icon.png
