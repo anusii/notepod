@@ -1,10 +1,9 @@
 <!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
-*Time-stamp: <Saturday 2025-10-04 17:22:47 +1000 Graham Williams>*
+*Time-stamp: <Saturday 2025-10-04 21:41:33 +1000 Graham Williams>*
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
-
 
 [![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
 [![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
@@ -24,6 +23,7 @@ Software Innovation Institute](https://sii.anu.edu.au)*
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Download the latest version:
+
 + **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 + **GNU/Linux**
@@ -214,23 +214,23 @@ Packages:
 These dart packages are under construction to support the development
 of Pods-based apps with flutter
 
-- [solidpod](https://pub.dev/packages/solidpod) package: Provides
++ [solidpod](https://pub.dev/packages/solidpod) package: Provides
   high level functionality to manage a Solid personal online data
   stores (Pods) via a Flutter application.
 
-- [solid-auth](https://pub.dev/packages/solid_auth) package:
++ [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
   authenticate a client application to a Solid Pod. Solid OIDC is
   built on top of OpenID Connect 1.0. Also provides a suite of tools
   and widgets to support typical app workflows.
 
-- [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
++ [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
   Software Innovation Institute has a focus on the security of our
   stored data. This package implements data encryption which can be
   used to encrypt, on device, the content of turtle files to be stored
   in a Solid Pod. Data is also only decrypted on device.
 
-- [rdflib](https://pub.dev/packages/rdflib) package: A dart package
++ [rdflib](https://pub.dev/packages/rdflib) package: A dart package
   for working with RDF. Features include find and create triple
   instances, create a graph to store triples, export graph to ttl,
   etc.
