@@ -46,55 +46,31 @@ Future<Map<String, dynamic>> getNoteList(
   Widget childPage,
 ) async {
   try {
-    // TODO: swap to getResourcesInContainer()
     final List<String> fileList;
 
-    // final dirUrl = await getDirUrl(basePath);
-    // late List<String> existingFiles;
-    // final resources = await getResourcesInContainer(dirUrl);
-    // existingFiles = resources.files;
-    // TODO: alternatively use NoteFileHelper()
     fileList = await NoteFileHelper().scanFileListDirectory();
 
-    // Get list of files in user's Podzzz
-    // if (!context.mounted) return {};
-    // fileList = await getResources(context, childPage);
-
-    // debugPrint('Old method getResources: ${fileList.toString()}');
-    // debugPrint(
-    //   'New method: getResourcesInContainer ${fileList.toString()}',
-    // );
-
     // String webId = await getWebId() as String;
-    // debugPrint('webId: $webId');
     // webId = webId.replaceAll(profCard, '');
-    // debugPrint('webId: $webId');
 
     Map<String, dynamic> notesMap = {};
     List<String> badFiles = [];
 
-    // Loop through file list to retrieve note data
-    // for each file
+    // Retrieve note data
     for (final fileName in fileList) {
-      // debugPrint('');
-      // debugPrint('${fileName.replaceAll(webId, '')}:');
       // Read file content
       if (context.mounted) {
-        // String noteContent =
-        //     await readPod(fileName.replaceAll(webId, ''), context, childPage);
         String noteContent =
             await readPod('$basePath/$fileName', context, childPage);
 
         // Extract ttl data to notesMap
-        // notesMap[fileName] = noteInfoMap(noteContent);
-
         if (noteContent.isNotEmpty) {
           try {
             final Map<String, dynamic>? note;
             note = TurtleSerializer.noteFromTurtle(noteContent);
 
             if (note != null) {
-              // Add note to notes map.
+              // Add note data to notes map.
               notesMap[fileName] = note;
             } else {
               // Found unparseable file content
@@ -102,6 +78,7 @@ Future<Map<String, dynamic>> getNoteList(
               badFiles.add(fileName);
             }
           } catch (e) {
+            // Error deserializing note
             debugPrint(e.toString());
           }
         } else {
@@ -119,21 +96,26 @@ Future<Map<String, dynamic>> getNoteList(
       debugPrint('All files parsed successfully!');
     }
 
-    // debugPrint('');
-    // debugPrint('notesMap: ${notesMap.toString()}');
+    // Fetch permission lists
+    try {
+      Map<String, dynamic> fullNotesMap = {};
 
-    Map<String, dynamic> fullNotesMap = {};
+      if (!context.mounted) return {};
+      fullNotesMap = await getAccessLists(
+        notesMap,
+        context,
+        childPage,
+        isFilePath: false,
+      );
+      debugPrint('Retrieved permission lists of files');
 
-    debugPrint('[getNotesList] fetching access lists...');
-    if (!context.mounted) return {};
-    fullNotesMap = await getAccessLists(
-      notesMap,
-      context,
-      childPage,
-      isFilePath: false,
-    );
-    // return notesMap;
-    return fullNotesMap;
+      // return notesMap;
+      return fullNotesMap;
+    } catch (e) {
+      // Error retrieving permission lists of each note
+      debugPrint(e.toString());
+      rethrow;
+    }
   } on Object catch (e) {
     // Error finding files
     debugPrint(e.toString());
