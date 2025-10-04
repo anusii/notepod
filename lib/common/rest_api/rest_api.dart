@@ -29,9 +29,14 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/common/rest_api/file_helper.dart';
+import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/utils/rdf.dart';
+// import 'package:notepod/utils/operations.dart';
+// import 'package:notepod/utils/rdf.dart';
+import 'package:notepod/utils/turtle/note_serializer.dart';
 
 /// Get the map comprising the list of notes and their data to return notesMap.
 /// Parameters:
@@ -40,30 +45,97 @@ Future<Map<String, dynamic>> getNoteList(
   BuildContext context,
   Widget childPage,
 ) async {
-  final List<String> fileList;
-
-  // Get list of files in user's Pod
-  fileList = await getResources(context, childPage);
-
   try {
-    String webId = await getWebId() as String;
-    webId = webId.replaceAll(profCard, '');
+    // TODO: swap to getResourcesInContainer()
+    final List<String> fileList;
+
+    // final dirUrl = await getDirUrl(basePath);
+    // late List<String> existingFiles;
+    // final resources = await getResourcesInContainer(dirUrl);
+    // existingFiles = resources.files;
+    // TODO: alternatively use NoteFileHelper()
+    fileList = await NoteFileHelper().scanFileListDirectory();
+
+    // Get list of files in user's Podzzz
+    // if (!context.mounted) return {};
+    // fileList = await getResources(context, childPage);
+
+    // debugPrint('Old method getResources: ${fileList.toString()}');
+    // debugPrint(
+    //   'New method: getResourcesInContainer ${fileList.toString()}',
+    // );
+
+    // String webId = await getWebId() as String;
+    // debugPrint('webId: $webId');
+    // webId = webId.replaceAll(profCard, '');
+    // debugPrint('webId: $webId');
 
     Map<String, dynamic> notesMap = {};
+    List<String> badFiles = [];
+
     // Loop through file list to retrieve note data
     // for each file
     for (final fileName in fileList) {
+      // debugPrint('');
+      // debugPrint('${fileName.replaceAll(webId, '')}:');
       // Read file content
       if (context.mounted) {
+        // String noteContent =
+        //     await readPod(fileName.replaceAll(webId, ''), context, childPage);
         String noteContent =
-            await readPod(fileName.replaceAll(webId, ''), context, childPage);
+            await readPod('$basePath/$fileName', context, childPage);
 
         // Extract ttl data to notesMap
-        notesMap[fileName] = noteInfoMap(noteContent);
+        // notesMap[fileName] = noteInfoMap(noteContent);
+
+        if (noteContent.isNotEmpty) {
+          try {
+            final Map<String, dynamic>? note;
+            note = TurtleSerializer.noteFromTurtle(noteContent);
+
+            if (note != null) {
+              // Add note to notes map.
+              notesMap[fileName] = note;
+            } else {
+              // Found unparseable file content
+              // Add note that failed parsing to bad notes map
+              badFiles.add(fileName);
+            }
+          } catch (e) {
+            debugPrint(e.toString());
+          }
+        } else {
+          // If empty, add to badFile list
+          // Need to also capture files with serialisation errors
+          badFiles.add(fileName);
+          debugPrint('[getNoteList] Found empty file: $fileName');
+        }
       }
     }
-    return notesMap;
+
+    if (badFiles.isNotEmpty) {
+      debugPrint('Unparseable or empty files: ${badFiles.toString()}');
+    } else {
+      debugPrint('All files parsed successfully!');
+    }
+
+    // debugPrint('');
+    // debugPrint('notesMap: ${notesMap.toString()}');
+
+    Map<String, dynamic> fullNotesMap = {};
+
+    debugPrint('[getNotesList] fetching access lists...');
+    if (!context.mounted) return {};
+    fullNotesMap = await getAccessLists(
+      notesMap,
+      context,
+      childPage,
+      isFilePath: false,
+    );
+    // return notesMap;
+    return fullNotesMap;
   } on Object catch (e) {
+    // Error finding files
     debugPrint(e.toString());
     rethrow;
   }
@@ -75,7 +147,9 @@ Future<Map<String, dynamic>> getNoteList(
 Map noteInfoMap(String noteContent) {
   try {
     // Parse turtle file
+    debugPrint('Before parseTTLMap');
     final rdfMap = parseTTLMap(noteContent);
+    debugPrint('After parseTTLMap');
 
     assert(
       rdfMap.isNotEmpty,
@@ -99,17 +173,30 @@ Map noteInfoMap(String noteContent) {
     );
 
     // Create note info map
-    Map noteInfoMap = {
-      noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
-      createdDateTimePred:
-          rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-      modifiedDateTimePred:
+    // Map noteInfoMap = {
+    //   noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
+    //   createdDateTimePred:
+    //       rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
+    //   modifiedDateTimePred:
+    //       rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
+    //   noteContentPred: decryptVal(
+    //     rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
+    //     rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
+    //   ),
+    // };
+
+    final Note noteInfo;
+    noteInfo = Note(
+      noteTitle: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
+      createdDateTime: rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
+      modifiedDateTime:
           rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
-      noteContentPred: decryptVal(
+      noteContent: decryptVal(
         rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
         rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
       ),
-    };
+    );
+    final Map<String, dynamic> noteInfoMap = noteInfo.toJson();
 
     return noteInfoMap;
   } on Object catch (e, s) {
@@ -128,8 +215,8 @@ Future<Map> getSharedNotes(
   bool filesWithGrantAccess = true,
 }) async {
   final loggedIn = await loginIfRequired(context);
-  String webId = await getWebId() as String;
-  webId = webId.replaceAll(profCard, '');
+  // String webId = await getWebId() as String;
+  // webId = webId.replaceAll(profCard, '');
 
   if (loggedIn && context.mounted) {
     Map sharedNotesLogMap = await sharedResources(context, childPage);
