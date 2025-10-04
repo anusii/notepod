@@ -206,8 +206,8 @@ Future<Map> getSharedNotes(
     Map sharedNotesMap = {};
 
     if (sharedNotesLogMap.isNotEmpty) {
-      for (final sharedFilaUrl in sharedNotesLogMap.keys) {
-        final sharedFileDetails = sharedNotesLogMap[sharedFilaUrl];
+      for (final sharedFileUrl in sharedNotesLogMap.keys) {
+        final sharedFileDetails = sharedNotesLogMap[sharedFileUrl];
 
         // If [filesWithGrantAccess] is set to true record only the files
         // with grant permission as the latest log entry
@@ -216,10 +216,10 @@ Future<Map> getSharedNotes(
           continue;
         }
 
-        sharedNotesMap[sharedFilaUrl] = {
+        sharedNotesMap[sharedFileUrl] = {
           sharedTime: sharedFileDetails[PermissionLogLiteral.logtime],
           noteUrl: sharedFileDetails[PermissionLogLiteral.resource],
-          noteFileName: sharedFilaUrl.split('/').last,
+          noteFileName: sharedFileUrl.split('/').last,
           noteOwner: sharedFileDetails[PermissionLogLiteral.owner],
           permissionGranter: sharedFileDetails[PermissionLogLiteral.granter],
           permissionRecepient:
