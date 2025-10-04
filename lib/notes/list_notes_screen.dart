@@ -1,4 +1,4 @@
-/// List notes screen - first fetches notes and then gets recipients for the notes
+/// List notes screen - fetches user's notes
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -33,14 +33,11 @@ import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
-/// A [StatefulWidget] that fetches the user's notes in their app data folder,
+/// A [StatefulWidget] that fetches the user's notes in their app data folder
 /// retrieving the note data map containing data and properties of each note
 /// file name.
-/// Following completion, NewNote() is called if no notes are found.
-/// Alternatively, if notes exist, ListRecipientsScreen() is called to
-/// retrieve the access control list for notes (required to support sharing
-/// of notes and display of sharing information).
-// Parameters: none
+///
+/// Parameters: none
 class ListNotesScreen extends StatefulWidget {
   const ListNotesScreen({super.key});
 
