@@ -1,10 +1,11 @@
 <!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
-*Time-stamp: <Saturday 2025-10-04 06:07:33 +1000 Graham Williams>*
+*Time-stamp: <Saturday 2025-10-04 16:31:36 +1000 Graham Williams>*
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
+[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 [![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
 [![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)

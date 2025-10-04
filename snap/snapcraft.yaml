@@ -1,5 +1,4 @@
 name: notepod
-base: core22
 version: '0.2.38'
 summary: Privacy preserving note taking app using PODs.
 description: |
@@ -10,13 +9,14 @@ description: |
   list with the family so whoever is next at the shops has it at their
   finger tips.
 
+base: core22
 grade: stable
 confinement: strict
 
 apps:
   notepod:
     command: notepod
-    extensions: [gnome]
+    extensions: [gnome] # gnome includes the libraries required by flutter
     plugs:
       - desktop
       - desktop-legacy
@@ -28,8 +28,8 @@ apps:
 
 parts:
   notepod:
-    plugin: flutter
     source: .
+    plugin: flutter
     flutter-target: lib/main.dart
     build-packages:
       - clang
