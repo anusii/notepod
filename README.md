@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
-*Time-stamp: <Saturday 2025-10-04 16:32:22 +1000 Graham Williams>*
+*Time-stamp: <Saturday 2025-10-04 17:15:13 +1000 Graham Williams>*
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
@@ -17,25 +17,22 @@
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
-*Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
-
-*[ANU Software Innovation Institute](https://sii.anu.edu.au)*
-
-*License: GNU GPL V3*
+*Authors: Anushka Vidanage, Graham Williams, Jessica Moore [ANU
+Software Innovation Institute](https://sii.anu.edu.au)*
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Download the latest version:
-**GNU/Linux**
++ **Android**
+[apk](https://solidcommunity.au/installers/notepod.apk);
++ **GNU/Linux**
 [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
 [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
 [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
-**Android**
-[apk](https://solidcommunity.au/installers/notepod.apk);
-**macOS**
++ **macOS**
 [dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
 [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
-**Windows**
++ **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
