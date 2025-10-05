@@ -103,7 +103,7 @@ Widget accessInfo(Map thisNoteInfo, BuildContext context) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Owner: ${thisNoteInfo[noteOwner]}',
+                  'Owner: ${thisNoteInfo[noteOwnerPred]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -117,7 +117,7 @@ Widget accessInfo(Map thisNoteInfo, BuildContext context) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Shared by: ${thisNoteInfo[permissionGranter]}',
+                  'Shared by: ${thisNoteInfo[permissionGranterPred]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -131,7 +131,7 @@ Widget accessInfo(Map thisNoteInfo, BuildContext context) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Permissions: ${thisNoteInfo[permissionList]}',
+                  'Permissions: ${thisNoteInfo[permissionListPred]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -156,7 +156,7 @@ Widget pathInfo(Map thisNoteInfo, BuildContext context) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Note file name: ${thisNoteInfo[noteFileName]}',
+                  'Note file name: ${thisNoteInfo[noteFileNamePred]}',
                   style: metadataTextStyle,
                 ),
               ),
@@ -170,7 +170,7 @@ Widget pathInfo(Map thisNoteInfo, BuildContext context) {
               child: Container(
                 padding: metadataPadding,
                 child: Text(
-                  'Note path: ${thisNoteInfo[noteUrl]}',
+                  'Note path: ${thisNoteInfo[noteUrlPred]}',
                   style: metadataTextStyle,
                 ),
               ),

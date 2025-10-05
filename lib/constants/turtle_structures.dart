@@ -52,14 +52,14 @@ String mePred = ':me';
 String meKey = '#me';
 
 // Shared notes details
-String sharedTime = 'sharedTime';
-String noteUrl = 'noteUrl';
-String noteFileName = 'noteFileName';
-String noteOwner = 'noteOwner';
-String permissionGranter = 'permissionGranter';
-String permissionRecepient = 'permissionRecepient';
-String permissionType = 'permissionType';
-String permissionList = 'permissionList';
+String sharedTimePred = 'sharedTime';
+String noteUrlPred = 'noteUrl';
+String noteFileNamePred = 'noteFileName';
+String noteOwnerPred = 'noteOwner';
+String permissionGranterPred = 'permissionGranter';
+String permissionRecepientPred = 'permissionRecepient';
+String permissionTypePred = 'permissionType';
+String permissionListPred = 'permissionList';
 
 // Set up encrypted note file content
 String genNoteTTLStr(

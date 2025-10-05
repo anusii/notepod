@@ -333,10 +333,10 @@ Future<void> saveNoteToPod(
 
     if (shared) {
       // Url of existing external note
-      String noteFileUrl = prevSharedNoteInfo[noteUrl];
+      String noteFileUrl = prevSharedNoteInfo[noteUrlPred];
 
       // WebId of note owner of existing external note
-      String noteOwnerWebId = prevSharedNoteInfo[noteOwner];
+      String noteOwnerWebId = prevSharedNoteInfo[noteOwnerPred];
 
       createNoteStatus = await writeExternalPod(
         noteFileUrl,
@@ -347,8 +347,6 @@ Future<void> saveNoteToPod(
       );
     } else {
       // Create note file name
-      // String noteFileName =
-      //     '$noteFileNamePrefix$noteTitle-$dateTimeStr.ttl';
       String noteFileName =
           '$noteFileNamePrefix${noteNewData[createdDateTimePred]}.ttl';
 

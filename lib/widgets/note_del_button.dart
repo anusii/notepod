@@ -76,7 +76,7 @@ class NoteDelButton extends StatelessWidget {
 
                     // Delete file
                     if (shared) {
-                      await deleteExternalFile(noteData[noteUrl]);
+                      await deleteExternalFile(noteData[noteUrlPred]);
                     } else {
                       // Create note file path
                       String noteFilePath =
