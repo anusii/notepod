@@ -38,9 +38,11 @@ import 'package:notepod/utils/encryption.dart';
 // import 'package:notepod/utils/rdf.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
-/// Get the map comprising the list of notes and their data to return notesMap.
-/// Parameters:
-///   [childPage] is the child widget to return to
+/// Get the map comprising the list of notes and their data to return notesMap with the note file name as the key.
+///
+/// Arguments:
+/// - [context] - the build context.
+/// - [childPage] - is the child widget to return to.
 Future<Map<String, dynamic>> getNoteList(
   BuildContext context,
   Widget childPage,
@@ -188,9 +190,16 @@ Map noteInfoMap(String noteContent) {
   }
 }
 
-// Get the Map of shared notes with the current user. If [filesWithGrantAccess]
-// is set to true, the function will only output notes with grant permission
-// access as the latest log entry.
+/// Get the Map of shared notes with the current user. If [filesWithGrantAccess]
+/// is set to true, the function will only output notes with grant permission
+/// access as the latest log entry.
+///
+/// Arguments:
+/// - [context] - the build context.
+/// - [childPage] - is the child widget to return to.
+/// - [filesWithGrantAccess] - boolean defining whether
+///                 to fetch external notes with current
+///                 permissions. (Default: true).
 Future<Map> getSharedNotes(
   BuildContext context,
   Widget childPage, {
@@ -268,25 +277,53 @@ Future<Map> getSharedNoteContent(
   Widget childPage,
   Map sharedNoteData,
 ) async {
-  final sharedNoteUrl = sharedNoteData[noteUrlPred];
-
   try {
+    final Map<dynamic, dynamic> noteContentMap;
+    String badFile;
+
+    final sharedNoteUrl = sharedNoteData[noteUrlPred];
+
     // Get note content
     final noteContent =
         await readExternalPod(sharedNoteUrl, context, childPage);
 
-    assert(
-      noteContent != null &&
-          noteContent != {} &&
-          noteContent != SolidFunctionCallStatus.notLoggedIn,
-      'Note content should not be null or empty or a SolidFunctionCallStatus',
-    );
+    // Extract external note ttl data to notesContent
+    if (noteContent == SolidFunctionCallStatus.notLoggedIn) {
+      debugPrint(
+        'readExternalPod() returned ${SolidFunctionCallStatus.notLoggedIn.toString()}',
+      );
+      return {};
+    } else if (noteContent == null || noteContent == {}) {
+      // Occurs if sharedNoteUrl file does not exist
+      badFile = sharedNoteUrl;
+      debugPrint('File not found or empty: $badFile');
+      return {};
+    } else {
+      // noteContent.isNotEmpty
+      try {
+        final Map<String, dynamic>? note;
+        note = TurtleSerializer.noteFromTurtle(noteContent);
 
-    final noteContentMap = noteInfoMap(noteContent);
-    return noteContentMap;
-  } on Object catch (e, s) {
-    debugPrint('Exception details:\n $e');
-    debugPrint('Stack trace:\n $s');
+        if (note != null) {
+          // Add note data to notes map.
+          noteContentMap = note;
+          debugPrint('External file content retrieved successfully');
+          return noteContentMap;
+        } else {
+          // Found external note file with unparseable note content
+          badFile = sharedNoteUrl;
+          return {};
+        }
+      } catch (e) {
+        // Error deserializing note
+        badFile = sharedNoteUrl;
+        debugPrint('Error deserializing note $badFile');
+        debugPrint(e.toString());
+        return {};
+      }
+    }
+  } on Object catch (e) {
+    debugPrint('Exception details: $e');
     rethrow;
   }
 }
