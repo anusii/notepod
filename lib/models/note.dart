@@ -55,3 +55,38 @@ class Note {
         noteContentPred: noteContent,
       };
 }
+
+/// External note details data model.
+
+class ExternalNote {
+  final String sharedTime;
+  final String noteUrl;
+  final String noteFileName;
+  final String noteOwner;
+  final String permissionGranter;
+  final String permissionRecepient;
+  final String permissionType;
+  final String permissionList;
+
+  const ExternalNote({
+    required this.sharedTime,
+    required this.noteUrl,
+    required this.noteFileName,
+    required this.noteOwner,
+    required this.permissionGranter,
+    required this.permissionRecepient,
+    required this.permissionType,
+    required this.permissionList,
+  });
+
+  Map<String, dynamic> toJson() => {
+        sharedTimePred: sharedTime,
+        noteUrlPred: noteUrl,
+        noteFileNamePred: noteFileName,
+        noteOwnerPred: noteOwner,
+        permissionGranterPred: permissionGranter,
+        permissionRecepientPred: permissionRecepient,
+        permissionTypePred: permissionType,
+        permissionListPred: permissionList,
+      };
+}

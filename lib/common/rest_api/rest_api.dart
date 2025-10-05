@@ -93,7 +93,7 @@ Future<Map<String, dynamic>> getNoteList(
     if (badFiles.isNotEmpty) {
       debugPrint('Unparseable or empty files: ${badFiles.toString()}');
     } else {
-      debugPrint('All files parsed successfully!');
+      debugPrint('All owners files parsed successfully!');
     }
 
     // Fetch permission lists
@@ -107,7 +107,7 @@ Future<Map<String, dynamic>> getNoteList(
         childPage,
         isFilePath: false,
       );
-      debugPrint('Retrieved permission lists of files');
+      debugPrint('Retrieved permission lists of owners files');
 
       // return notesMap;
       return fullNotesMap;
@@ -196,43 +196,65 @@ Future<Map> getSharedNotes(
   Widget childPage, {
   bool filesWithGrantAccess = true,
 }) async {
-  final loggedIn = await loginIfRequired(context);
-  // String webId = await getWebId() as String;
-  // webId = webId.replaceAll(profCard, '');
+  try {
+    final Map<dynamic, dynamic> sharedNotesLogMap;
 
-  if (loggedIn && context.mounted) {
-    Map sharedNotesLogMap = await sharedResources(context, childPage);
+    if (!context.mounted) return {};
+    sharedNotesLogMap =
+        await NoteFileHelper().scanPermLogFile(context, childPage);
 
     Map sharedNotesMap = {};
+    List<String> badFiles = [];
 
     if (sharedNotesLogMap.isNotEmpty) {
       for (final sharedFileUrl in sharedNotesLogMap.keys) {
         final sharedFileDetails = sharedNotesLogMap[sharedFileUrl];
 
-        // If [filesWithGrantAccess] is set to true record only the files
-        // with grant permission as the latest log entry
+        // Extract details of external files with permissions
+        // granted to the user in the latest log entry by
+        // selecting for [filesWithGrantAccess] = true
         if (filesWithGrantAccess &&
             sharedFileDetails[PermissionLogLiteral.type] == 'revoke') {
           continue;
         }
 
-        sharedNotesMap[sharedFileUrl] = {
-          sharedTime: sharedFileDetails[PermissionLogLiteral.logtime],
-          noteUrl: sharedFileDetails[PermissionLogLiteral.resource],
-          noteFileName: sharedFileUrl.split('/').last,
-          noteOwner: sharedFileDetails[PermissionLogLiteral.owner],
-          permissionGranter: sharedFileDetails[PermissionLogLiteral.granter],
-          permissionRecepient:
-              sharedFileDetails[PermissionLogLiteral.recepient],
-          permissionType: sharedFileDetails[PermissionLogLiteral.type],
-          permissionList: sharedFileDetails[PermissionLogLiteral.permissions],
-        };
+        try {
+          final Map<String, dynamic>? note;
+
+          // Parse external note file details
+          note = NoteFileHelper.extFileDetailsFromLog(
+            sharedFileDetails,
+            sharedFileUrl,
+          );
+
+          if (note != null) {
+            // Add external note details to notes map.
+            sharedNotesMap[sharedFileUrl] = note;
+          } else {
+            // Found external note file with unparseable permissions details
+            // Add to bad notes map
+            badFiles.add(sharedFileUrl);
+          }
+        } catch (e) {
+          // Error deserializing external note permissions
+          debugPrint(e.toString());
+        }
       }
     }
 
+    if (badFiles.isNotEmpty) {
+      debugPrint(
+        'Unparseable permission details of files: ${badFiles.toString()}',
+      );
+    } else {
+      debugPrint('All external file details parsed successfully!');
+    }
+
     return sharedNotesMap;
-  } else {
-    return {};
+  } on Object catch (e) {
+    // Error finding files
+    debugPrint(e.toString());
+    rethrow;
   }
 }
 
@@ -246,7 +268,7 @@ Future<Map> getSharedNoteContent(
   Widget childPage,
   Map sharedNoteData,
 ) async {
-  final sharedNoteUrl = sharedNoteData[noteUrl];
+  final sharedNoteUrl = sharedNoteData[noteUrlPred];
 
   try {
     // Get note content
