@@ -32,6 +32,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
 /// Get the map comprising the list of notes and their data to return notesMap with the note file name as the key.
@@ -39,7 +40,12 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// Arguments:
 /// - [context] - the build context.
 /// - [childPage] - is the child widget to return to.
-Future<Map<String, dynamic>> getNoteList(
+///
+/// Returns: [NotesCallResult] object comprising
+/// - [notesMap] - map of notes data.
+/// - [badFiles] - list of unreadable files.
+// Future<Map<String, dynamic>> getNoteList(
+Future<NotesCallResult> getNoteList(
   BuildContext context,
   Widget childPage,
 ) async {
@@ -74,6 +80,7 @@ Future<Map<String, dynamic>> getNoteList(
               // Found unparseable file content
               // Add note that failed parsing to bad notes map
               badFiles.add(fileName);
+              debugPrint('Found unparseable file: $fileName');
             }
           } catch (e) {
             // Error deserializing note
@@ -83,7 +90,7 @@ Future<Map<String, dynamic>> getNoteList(
           // If empty, add to badFile list
           // Need to also capture files with serialisation errors
           badFiles.add(fileName);
-          debugPrint('[getNoteList] Found empty file: $fileName');
+          debugPrint('Found empty file: $fileName');
         }
       }
     }
@@ -97,8 +104,9 @@ Future<Map<String, dynamic>> getNoteList(
     // Fetch permission lists
     try {
       Map<String, dynamic> fullNotesMap = {};
+      NotesCallResult results;
 
-      if (!context.mounted) return {};
+      if (!context.mounted) return NotesCallResult();
       fullNotesMap = await getAccessLists(
         notesMap,
         context,
@@ -107,8 +115,13 @@ Future<Map<String, dynamic>> getNoteList(
       );
       debugPrint('Retrieved permission lists of owners files');
 
-      // return notesMap;
-      return fullNotesMap;
+      if (badFiles.isEmpty) {
+        results = NotesCallResult(notesMap: fullNotesMap);
+      } else {
+        results = NotesCallResult(notesMap: fullNotesMap, badFiles: badFiles);
+      }
+
+      return results;
     } catch (e) {
       // Error retrieving permission lists of each note
       debugPrint(e.toString());

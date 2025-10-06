@@ -27,9 +27,11 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
+import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 
@@ -67,16 +69,31 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     super.dispose();
   }
 
-  /// Load Notes if notes found.
-  /// Parameters:
-  ///   [notesMap] - list of files with data in a user's app data folder.
-  Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
-    // return ListRecipientsScreen(notesMap: notesMap);
-    return ListNotes(notesMap: notesMap);
+  /// Load user's notes if notes found. If any unparseable notes
+  /// found, first navigate to a dialog to delete unparseable
+  /// notes.
+  ///
+  /// Arguments:
+  ///   [results] - [NotesCallResult] class containing [notesMap] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  Widget _loadedNotesScreen(NotesCallResult results) {
+    final notesMap = results.notesMap!;
+    final badFiles = results.badFiles!;
+
+    if (badFiles.isNotEmpty) {
+      return NotesDelDialog(
+        badFiles: badFiles,
+        childPage: ListNotes(notesMap: notesMap),
+      );
+    } else if (notesMap.isEmpty) {
+      return _loadNewNote();
+    } else {
+      return ListNotes(notesMap: notesMap);
+    }
   }
 
-  /// Advise user to create their first note, if no notes found.
-  /// Parameters - none.
+  /// Advises user to create their first note if no notes found.
+  ///
+  /// Arguments: none.
   Widget _loadNewNote() {
     return Scrollbar(
       thumbVisibility: true,
@@ -86,10 +103,13 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         child: Column(
           children: <Widget>[
             // MsgCard style works in light and dark themes
+            // No notes message
             buildMsgCard(
-              context, Icons.info, Colors.amber, 'No notes yet!',
-              'Write your first note',
-              // noNotesMsg,
+              context,
+              Icons.info,
+              Colors.amber,
+              NoteListMsg.noNotes,
+              NoteListMsg.writeFirstNote,
               isSmall: true,
             ),
             NewNote(),
@@ -118,16 +138,13 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                     context,
                     'Error: data loading failed',
                   );
-                } else if (snapshot.hasData &&
-                    snapshot.data != null &&
-                    snapshot.data.length > 0) {
-                  // Notes found
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  // Successfully returned NotesCallResult
                   return _loadedNotesScreen(
-                    snapshot.data! as Map<String, dynamic>,
+                    snapshot.data as NotesCallResult,
                   );
                 } else if (snapshot.data == null ||
-                    snapshot.data.toString() == 'null' ||
-                    snapshot.data.length == 0) {
+                    snapshot.data.toString() == 'null') {
                   // No notes found
                   return _loadNewNote();
                 } else {

@@ -38,6 +38,7 @@ const String authors =
 const double normalLoadingScreenHeight = 200.0;
 //const double buttonBorderRadius = 5;
 //const double standardSpace = 20.0;
+const double badListItemHeight = 68.0;
 const double ownListItemHeight = 108.0;
 const double sharedListItemHeight =
     130.0; // (with 4 row subtitle) // 108.0 (with 3 row subtitle)
@@ -75,6 +76,18 @@ const metadataTextStyle = TextStyle(
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
 
+/// Note list messages
+class NoteListMsg {
+  /// Message displayed when corrupt files found
+  static const String badFilesFound = 'Corrupt note files present';
+
+  /// Message displayed when no notes found in user's Pod
+  static const String noNotes = 'No notes yet!';
+
+  /// Advises user to write their first note
+  static const String writeFirstNote = 'Write your first note';
+}
+
 /// Note action messages
 class Msg {
   /// Note saving message
@@ -86,6 +99,9 @@ class Msg {
   /// Confirm delete note message
   static const String confirmDelete =
       'Are you sure you want to delete this note?';
+
+  static const String confirmDeleteMultiple =
+      'Are you sure you want to delete these notes?';
 
   // Please confirm message
   static const String plsConfirm = 'Please Confirm';
