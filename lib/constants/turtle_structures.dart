@@ -52,7 +52,8 @@ String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
 //String encNoteContentPred = 'encNoteContent';
 String mePred = ':me';
-String meKey = '#me';
+// 20251006 jess Keep meKey as ref, even though mePred is shorthand
+// String meKey = '#me';
 
 // Shared notes details
 String sharedTimePred = 'sharedTime';
