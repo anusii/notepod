@@ -102,6 +102,8 @@ String genNoteTTLStr(
     debugPrint(
       'Writing note file using incorrect predicate $createdDateTimePredErr',
     );
+  } else if (chosenTTL == noteTTLStr) {
+    debugPrint('Writing note file using correct predicates');
   }
 
   return chosenTTL;
