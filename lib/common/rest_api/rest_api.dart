@@ -32,10 +32,6 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/utils/encryption.dart';
-// import 'package:notepod/utils/operations.dart';
-// import 'package:notepod/utils/rdf.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
 /// Get the map comprising the list of notes and their data to return notesMap with the note file name as the key.
@@ -121,71 +117,6 @@ Future<Map<String, dynamic>> getNoteList(
   } on Object catch (e) {
     // Error finding files
     debugPrint(e.toString());
-    rethrow;
-  }
-}
-
-/// Parses note content from turtle format, decrypts the note text, and formats as json map
-///
-/// - [noteContent] - note content in turtle map format
-Map noteInfoMap(String noteContent) {
-  try {
-    // Parse turtle file
-    debugPrint('Before parseTTLMap');
-    final rdfMap = parseTTLMap(noteContent);
-    debugPrint('After parseTTLMap');
-
-    assert(
-      rdfMap.isNotEmpty,
-      'rdfMap should not be empty',
-    );
-
-    if (rdfMap[meKey] == null) {
-      debugPrint(
-        '[noteInfoMap() rdfMap[meKey] == null]: ${rdfMap.toString()}',
-      );
-    }
-
-    assert(
-      rdfMap[meKey] != null,
-      'rdfMap must have key "#me"',
-    );
-
-    assert(
-      rdfMap[meKey]['$notepodTerms$noteTitlePred'] != null,
-      'rdfMap[meKey] keys must contain $notepodTerms$noteTitlePred',
-    );
-
-    // Create note info map
-    // Map noteInfoMap = {
-    //   noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
-    //   createdDateTimePred:
-    //       rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    //   modifiedDateTimePred:
-    //       rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
-    //   noteContentPred: decryptVal(
-    //     rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
-    //     rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    //   ),
-    // };
-
-    final Note noteInfo;
-    noteInfo = Note(
-      noteTitle: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
-      createdDateTime: rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-      modifiedDateTime:
-          rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
-      noteContent: decryptVal(
-        rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
-        rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-      ),
-    );
-    final Map<String, dynamic> noteInfoMap = noteInfo.toJson();
-
-    return noteInfoMap;
-  } on Object catch (e, s) {
-    debugPrint('Exception details:\n $e');
-    debugPrint('Stack trace:\n $s');
     rethrow;
   }
 }
