@@ -22,6 +22,8 @@
 
 library;
 
+import 'package:flutter/material.dart';
+
 import 'package:solidpod/solidpod.dart';
 
 // Directory name constants.
@@ -44,6 +46,7 @@ const noteFileNamePrefix = 'note-';
 String notepodTerms = 'https://solidcommunity.au/' 'predicates/terms#';
 
 String createdDateTimePred = 'createdDateTime';
+String createdDateTimePredErr = 'createdDateERROR';
 String modifiedDateTimePred = 'modifiedDateTime';
 String noteContentPred = 'noteContent';
 String noteTitlePred = 'noteTitle';
@@ -80,7 +83,29 @@ String genNoteTTLStr(
           notepodTerms:$noteTitlePred "$noteTitle";
           notepodTerms:$noteContentPred "$noteContent".''';
 
-  return noteTTLStr;
+  // Generate TTL with incorrect predicate
+  String noteTTLStrErr = '''@prefix : <#>.
+      @prefix foaf: <$foaf>.
+      @prefix terms: <$terms>.
+      @prefix notepodTerms: <$notepodTerms>.
+      $mePred
+          a foaf:PersonalProfileDocument;
+          terms:title "Note";
+          notepodTerms:$createdDateTimePredErr "$createdTimeStr";
+          notepodTerms:$modifiedDateTimePred "$updatedTimeStr";
+          notepodTerms:$noteTitlePred "$noteTitle";
+          notepodTerms:$noteContentPred "$noteContent".''';
+  final String chosenTTL;
+  chosenTTL = noteTTLStrErr;
+  // chosenTTL = noteTTLStr;
+  if (chosenTTL == noteTTLStrErr) {
+    debugPrint(
+      'Writing note file using incorrect predicate $createdDateTimePredErr',
+    );
+  }
+
+  return chosenTTL;
+  // return noteTTLStr;
 }
 
 /// Selection status of notes
