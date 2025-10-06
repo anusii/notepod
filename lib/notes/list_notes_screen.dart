@@ -23,17 +23,15 @@ library;
 
 import 'package:flutter/material.dart';
 
-// import 'package:solidpod/solidpod.dart';
-
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/note_list_del_dialog.dart';
 
 /// A [StatefulWidget] that fetches the user's notes in their app data folder
 /// retrieving the note data map containing data and properties of each note

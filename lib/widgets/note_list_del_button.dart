@@ -29,8 +29,8 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/paths.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
