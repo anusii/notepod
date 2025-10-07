@@ -522,7 +522,7 @@ docs::
 
 .PHONY: versions
 versions:
-	perl -pi -e 's|^version:.*|version: "$(VER)"|' snap/snapcraft.yaml
+	if [ -d snap ]; then perl -pi -e 's|^version:.*|version: "$(VER)"|' snap/snapcraft.yaml; fi
 
 .PHONY: loc
 loc: lib/*.dart
