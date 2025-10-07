@@ -331,7 +331,6 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                     ),
                     padding: const EdgeInsets.all(10),
                     itemCount: _foundNotes.length,
-                    // itemExtent: sharedListItemHeight,
                     itemBuilder: (context, index) => Card(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
