@@ -144,9 +144,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                     const SizedBox(
                       width: 5,
                     ),
-                    // Back
-                    NoteBackButton(childPage: SharedNotesScreen()),
                   ],
+                  // Back
+                  NoteBackButton(childPage: SharedNotesScreen()),
                 ],
               ),
             ),
