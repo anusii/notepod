@@ -23,12 +23,12 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:notepod/constants/ui.dart';
 
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
@@ -83,6 +83,9 @@ class _ListNotesState extends State<ListNotes> {
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
+
+  /// Boolean describing whether note is external
+  final bool isExternal = false;
 
   /// Update selected status and count of selected
   void updateSelected(int index) {
@@ -207,7 +210,7 @@ class _ListNotesState extends State<ListNotes> {
         isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
         cardAspectRatio =
-            OwnNoteItemSize().calculateCardAspectRatio(constraints);
+            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
         return SizedBox(
           child: Column(
             children: [

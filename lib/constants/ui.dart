@@ -56,44 +56,73 @@ class WindowSize {
 /// Approximate size for grid items used for
 /// displaying text of user's notes.
 
-class OwnNoteItemSize {
+class NoteItemSize {
   /// Approximate height of compressed item
+  /// in user's own notes list
   /// when list item text is line wrapped
   /// in a narrow mobile phone size window.
   /// (Where each of note title, created date time,
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedItemHeight = 190;
+  static const double compressedOwnItemHeight = 190;
 
   /// Approximate height of uncompressed item
+  /// in user's own notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedItemHeight = 108;
+  static const double uncompressedOwnItemHeight = 108;
 
-  /// Calculate card aspect ratio using the box
+  /// Approximate height of compressed item
+  /// in user's external notes list
+  /// when list item text is line wrapped
+  /// in a narrow mobile phone size window.
+  /// (Where each of note title, created date time,
+  /// modified date time are line wrapped to
+  /// two lines.)
+
+  static const double compressedExtItemHeight = 250;
+
+  /// Approximate height of uncompressed item
+  /// in user's external notes list
+  /// when list item text is not line wrapped.
+
+  static const double uncompressedExtItemHeight = 138;
+
+  /// Calculate card aspect ratio to use for
+  /// gridview builder cards using the box
   /// constraints found by LayoutBuilder().
   ///
   /// Arguments:
-  /// - [_constraints] - The box constraints of the parent widget where LayoutBuilder() called.
-  double calculateCardAspectRatio(BoxConstraints constraints) {
-    // TODO: constraints of parent widget available
-
+  /// - [constraints] - The box constraints of the parent widget
+  /// where LayoutBuilder() called.
+  /// - [isExternal] - Boolean describing whether its an external
+  /// note which has more rows of text.
+  double calculateCardAspectRatio(BoxConstraints constraints, bool isExternal) {
     /// Aspect ratio (width / height) for gridview
     /// cards to display note items
     final double cardAspectRatio;
 
-    debugPrint(
-      'Contraints: ${constraints.toString()}',
-    );
-    debugPrint('max height: ${constraints.maxHeight}');
-    debugPrint('max width: ${constraints.maxWidth}');
-    if (constraints.maxWidth < WindowSize.smallWidthLimit) {
-      cardAspectRatio =
-          constraints.maxWidth / OwnNoteItemSize.compressedItemHeight;
+    /// Compressed item height
+    final double compressedItemHeight;
+
+    /// Uncompressed item height
+    final double uncompressedItemHeight;
+
+    // Use appropriate item heights
+    if (!isExternal) {
+      compressedItemHeight = compressedOwnItemHeight;
+      uncompressedItemHeight = uncompressedOwnItemHeight;
     } else {
-      cardAspectRatio =
-          constraints.maxWidth / OwnNoteItemSize.uncompressedItemHeight;
+      compressedItemHeight = compressedExtItemHeight;
+      uncompressedItemHeight = uncompressedExtItemHeight;
+    }
+
+    // Derive card aspect ratio (width / height)
+    if (constraints.maxWidth < WindowSize.smallWidthLimit) {
+      cardAspectRatio = constraints.maxWidth / compressedItemHeight;
+    } else {
+      cardAspectRatio = constraints.maxWidth / uncompressedItemHeight;
     }
     return cardAspectRatio;
   }

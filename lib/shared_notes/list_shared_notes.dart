@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
@@ -64,6 +65,16 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Aspect ratio (width / height) for gridview
+  /// cards to display note items
+  late double cardAspectRatio = 2.0;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
+  /// Boolean describing whether note is external
+  final bool isExternal = true;
 
   @override
   void initState() {
@@ -176,193 +187,224 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$sharedNotesTitle (created by other people)',
-                  style: titleStyle,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  onChanged: (value) => _searchNotes(value),
-                  decoration: const InputDecoration(
-                    labelText:
-                        'Search filename, owner, permission granter, permissions',
-                    hintText: 'Enter string to match note metadata',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Derive whether window is narrow
+        isNarrow = WindowSize().isNarrowWindow(constraints);
+        // Calculate the aspect radio for grid cards
+        cardAspectRatio =
+            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
+        return SizedBox(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Count statement
-                    // Match color scheme of sorting TextButtons
-                    _foundNotes.length > 1 || _foundNotes.isEmpty
-                        ? Text(
-                            'Found ${_foundNotes.length} notes',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          )
-                        : Text(
-                            'Found ${_foundNotes.length} note',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
+                    Text(
+                      '$sharedNotesTitle (created by other people)',
+                      style: titleStyle,
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      onChanged: (value) => _searchNotes(value),
+                      decoration: const InputDecoration(
+                        labelText:
+                            'Search filename, owner, permission granter, permissions',
+                        hintText: 'Enter string to match note metadata',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Filename Sort Label and Button
-                        TextButton.icon(
-                          onPressed: () {
-                            _sortByFilename(!_sortFilenameAscending);
-                          },
-                          icon: Icon(
-                            _sortFilenameAscending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up,
-                          ),
-                          label: Text(
-                            _sortFilenameAscending
-                                ? 'Filename A to Z'
-                                : 'Filename Z to A',
-                          ),
-                          iconAlignment: IconAlignment.end,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        // Owner Sort Label and Button
-                        TextButton.icon(
-                          onPressed: () {
-                            _sortByOwner(!_sortOwnerAscending);
-                          },
-                          icon: Icon(
-                            _sortOwnerAscending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up,
-                          ),
-                          label: Text(
-                            _sortOwnerAscending
-                                ? 'Owner A to Z'
-                                : 'Owner Z to A',
-                          ),
-                          iconAlignment: IconAlignment.end,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        // Permission Sort Label and Button
-                        TextButton.icon(
-                          onPressed: () {
-                            _sortByPermission(!_sortPermissionAscending);
-                          },
-                          icon: Icon(
-                            _sortPermissionAscending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up,
-                          ),
-                          label: Text(
-                            _sortPermissionAscending
-                                ? 'Permission A to Z'
-                                : 'Permission Z to A',
-                          ),
-                          iconAlignment: IconAlignment.end,
+                        // Count statement
+                        // Match color scheme of sorting TextButtons
+                        _foundNotes.length > 1 || _foundNotes.isEmpty
+                            ? Text(
+                                'Found ${_foundNotes.length} notes',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              )
+                            : Text(
+                                'Found ${_foundNotes.length} note',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // Filename Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByFilename(!_sortFilenameAscending);
+                              },
+                              icon: Icon(
+                                _sortFilenameAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                              ),
+                              label: Text(
+                                _sortFilenameAscending
+                                    ? !isNarrow
+                                        ? 'Filename A to Z'
+                                        : 'Filename'
+                                    : !isNarrow
+                                        ? 'Filename Z to A'
+                                        : 'Filename',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            // Owner Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByOwner(!_sortOwnerAscending);
+                              },
+                              icon: Icon(
+                                _sortOwnerAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                              ),
+                              label: Text(
+                                _sortOwnerAscending
+                                    ? !isNarrow
+                                        ? 'Owner A to Z'
+                                        : 'Owner'
+                                    : !isNarrow
+                                        ? 'Owner Z to A'
+                                        : 'Owner',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                            // Only display permissions sort
+                            // when window is not narrow
+                            if (!isNarrow) ...[
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              // Permission Sort Label and Button
+                              TextButton.icon(
+                                onPressed: () {
+                                  _sortByPermission(!_sortPermissionAscending);
+                                },
+                                icon: Icon(
+                                  _sortPermissionAscending
+                                      ? Icons.arrow_drop_down
+                                      : Icons.arrow_drop_up,
+                                ),
+                                label: Text(
+                                  _sortPermissionAscending
+                                      ? 'Permission A to Z'
+                                      : 'Permission Z to A',
+                                ),
+                                iconAlignment: IconAlignment.end,
+                              ),
+                            ],
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Scrollbar(
-              thumbVisibility: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(10),
-                itemCount: _foundNotes.length,
-                itemExtent: sharedListItemHeight,
-                itemBuilder: (context, index) => Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 26,
-                      backgroundColor: Colors.grey,
-                      child: Icon(Icons.edit_document),
+              ),
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller: _scrollController,
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      // Aspect ratio calculated from LayoutBuilder box constraints
+                      crossAxisCount: 1,
+                      childAspectRatio: cardAspectRatio,
                     ),
-                    // Define width to avoid consuming full width
-                    title: TitleExternalNote(
-                      sharedNoteData: _foundNotes[sharedNotesUrlList[index]],
-                    ),
-                    subtitle: Text(
-                      'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileName]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
-                    ),
-                    // Define width to avoid consuming full width
-                    trailing: SizedBox(
-                      height: 60,
-                      width: 120,
-                      child: SharedTrailingButtons(
-                        sharedNoteData: _foundNotes[sharedNotesUrlList[index]],
+                    padding: const EdgeInsets.all(10),
+                    itemCount: _foundNotes.length,
+                    // itemExtent: sharedListItemHeight,
+                    itemBuilder: (context, index) => Card(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 26,
+                            backgroundColor: Colors.grey,
+                            child: Icon(Icons.edit_document),
+                          ),
+                          // Define width to avoid consuming full width
+                          title: TitleExternalNote(
+                            sharedNoteData:
+                                _foundNotes[sharedNotesUrlList[index]],
+                          ),
+                          subtitle: Text(
+                            'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileName]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
+                          ),
+                          // Define width to avoid consuming full width
+                          trailing: SizedBox(
+                            height: 60,
+                            width: 120,
+                            child: SharedTrailingButtons(
+                              sharedNoteData:
+                                  _foundNotes[sharedNotesUrlList[index]],
+                            ),
+                          ),
+                          onTap: () {
+                            // Open note if read in permissions
+                            String access =
+                                _foundNotes[sharedNotesUrlList[index]]
+                                    [permissionList];
+                            if (access.contains('read')) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AppHomePage(
+                                    childPage: ViewSharedNoteScreen(
+                                      sharedNoteData: _foundNotes[
+                                          sharedNotesUrlList[index]],
+                                    ),
+                                  ),
+                                ),
+                                (Route<dynamic> route) =>
+                                    false, // This predicate ensures all previous routes are removed
+                              );
+                            } else {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AppHomePage(
+                                    childPage: NonReadableNote(
+                                      noteMetaData: _foundNotes[
+                                          sharedNotesUrlList[index]],
+                                    ),
+                                  ),
+                                ),
+                                (Route<dynamic> route) =>
+                                    false, // This predicate ensures all previous routes are removed
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
-                    onTap: () {
-                      // Open note if read in permissions
-                      String access = _foundNotes[sharedNotesUrlList[index]]
-                          [permissionList];
-                      if (access.contains('read')) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppHomePage(
-                              childPage: ViewSharedNoteScreen(
-                                sharedNoteData:
-                                    _foundNotes[sharedNotesUrlList[index]],
-                              ),
-                            ),
-                          ),
-                          (Route<dynamic> route) =>
-                              false, // This predicate ensures all previous routes are removed
-                        );
-                      } else {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppHomePage(
-                              childPage: NonReadableNote(
-                                noteMetaData:
-                                    _foundNotes[sharedNotesUrlList[index]],
-                              ),
-                            ),
-                          ),
-                          (Route<dynamic> route) =>
-                              false, // This predicate ensures all previous routes are removed
-                        );
-                      }
-                    },
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
