@@ -81,6 +81,9 @@ class _ListNotesState extends State<ListNotes> {
   /// cards to display note items
   late double cardAspectRatio = 2.0;
 
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
   /// Update selected status and count of selected
   void updateSelected(int index) {
     setState(() {
@@ -200,7 +203,8 @@ class _ListNotesState extends State<ListNotes> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        //
+        // Derive whether window is narrow
+        isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
         cardAspectRatio =
             OwnNoteItemSize().calculateCardAspectRatio(constraints);
@@ -271,8 +275,12 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                               label: Text(
                                 _sortTitleAscending
-                                    ? 'Title A to Z'
-                                    : 'Title Z to A',
+                                    ? !isNarrow
+                                        ? 'Title A to Z'
+                                        : 'Title'
+                                    : !isNarrow
+                                        ? 'Title Z to A'
+                                        : 'Title',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -291,8 +299,12 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                               label: Text(
                                 _sortModDateAscending
-                                    ? 'Date First Modified'
-                                    : 'Date Last Modified',
+                                    ? !isNarrow
+                                        ? 'Date First Modified'
+                                        : 'Date'
+                                    : !isNarrow
+                                        ? 'Date Last Modified'
+                                        : 'Date',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
