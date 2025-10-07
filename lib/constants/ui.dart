@@ -81,7 +81,7 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedExtItemHeight = 250;
+  static const double compressedExtItemHeight = 260;
 
   /// Approximate height of uncompressed item
   /// in user's external notes list
