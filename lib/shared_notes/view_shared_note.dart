@@ -72,7 +72,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
   Widget build(BuildContext context) {
     Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
     Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
-    List accessList = sharedNoteInfo[permissionList].split(',');
+    List accessList = sharedNoteInfo[permissionListPred].split(',');
 
     return Column(
       children: [

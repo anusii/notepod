@@ -1,4 +1,4 @@
-/// List notes screen - first fetches notes and then gets recipients for the notes
+/// List notes screen - fetches user's notes
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -23,24 +23,21 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
-
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/note_list_del_dialog.dart';
 
-/// A [StatefulWidget] that fetches the user's notes in their app data folder,
+/// A [StatefulWidget] that fetches the user's notes in their app data folder
 /// retrieving the note data map containing data and properties of each note
 /// file name.
-/// Following completion, NewNote() is called if no notes are found.
-/// Alternatively, if notes exist, ListRecipientsScreen() is called to
-/// retrieve the access control list for notes (required to support sharing
-/// of notes and display of sharing information).
-// Parameters: none
+///
+/// Parameters: none
 class ListNotesScreen extends StatefulWidget {
   const ListNotesScreen({super.key});
 
@@ -70,15 +67,31 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     super.dispose();
   }
 
-  /// Load Notes if notes found.
-  /// Parameters:
-  ///   [notesMap] - list of files with data in a user's app data folder.
-  Widget _loadedNotesScreen(Map<String, dynamic> notesMap) {
-    return ListRecipientsScreen(notesMap: notesMap);
+  /// Load user's notes if notes found. If any unparseable notes
+  /// found, first navigate to a dialog to delete unparseable
+  /// notes.
+  ///
+  /// Arguments:
+  ///   [results] - [NotesCallResult] class containing [notesMap] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  Widget _loadedNotesScreen(NotesCallResult results) {
+    final notesMap = results.notesMap!;
+    final badFiles = results.badFiles!;
+
+    if (badFiles.isNotEmpty) {
+      return NotesDelDialog(
+        badFiles: badFiles,
+        childPage: ListNotes(notesMap: notesMap),
+      );
+    } else if (notesMap.isEmpty) {
+      return _loadNewNote();
+    } else {
+      return ListNotes(notesMap: notesMap);
+    }
   }
 
-  /// Advise user to create their first note, if no notes found.
-  /// Parameters - none.
+  /// Advises user to create their first note if no notes found.
+  ///
+  /// Arguments: none.
   Widget _loadNewNote() {
     return Scrollbar(
       thumbVisibility: true,
@@ -88,10 +101,13 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         child: Column(
           children: <Widget>[
             // MsgCard style works in light and dark themes
+            // No notes message
             buildMsgCard(
-              context, Icons.info, Colors.amber, 'No notes yet!',
-              'Write your first note',
-              // noNotesMsg,
+              context,
+              Icons.info,
+              Colors.amber,
+              NoteListMsg.noNotes,
+              NoteListMsg.writeFirstNote,
               isSmall: true,
             ),
             NewNote(),
@@ -120,118 +136,15 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                     context,
                     'Error: data loading failed',
                   );
-                } else if (snapshot.hasData &&
-                    snapshot.data != null &&
-                    snapshot.data.length > 0) {
-                  // Notes found
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  // Successfully returned NotesCallResult
                   return _loadedNotesScreen(
-                    snapshot.data! as Map<String, dynamic>,
+                    snapshot.data as NotesCallResult,
                   );
                 } else if (snapshot.data == null ||
-                    snapshot.data.toString() == 'null' ||
-                    snapshot.data.length == 0) {
+                    snapshot.data.toString() == 'null') {
                   // No notes found
                   return _loadNewNote();
-                } else {
-                  // Unknown error
-                  return errCard(
-                    context,
-                    'Unknown error',
-                  );
-                }
-
-              // Connection none error
-              case ConnectionState.none:
-                debugPrint('Error: Builder has ConnectionState.none');
-                return errCard(
-                  context,
-                  'Connection error',
-                );
-            }
-          },
-        ),
-      ),
-    );
-  }
-}
-
-/// A [StatefulWidget] that uses the note filenames in [notesMap]
-/// to retrieve the access control list data for each note filename.
-/// This adds the recipients and permissions of all recipients for
-/// each file record in [notesMap].
-/// After completion, run ListNotes() to display the notes.
-/// Parameters:
-///   [notesMap] is the map comprising a list of notes and data in a
-///              user's Pod.
-class ListRecipientsScreen extends StatefulWidget {
-  final Map<String, dynamic> notesMap;
-
-  const ListRecipientsScreen({
-    super.key,
-    required this.notesMap,
-  });
-
-  @override
-  State<ListRecipientsScreen> createState() => _ListRecipientsScreenState();
-}
-
-class _ListRecipientsScreenState extends State<ListRecipientsScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  /// Future comprising notesData with recipients added
-  static Future? _asyncRecipientsAdd;
-
-  @override
-  void initState() {
-    _asyncRecipientsAdd = getAccessLists(
-      widget.notesMap,
-      context,
-      ListRecipientsScreen(
-        notesMap: widget.notesMap,
-      ),
-    );
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  // Fetch note recipient data and add to notes map
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: SafeArea(
-        child: FutureBuilder(
-          future: _asyncRecipientsAdd,
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case (ConnectionState.waiting || ConnectionState.active):
-                return loadingScreen(normalLoadingScreenHeight);
-              case ConnectionState.done:
-                if (snapshot.hasError) {
-                  // future failed with error
-                  debugPrint('Error: ${snapshot.error.toString()}');
-                  return errCard(
-                    context,
-                    'Error: data loading failed',
-                  );
-                } else if (snapshot.hasData &&
-                    snapshot.data != null &&
-                    snapshot.data.length > 0) {
-                  // Notes found
-                  return ListNotes(notesMap: snapshot.data! as Map);
-                } else if (snapshot.data == null ||
-                    snapshot.data.toString() == 'null' ||
-                    snapshot.data.length == 0) {
-                  // No note recipients found
-                  return errCard(
-                    context,
-                    'Error adding recipients to notes!',
-                  );
                 } else {
                   // Unknown error
                   return errCard(

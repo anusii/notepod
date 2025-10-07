@@ -76,7 +76,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               // Share button
-              if (noteMetaData[permissionList].contains('control')) ...[
+              if (noteMetaData[permissionListPred].contains('control')) ...[
                 NoteShareButton(
                   childPage: ShareExternalNote(
                     noteMetaData: noteMetaData,
@@ -89,7 +89,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               // /// Delete button
               // /// 20250719 jesscmoore Commented out as also commented out
               // /// external note with read-write-control-append access
-              // if (noteMetaData[permissionList].contains('write')) ...[
+              // if (noteMetaData[permissionListPred].contains('write')) ...[
               //   NoteDelButton(noteData: noteMetaData, shared: true),
               //   const SizedBox(
               //     width: 5,
