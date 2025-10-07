@@ -102,9 +102,9 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: GrantPermissionUi(
                       showAppBar: false,
-                      fileName: noteMetaData[noteUrl],
+                      fileName: noteMetaData[noteUrlPred],
                       isExternalRes: true,
-                      externalWebId: noteMetaData[noteOwner],
+                      externalWebId: noteMetaData[noteOwnerPred],
                       child: child,
                     ),
                   ),

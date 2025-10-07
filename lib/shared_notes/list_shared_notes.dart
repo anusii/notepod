@@ -99,12 +99,12 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
       _sortFilenameAscending = ascending;
       sharedNotesUrlList.sort(
         (a, b) => _sortFilenameAscending
-            ? _foundNotes[a][noteFileName]
+            ? _foundNotes[a][noteFileNamePred]
                 .toLowerCase()
-                .compareTo(_foundNotes[b][noteFileName].toLowerCase())
-            : _foundNotes[b][noteFileName]
+                .compareTo(_foundNotes[b][noteFileNamePred].toLowerCase())
+            : _foundNotes[b][noteFileNamePred]
                 .toLowerCase()
-                .compareTo(_foundNotes[a][noteFileName].toLowerCase()),
+                .compareTo(_foundNotes[a][noteFileNamePred].toLowerCase()),
       );
     });
   }
@@ -115,12 +115,12 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
       _sortOwnerAscending = ascending;
       sharedNotesUrlList.sort(
         (a, b) => _sortOwnerAscending
-            ? _foundNotes[a][noteOwner]
+            ? _foundNotes[a][noteOwnerPred]
                 .toLowerCase()
-                .compareTo(_foundNotes[b][noteOwner].toLowerCase())
-            : _foundNotes[b][noteOwner]
+                .compareTo(_foundNotes[b][noteOwnerPred].toLowerCase())
+            : _foundNotes[b][noteOwnerPred]
                 .toLowerCase()
-                .compareTo(_foundNotes[a][noteOwner].toLowerCase()),
+                .compareTo(_foundNotes[a][noteOwnerPred].toLowerCase()),
       );
     });
   }
@@ -131,12 +131,12 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
       _sortPermissionAscending = ascending;
       sharedNotesUrlList.sort(
         (a, b) => _sortPermissionAscending
-            ? _foundNotes[a][permissionList]
+            ? _foundNotes[a][permissionListPred]
                 .toLowerCase()
-                .compareTo(_foundNotes[b][permissionList].toLowerCase())
-            : _foundNotes[b][permissionList]
+                .compareTo(_foundNotes[b][permissionListPred].toLowerCase())
+            : _foundNotes[b][permissionListPred]
                 .toLowerCase()
-                .compareTo(_foundNotes[a][permissionList].toLowerCase()),
+                .compareTo(_foundNotes[a][permissionListPred].toLowerCase()),
       );
     });
   }
@@ -152,16 +152,16 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
       results = Map.fromEntries(
         widget.sharedNotesMap.entries.where(
           (note) =>
-              (note.value as Map)[noteFileName]
+              (note.value as Map)[noteFileNamePred]
                   .toLowerCase()
                   .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[noteOwner]
+              (note.value as Map)[noteOwnerPred]
                   .toLowerCase()
                   .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[permissionGranter]
+              (note.value as Map)[permissionGranterPred]
                   .toLowerCase()
                   .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[permissionList]
+              (note.value as Map)[permissionListPred]
                   .toLowerCase()
                   .contains(enteredKeyword.toLowerCase()),
         ),
@@ -348,8 +348,9 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                                 _foundNotes[sharedNotesUrlList[index]],
                           ),
                           subtitle: Text(
-                            'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileName]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwner])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranter])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionList]}',
+                            'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileNamePred]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwnerPred])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranterPred])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionListPred]}',
                           ),
+
                           // Define width to avoid consuming full width
                           trailing: SizedBox(
                             height: 60,
@@ -359,11 +360,12 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                                   _foundNotes[sharedNotesUrlList[index]],
                             ),
                           ),
+
                           onTap: () {
                             // Open note if read in permissions
                             String access =
                                 _foundNotes[sharedNotesUrlList[index]]
-                                    [permissionList];
+                                    [permissionListPred];
                             if (access.contains('read')) {
                               Navigator.pushAndRemoveUntil(
                                 context,
@@ -418,7 +420,7 @@ class TitleExternalNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _sharedNoteData[permissionList].split(',');
+    List accessList = _sharedNoteData[permissionListPred].split(',');
 
     return Row(
       children: [
@@ -444,7 +446,7 @@ class SharedTrailingButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _sharedNoteData[permissionList].split(',');
+    List accessList = _sharedNoteData[permissionListPred].split(',');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

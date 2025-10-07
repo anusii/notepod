@@ -1,4 +1,4 @@
-/// The delete note button.
+/// The delete note list button.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Wednesday 2023-11-01 08:32:47 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-10-06 16:18:01 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,21 +30,24 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/paths.dart';
 import 'package:notepod/home.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
-/// A stylised delete button widget for notes.
+/// A delete button widget for deleting a list of notes.
+///
+/// Arguments:
+/// - [badFiles] - list of filenames of corrupted files.
+/// - [childPage] - child widget to return to.
 
-class NoteDelButton extends StatelessWidget {
-  final Map noteData;
-  final bool shared;
+class NoteListDelButton extends StatelessWidget {
+  final List<String> badFiles;
+  final Widget childPage;
 
-  const NoteDelButton({
+  const NoteListDelButton({
     super.key,
-    required this.noteData,
-    required this.shared,
+    required this.badFiles,
+    required this.childPage,
   });
 
   @override
@@ -61,8 +64,10 @@ class NoteDelButton extends StatelessWidget {
           builder: (BuildContext ctx) {
             return AlertDialog(
               title: const Text(Msg.plsConfirm),
-              content: const Text(
-                Msg.confirmDelete,
+              content: Text(
+                badFiles.length > 1
+                    ? Msg.confirmDeleteMultiple
+                    : Msg.confirmDelete,
               ),
               actions: [
                 // The "Yes" button
@@ -75,12 +80,10 @@ class NoteDelButton extends StatelessWidget {
                     );
 
                     // Delete file
-                    if (shared) {
-                      await deleteExternalFile(noteData[noteUrlPred]);
-                    } else {
+                    for (String fileName in badFiles) {
                       // Create note file path
-                      String noteFilePath =
-                          '$mainResDir/$dataDir/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+                      String noteFilePath = '$basePath/$fileName';
+                      debugPrint('Deleting $noteFilePath...');
 
                       // Call solid delete file function
                       await deleteFile(noteFilePath);
@@ -95,7 +98,7 @@ class NoteDelButton extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => AppHomePage(
                             title: topBarTitle,
-                            childPage: ListNotesScreen(),
+                            childPage: childPage,
                           ),
                         ),
                         (Route<dynamic> route) =>
