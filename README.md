@@ -1,5 +1,7 @@
 <!-- markdownlint-disable MD013 MD033 MD036 MD041 -->
 
+*Time-stamp: <Saturday 2025-10-04 21:41:33 +1000 Graham Williams>*
+
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
@@ -9,29 +11,29 @@
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 
+[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
+
 # NotePod &mdash; Encrypted Markdown Notes in your Data Vault
 
 **An ANU Software Innovation Institute demonstrator for your Data Vault**.
 
-*Time-stamp: <Monday 2025-08-25 11:31:49 +1000 Graham Williams>*
-
-*Authors: Anushka Vidanage, Graham Williams, Jessica Moore*
-
-*[ANU Software Innovation Institute](https://sii.anu.edu.au)*
-
-*License: GNU GPL V3*
+*Authors: Anushka Vidanage, Graham Williams, Jessica Moore [ANU
+Software Innovation Institute](https://sii.anu.edu.au)*
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
 Download the latest version:
-**GNU/Linux**
+
++ **Android**
+[apk](https://solidcommunity.au/installers/notepod.apk);
++ **GNU/Linux**
+[snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
 [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
 [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
-**Android**
-[apk](https://solidcommunity.au/installers/notepod.apk);
-**macOS**
++ **macOS**
+[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
 [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
-**Windows**
++ **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
@@ -212,23 +214,23 @@ Packages:
 These dart packages are under construction to support the development
 of Pods-based apps with flutter
 
-- [solidpod](https://pub.dev/packages/solidpod) package: Provides
++ [solidpod](https://pub.dev/packages/solidpod) package: Provides
   high level functionality to manage a Solid personal online data
   stores (Pods) via a Flutter application.
 
-- [solid-auth](https://pub.dev/packages/solid_auth) package:
++ [solid-auth](https://pub.dev/packages/solid_auth) package:
   Implementation of the Solid-OIDC flow which can be used to
   authenticate a client application to a Solid Pod. Solid OIDC is
   built on top of OpenID Connect 1.0. Also provides a suite of tools
   and widgets to support typical app workflows.
 
-- [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
++ [solid-encrypt](https://pub.dev/packages/solid_encrypt) package: The
   Software Innovation Institute has a focus on the security of our
   stored data. This package implements data encryption which can be
   used to encrypt, on device, the content of turtle files to be stored
   in a Solid Pod. Data is also only decrypted on device.
 
-- [rdflib](https://pub.dev/packages/rdflib) package: A dart package
++ [rdflib](https://pub.dev/packages/rdflib) package: A dart package
   for working with RDF. Features include find and create triple
   instances, create a graph to store triples, export graph to ttl,
   etc.
