@@ -101,7 +101,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
               );
             } else if (snapshot.hasError) {
               debugPrint('Error: ${snapshot.error.toString()}');
-              return Text('Error: Title not loaded, please reload');
+              return Text('Error: no data');
             } else {
               return Text('Error: title is empty');
             }

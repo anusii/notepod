@@ -28,6 +28,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
@@ -75,6 +76,16 @@ class _ListNotesState extends State<ListNotes> {
 
   /// Count of selected notes
   int selectedCount = 0;
+
+  /// Aspect ratio (width / height) for gridview
+  /// cards to display note items
+  late double cardAspectRatio = 2.0;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
+  /// Boolean describing whether note is external
+  final bool isExternal = false;
 
   /// Update selected status and count of selected
   void updateSelected(int index) {
@@ -193,182 +204,213 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$myNotesTitle (created by me)',
-                  style: titleStyle,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  onChanged: (value) => _searchNotes(value),
-                  decoration: const InputDecoration(
-                    labelText: 'Search title or text',
-                    hintText: 'Enter string to match note contents',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Derive whether window is narrow
+        isNarrow = WindowSize().isNarrowWindow(constraints);
+        // Calculate the aspect radio for grid cards
+        cardAspectRatio =
+            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
+        return SizedBox(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Count statement
-                    // Match color scheme of sorting TextButtons
-                    selectedCount > 0
-                        ? Text(
-                            'Selected: $selectedCount notes',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          )
-                        : _foundNotes.length > 1 || _foundNotes.isEmpty
+                    Text(
+                      '$myNotesTitle (created by me)',
+                      style: titleStyle,
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      onChanged: (value) => _searchNotes(value),
+                      decoration: const InputDecoration(
+                        labelText: 'Search title or text',
+                        hintText: 'Enter string to match note contents',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Count statement
+                        // Match color scheme of sorting TextButtons
+                        selectedCount > 0
                             ? Text(
-                                'Found ${_foundNotes.length} notes',
+                                'Selected: $selectedCount notes',
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               )
-                            : Text(
-                                'Found ${_foundNotes.length} note',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                            : _foundNotes.length > 1 || _foundNotes.isEmpty
+                                ? Text(
+                                    'Found ${_foundNotes.length} notes',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  )
+                                : Text(
+                                    'Found ${_foundNotes.length} note',
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // Title Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByTitle(!_sortTitleAscending);
+                              },
+                              icon: Icon(
+                                _sortTitleAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
                               ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // Title Sort Label and Button
-                        TextButton.icon(
-                          onPressed: () {
-                            _sortByTitle(!_sortTitleAscending);
-                          },
-                          icon: Icon(
-                            _sortTitleAscending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up,
-                          ),
-                          label: Text(
-                            _sortTitleAscending
-                                ? 'Title A to Z'
-                                : 'Title Z to A',
-                          ),
-                          iconAlignment: IconAlignment.end,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        // Date Sort Label and Button
-                        TextButton.icon(
-                          onPressed: () {
-                            _sortByModDate(!_sortModDateAscending);
-                          },
-                          icon: Icon(
-                            _sortModDateAscending
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up,
-                          ),
-                          label: Text(
-                            _sortModDateAscending
-                                ? 'Date First Modified'
-                                : 'Date Last Modified',
-                          ),
-                          iconAlignment: IconAlignment.end,
+                              label: Text(
+                                _sortTitleAscending
+                                    ? !isNarrow
+                                        ? 'Title A to Z'
+                                        : 'Title'
+                                    : !isNarrow
+                                        ? 'Title Z to A'
+                                        : 'Title',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            // Date Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByModDate(!_sortModDateAscending);
+                              },
+                              icon: Icon(
+                                _sortModDateAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                              ),
+                              label: Text(
+                                _sortModDateAscending
+                                    ? !isNarrow
+                                        ? 'Date First Modified'
+                                        : 'Date'
+                                    : !isNarrow
+                                        ? 'Date Last Modified'
+                                        : 'Date',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Scrollbar(
-              thumbVisibility: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(10),
-                itemCount: _foundNotes.length,
-                itemExtent: ownListItemHeight,
-                itemBuilder: (context, index) => Card(
-                  child: Container(
-                    decoration: _foundNotes[fileNames[index]][isSelectedPred]
-                        ? BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.onInverseSurface,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          )
-                        : BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                    child: ListTile(
-                      // Select note button
-                      leading: SizedBox(
-                        width: NoteIconSize.width,
-                        child: Center(
-                          child: Ink(
-                            decoration: buttonShapeList,
-                            child: IconButton(
-                              icon: _foundNotes[fileNames[index]]
-                                      [isSelectedPred]
-                                  ? const Icon(Icons.done)
-                                  : const Icon(Icons.edit_document),
-                              onPressed: () {
-                                updateSelected(index);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      title: Text(_foundNotes[fileNames[index]][noteTitlePred]),
-                      subtitle: Text(
-                        'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
-                        'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
-                        'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
-                      ),
-                      // Define width to avoid consuming full width
-                      trailing: SizedBox(
-                        height: NoteIconSize.height,
-                        width: NoteIconSize.twoIconWidth,
-                        child: TrailingButtons(
-                          foundNotes: _foundNotes,
-                          fileNames: fileNames,
-                          index: index,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppHomePage(
-                              title: topBarTitle,
-                              childPage: ViewNote(
-                                noteData: _foundNotes[fileNames[index]],
-                                notesMap: widget.notesMap,
+              ),
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller: _scrollController,
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      // Aspect ratio calculated from LayoutBuilder box constraints
+                      crossAxisCount: 1,
+                      childAspectRatio: cardAspectRatio,
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    itemCount: _foundNotes.length,
+                    itemBuilder: (context, index) => Card(
+                      child: Center(
+                        child: Container(
+                          decoration: _foundNotes[fileNames[index]]
+                                  [isSelectedPred]
+                              ? BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onInverseSurface,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                )
+                              : BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                ),
+                          child: ListTile(
+                            // Select note button
+                            leading: SizedBox(
+                              width: NoteIconSize.width,
+                              child: Center(
+                                child: Ink(
+                                  decoration: buttonShapeList,
+                                  child: IconButton(
+                                    icon: _foundNotes[fileNames[index]]
+                                            [isSelectedPred]
+                                        ? const Icon(Icons.done)
+                                        : const Icon(Icons.edit_document),
+                                    onPressed: () {
+                                      updateSelected(index);
+                                    },
+                                  ),
+                                ),
                               ),
                             ),
+                            title: Text(
+                              _foundNotes[fileNames[index]][noteTitlePred],
+                            ),
+                            subtitle: Text(
+                              'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
+                              'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
+                              'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                            ),
+                            // Define width to avoid consuming full width
+                            trailing: SizedBox(
+                              height: NoteIconSize.height,
+                              width: NoteIconSize.twoIconWidth,
+                              child: TrailingButtons(
+                                foundNotes: _foundNotes,
+                                fileNames: fileNames,
+                                index: index,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AppHomePage(
+                                    title: topBarTitle,
+                                    childPage: ViewNote(
+                                      noteData: _foundNotes[fileNames[index]],
+                                      notesMap: widget.notesMap,
+                                    ),
+                                  ),
+                                ),
+                                (Route<dynamic> route) =>
+                                    false, // This predicate ensures all previous routes are removed
+                              );
+                            },
                           ),
-                          (Route<dynamic> route) =>
-                              false, // This predicate ensures all previous routes are removed
-                        );
-                      },
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
