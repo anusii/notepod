@@ -441,8 +441,11 @@ apk::
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP).apk
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP)-$(VER).apk
 
-appbundle:
+appbundle::
+	flutter clean
 	flutter build appbundle --release
+	cp build/app/outputs/bundle/release/app-release.aab installers/$(APP).aab
+	cp build/app/outputs/bundle/release/app-release.aab installers/$(APP)-$(VER).aab
 
 realclean::
 	flutter clean
@@ -519,8 +522,7 @@ docs::
 
 .PHONY: versions
 versions:
-	perl -pi -e 's|applicationVersion = ".*";|applicationVersion = "$(VER)";|' \
-	lib/constants/app.dart
+	perl -pi -e 's|^version:.*|version: "$(VER)"|' snap/snapcraft.yaml
 
 .PHONY: loc
 loc: lib/*.dart

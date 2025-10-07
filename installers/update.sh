@@ -88,6 +88,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     scp ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
     mv -f ${APP}_${version%%+*}_amd64.snap ARCHIVE/${APP}_${version%%+*}_amd64.snap
+    ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}_amd64.snap"
 
     echo ""
 
