@@ -448,6 +448,7 @@ class SharedTrailingButtons extends StatelessWidget {
     List accessList = _sharedNoteData[permissionList].split(',');
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
