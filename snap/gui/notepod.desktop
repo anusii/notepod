@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=com.togaware.notepod
+Name=NotePod
 Comment=Simple, Private, Secure Flutter Notepad
 Exec=notepod
 Icon=${SNAP}/meta/gui/icon.png
