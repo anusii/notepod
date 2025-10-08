@@ -35,12 +35,12 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
@@ -469,17 +469,7 @@ class NoteFileHelper with PodOperationsMixin {
         Navigator.of(context, rootNavigator: true)
             .pop(); // Dismiss the saving note dialog
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AppHomePage(
-              title: topBarTitle,
-              childPage: returnPage,
-            ),
-          ),
-          (Route<dynamic> route) =>
-              false, // This predicate ensures all previous routes are removed
-        );
+        navToChildPage(context, returnPage);
       } else {
         // Show SolidFunctionCallStatus after writePod() if not success
         debugPrint(
