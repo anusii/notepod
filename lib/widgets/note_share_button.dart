@@ -29,9 +29,19 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/utils/nav_to_child.dart';
+// import 'package:notepod/home.dart';
 
-/// A stylised share button widget for notes.
+/// A stylised share button widget for notes. A simpler version
+/// of the button is displayed with icon only if [simple] or
+/// [isNarrow] is true.
+///
+/// Arguments:
+/// - [childPage] - The child widget to navigate to.
+/// - [simple] - Boolean describing whether to show
+/// simple version of button without text label.
+/// - [isNarrow] - Boolean describing whether displaying
+/// in a narrow window.
 
 class NoteShareButton extends StatelessWidget {
   /// Page to display on button click
@@ -41,17 +51,23 @@ class NoteShareButton extends StatelessWidget {
   ///
   /// Used to specify a simpler style without label for use when
   /// less real estate is available.Default false (full button with label)
-  final bool? simple;
+  final bool simple;
+
+  /// Boolean describing whether window is narrow
+  final bool isNarrow;
 
   const NoteShareButton({
     super.key,
     required this.childPage,
     this.simple = false,
+    this.isNarrow = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return simple! ? simpleShareButton(context) : shareButton(context);
+    return (simple || isNarrow)
+        ? simpleShareButton(context)
+        : shareButton(context);
   }
 
   /// A simple share button for using in note lists.
@@ -64,7 +80,7 @@ class NoteShareButton extends StatelessWidget {
           icon: const Icon(Icons.share),
           onPressed: () async {
             // Redirect.
-            navToChildPage(context);
+            navToChildPage(context, childPage);
           },
         ),
       ),
@@ -82,7 +98,7 @@ class NoteShareButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Redirect.
-        navToChildPage(context);
+        navToChildPage(context, childPage);
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor:
@@ -91,23 +107,6 @@ class NoteShareButton extends StatelessWidget {
       label: Text(
         'SHARE',
       ),
-    );
-  }
-
-  /// Navigate to sharing child page.
-
-  dynamic navToChildPage(BuildContext context) async {
-    return Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AppHomePage(
-          title: topBarTitle,
-          childPage: childPage,
-        ),
-      ),
-      (Route<dynamic> route) =>
-          // Ensure all previous routes are removed.
-          false,
     );
   }
 }
