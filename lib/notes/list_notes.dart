@@ -440,7 +440,7 @@ class TrailingButtons extends StatelessWidget {
             notesMap: _foundNotes,
             backPage: ListNotesScreen(),
           ),
-          simple: true,
+          showSimple: true,
         ),
         const SizedBox(
           width: 15,

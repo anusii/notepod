@@ -457,7 +457,7 @@ class SharedTrailingButtons extends StatelessWidget {
             childPage: ShareExternalNote(
               noteMetaData: _sharedNoteData,
             ),
-            simple: true,
+            showSimple: true,
           ),
           const SizedBox(
             width: 5,

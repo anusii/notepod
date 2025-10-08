@@ -33,12 +33,12 @@ import 'package:notepod/utils/nav_to_child.dart';
 // import 'package:notepod/home.dart';
 
 /// A stylised share button widget for notes. A simpler version
-/// of the button is displayed with icon only if [simple] or
+/// of the button is displayed with icon only if [showSimple] or
 /// [isNarrow] is true.
 ///
 /// Arguments:
 /// - [childPage] - The child widget to navigate to.
-/// - [simple] - Boolean describing whether to show
+/// - [showSimple] - Boolean describing whether to show
 /// simple version of button without text label.
 /// - [isNarrow] - Boolean describing whether displaying
 /// in a narrow window.
@@ -47,11 +47,8 @@ class NoteShareButton extends StatelessWidget {
   /// Page to display on button click
   final Widget childPage;
 
-  /// Simple button style option.
-  ///
-  /// Used to specify a simpler style without label for use when
-  /// less real estate is available.Default false (full button with label)
-  final bool simple;
+  /// Show simple button without label
+  final bool showSimple;
 
   /// Boolean describing whether window is narrow
   final bool isNarrow;
@@ -59,13 +56,13 @@ class NoteShareButton extends StatelessWidget {
   const NoteShareButton({
     super.key,
     required this.childPage,
-    this.simple = false,
+    this.showSimple = false,
     this.isNarrow = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return (simple || isNarrow)
+    return (showSimple || isNarrow)
         ? simpleShareButton(context)
         : shareButton(context);
   }
