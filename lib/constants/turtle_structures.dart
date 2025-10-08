@@ -26,10 +26,6 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-// Directory name constants.
-
-const mainResDir = 'notepod';
-
 // const myNotesDir = 'mynotes';
 const noteFileNamePrefix = 'note-';
 
