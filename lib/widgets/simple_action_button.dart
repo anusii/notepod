@@ -28,6 +28,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 
 /// Simple action button widget with icon only for using in narrow
@@ -43,10 +44,14 @@ class SimpleActionButton extends StatelessWidget {
   /// Childpage
   final Widget childPage;
 
+  /// Button color
+  final Color color;
+
   const SimpleActionButton({
     super.key,
     required this.icon,
     required this.childPage,
+    this.color = ButtonBackgroundColor.def,
   });
 
   @override
