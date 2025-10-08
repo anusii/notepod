@@ -84,21 +84,28 @@ String genNoteTTLStr(
           notepodTerms:$noteTitlePred "$noteTitle";
           notepodTerms:$noteContentPred "$noteContent".''';
 
-  // Generate TTL with incorrect predicate
-  String noteTTLStrErr = '''@prefix : <#>.
-      @prefix foaf: <$foaf>.
-      @prefix terms: <$terms>.
-      @prefix notepodTerms: <$notepodTerms>.
-      $mePred
-          a foaf:PersonalProfileDocument;
-          terms:title "Note";
-          notepodTerms:$createdDateTimePredErr "$createdTimeStr";
-          notepodTerms:$modifiedDateTimePred "$updatedTimeStr";
-          notepodTerms:$noteTitlePred "$noteTitle";
-          notepodTerms:$noteContentPred "$noteContent".''';
+  // 20251008 jm: code to generate a corrupt note
+  // for testing purposes only.
+  // Generates TTL with incorrect predicate
+  String noteTTLStrErr = '';
+  // String noteTTLStrErr = '''@prefix : <#>.
+  //     @prefix foaf: <$foaf>.
+  //     @prefix terms: <$terms>.
+  //     @prefix notepodTerms: <$notepodTerms>.
+  //     $mePred
+  //         a foaf:PersonalProfileDocument;
+  //         terms:title "Note";
+  //         notepodTerms:$createdDateTimePredErr "$createdTimeStr";
+  //         notepodTerms:$modifiedDateTimePred "$updatedTimeStr";
+  //         notepodTerms:$noteTitlePred "$noteTitle";
+  //         notepodTerms:$noteContentPred "$noteContent".''';
+
   final String chosenTTL;
-  chosenTTL = noteTTLStrErr;
-  // chosenTTL = noteTTLStr;
+  // // Choose erroneous TTL
+  // chosenTTL = noteTTLStrErr;
+  // Choose correct TTL
+  chosenTTL = noteTTLStr;
+
   if (chosenTTL == noteTTLStrErr) {
     debugPrint(
       'Writing note file using incorrect predicate $createdDateTimePredErr',
