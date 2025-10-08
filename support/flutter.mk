@@ -270,7 +270,7 @@ locmax-enforce:
 .PHONY: markdown
 markdown:
 	@echo "Markdown: MARKDOWN FORMAT CHECK."
-	-markdownlint --disable MD036 -- *.md lib assets installers
+	-markdownlint *.md lib assets installers
 	@echo
 	@echo $(SEPARATOR)
 
