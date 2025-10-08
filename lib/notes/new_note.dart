@@ -95,7 +95,7 @@ class NewNoteState extends State<NewNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(context, _textController!, formKey);
+    //         NoteFileHelper().saveNote(context, _textController!, formKey);
     //       }
     //       return KeyEventResult.handled;
     //     } else {

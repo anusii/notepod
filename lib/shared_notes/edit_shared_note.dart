@@ -102,7 +102,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(
+    //         NoteFileHelper().saveNote(
     //             context, _textController!, formKey, widget.fullNoteData, true);
     //       }
     //       return KeyEventResult.handled;

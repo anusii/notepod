@@ -28,9 +28,9 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/utils/nav_to_child.dart';
-import 'package:notepod/widgets/note_save_button.dart';
 
 /// A save note options dialog providing the user with the options to
 /// save or don't save the note, or cancel their back action.
@@ -82,7 +82,7 @@ class SaveDialog extends StatelessWidget {
           child: const Text('Save'),
           onPressed: () async {
             // Save note
-            await saveNote(
+            await NoteFileHelper().saveNote(
               context,
               textController,
               formKey,

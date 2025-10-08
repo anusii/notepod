@@ -109,7 +109,7 @@ class EditNoteState extends State<EditNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(context, _textController!, formKey, widget.noteData);
+    //         NoteFileHelper().saveNote(context, _textController!, formKey, widget.noteData);
     //       }
     //       return KeyEventResult.handled;
     //     } else {
