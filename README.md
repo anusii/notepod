@@ -6,10 +6,13 @@ An app to support the storage and sharing of personal notes on your
 own encrypted personal online data store (Pod) hosted in your Data
 Vault on a Solid Server. The app was developed by the [ANU Software
 Innovation Institute](https://sii.anu.edu.au) and written by Anushka
-Vidanage, Graham Williams, and Jessica Moore. You can install the app
-from [SnapCraft](https://snapcraft.io/notepod) for Linux. You can also
-run the app online at
-[innerpod.solidcommunity.au](https://notepod.solidcommunity.au).
+Vidanage, [Graham
+Williams](https://togaware.com/Graham.Williams.html), and Jessica
+Moore. You can install the app from
+[SnapCraft](https://snapcraft.io/notepod) for Linux. You can also run
+the app online at
+[innerpod.solidcommunity.au](https://notepod.solidcommunity.au)
+&mdash; no installation required.
 
 The latest version of the app can be downloaded and installed from the
 [Solid Community AU](https://solidcommunity.au):
@@ -26,6 +29,11 @@ The latest version of the app can be downloaded and installed from the
 + **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+
+Contributions are welcome. Visit
+[github](https://github.com/gjwgit/notepod) to submit an issue or,
+even better, fork the repository yourself, update the code, and submit
+a Pull Request. Thanks.
 
 ## Introduction
 
@@ -237,7 +245,7 @@ of Pods-based apps with flutter
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-*Time-stamp: <Wednesday 2025-10-08 14:59:45 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-08 15:21:35 +1100 Graham Williams>*
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
