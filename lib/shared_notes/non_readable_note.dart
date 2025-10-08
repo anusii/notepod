@@ -90,7 +90,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               // /// 20250719 jesscmoore Commented out as also commented out
               // /// external note with read-write-control-append access
               // if (noteMetaData[permissionListPred].contains('write')) ...[
-              //   NoteDelButton(noteData: noteMetaData, shared: true),
+              //   NoteDelButton(noteData: noteMetaData, isExternal: true),
               //   const SizedBox(
               //     width: 5,
               //   ),

@@ -138,7 +138,7 @@ class _ViewNoteState extends State<ViewNote> {
                     children: [
                       // Share button
                       NoteActionButton(
-                        label: 'SHARE',
+                        label: ButtonLabel.share,
                         icon: const Icon(Icons.share),
                         backgroundColor: ButtonBackgroundColor.share,
                         childPage: ShareNote(
@@ -157,7 +157,7 @@ class _ViewNoteState extends State<ViewNote> {
                       ),
                       // Edit button
                       NoteActionButton(
-                        label: 'EDIT',
+                        label: ButtonLabel.edit,
                         icon: const Icon(Icons.edit),
                         backgroundColor: ButtonBackgroundColor.edit,
                         childPage: EditNote(
@@ -171,13 +171,18 @@ class _ViewNoteState extends State<ViewNote> {
                       ),
 
                       /// Delete button
-                      NoteDelButton(noteData: noteData, shared: false),
+                      NoteDelButton(
+                        noteData: noteData,
+                        isExternal: false,
+                        isNarrow: isNarrow,
+                        childPage: ListNotesScreen(),
+                      ),
                       const SizedBox(
                         width: 5,
                       ),
                       // Back button
                       NoteActionButton(
-                        label: 'BACK',
+                        label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
                         childPage: ListNotesScreen(),

@@ -127,3 +127,28 @@ class NoteItemSize {
     return cardAspectRatio;
   }
 }
+
+/// Button labels
+
+class ButtonLabel {
+  /// Share button label
+  static const String share = 'SHARE';
+
+  /// Back button label
+  static const String back = 'BACK';
+
+  /// Edit button label
+  static const String edit = 'EDIT';
+
+  /// Delete button label
+  static const String delete = 'DELETE';
+
+  /// Save button label
+  static const String save = 'SAVE';
+
+  /// Yes button label
+  static const String yes = 'Yes';
+
+  /// No button label
+  static const String no = 'No';
+}
