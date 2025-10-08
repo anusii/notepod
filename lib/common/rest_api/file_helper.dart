@@ -26,13 +26,13 @@
 library;
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/common/rest_api/operations.dart';
+import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
