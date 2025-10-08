@@ -27,7 +27,6 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 
@@ -37,6 +36,9 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// Arguments:
 /// - [icon] - icon to show on button.
 /// - [childPage] - child page to navigate to.
+/// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
+/// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
+
 class SimpleActionButton extends StatelessWidget {
   /// Button icon
   final Icon icon;
@@ -44,22 +46,32 @@ class SimpleActionButton extends StatelessWidget {
   /// Childpage
   final Widget childPage;
 
-  /// Button color
-  final Color color;
+  /// Button background color
+  final Color backgroundColor;
+
+  /// Button foreground color
+  final Color foregroundColor;
 
   const SimpleActionButton({
     super.key,
     required this.icon,
     required this.childPage,
-    this.color = ButtonBackgroundColor.def,
+    this.backgroundColor = ButtonBackgroundColor.def,
+    // When SimpleActionButton called independently, default foreground color
+    // is ButtonForegroundColor.list
+    this.foregroundColor = ButtonForegroundColor.list,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Ink(
-        decoration: buttonShapeList,
+        decoration: ShapeDecoration(
+          color: backgroundColor,
+          shape: const CircleBorder(),
+        ),
         child: IconButton(
+          color: foregroundColor,
           icon: icon,
           onPressed: () async {
             // Redirect.

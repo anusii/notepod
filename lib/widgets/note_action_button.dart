@@ -27,6 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 import 'package:notepod/widgets/full_size_action_button.dart';
 
@@ -39,10 +40,13 @@ import 'package:notepod/widgets/full_size_action_button.dart';
 /// - [label] - text label to show on button.
 /// - [icon] - icon to show on button.
 /// - [childPage] - The child widget to navigate to.
+/// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
+/// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
 /// - [simple] - Boolean describing whether to show
 /// simple version of button without text label.
 /// - [isNarrow] - Boolean describing whether displaying
 /// in a narrow window.
+
 class NoteActionButton extends StatelessWidget {
   /// Button label
   final String label;
@@ -52,6 +56,12 @@ class NoteActionButton extends StatelessWidget {
 
   /// Childpage
   final Widget childPage;
+
+  /// Button background color
+  final Color backgroundColor;
+
+  /// Button foreground color
+  final Color foregroundColor;
 
   /// Simple button style option.
   ///
@@ -67,6 +77,8 @@ class NoteActionButton extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.childPage,
+    this.backgroundColor = ButtonBackgroundColor.def,
+    this.foregroundColor = ButtonForegroundColor.view,
     this.simple = false,
     this.isNarrow = false,
   });
@@ -77,7 +89,16 @@ class NoteActionButton extends StatelessWidget {
         ? SimpleActionButton(
             icon: icon,
             childPage: childPage,
+            backgroundColor: backgroundColor,
+            // When SimpleActionButton called from NoteActionButton, default foreground color
+            // is ButtonForegroundColor.view
+            foregroundColor: foregroundColor,
           )
-        : FullSizeActionButton(label: label, icon: icon, childPage: childPage);
+        : FullSizeActionButton(
+            label: label,
+            icon: icon,
+            childPage: childPage,
+            backgroundColor: backgroundColor,
+          );
   }
 }

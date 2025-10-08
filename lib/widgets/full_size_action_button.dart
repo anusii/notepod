@@ -36,6 +36,8 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// - [label] - text label to show on button.
 /// - [icon] - icon to show on button.
 /// - [childPage] - child page to navigate to.
+/// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
+
 class FullSizeActionButton extends StatelessWidget {
   /// Button label
   final String label;
@@ -46,11 +48,15 @@ class FullSizeActionButton extends StatelessWidget {
   /// Childpage
   final Widget childPage;
 
+  /// Button background color
+  final Color backgroundColor;
+
   const FullSizeActionButton({
     super.key,
     required this.label,
     required this.icon,
     required this.childPage,
+    this.backgroundColor = ButtonBackgroundColor.def,
   });
 
   @override
@@ -59,20 +65,15 @@ class FullSizeActionButton extends StatelessWidget {
       // Uses Theme elevatedButtonTheme for all properties
       // except background color
       icon: icon,
-      // icon: Icon(
-      //   Icons.share,
-      // ),
       onPressed: () async {
         // Redirect.
         navToChildPage(context, childPage);
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-            backgroundColor:
-                WidgetStateProperty.all<Color>(ButtonBackgroundColor.share),
+            backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),
           ),
       label: Text(
         label,
-        // 'SHARE',
       ),
     );
   }
