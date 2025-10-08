@@ -103,7 +103,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
               debugPrint('Error: ${snapshot.error.toString()}');
               return Text('Error: no data');
             } else {
-              return Text('Error: title is empty');
+              return Text('Error: no data');
             }
 
           case ConnectionState.none:
