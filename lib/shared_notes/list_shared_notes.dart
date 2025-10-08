@@ -32,7 +32,7 @@ import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/title_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
-import 'package:notepod/widgets/note_share_button.dart';
+import 'package:notepod/widgets/simple_action_button.dart';
 
 class ListSharedNotes extends StatefulWidget {
   final Map sharedNotesMap;
@@ -453,11 +453,11 @@ class SharedTrailingButtons extends StatelessWidget {
       children: [
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
-          NoteShareButton(
+          SimpleActionButton(
+            icon: const Icon(Icons.share),
             childPage: ShareExternalNote(
               noteMetaData: _sharedNoteData,
             ),
-            showSimple: true,
           ),
           const SizedBox(
             width: 5,
