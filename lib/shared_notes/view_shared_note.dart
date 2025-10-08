@@ -27,15 +27,15 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/shared_notes/edit_shared_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
-import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_edit_button.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 
 class ViewSharedNote extends StatefulWidget {
   final Map fullNoteData;
@@ -55,6 +55,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
   // final ScrollController _scrollController = ScrollController();
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
 
   @override
   void initState() {
@@ -119,35 +122,59 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Share if control access
-                  if (accessList.contains('control')) ...[
-                    NoteShareButton(
-                      childPage: ShareExternalNote(
-                        // noteMetaData: noteMetaData,
-                        fullNoteData: widget.fullNoteData,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Share if control access
+                      if (accessList.contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareExternalNote(
+                            // noteMetaData: noteMetaData,
+                            fullNoteData: widget.fullNoteData,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                      ],
+                      // Edit if write access
+                      if (accessList.contains('write')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.edit,
+                          icon: const Icon(Icons.edit),
+                          backgroundColor: ButtonBackgroundColor.edit,
+                          childPage: EditSharedNote(
+                            fullNoteData: widget.fullNoteData,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                      ],
+                      // Back
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: SharedNotesScreen(),
+                        isNarrow: isNarrow,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ],
-                  // Edit if write access
-                  if (accessList.contains('write')) ...[
-                    NoteEditButton(
-                      childPage: EditSharedNote(
-                        fullNoteData: widget.fullNoteData,
+                      // Add space
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ],
-                  // Back
-                  NoteBackButton(childPage: SharedNotesScreen()),
-                ],
+                    ],
+                  );
+                },
               ),
             ),
             const SizedBox(
