@@ -34,7 +34,7 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
-import 'package:notepod/widgets/note_share_button.dart';
+import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
 /// Parameters:
@@ -432,7 +432,8 @@ class TrailingButtons extends StatelessWidget {
     return Row(
       children: [
         // Share button
-        NoteShareButton(
+        SimpleActionButton(
+          icon: const Icon(Icons.share),
           childPage: ShareNote(
             noteData: _foundNotes[fileNames[index]],
             noteFilePath: // Get note file path
@@ -440,7 +441,6 @@ class TrailingButtons extends StatelessWidget {
             notesMap: _foundNotes,
             backPage: ListNotesScreen(),
           ),
-          simple: true,
         ),
         const SizedBox(
           width: 15,

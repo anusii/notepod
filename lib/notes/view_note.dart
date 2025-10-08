@@ -27,16 +27,16 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_edit_button.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 
 /// A [StatefulWidget] to display the text and selected metadata
 /// from the [noteData] of the selected note. Action buttons are
@@ -64,6 +64,9 @@ class ViewNote extends StatefulWidget {
 class _ViewNoteState extends State<ViewNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
 
   @override
   void initState() {
@@ -126,43 +129,72 @@ class _ViewNoteState extends State<ViewNote> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Share button
-                  NoteShareButton(
-                    childPage: ShareNote(
-                      noteData: noteData,
-                      noteFilePath: noteFilePath,
-                      notesMap: widget.notesMap as Map<dynamic, dynamic>,
-                      backPage: ViewNote(
-                        noteData: widget.noteData,
-                        notesMap: widget.notesMap,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Share button
+                      NoteActionButton(
+                        label: ButtonLabel.share,
+                        icon: const Icon(Icons.share),
+                        backgroundColor: ButtonBackgroundColor.share,
+                        childPage: ShareNote(
+                          noteData: noteData,
+                          noteFilePath: noteFilePath,
+                          notesMap: widget.notesMap as Map<dynamic, dynamic>,
+                          backPage: ViewNote(
+                            noteData: widget.noteData,
+                            notesMap: widget.notesMap,
+                          ),
+                        ),
+                        isNarrow: isNarrow,
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  // Edit button
-                  NoteEditButton(
-                    childPage: EditNote(
-                      noteData: noteData,
-                      notesMap: widget.notesMap as Map<dynamic, dynamic>,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      // Edit button
+                      NoteActionButton(
+                        label: ButtonLabel.edit,
+                        icon: const Icon(Icons.edit),
+                        backgroundColor: ButtonBackgroundColor.edit,
+                        childPage: EditNote(
+                          noteData: noteData,
+                          notesMap: widget.notesMap as Map<dynamic, dynamic>,
+                        ),
+                        isNarrow: isNarrow,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
 
-                  /// Delete button
-                  NoteDelButton(noteData: noteData, shared: false),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  // Back button
-                  NoteBackButton(childPage: ListNotesScreen()),
-                ],
+                      /// Delete button
+                      NoteDelButton(
+                        noteData: noteData,
+                        isExternal: false,
+                        isNarrow: isNarrow,
+                        childPage: ListNotesScreen(),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      // Back button
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: ListNotesScreen(),
+                        isNarrow: isNarrow,
+                      ),
+                      // Add space
+                      const SizedBox(
+                        width: 5,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             const SizedBox(

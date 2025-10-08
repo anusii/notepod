@@ -166,4 +166,36 @@ class NoteFileHelper with PodOperationsMixin {
       return null;
     }
   }
+
+  /// Safely deletes a note file
+  ///
+  /// Arguments:
+  /// - [context] - The build context.
+  /// - [noteData] - The note data map containing filename/fileUrl.
+  /// - [childpage] - The child widget to return to.
+  /// - [isExternal] - Boolean describing whether the note is an external note.
+
+  Future<void> deleteNote(
+    BuildContext context,
+    Map noteData,
+    Widget childPage,
+    bool isExternal,
+  ) async {
+    try {
+      // Delete file
+      if (isExternal) {
+        await deleteExternalFile(noteData[noteUrlPred]);
+      } else {
+        // Create note file path
+        String noteFilePath =
+            '$basePath/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
+
+        // Call solid delete file function
+        await deleteFile(noteFilePath);
+      }
+    } catch (e) {
+      debugPrint('Error deleting note: $e');
+      rethrow;
+    }
+  }
 }

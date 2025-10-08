@@ -28,13 +28,14 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/ui.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
-import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_share_button.dart';
 
 class NonReadableNote extends StatefulWidget {
   final Map noteMetaData;
@@ -50,6 +51,9 @@ class NonReadableNote extends StatefulWidget {
 }
 
 class _NonReadableNoteState extends State<NonReadableNote> {
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
   @override
   Widget build(BuildContext context) {
     Map noteMetaData = widget.noteMetaData;
@@ -72,31 +76,47 @@ class _NonReadableNoteState extends State<NonReadableNote> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // Share button
-              if (noteMetaData[permissionListPred].contains('control')) ...[
-                NoteShareButton(
-                  childPage: ShareExternalNote(
-                    noteMetaData: noteMetaData,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Derive whether window is narrow
+              isNarrow = WindowSize().isNarrowWindow(constraints);
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Share button
+                  if (noteMetaData[permissionListPred].contains('control')) ...[
+                    NoteActionButton(
+                      label: ButtonLabel.share,
+                      icon: const Icon(Icons.share),
+                      backgroundColor: ButtonBackgroundColor.share,
+                      childPage: ShareExternalNote(
+                        noteMetaData: noteMetaData,
+                      ),
+                      isNarrow: isNarrow,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                  ],
+                  // /// Delete button
+                  // /// 20250719 jesscmoore Commented out as also commented out
+                  // /// external note with read-write-control-append access
+                  // if (noteMetaData[permissionListPred].contains('write')) ...[
+                  //   NoteDelButton(noteData: noteMetaData, isExternal: true),
+                  //   const SizedBox(
+                  //     width: 5,
+                  //   ),
+                  // ],
+                  NoteActionButton(
+                    label: ButtonLabel.back,
+                    icon: const Icon(Icons.keyboard_backspace),
+                    backgroundColor: ButtonBackgroundColor.back,
+                    childPage: SharedNotesScreen(),
+                    isNarrow: isNarrow,
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
-              // /// Delete button
-              // /// 20250719 jesscmoore Commented out as also commented out
-              // /// external note with read-write-control-append access
-              // if (noteMetaData[permissionListPred].contains('write')) ...[
-              //   NoteDelButton(noteData: noteMetaData, shared: true),
-              //   const SizedBox(
-              //     width: 5,
-              //   ),
-              // ],
-              NoteBackButton(childPage: SharedNotesScreen()),
-            ],
+                ],
+              );
+            },
           ),
         ),
         const SizedBox(

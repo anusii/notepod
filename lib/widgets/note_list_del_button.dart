@@ -31,7 +31,8 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/paths.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/constants/ui.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
 /// A delete button widget for deleting a list of notes.
@@ -93,27 +94,17 @@ class NoteListDelButton extends StatelessWidget {
                       Navigator.of(context, rootNavigator: true)
                           .pop(); // Dismiss the deleting note dialog
 
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppHomePage(
-                            title: topBarTitle,
-                            childPage: childPage,
-                          ),
-                        ),
-                        (Route<dynamic> route) =>
-                            false, // This predicate ensures all previous routes are removed
-                      );
+                      navToChildPage(context, childPage);
                     }
                   },
-                  child: const Text('Yes'),
+                  child: const Text(ButtonLabel.yes),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true)
                         .pop(); // Dismiss the deleting note dialog
                   },
-                  child: const Text('No'),
+                  child: const Text(ButtonLabel.no),
                 ),
               ],
             );
@@ -125,7 +116,7 @@ class NoteListDelButton extends StatelessWidget {
                 WidgetStateProperty.all<Color>(ButtonBackgroundColor.delete),
           ),
       label: const Text(
-        'DELETE',
+        ButtonLabel.delete,
       ),
     );
   }

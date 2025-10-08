@@ -62,8 +62,24 @@ List<Color> defaultNotepodColors = const [
   lightBlue,
 ];
 
+/// Foreground colours of action buttons in note view
+/// pages.
+/// Required for the simple action buttons created with
+/// an icon inside a Ink().
+
+class ButtonForegroundColor {
+  /// Buttons on view pages
+  static const Color view = backgroundWhite;
+
+  /// Buttons on lists
+  static const Color list = titleAsh;
+}
+
 /// Background colours of action buttons in note view
-/// pages
+/// pages.
+/// Required for the simple action buttons created with
+/// an icon inside a Ink().
+
 class ButtonBackgroundColor {
   /// Share button colour
   static const Color share = darkBlue;
@@ -79,6 +95,9 @@ class ButtonBackgroundColor {
 
   /// Save button colour
   static const Color save = lightBlue;
+
+  /// Default button colour - used for list item buttons
+  static const Color def = Colors.grey;
 }
 
 // 20250529 JM: Additional settings commented below as options
@@ -112,7 +131,7 @@ ThemeData lightThemeData(BuildContext context) {
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
         foregroundColor: backgroundWhite,
-        backgroundColor: Colors.grey,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
@@ -179,7 +198,7 @@ ThemeData darkThemeData(BuildContext context) {
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
         foregroundColor: backgroundWhite,
-        backgroundColor: Colors.grey,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
