@@ -2,13 +2,13 @@
 
 # NotePod &mdash; Notepad for your Data Vault
 
-An app developed by the [ANU Software Innovation
-Institute](https://sii.anu.edu.au) to support the storage and sharing
-of personal notes on your own encrypted personal online data store
-(Pod) hosted in your Data Vault on a Solid Server. The app was written
-by Anushka Vidanage, Graham Williams, and Jessica Moore. You can
-install the app from [SnapCraft](https://snapcraft.io/notepod) for
-Linux. You can also run the app online at
+An app to support the storage and sharing of personal notes on your
+own encrypted personal online data store (Pod) hosted in your Data
+Vault on a Solid Server. The app was developed by the [ANU Software
+Innovation Institute](https://sii.anu.edu.au) and written by Anushka
+Vidanage, Graham Williams, and Jessica Moore. You can install the app
+from [SnapCraft](https://snapcraft.io/notepod) for Linux. You can also
+run the app online at
 [innerpod.solidcommunity.au](https://notepod.solidcommunity.au).
 
 The latest version of the app can be downloaded and installed from the
@@ -237,7 +237,7 @@ of Pods-based apps with flutter
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-*Time-stamp: <Wednesday 2025-10-08 14:58:42 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-08 14:59:45 +1100 Graham Williams>*
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
