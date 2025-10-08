@@ -1,13 +1,18 @@
-# NotePod &mdash; Encrypted Markdown Notes in your Data Vault
+<!-- markdownlint-disable MD013 MD033 MD036 -->
 
-**An ANU Software Innovation Institute demonstrator for your Data Vault**.
+# NotePod &mdash; Notepad for your Data Vault
 
-*Authors: Anushka Vidanage, Graham Williams, Jessica Moore [ANU
-Software Innovation Institute](https://sii.anu.edu.au)*
+An app developed by the [ANU Software Innovation
+Institute](https://sii.anu.edu.au) to support the storage and sharing
+of personal notes on your own encrypted personal online data store
+(Pod) hosted in your Data Vault on a Solid Server. The app was written
+by Anushka Vidanage, Graham Williams, and Jessica Moore. You can
+install the app from [SnapCraft](https://snapcraft.io/notepod) for
+Linux. You can also run the app online at
+[innerpod.solidcommunity.au](https://notepod.solidcommunity.au).
 
-Run the app online: [**web**](https://notepod.solidcommunity.au).
-
-Download the latest version:
+The latest version of the app can be downloaded and installed from the
+[Solid Community AU](https://solidcommunity.au):
 
 + **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
@@ -21,9 +26,6 @@ Download the latest version:
 + **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
-
-Coding documentation is available from [solid community
-au](https://solidcommunity.au/docs/notepod)
 
 ## Introduction
 
@@ -235,7 +237,7 @@ of Pods-based apps with flutter
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-*Time-stamp: <Saturday 2025-10-04 21:41:33 +1000 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-08 14:58:42 +1100 Graham Williams>*
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
