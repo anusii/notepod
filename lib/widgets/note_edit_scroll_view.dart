@@ -33,8 +33,6 @@ import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
@@ -51,6 +49,7 @@ class NoteEditScrollView extends StatelessWidget {
     required ScrollController scrollController,
     required FocusNode focusTitle,
     required FocusNode focusContent,
+    required this.childPage,
     required this.data,
     this.prevNoteData,
     required this.shared,
@@ -72,6 +71,10 @@ class NoteEditScrollView extends StatelessWidget {
 
   /// Focus node for note contents text field
   final FocusNode _focusContent;
+
+  /// Childpage used by back button
+  final Widget childPage;
+
   final String data;
 
   /// Existing note data is note already exists
@@ -134,14 +137,19 @@ class NoteEditScrollView extends StatelessWidget {
                 // Nav to view note or view shared note
                 (shared)
                     ? NoteBackButton(
-                        childPage:
-                            ViewSharedNoteScreen(sharedNoteData: noteInfo),
+                        childPage: childPage,
+                        textController: _textController,
+                        formKey: formKey,
+                        prevNoteData: prevNoteData,
+                        notesMap: notesMap,
+                        shared: shared,
                       )
                     : NoteBackButton(
-                        childPage: ViewNote(
-                          noteData: prevNoteData as Map<dynamic, dynamic>,
-                          notesMap: notesMap,
-                        ),
+                        childPage: childPage,
+                        textController: _textController,
+                        formKey: formKey,
+                        prevNoteData: prevNoteData,
+                        notesMap: notesMap,
                       ),
               ],
       );

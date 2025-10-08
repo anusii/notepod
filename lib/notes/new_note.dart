@@ -30,6 +30,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
@@ -94,7 +95,7 @@ class NewNoteState extends State<NewNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(context, _textController!, formKey);
+    //         NoteFileHelper().saveNote(context, _textController!, formKey);
     //       }
     //       return KeyEventResult.handled;
     //     } else {
@@ -127,6 +128,7 @@ class NewNoteState extends State<NewNote> {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      childPage: ListNotesScreen(),
       data: data,
       shared: false,
     );

@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit externally owned notes shared to
@@ -101,7 +102,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(
+    //         NoteFileHelper().saveNote(
     //             context, _textController!, formKey, widget.fullNoteData, true);
     //       }
     //       return KeyEventResult.handled;
@@ -135,6 +136,9 @@ class EditSharedNoteState extends State<EditSharedNote> {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      childPage: ViewSharedNoteScreen(
+        sharedNoteData: widget.fullNoteData['sharedNoteInfo'],
+      ),
       data: data,
       prevNoteData: widget.fullNoteData,
       shared: true,

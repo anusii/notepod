@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit notes owned by the user.
@@ -108,7 +109,7 @@ class EditNoteState extends State<EditNote> {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(context, _textController!, formKey, widget.noteData);
+    //         NoteFileHelper().saveNote(context, _textController!, formKey, widget.noteData);
     //       }
     //       return KeyEventResult.handled;
     //     } else {
@@ -141,6 +142,10 @@ class EditNoteState extends State<EditNote> {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      childPage: ViewNote(
+        noteData: widget.noteData,
+        notesMap: widget.notesMap,
+      ),
       data: data,
       prevNoteData: widget.noteData,
       shared: false,
