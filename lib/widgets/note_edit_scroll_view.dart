@@ -136,12 +136,21 @@ class NoteEditScrollView extends StatelessWidget {
                     ? NoteBackButton(
                         childPage:
                             ViewSharedNoteScreen(sharedNoteData: noteInfo),
+                        textController: _textController,
+                        formKey: formKey,
+                        prevNoteData: prevNoteData,
+                        notesMap: notesMap,
+                        shared: shared,
                       )
                     : NoteBackButton(
                         childPage: ViewNote(
                           noteData: prevNoteData as Map<dynamic, dynamic>,
                           notesMap: notesMap,
                         ),
+                        textController: _textController,
+                        formKey: formKey,
+                        prevNoteData: prevNoteData,
+                        notesMap: notesMap,
                       ),
               ],
       );

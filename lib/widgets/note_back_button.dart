@@ -26,20 +26,41 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/utils/nav_to_child.dart';
+import 'package:notepod/widgets/save_dialog.dart';
 
-/// A stylised back button widget for notes.
+/// A stylised back button widget for notes. On click it checks if edited data exists, if found it asks if the user wants to save or not save or cancel the back action. Then it navigates to the provided child page.
+///
+/// Arguments:
+/// - [childPage] - The child page to navigate back to.
+/// - [formKey] - Key of the form to edit note metadata
+/// - [textController] - Optional text controller if back is being called from note editor.
+/// - [prevNoteData] - Optional map of previous data of an existing note, used if back
+/// called from note editor of existing note.
+/// - [notesMap] -  Map of current data of the note to write to Pod
+/// - [shared] - is boolean describing whether note is an external note.
 
 class NoteBackButton extends StatelessWidget {
-  final Widget childPage;
-
   const NoteBackButton({
     super.key,
     required this.childPage,
+    this.textController,
+    this.formKey,
+    this.prevNoteData,
+    this.notesMap,
+    this.shared = false,
   });
+
+  final Widget childPage;
+  final TextEditingController? textController;
+  final GlobalKey<FormBuilderState>? formKey;
+  final Map? prevNoteData;
+  final Map? notesMap;
+  final bool shared;
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +71,38 @@ class NoteBackButton extends StatelessWidget {
         Icons.keyboard_backspace,
       ),
       onPressed: () {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AppHomePage(
-              title: topBarTitle,
-              childPage: childPage,
-            ),
-          ),
-          (Route<dynamic> route) =>
-              false, // This predicate ensures all previous routes are removed
-        );
+        if (formKey?.currentState?.saveAndValidate() ?? false) {
+          if (textController != null) {
+            String noteText = textController!.text;
+            Map formData = formKey?.currentState?.value as Map;
+            String noteTitle = formData[noteTitlePred].replaceAll('\n', '');
+            if (prevNoteData != null) {
+              if (noteTitle != prevNoteData![noteTitlePred] ||
+                  noteText != prevNoteData![noteContentPred]) {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) {
+                    // Call save/don't save/cancel dialog
+                    return SaveDialog(
+                      childPage: childPage,
+                      textController: textController!,
+                      formKey: formKey!,
+                      notesMap: notesMap!,
+                      prevNoteData: prevNoteData,
+                      shared: shared,
+                    );
+                  },
+                );
+              } else {
+                debugPrint('No unsaved changes found');
+                navToChildPage(context, childPage);
+              }
+            }
+          }
+        } else {
+          navToChildPage(context, childPage);
+        }
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor:
