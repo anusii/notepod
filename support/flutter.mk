@@ -270,7 +270,7 @@ locmax-enforce:
 .PHONY: markdown
 markdown:
 	@echo "Markdown: MARKDOWN FORMAT CHECK."
-	-markdownlint --disable MD036 -- *.md lib assets installers
+	-markdownlint *.md lib assets installers
 	@echo
 	@echo $(SEPARATOR)
 
@@ -522,7 +522,7 @@ docs::
 
 .PHONY: versions
 versions:
-	perl -pi -e 's|^version:.*|version: "$(VER)"|' snap/snapcraft.yaml
+	if [ -d snap ]; then perl -pi -e 's|^version:.*|version: $(VER)|' snap/snapcraft.yaml; fi
 
 .PHONY: loc
 loc: lib/*.dart
