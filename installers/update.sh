@@ -86,7 +86,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
     unzip -oq artifact.zip
     rm -f artifact.zip
 
-    scp ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
+    scp -q ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
     mv -f ${APP}_${version%%+*}_amd64.snap ARCHIVE/${APP}_${version%%+*}_amd64.snap
     ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}_amd64.snap"
 
