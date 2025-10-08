@@ -41,7 +41,7 @@ import 'package:notepod/widgets/loading_animation.dart';
 /// - [noteData] - Map of note data.
 /// - [childPage] - The child widget to navigate to.
 /// - [isExternal] - Boolean describing whether an external note.
-/// - [simple] - Boolean describing whether to show
+/// - [showSimple] - Boolean describing whether to show
 /// simple version of button without text label.
 /// - [isNarrow] - Boolean describing whether displaying
 /// in a narrow window.
@@ -56,11 +56,8 @@ class NoteDelButton extends StatelessWidget {
   /// Boolean describing whether an external note
   final bool isExternal;
 
-  /// Simple button style option.
-  ///
-  /// Used to specify a simpler style without label for use when
-  /// less real estate is available.Default false (full button with label)
-  final bool simple;
+  /// Show simple button without label
+  final bool showSimple;
 
   /// Boolean describing whether window is narrow
   final bool isNarrow;
@@ -70,7 +67,7 @@ class NoteDelButton extends StatelessWidget {
     required this.noteData,
     required this.childPage,
     this.isExternal = false,
-    this.simple = false,
+    this.showSimple = false,
     this.isNarrow = false,
   });
 
@@ -168,7 +165,7 @@ class NoteDelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (simple || isNarrow)
+    return (showSimple || isNarrow)
         ? simpleDelButton(context)
         : fullSizeDelButton(context);
   }

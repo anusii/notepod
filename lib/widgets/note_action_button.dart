@@ -33,7 +33,7 @@ import 'package:notepod/widgets/full_size_action_button.dart';
 
 ///  Note action button widget for display on note views
 /// or note list items. A simpler version
-/// of the button is displayed with icon only if [simple] or
+/// of the button is displayed with icon only if [showSimple] or
 /// [isNarrow] is true.
 ///
 /// Arguments:
@@ -42,7 +42,7 @@ import 'package:notepod/widgets/full_size_action_button.dart';
 /// - [childPage] - The child widget to navigate to.
 /// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
 /// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
-/// - [simple] - Boolean describing whether to show
+/// - [showSimple] - Boolean describing whether to show
 /// simple version of button without text label.
 /// - [isNarrow] - Boolean describing whether displaying
 /// in a narrow window.
@@ -63,11 +63,8 @@ class NoteActionButton extends StatelessWidget {
   /// Button foreground color
   final Color foregroundColor;
 
-  /// Simple button style option.
-  ///
-  /// Used to specify a simpler style without label for use when
-  /// less real estate is available.Default false (full button with label)
-  final bool simple;
+  /// Show simple button without label
+  final bool showSimple;
 
   /// Boolean describing whether window is narrow
   final bool isNarrow;
@@ -79,13 +76,13 @@ class NoteActionButton extends StatelessWidget {
     required this.childPage,
     this.backgroundColor = ButtonBackgroundColor.def,
     this.foregroundColor = ButtonForegroundColor.view,
-    this.simple = false,
+    this.showSimple = false,
     this.isNarrow = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return (simple || isNarrow)
+    return (showSimple || isNarrow)
         ? SimpleActionButton(
             icon: icon,
             childPage: childPage,
