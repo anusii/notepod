@@ -79,6 +79,9 @@ class ButtonBackgroundColor {
 
   /// Save button colour
   static const Color save = lightBlue;
+
+  /// Default button colour - used for list item buttons
+  static const Color def = Colors.grey;
 }
 
 // 20250529 JM: Additional settings commented below as options
@@ -112,7 +115,7 @@ ThemeData lightThemeData(BuildContext context) {
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
         foregroundColor: backgroundWhite,
-        backgroundColor: Colors.grey,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
@@ -179,7 +182,7 @@ ThemeData darkThemeData(BuildContext context) {
       style: ElevatedButton.styleFrom(
         // Label and icon use foreground colour
         foregroundColor: backgroundWhite,
-        backgroundColor: Colors.grey,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
         ),
