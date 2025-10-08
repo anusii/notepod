@@ -28,8 +28,8 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/widgets/simple_action_button.dart';
 import 'package:notepod/widgets/full_size_action_button.dart';
+import 'package:notepod/widgets/simple_action_button.dart';
 
 ///  Note action button widget for display on note views
 /// or note list items. A simpler version
