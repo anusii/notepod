@@ -1,10 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 20251010 gjw With flutter_secure_storage prevent
+         backup-related keystore issues by setting allowBackup and
+         fullBackupContent to false as below. See
+         https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
+    -->
     <application
         android:label="notepod"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+	android:allowBackup="false"
+	android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"

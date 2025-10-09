@@ -33,6 +33,12 @@ android {
         applicationId = "com.togaware.notepod"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
+	//
+	// 20251010 gjw For flutter_secure_storage the required minSdkVersion
+	// is 23 for security features. We stay with flutter.minSdkVersion here,
+	// expecting that gets the required min value - but how to confirm. See
+	// https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
+	//
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
