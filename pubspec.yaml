@@ -32,7 +32,7 @@ dependencies:
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.5
-  window_manager: ^0.5.0
+  window_manager: ^0.5.1
 
 dev_dependencies:
   build_runner: ^2.4.14

@@ -49,7 +49,10 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   if (isDesktop) {
-    // await windowManager.ensureInitialized();
+    // 20251009 jm: Required to initialize the
+    // window_manager plugin. Failure to include
+    // causes a build failure on macos
+    await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
       // Set various desktop window options here, specifically the title.
