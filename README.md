@@ -173,7 +173,24 @@ xed .
 Select `Signing & Capabilities`. In `Team`, choose `Add an Account`
 and sign in with your Apple ID account. In `Network`, select `Incoming
 Connections (Server)` and `Outgoing Connections (Client)`. The latter
-is needed to login to your Pod.
+is needed to login to your Pod. Keychain access capability is also required to save authorisation and encryption key credentials to secure storage.
+
+Edit `macos/Runner/DebugRunner.entitlements` to add:
+
+```xml
+ <key>keychain-access-groups</key>
+    <array/>
+```
+
+Edit `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements` to add:
+
+```xml
+ <array>
+        <string>[$DEVELOPMENT_TEAM].[$PRODUCT_BUNDLE_IDENTIFIER]</string>
+    </array>
+```
+
+where `$DEVELOPMENT_TEAM` found in `macos/Runner.xcodeproj/project.pbxproj` and `$PRODUCT_BUNDLE_IDENTIFIER` found in `macos/Runner/Configs/AppInfo.xcconfig`.
 
 ### Extra setup for iOS<a name="extra_for_ios"></a>
 
