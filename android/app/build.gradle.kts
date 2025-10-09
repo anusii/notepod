@@ -36,7 +36,7 @@ android {
 	//
 	// 20251010 gjw For flutter_secure_storage the required minSdkVersion
 	// is 23 for security features. We stay with flutter.minSdkVersion here,
-	// expecting that gets the required min value - but how to confirm. See
+	// since that is already 24 as per the play store console. See
 	// https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
 	//
         minSdk = flutter.minSdkVersion
