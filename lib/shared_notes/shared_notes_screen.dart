@@ -46,7 +46,7 @@ class _SharedNotesScreenState extends State<SharedNotesScreen> {
 
   @override
   void initState() {
-    _asyncDataFetch = getSharedNotes(context, SharedNotesScreen());
+    _asyncDataFetch = getSharedNotes(context, const SharedNotesScreen());
     super.initState();
   }
 

@@ -83,7 +83,7 @@ class NoteDisplayMetadata extends StatelessWidget {
           if (showSharing) accessInfo(thisNoteInfo, context),
           // Show path info (filename and path)
           if (showPathInfo) pathInfo(thisNoteInfo, context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );

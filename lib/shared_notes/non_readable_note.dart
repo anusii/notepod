@@ -111,7 +111,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                     label: ButtonLabel.back,
                     icon: const Icon(Icons.keyboard_backspace),
                     backgroundColor: ButtonBackgroundColor.back,
-                    childPage: SharedNotesScreen(),
+                    childPage: const SharedNotesScreen(),
                     isNarrow: isNarrow,
                   ),
                 ],

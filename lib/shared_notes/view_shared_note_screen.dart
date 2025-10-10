@@ -53,7 +53,7 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
 
     _asyncDataFetch = getSharedNoteContent(
       context,
-      SharedNotesScreen(),
+      const SharedNotesScreen(),
       sharedNoteData,
     );
     super.initState();

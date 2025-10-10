@@ -175,7 +175,7 @@ class _ViewNoteState extends State<ViewNote> {
                         noteData: noteData,
                         isExternal: false,
                         isNarrow: isNarrow,
-                        childPage: ListNotesScreen(),
+                        childPage: const ListNotesScreen(),
                       ),
                       const SizedBox(
                         width: 5,
@@ -185,7 +185,7 @@ class _ViewNoteState extends State<ViewNote> {
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: ListNotesScreen(),
+                        childPage: const ListNotesScreen(),
                         isNarrow: isNarrow,
                       ),
                       // Add space

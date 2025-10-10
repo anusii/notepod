@@ -93,7 +93,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                         color: Colors.white,
                       ),
                       alignment: Alignment.center,
-                      child: Icon(
+                      child: const Icon(
                         Icons.error,
                         color: Colors.amber,
                         size: 60,
@@ -104,7 +104,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                 const SizedBox(
                   height: 30,
                 ),
-                Row(
+                const Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
@@ -137,7 +137,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                 itemExtent: badListItemHeight,
                 itemBuilder: (context, index) => Card(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                     child: ListTile(
