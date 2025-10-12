@@ -2,6 +2,12 @@
 
 # NotePod &mdash; Notepad for your Data Vault
 
+[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
+[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
+[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
+[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
+[![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+
 An app to support the storage and sharing of personal notes on your
 own encrypted personal online data store (Pod) hosted in your Data
 Vault on a Solid Server. The app was developed by the [ANU Software
@@ -13,6 +19,8 @@ Moore. You can install the app from
 the app online at
 [innerpod.solidcommunity.au](https://notepod.solidcommunity.au)
 &mdash; no installation required.
+
+[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
 The latest version of the app can be downloaded and installed from the
 [Solid Community AU](https://solidcommunity.au):
@@ -251,18 +259,10 @@ of Pods-based apps with flutter
 
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
-[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
-
-[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
-[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
-[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
-[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
-[![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-*Time-stamp: <Wednesday 2025-10-08 15:21:35 +1100 Graham Williams>*
+*Time-stamp: <Sunday 2025-10-12 20:24:32 +1100 Graham Williams>*
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
