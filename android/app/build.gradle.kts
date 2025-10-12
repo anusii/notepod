@@ -35,8 +35,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
 	//
 	// 20251010 gjw For flutter_secure_storage the required minSdkVersion
-	// is 23 for security features. We stay with flutter.minSdkVersion here,
-	// since that is already 24 as per the play store console. See
+	// is 23 for security features. We stay with flutter.minSdkVersion here.
+	// Fromt he play store console, targetSdk is 36 and API levels is 24+. See
 	// https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
 	//
         minSdk = flutter.minSdkVersion
