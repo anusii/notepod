@@ -17,7 +17,8 @@ Moore. You can install the app from
 [SnapCraft](https://snapcraft.io/notepod) for Linux. You can also run
 the app online at
 [innerpod.solidcommunity.au](https://notepod.solidcommunity.au)
-&mdash; no installation required.
+&mdash; no installation required. For running directly on your own
+device:
 
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
@@ -249,7 +250,7 @@ of Pods-based apps with flutter
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-*Time-stamp: <Monday 2025-10-13 10:30:53 +1100 Graham Williams>*
+*Time-stamp: <Monday 2025-10-13 10:36:14 +1100 Graham Williams>*
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
