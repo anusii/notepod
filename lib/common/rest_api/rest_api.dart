@@ -106,7 +106,7 @@ Future<NotesCallResult> getNoteList(
       Map<String, dynamic> fullNotesMap = {};
       NotesCallResult results;
 
-      if (!context.mounted) return NotesCallResult();
+      if (!context.mounted) return const NotesCallResult();
       fullNotesMap = await getAccessLists(
         notesMap,
         context,

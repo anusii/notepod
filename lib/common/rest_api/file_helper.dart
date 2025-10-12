@@ -353,7 +353,7 @@ class NoteFileHelper with PodOperationsMixin {
             await saveNoteToPod(
               context,
               noteNewData,
-              ListNotesScreen(),
+              const ListNotesScreen(),
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');

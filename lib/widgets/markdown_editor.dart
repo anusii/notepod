@@ -55,13 +55,13 @@ Container markdownEditor(
                 focusNode: focusContent,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Note Content',
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -75,7 +75,7 @@ Container markdownEditor(
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         Column(

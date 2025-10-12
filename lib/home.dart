@@ -89,7 +89,7 @@ class AppHomePageState extends State<AppHomePage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AppHomePage(
+                  builder: (context) => const AppHomePage(
                     title: topBarTitle,
                     childPage: NewNote(),
                   ),
@@ -109,7 +109,7 @@ class AppHomePageState extends State<AppHomePage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AppHomePage(
+                  builder: (context) => const AppHomePage(
                     title: topBarTitle,
                     childPage: ListNotesScreen(),
                   ),
@@ -135,7 +135,7 @@ class AppHomePageState extends State<AppHomePage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AppHomePage(
+                  builder: (context) => const AppHomePage(
                     title: topBarTitle,
                     childPage: SharedNotesScreen(),
                   ),

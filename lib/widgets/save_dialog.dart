@@ -66,7 +66,7 @@ class SaveDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Unsaved changes!'),
-      content: Scrollbar(
+      content: const Scrollbar(
         thumbVisibility: true,
         child: SingleChildScrollView(
           primary: true,

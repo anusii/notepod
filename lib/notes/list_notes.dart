@@ -219,7 +219,7 @@ class _ListNotesState extends State<ListNotes> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       '$myNotesTitle (created by me)',
                       style: titleStyle,
                     ),
@@ -287,7 +287,7 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5.0,
                             ),
                             // Date Sort Label and Button
@@ -340,10 +340,11 @@ class _ListNotesState extends State<ListNotes> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onInverseSurface,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
                                 )
-                              : BoxDecoration(
+                              : const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
@@ -439,14 +440,14 @@ class TrailingButtons extends StatelessWidget {
             noteFilePath: // Get note file path
                 '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
             notesMap: _foundNotes,
-            backPage: ListNotesScreen(),
+            backPage: const ListNotesScreen(),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         // Open note icon
-        Icon(
+        const Icon(
           Icons.arrow_forward,
         ),
       ],

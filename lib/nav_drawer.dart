@@ -63,7 +63,7 @@ class NavDrawer extends StatelessWidget {
     }
 
     return Drawer(
-      shape: Border(),
+      shape: const Border(),
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         children: <Widget>[
@@ -112,7 +112,7 @@ class NavDrawer extends StatelessWidget {
                     showDate: true,
                     // User specified text style - see branch on version_widget package
                     // fontSize: 12.0,
-                    userTextStyle: TextStyle(
+                    userTextStyle: const TextStyle(
                       color: backgroundWhite,
                       fontSize: 12,
                     ),
@@ -133,7 +133,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppHomePage(
+                        builder: (context) => const AppHomePage(
                           title: topBarTitle,
                           childPage: NewNote(),
                         ),
@@ -150,7 +150,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppHomePage(
+                        builder: (context) => const AppHomePage(
                           title: topBarTitle,
                           childPage: ListNotesScreen(),
                         ),
@@ -170,7 +170,7 @@ class NavDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppHomePage(
+                        builder: (context) => const AppHomePage(
                           title: topBarTitle,
                           childPage: SharedNotesScreen(),
                           // childPage: SharedNotes(),
@@ -247,7 +247,7 @@ Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
             text: TextSpan(
               style: Theme.of(context).textTheme.bodyMedium,
               children: [
-                TextSpan(text: 'An '),
+                const TextSpan(text: 'An '),
                 TextSpan(
                   text: 'ANU Software Innovation Institute',
                   style: const TextStyle(color: Colors.blue),

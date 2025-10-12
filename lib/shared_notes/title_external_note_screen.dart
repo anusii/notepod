@@ -52,7 +52,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
 
     _asyncDataFetch = getSharedNoteContent(
       context,
-      SharedNotesScreen(),
+      const SharedNotesScreen(),
       _sharedNoteData,
     );
     super.initState();
@@ -65,7 +65,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     _sharedNoteData = widget.sharedNoteData;
     _asyncDataFetch = getSharedNoteContent(
       context,
-      SharedNotesScreen(),
+      const SharedNotesScreen(),
       _sharedNoteData,
     );
   }
@@ -88,7 +88,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case (ConnectionState.waiting || ConnectionState.active):
-            return CircularProgressIndicator(
+            return const CircularProgressIndicator(
               value: null,
               strokeWidth: 7.0,
             );
@@ -101,14 +101,14 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
               );
             } else if (snapshot.hasError) {
               debugPrint('Error: ${snapshot.error.toString()}');
-              return Text('Error: no data');
+              return const Text('Error: no data');
             } else {
-              return Text('Error: no data');
+              return const Text('Error: no data');
             }
 
           case ConnectionState.none:
             debugPrint('Error: No future set in title call.}');
-            return Text('Error: Title not loaded, please reload');
+            return const Text('Error: Title not loaded, please reload');
         }
       },
     );

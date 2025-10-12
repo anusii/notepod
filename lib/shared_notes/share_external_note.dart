@@ -96,7 +96,7 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10),
-                  NoteBackButton(childPage: SharedNotesScreen()),
+                  const NoteBackButton(childPage: SharedNotesScreen()),
                   const SizedBox(height: 10),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,

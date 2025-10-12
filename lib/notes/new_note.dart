@@ -128,7 +128,7 @@ class NewNoteState extends State<NewNote> {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: ListNotesScreen(),
+      childPage: const ListNotesScreen(),
       data: data,
       shared: false,
     );
