@@ -25,14 +25,16 @@
 
 library;
 
+import 'package:notepod/models/own_note.dart';
+
 /// Data model for result of get notes list future call
 
-class NotesCallResult {
-  final Map<String, dynamic>? notesMap;
+class OwnNotesCallResult {
+  final List<OwnNote>? notes;
   final List<String>? badFiles;
 
-  const NotesCallResult({
-    this.notesMap = const <String, dynamic>{},
+  const OwnNotesCallResult({
+    this.notes = const [],
     this.badFiles = const [],
   });
 }
