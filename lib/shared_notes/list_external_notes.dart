@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// A stateful widget to list external notes.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -25,34 +25,37 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/home.dart';
+import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/title_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
-class ListSharedNotes extends StatefulWidget {
-  final Map sharedNotesMap;
+/// A [stateful] widget to list externally owned notes shared to the
+/// user.
+///
+/// Arguments:
+/// - [notes] - The externally owned notes shared to the user.
 
-  const ListSharedNotes({
+class ListExternalNotes extends StatefulWidget {
+  final List<ExternalNote> notes;
+
+  const ListExternalNotes({
     super.key,
-    required this.sharedNotesMap,
+    required this.notes,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _ListSharedNotesState createState() => _ListSharedNotesState();
+  _ListExternalNotesState createState() => _ListExternalNotesState();
 }
 
-class _ListSharedNotesState extends State<ListSharedNotes> {
+class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Filtered map of notes.
-  Map _foundNotes = {};
-
-  /// Filtered note url lists which are the keys of the map of notes.
-  List sharedNotesUrlList = [];
+  List<FoundExternalNote> _foundNotes = [];
 
   /// Initial sort by note filename order.
   bool _sortFilenameAscending = true;
@@ -80,9 +83,10 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+
     // By default _foundNotes is the full list of notes
-    _foundNotes = widget.sharedNotesMap;
-    sharedNotesUrlList = _foundNotes.keys.toList();
+    _foundNotes = widget.notes.toListFoundExternalNote();
+
     // Initial sort by filename alphabetically
     _sortByFilename(_sortFilenameAscending);
   }
@@ -97,14 +101,14 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
   void _sortByFilename(bool ascending) {
     setState(() {
       _sortFilenameAscending = ascending;
-      sharedNotesUrlList.sort(
+      _foundNotes.sort(
         (a, b) => _sortFilenameAscending
-            ? _foundNotes[a][noteFileNamePred]
+            ? a.noteFileName
                 .toLowerCase()
-                .compareTo(_foundNotes[b][noteFileNamePred].toLowerCase())
-            : _foundNotes[b][noteFileNamePred]
+                .compareTo(b.noteFileName.toLowerCase())
+            : b.noteFileName
                 .toLowerCase()
-                .compareTo(_foundNotes[a][noteFileNamePred].toLowerCase()),
+                .compareTo(a.noteFileName.toLowerCase()),
       );
     });
   }
@@ -113,14 +117,11 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
   void _sortByOwner(bool ascending) {
     setState(() {
       _sortOwnerAscending = ascending;
-      sharedNotesUrlList.sort(
+
+      _foundNotes.sort(
         (a, b) => _sortOwnerAscending
-            ? _foundNotes[a][noteOwnerPred]
-                .toLowerCase()
-                .compareTo(_foundNotes[b][noteOwnerPred].toLowerCase())
-            : _foundNotes[b][noteOwnerPred]
-                .toLowerCase()
-                .compareTo(_foundNotes[a][noteOwnerPred].toLowerCase()),
+            ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
+            : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
       );
     });
   }
@@ -129,49 +130,47 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
   void _sortByPermission(bool ascending) {
     setState(() {
       _sortPermissionAscending = ascending;
-      sharedNotesUrlList.sort(
+
+      _foundNotes.sort(
         (a, b) => _sortPermissionAscending
-            ? _foundNotes[a][permissionListPred]
+            ? a.permissionList
                 .toLowerCase()
-                .compareTo(_foundNotes[b][permissionListPred].toLowerCase())
-            : _foundNotes[b][permissionListPred]
+                .compareTo(b.permissionList.toLowerCase())
+            : b.permissionList
                 .toLowerCase()
-                .compareTo(_foundNotes[a][permissionListPred].toLowerCase()),
+                .compareTo(a.permissionList.toLowerCase()),
       );
     });
   }
 
   /// Search notes
   void _searchNotes(String enteredKeyword) {
-    Map results = {};
+    List<FoundExternalNote> results = [];
     if (enteredKeyword.isEmpty) {
       // Display all notes if no search string
-      results = widget.sharedNotesMap;
+      results = widget.notes.toListFoundExternalNote();
     } else {
       // Search for matches in filename, owner, permission granter or permission list
-      results = Map.fromEntries(
-        widget.sharedNotesMap.entries.where(
-          (note) =>
-              (note.value as Map)[noteFileNamePred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[noteOwnerPred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[permissionGranterPred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[permissionListPred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()),
-        ),
-      );
+      results = widget.notes.toListFoundExternalNote().where((note) {
+        return note.noteFileName
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.noteOwner
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.permissionGranter
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.permissionList
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase());
+      }).toList();
     }
 
     // Refresh the UI
     setState(() {
       _foundNotes = results;
-      sharedNotesUrlList = _foundNotes.keys.toList();
+
       // Sort results by filename
       _sortByFilename(_sortFilenameAscending);
     });
@@ -344,11 +343,10 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                           ),
                           // Define width to avoid consuming full width
                           title: TitleExternalNote(
-                            sharedNoteData:
-                                _foundNotes[sharedNotesUrlList[index]],
+                            note: _foundNotes[index],
                           ),
                           subtitle: Text(
-                            'Filename: ${_foundNotes[sharedNotesUrlList[index]][noteFileNamePred]} \nOwner: ${getId(_foundNotes[sharedNotesUrlList[index]][noteOwnerPred])} \nShared by: ${getId(_foundNotes[sharedNotesUrlList[index]][permissionGranterPred])} \nPermissions: ${_foundNotes[sharedNotesUrlList[index]][permissionListPred]}',
+                            'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter)} \nPermissions: ${_foundNotes[index].permissionList}',
                           ),
 
                           // Define width to avoid consuming full width
@@ -356,24 +354,23 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                             height: 60,
                             width: 120,
                             child: SharedTrailingButtons(
-                              sharedNoteData:
-                                  _foundNotes[sharedNotesUrlList[index]],
+                              note: _foundNotes[index],
                             ),
                           ),
 
                           onTap: () {
                             // Open note if read in permissions
-                            String access =
-                                _foundNotes[sharedNotesUrlList[index]]
-                                    [permissionListPred];
+                            // String access =
+                            //     _foundNotes[sharedNotesUrlList[index]]
+                            //         [permissionListPred];
+                            String access = _foundNotes[index].permissionList;
                             if (access.contains('read')) {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => AppHomePage(
                                     childPage: ViewSharedNoteScreen(
-                                      sharedNoteData: _foundNotes[
-                                          sharedNotesUrlList[index]],
+                                      note: _foundNotes[index],
                                     ),
                                   ),
                                 ),
@@ -386,8 +383,7 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
                                 MaterialPageRoute(
                                   builder: (context) => AppHomePage(
                                     childPage: NonReadableNote(
-                                      noteMetaData: _foundNotes[
-                                          sharedNotesUrlList[index]],
+                                      note: _foundNotes[index],
                                     ),
                                   ),
                                 ),
@@ -411,22 +407,22 @@ class _ListSharedNotesState extends State<ListSharedNotes> {
 }
 
 class TitleExternalNote extends StatelessWidget {
-  final Map _sharedNoteData;
+  final FoundExternalNote _note;
 
   const TitleExternalNote({
     super.key,
-    required sharedNoteData,
-  }) : _sharedNoteData = sharedNoteData;
+    required note,
+  }) : _note = note;
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _sharedNoteData[permissionListPred].split(',');
+    List accessList = _note.permissionList.split(',');
 
     return Row(
       children: [
         if (accessList.contains('read')) ...[
           TitleExternalNoteScreen(
-            sharedNoteData: _sharedNoteData,
+            note: _note,
           ),
         ] else ...[
           Text('Title access requires read permission'),
@@ -439,14 +435,14 @@ class TitleExternalNote extends StatelessWidget {
 class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({
     super.key,
-    required Map sharedNoteData,
-  }) : _sharedNoteData = sharedNoteData;
+    required FoundExternalNote note,
+  }) : _note = note;
 
-  final Map _sharedNoteData;
+  final FoundExternalNote _note;
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _sharedNoteData[permissionListPred].split(',');
+    List accessList = _note.permissionList.split(',');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -456,7 +452,7 @@ class SharedTrailingButtons extends StatelessWidget {
           SimpleActionButton(
             icon: const Icon(Icons.share),
             childPage: ShareExternalNote(
-              noteMetaData: _sharedNoteData,
+              note: _note,
             ),
           ),
           const SizedBox(

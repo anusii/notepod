@@ -1,4 +1,5 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// A stateful widget for retrieving content to view an externally owned
+/// note.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -25,18 +26,25 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 
+/// A stateful widget for retrieving content to view an externally owned
+/// note.
+///
+/// Arguments:
+/// - [note] - The externally owned note to view.
+
 class ViewSharedNoteScreen extends StatefulWidget {
   const ViewSharedNoteScreen({
     super.key,
-    required this.sharedNoteData,
+    required this.note,
   });
 
-  final Map sharedNoteData;
+  final FoundExternalNote note;
 
   @override
   State<ViewSharedNoteScreen> createState() => _ViewSharedNoteScreenState();
@@ -46,26 +54,18 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static Future? _asyncDataFetch;
+  late final FoundExternalNote _note;
 
   @override
   void initState() {
-    Map sharedNoteData = widget.sharedNoteData;
+    _note = widget.note;
 
     _asyncDataFetch = getSharedNoteContent(
-      context,
-      SharedNotesScreen(),
-      sharedNoteData,
+      context: context,
+      childPage: ListExternalNotesScreen(),
+      fullNote: _note,
     );
     super.initState();
-  }
-
-  Widget _loadedScreen(Map sharedNoteContent) {
-    return ViewSharedNote(
-      fullNoteData: {
-        'sharedNoteInfo': widget.sharedNoteData,
-        'sharedNoteContent': sharedNoteContent,
-      },
-    );
   }
 
   @override
@@ -87,12 +87,10 @@ class _ViewSharedNoteScreenState extends State<ViewSharedNoteScreen> {
                     context,
                     'Error: data loading failed',
                   );
-                } else if (snapshot.hasData &&
-                    snapshot.data != null &&
-                    snapshot.data.length > 0) {
+                } else if (snapshot.hasData && snapshot.data != null) {
                   // Notes found
-                  return _loadedScreen(
-                    snapshot.data! as Map,
+                  return ViewSharedNote(
+                    note: snapshot.data as FoundExternalNote,
                   );
                 } else if (snapshot.data == null ||
                     snapshot.data.toString() == 'null' ||

@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for editing an externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 14:43:29 +1000 Graham Williams>
 ///
@@ -30,21 +30,23 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit externally owned notes shared to
 /// the user.
-/// Parameters:
-///   [fullNoteData] - is the data of that note, with information
-///                    about the owner, person who shared the note
-///                    to the user, and the user's access rights
-///                    to the note.
-class EditSharedNote extends StatefulWidget {
-  final Map fullNoteData;
+///
+/// Arguments:
+/// - [note] - the externally owned note.
 
-  const EditSharedNote({super.key, required this.fullNoteData});
+class EditSharedNote extends StatefulWidget {
+  final FoundExternalNote note;
+
+  const EditSharedNote({
+    super.key,
+    required this.note,
+  });
 
   @override
   EditSharedNoteState createState() => EditSharedNoteState();
@@ -64,14 +66,18 @@ class EditSharedNoteState extends State<EditSharedNote> {
   /// Focus node for note content text field.
   late final FocusNode _focusContent;
 
+  /// Edited note content
   String data = '';
+
+  /// Note
+  late final FoundExternalNote _note;
 
   @override
   void initState() {
     super.initState();
+    _note = widget.note;
     _textController = TextEditingController();
-    _textController!.text =
-        widget.fullNoteData['sharedNoteContent'][noteContentPred];
+    _textController!.text = _note.content!.noteContent;
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _scrollController = ScrollController();
@@ -137,12 +143,13 @@ class EditSharedNoteState extends State<EditSharedNote> {
       focusTitle: _focusTitle,
       focusContent: _focusContent,
       childPage: ViewSharedNoteScreen(
-        sharedNoteData: widget.fullNoteData['sharedNoteInfo'],
+        note: _note,
       ),
       data: data,
-      prevNoteData: widget.fullNoteData,
-      shared: true,
-      noteInfo: widget.fullNoteData['sharedNoteInfo'],
+      prevExternalNote: _note,
+      noteTitle: _note.content!.noteTitle,
+      isExternal: true,
+      isExisting: true,
     );
   }
 }

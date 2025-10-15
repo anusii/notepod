@@ -1,4 +1,4 @@
-/// Individual's PODs app for diabetes care in Yarrabah.
+/// A stateful widget for getting external note content to display title.
 ///
 // Time-stamp: <Tuesday 2025-09-23 05:30:50 +1000 Graham Williams>
 ///
@@ -26,16 +26,22 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+
+/// A [stateful] widget for displaying the title of an externally owned
+/// note.
+///
+/// Arguments:
+/// - [note] - The externally owned note.
 
 class TitleExternalNoteScreen extends StatefulWidget {
   const TitleExternalNoteScreen({
     super.key,
-    required this.sharedNoteData,
+    required this.note,
   });
 
-  final Map sharedNoteData;
+  final FoundExternalNote note;
 
   @override
   State<TitleExternalNoteScreen> createState() =>
@@ -44,16 +50,16 @@ class TitleExternalNoteScreen extends StatefulWidget {
 
 class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
   static Future? _asyncDataFetch;
-  Map _sharedNoteData = {};
+  late final FoundExternalNote _note;
 
   @override
   void initState() {
-    _sharedNoteData = widget.sharedNoteData;
+    _note = widget.note;
 
     _asyncDataFetch = getSharedNoteContent(
-      context,
-      SharedNotesScreen(),
-      _sharedNoteData,
+      context: context,
+      childPage: ListExternalNotesScreen(),
+      fullNote: _note,
     );
     super.initState();
   }
@@ -62,23 +68,17 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
   void didUpdateWidget(covariant TitleExternalNoteScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Fetch data when the widget configuration changes (eg new data).
-    _sharedNoteData = widget.sharedNoteData;
+    _note = widget.note;
     _asyncDataFetch = getSharedNoteContent(
-      context,
-      SharedNotesScreen(),
-      _sharedNoteData,
+      context: context,
+      childPage: ListExternalNotesScreen(),
+      fullNote: _note,
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Widget _loadedScreen(Map sharedNoteContent) {
-    return Text(
-      sharedNoteContent[noteTitlePred],
-    );
   }
 
   @override
@@ -93,11 +93,10 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
               strokeWidth: 7.0,
             );
           case ConnectionState.done:
-            if (snapshot.hasData &&
-                snapshot.data != null &&
-                snapshot.data.length > 0) {
-              return _loadedScreen(
-                snapshot.data,
+            if (snapshot.hasData && snapshot.data != null) {
+              // Data found
+              return Text(
+                (snapshot.data as FoundExternalNote).content!.noteTitle,
               );
             } else if (snapshot.hasError) {
               debugPrint('Error: ${snapshot.error.toString()}');

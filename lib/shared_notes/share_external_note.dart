@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for sharing an externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 10:19:41 +1000 Graham Williams>
 ///
@@ -29,19 +29,21 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
+/// A [stateful] widget for sharing an externally owned note shared to the user, to share the note with another user.
+///
+/// Arguments:
+/// - [note] - The externally owned note shared to the user.
+
 class ShareExternalNote extends StatefulWidget {
-  final Map? fullNoteData;
-  final Map? noteMetaData;
+  final ExternalNote note;
 
   const ShareExternalNote({
     super.key,
-    // required this.fullNoteData,
-    this.fullNoteData,
-    this.noteMetaData,
+    required this.note,
   });
 
   @override
@@ -52,10 +54,14 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Note
+  late final ExternalNote _note;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _note = widget.note;
   }
 
   @override
@@ -66,23 +72,6 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
 
   @override
   Widget build(BuildContext context) {
-    // String notePermission;
-    Map noteMetaData;
-    ShareExternalNote child;
-    // Access including Read: fullData supplied
-    if (widget.fullNoteData != null) {
-      noteMetaData = widget.fullNoteData?['sharedNoteInfo'];
-      child = ShareExternalNote(
-        fullNoteData: widget.fullNoteData,
-      );
-      // Access not including Read: only metadata supplied
-    } else {
-      noteMetaData = widget.noteMetaData as Map<dynamic, dynamic>;
-      child = ShareExternalNote(
-        noteMetaData: widget.noteMetaData,
-      );
-    }
-
     return Scrollbar(
       thumbVisibility: true,
       controller: _scrollController,
@@ -96,16 +85,16 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10),
-                  NoteBackButton(childPage: SharedNotesScreen()),
+                  NoteBackButton(childPage: ListExternalNotesScreen()),
                   const SizedBox(height: 10),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: GrantPermissionUi(
                       showAppBar: false,
-                      fileName: noteMetaData[noteUrlPred],
+                      fileName: _note.noteUrl,
                       isExternalRes: true,
-                      externalWebId: noteMetaData[noteOwnerPred],
-                      child: child,
+                      externalWebId: _note.noteOwner,
+                      child: ShareExternalNote(note: _note),
                     ),
                   ),
                 ],

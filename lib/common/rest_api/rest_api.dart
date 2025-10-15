@@ -178,10 +178,6 @@ Future<List<ExternalNote>?> getExtNotes({
       for (final sharedFileUrl in sharedNotesLogMap.keys) {
         final sharedFileDetails = sharedNotesLogMap[sharedFileUrl];
 
-        debugPrint('');
-        debugPrint('extFile: $sharedFileUrl');
-        debugPrint('details: ${sharedFileDetails.toString()}');
-
         // Extract details of external files with permissions
         // granted to the user in the latest log entry by
         // selecting for [filesWithGrantAccess] = true

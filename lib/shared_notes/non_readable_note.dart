@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for unreadable externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 10:19:02 +1000 Graham Williams>
 ///
@@ -29,20 +29,26 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
 
+/// A [stateful] widget for displaying a message when the user tries to view
+/// an externally owned widget shared to the user.
+///
+/// Arguments:
+/// - [note] - The externally owned note shared to the user.
+
 class NonReadableNote extends StatefulWidget {
-  final Map noteMetaData;
+  final ExternalNote note;
 
   const NonReadableNote({
     super.key,
-    required this.noteMetaData,
+    required this.note,
   });
 
   @override
@@ -54,15 +60,31 @@ class _NonReadableNoteState extends State<NonReadableNote> {
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
+  /// Note
+  late final ExternalNote _note;
+
+  @override
+  void initState() {
+    super.initState();
+    _note = widget.note;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map noteMetaData = widget.noteMetaData;
-
     return Column(
       children: <Widget>[
         // Display note metadata - show sharing and path info but not dates (as requires noteContent)
-        NoteDisplayMetadata(
-          noteInfo: noteMetaData,
+        DisplayNoteMetadata(
+          noteOwner: _note.noteOwner,
+          permissionGranter: _note.permissionGranter,
+          permissionList: _note.permissionList,
+          noteFileName: _note.noteFileName,
+          noteUrl: _note.noteUrl,
           showSharing: true,
           showPathInfo: true,
         ),
@@ -84,13 +106,13 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // Share button
-                  if (noteMetaData[permissionListPred].contains('control')) ...[
+                  if (_note.permissionList.contains('control')) ...[
                     NoteActionButton(
                       label: ButtonLabel.share,
                       icon: const Icon(Icons.share),
                       backgroundColor: ButtonBackgroundColor.share,
                       childPage: ShareExternalNote(
-                        noteMetaData: noteMetaData,
+                        note: _note,
                       ),
                       isNarrow: isNarrow,
                     ),
@@ -111,7 +133,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                     label: ButtonLabel.back,
                     icon: const Icon(Icons.keyboard_backspace),
                     backgroundColor: ButtonBackgroundColor.back,
-                    childPage: SharedNotesScreen(),
+                    childPage: ListExternalNotesScreen(),
                     isNarrow: isNarrow,
                   ),
                 ],
