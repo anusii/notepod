@@ -25,31 +25,31 @@
 
 library;
 
+import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
 
-final String filenamePred = 'filename';
 final String contentPred = 'content';
 
 /// Data model for user's note
 
 class OwnNote {
-  final String filename;
+  final String noteFileName;
   final Note content;
 
   const OwnNote({
-    required this.filename,
+    required this.noteFileName,
     required this.content,
   });
 
   factory OwnNote.fromJson(Map<String, dynamic> json) {
     return OwnNote(
-      filename: json[filenamePred],
+      noteFileName: json[noteFileNamePred],
       content: json[contentPred],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        filenamePred: filename,
+        noteFileNamePred: noteFileName,
         contentPred: content,
       };
 
@@ -57,11 +57,11 @@ class OwnNote {
   /// updated copy of another instance
 
   OwnNote copyWith({
-    String? filename,
+    String? noteFileName,
     Note? content,
   }) {
     return OwnNote(
-      filename: filename ?? this.filename,
+      noteFileName: noteFileName ?? this.noteFileName,
       content: content ?? this.content,
     );
   }
@@ -74,7 +74,7 @@ class FoundOwnNote extends OwnNote {
   bool isSelected;
 
   FoundOwnNote({
-    required super.filename,
+    required super.noteFileName,
     required super.content,
     this.isSelected = false,
   });
@@ -84,12 +84,12 @@ class FoundOwnNote extends OwnNote {
 
   @override
   FoundOwnNote copyWith({
-    String? filename,
+    String? noteFileName,
     Note? content,
     bool? isSelected,
   }) {
     return FoundOwnNote(
-      filename: filename ?? this.filename,
+      noteFileName: noteFileName ?? this.noteFileName,
       content: content ?? this.content,
       isSelected: isSelected ?? this.isSelected,
     );
@@ -107,7 +107,7 @@ extension ListOwnNoteExtension on List<OwnNote> {
     Map<String, Map<String, dynamic>> mapOfNoteMaps = {};
 
     for (var note in this) {
-      String key = note.filename;
+      String key = note.noteFileName;
       Map<String, dynamic> value = note.content.toJson();
 
       // Add note to map with filename as key
@@ -122,7 +122,7 @@ extension ListOwnNoteExtension on List<OwnNote> {
   List<FoundOwnNote> toListFoundOwnNote() {
     List<FoundOwnNote> listFoundNotes = map((item) {
       return FoundOwnNote(
-        filename: item.filename,
+        noteFileName: item.noteFileName,
         content: item.content,
       );
     }).toList();
@@ -141,7 +141,10 @@ List<OwnNote> mapOfMapsToListOwnNote(
 ) {
   final List<OwnNote> listOfNoteMaps;
   listOfNoteMaps = mapOfNoteMaps.entries.map((entry) {
-    return OwnNote(filename: entry.key, content: Note.fromJson(entry.value));
+    return OwnNote(
+      noteFileName: entry.key,
+      content: Note.fromJson(entry.value),
+    );
   }).toList();
 
   return listOfNoteMaps;

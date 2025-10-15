@@ -30,7 +30,6 @@ import 'package:notepod/models/note.dart';
 
 /// Data model for externally owned note shared with the user
 class ExternalNote {
-  final String filename;
   Note? content;
   final String sharedTime;
   final String noteUrl;
@@ -42,7 +41,6 @@ class ExternalNote {
   final String permissionList;
 
   ExternalNote({
-    required this.filename,
     this.content,
     required this.sharedTime,
     required this.noteUrl,
@@ -56,7 +54,6 @@ class ExternalNote {
 
   factory ExternalNote.fromJson(Map<String, dynamic> json) {
     return ExternalNote(
-      filename: json['filename'],
       content: json['content'],
       sharedTime: json[sharedTimePred],
       noteUrl: json[noteUrlPred],
@@ -70,7 +67,6 @@ class ExternalNote {
   }
 
   Map<String, dynamic> toJson() => {
-        'filename': filename,
         'content': content,
         sharedTimePred: sharedTime,
         noteUrlPred: noteUrl,
@@ -86,7 +82,6 @@ class ExternalNote {
   /// updated copy of another instance
 
   ExternalNote copyWith({
-    String? filename,
     Note? content,
     String? sharedTime,
     String? noteUrl,
@@ -98,7 +93,6 @@ class ExternalNote {
     String? permissionList,
   }) {
     return ExternalNote(
-      filename: filename ?? this.filename,
       content: content ?? this.content,
       sharedTime: sharedTime ?? this.sharedTime,
       noteUrl: noteUrl ?? this.noteUrl,
@@ -120,7 +114,6 @@ extension ListOwnNoteExtension on List<ExternalNote> {
   List<FoundExternalNote> toListFoundExternalNote() {
     List<FoundExternalNote> listFoundNotes = map((item) {
       return FoundExternalNote(
-        filename: item.filename,
         content: item.content,
         sharedTime: item.sharedTime,
         noteUrl: item.noteUrl,
@@ -144,7 +137,6 @@ class FoundExternalNote extends ExternalNote {
   bool isSelected;
 
   FoundExternalNote({
-    required super.filename,
     super.content,
     required super.sharedTime,
     required super.noteUrl,
@@ -162,7 +154,6 @@ class FoundExternalNote extends ExternalNote {
 
   @override
   FoundExternalNote copyWith({
-    String? filename,
     Note? content,
     String? sharedTime,
     String? noteUrl,
@@ -175,7 +166,6 @@ class FoundExternalNote extends ExternalNote {
     bool? isSelected,
   }) {
     return FoundExternalNote(
-      filename: filename ?? this.filename,
       content: content ?? this.content,
       sharedTime: sharedTime ?? this.sharedTime,
       noteUrl: noteUrl ?? this.noteUrl,
