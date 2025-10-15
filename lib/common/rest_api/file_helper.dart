@@ -349,7 +349,7 @@ class NoteFileHelper with PodOperationsMixin {
                 noteFileName: prevOwnNote.noteFileName,
                 data: updatedContent,
                 childPage: ViewNote(
-                  noteData: updatedOwnNote,
+                  note: updatedOwnNote,
                 ),
               );
             } on Exception catch (e) {
