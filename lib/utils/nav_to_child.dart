@@ -30,13 +30,16 @@ import 'package:flutter/material.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/home.dart';
 
-/// Navigate to page.
+/// Navigate to child page widget wrapped in AppHomePage()with app top bar.
 ///
 /// Arguments:
 /// - [context] - the build context.
 /// - [childPage] - child page to navigate to.
 
-Future<dynamic> navToChildPage(BuildContext context, Widget childPage) async {
+Future<dynamic> navToChildPage({
+  required BuildContext context,
+  required Widget childPage,
+}) async {
   return Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(

@@ -122,12 +122,12 @@ class NoteBackButton extends StatelessWidget {
                 );
               } else {
                 debugPrint('No unsaved changes found');
-                navToChildPage(context, childPage);
+                navToChildPage(context: context, childPage: childPage);
               }
             }
           }
         } else {
-          navToChildPage(context, childPage);
+          navToChildPage(context: context, childPage: childPage);
         }
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(

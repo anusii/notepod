@@ -34,12 +34,12 @@ import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
@@ -130,16 +130,9 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.note_add_outlined),
                   title: const Text('New Note'),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: NewNote(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: NewNote(),
                     );
                   },
                 ),
@@ -147,16 +140,9 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.view_list),
                   title: const Text('My Notes'),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: ListNotesScreen(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: ListNotesScreen(),
                     );
                   },
                 ),
@@ -167,17 +153,9 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.groups),
                   title: const Text(sharedNotesTitle),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          title: topBarTitle,
-                          childPage: ListExternalNotesScreen(),
-                          // childPage: SharedNotes(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: ListExternalNotesScreen(),
                     );
                   },
                 ),

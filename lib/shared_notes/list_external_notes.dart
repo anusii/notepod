@@ -26,12 +26,12 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/title_external_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note_screen.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [stateful] widget to list externally owned notes shared to the
@@ -365,30 +365,18 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             //         [permissionListPred];
                             String access = _foundNotes[index].permissionList;
                             if (access.contains('read')) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                    childPage: ViewSharedNoteScreen(
-                                      note: _foundNotes[index],
-                                    ),
-                                  ),
+                              navToChildPage(
+                                context: context,
+                                childPage: ViewSharedNoteScreen(
+                                  note: _foundNotes[index],
                                 ),
-                                (Route<dynamic> route) =>
-                                    false, // This predicate ensures all previous routes are removed
                               );
                             } else {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                    childPage: NonReadableNote(
-                                      note: _foundNotes[index],
-                                    ),
-                                  ),
+                              navToChildPage(
+                                context: context,
+                                childPage: NonReadableNote(
+                                  note: _foundNotes[index],
                                 ),
-                                (Route<dynamic> route) =>
-                                    false, // This predicate ensures all previous routes are removed
                               );
                             }
                           },

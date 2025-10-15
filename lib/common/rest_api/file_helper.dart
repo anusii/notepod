@@ -482,7 +482,7 @@ class NoteFileHelper with PodOperationsMixin {
         Navigator.of(context, rootNavigator: true)
             .pop(); // Dismiss the saving note dialog
 
-        navToChildPage(context, childPage);
+        navToChildPage(context: context, childPage: childPage);
       } else {
         // Show SolidFunctionCallStatus after writePod() if not success
         debugPrint(

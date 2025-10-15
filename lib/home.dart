@@ -33,6 +33,7 @@ import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -86,16 +87,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.add_circle,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    title: topBarTitle,
-                    childPage: NewNote(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: NewNote(),
               );
             },
           ),
@@ -106,16 +100,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.view_list,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    title: topBarTitle,
-                    childPage: ListNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: ListNotesScreen(),
               );
             },
           ),
@@ -132,16 +119,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.groups,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    title: topBarTitle,
-                    childPage: ListExternalNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: ListExternalNotesScreen(),
               );
             },
           ),

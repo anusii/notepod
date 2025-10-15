@@ -113,7 +113,7 @@ class SaveDialog extends StatelessWidget {
         TextButton(
           child: const Text('Don\'t Save'),
           onPressed: () {
-            navToChildPage(context, childPage);
+            navToChildPage(context: context, childPage: childPage);
           },
         ),
         // Cancel button

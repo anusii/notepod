@@ -26,12 +26,12 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
@@ -370,18 +370,11 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                             ),
                             onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                    title: topBarTitle,
-                                    childPage: ViewNote(
-                                      note: _foundNotes[index],
-                                    ),
-                                  ),
+                              navToChildPage(
+                                context: context,
+                                childPage: ViewNote(
+                                  note: _foundNotes[index],
                                 ),
-                                (Route<dynamic> route) =>
-                                    false, // This predicate ensures all previous routes are removed
                               );
                             },
                           ),

@@ -94,7 +94,7 @@ class NoteListDelButton extends StatelessWidget {
                       Navigator.of(context, rootNavigator: true)
                           .pop(); // Dismiss the deleting note dialog
 
-                      navToChildPage(context, childPage);
+                      navToChildPage(context: context, childPage: childPage);
                     }
                   },
                   child: const Text(ButtonLabel.yes),
