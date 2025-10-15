@@ -32,7 +32,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -137,7 +137,7 @@ class AppHomePageState extends State<AppHomePage> {
                 MaterialPageRoute(
                   builder: (context) => AppHomePage(
                     title: topBarTitle,
-                    childPage: SharedNotesScreen(),
+                    childPage: ListExternalNotesScreen(),
                   ),
                 ),
                 (Route<dynamic> route) =>

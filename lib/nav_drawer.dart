@@ -38,7 +38,7 @@ import 'package:notepod/home.dart';
 import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/utils/misc.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -172,7 +172,7 @@ class NavDrawer extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => AppHomePage(
                           title: topBarTitle,
-                          childPage: SharedNotesScreen(),
+                          childPage: ListExternalNotesScreen(),
                           // childPage: SharedNotes(),
                         ),
                       ),
