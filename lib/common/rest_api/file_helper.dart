@@ -77,15 +77,15 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// Arguments:
   /// - [context] - The build context.
-  /// - [childpage] - The child widget to return to.
+  /// - [childPage] - The child widget to return to.
   ///
   /// Returns:
   /// - map of external files with filename as key and details of permissions.
 
-  Future<Map<dynamic, dynamic>> scanPermLogFile(
-    BuildContext context,
-    Widget childPage,
-  ) async {
+  Future<Map<dynamic, dynamic>> scanPermLogFile({
+    required BuildContext context,
+    required Widget childPage,
+  }) async {
     try {
       // SharedResources() parses log ttl to map
       debugPrint('');
@@ -113,16 +113,16 @@ class NoteFileHelper with PodOperationsMixin {
   /// entry for note file.
   ///
   /// Arguments:
-  /// - [sharedFileDetails] - Map of details of external
-  ///                         note file shared to user.
-  /// - [sharedFileUrl] - URL of external file shared to user.
+  /// - [sharingMetadata] - Map of sharing metadata of the external
+  /// note file shared to user.
+  /// - [fileUrl] - URL of external file shared to user.
   ///
   /// Returns: parsed map of details of external note file.
 
-  static ExternalNote? extFileDetailsFromLog(
-    Map sharedFileDetails,
-    String sharedFileUrl,
-  ) {
+  static ExternalNote? extFileDetailsFromLog({
+    required Map sharingMetadata,
+    required String fileUrl,
+  }) {
     try {
       String? sharedTime;
       String? noteUrl;
@@ -135,10 +135,10 @@ class NoteFileHelper with PodOperationsMixin {
 
       // Extract external note details information
 
-      noteFileName = sharedFileUrl.split('/').last;
+      noteFileName = fileUrl.split('/').last;
       // debugPrint('noteFileName: $noteFileName');
 
-      for (final entry in sharedFileDetails.entries) {
+      for (final entry in sharingMetadata.entries) {
         final predicate = entry.key.toString();
         final value = entry.value.toString();
         // debugPrint('predicate: $predicate, value: $value');
@@ -187,13 +187,13 @@ class NoteFileHelper with PodOperationsMixin {
   /// Arguments:
   /// - [context] - The build context.
   /// - [filename] - The note filename. For external notes this should be the note Url.
-  /// - [isExternal] - Boolean describing whether the note is an external note.
+  /// - [isExternal] - Boolean describing whether the note is an external note. (Default: false).
 
-  Future<void> deleteNote(
-    BuildContext context,
-    String filename,
-    bool isExternal,
-  ) async {
+  Future<void> deleteNote({
+    required BuildContext context,
+    required String filename,
+    bool isExternal = false,
+  }) async {
     try {
       // Delete file
       if (isExternal) {
@@ -443,8 +443,8 @@ class NoteFileHelper with PodOperationsMixin {
       // at the moment rdflib cannot parse multiline text with
       // # (hash) values in them.
       String encNoteText = encryptVal(
-        data.noteContent,
-        data.createdDateTime,
+        plainText: data.noteContent,
+        encKey: data.createdDateTime,
       );
 
       // Create TTL body for note

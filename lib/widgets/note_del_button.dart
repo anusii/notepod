@@ -91,8 +91,11 @@ class NoteDelButton extends StatelessWidget {
                 );
 
                 // Delete file
-                await NoteFileHelper()
-                    .deleteNote(context, filename, isExternal);
+                await NoteFileHelper().deleteNote(
+                  context: context,
+                  filename: filename,
+                  isExternal: isExternal,
+                );
 
                 if (context.mounted) {
                   Navigator.of(context, rootNavigator: true)

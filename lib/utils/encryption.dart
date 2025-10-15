@@ -31,19 +31,23 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypter_plus/encrypter_plus.dart';
 
-/// A function for ecrypting a plaintext value
+/// A function for encrypting a plaintext value
 ///
 /// Takes the arguments plaintext value and the encryption key
 /// and returns a string of the encrypted value.
 /// Note: AES encryption is used in this function. For more
 /// details see: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+///
+/// Arguments:
+/// - [plainText] - Plain text string to be encrypted.
+/// - [encKey] - String to use as the encryption key.
 
-String encryptVal(String plaintextStr, String encKey) {
+String encryptVal({required String plainText, required String encKey}) {
   String encKeySha256 =
       sha256.convert(utf8.encode(encKey)).toString().substring(0, 32);
   final keyEncode = Key.fromUtf8(encKeySha256);
   final encrypter = Encrypter(AES(keyEncode, mode: AESMode.cbc));
-  final encryptVal = encrypter.encrypt(plaintextStr, iv: getDummyIv());
+  final encryptVal = encrypter.encrypt(plainText, iv: getDummyIv());
   String encryptValStr = encryptVal.base64.toString();
   return encryptValStr;
 }

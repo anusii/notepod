@@ -148,9 +148,6 @@ Future<OwnNotesCallResult> getNoteList({
 }
 
 /// Get data object of externally owned notes shared with the user.
-
-/// i, the function will only output notes with grant permission
-/// access as the latest log entry.
 ///
 /// Arguments:
 /// - [context] - The build context.
@@ -168,21 +165,21 @@ Future<List<ExternalNote>?> getExtNotes({
     final Map<dynamic, dynamic> sharedNotesLogMap;
 
     if (!context.mounted) return null;
-    sharedNotesLogMap =
-        await NoteFileHelper().scanPermLogFile(context, childPage);
+    sharedNotesLogMap = await NoteFileHelper()
+        .scanPermLogFile(context: context, childPage: childPage);
 
     final List<ExternalNote> notes = [];
     List<String> badFiles = [];
 
     if (sharedNotesLogMap.isNotEmpty) {
-      for (final sharedFileUrl in sharedNotesLogMap.keys) {
-        final sharedFileDetails = sharedNotesLogMap[sharedFileUrl];
+      for (final fileUrl in sharedNotesLogMap.keys) {
+        final sharingMetadata = sharedNotesLogMap[fileUrl];
 
         // Extract details of external files with permissions
         // granted to the user in the latest log entry by
         // selecting for [filesWithGrantAccess] = true
         if (filesWithGrantAccess &&
-            sharedFileDetails[PermissionLogLiteral.type] == 'revoke') {
+            sharingMetadata[PermissionLogLiteral.type] == 'revoke') {
           continue;
         }
 
@@ -191,18 +188,18 @@ Future<List<ExternalNote>?> getExtNotes({
 
           // Parse external note file details
           note = NoteFileHelper.extFileDetailsFromLog(
-            sharedFileDetails,
-            sharedFileUrl,
+            sharingMetadata: sharingMetadata,
+            fileUrl: fileUrl,
           );
 
           if (note != null) {
             // Add external note details to notes map.
-            // sharedNotesMap[sharedFileUrl] = note;
+            // sharedNotesMap[fileUrl] = note;
             notes.add(note);
           } else {
             // Found external note file with unparseable permissions details
             // Add to bad notes map
-            badFiles.add(sharedFileUrl);
+            badFiles.add(fileUrl);
           }
         } catch (e) {
           // Error deserializing external note permissions
