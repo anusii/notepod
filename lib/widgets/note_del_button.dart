@@ -38,7 +38,7 @@ import 'package:notepod/widgets/loading_animation.dart';
 /// [isNarrow] is true.
 ///
 /// Arguments:
-/// - [noteData] - Map of note data.
+/// - [filename] - Filename of note.
 /// - [childPage] - The child widget to navigate to.
 /// - [isExternal] - Boolean describing whether an external note.
 /// - [showSimple] - Boolean describing whether to show
@@ -47,8 +47,7 @@ import 'package:notepod/widgets/loading_animation.dart';
 /// in a narrow window.
 
 class NoteDelButton extends StatelessWidget {
-  /// Map of note data
-  final Map noteData;
+  final String filename;
 
   /// Childpage
   final Widget childPage;
@@ -64,7 +63,7 @@ class NoteDelButton extends StatelessWidget {
 
   const NoteDelButton({
     super.key,
-    required this.noteData,
+    required this.filename,
     required this.childPage,
     this.isExternal = false,
     this.showSimple = false,
@@ -93,7 +92,7 @@ class NoteDelButton extends StatelessWidget {
 
                 // Delete file
                 await NoteFileHelper()
-                    .deleteNote(context, noteData, childPage, isExternal);
+                    .deleteNote(context, filename, isExternal);
 
                 if (context.mounted) {
                   Navigator.of(context, rootNavigator: true)
