@@ -7,9 +7,9 @@ name: Build Installers
 # directly to togaware.com and to build signed packages.
 
 on:
-  push:
-    branches:
-      - dev
+  push # :
+#    branches:
+#      - dev
 
 env:
   APP: notepod
@@ -188,7 +188,7 @@ jobs:
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
             -ov -format UDZO \
-            "${{ env.APP }}-${{github.ref_name}}-macos-unsigned.dmg"
+            "${{ env.APP }}-dev-macos-unsigned.dmg"
 
       - name: Note the DMG created
         run: |
@@ -198,7 +198,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dmg
-          path: ${{ env.APP }}-${{github.ref_name}}-macos-unsigned.dmg
+          path: ${{ env.APP }}-dev-macos-unsigned.dmg
 
       # Package as ZIP
 
@@ -208,7 +208,7 @@ jobs:
           type: 'zip'
           directory: build/macos/Build/Products/Release
           path: ${{ env.APP }}.app
-          filename: ${{ env.APP }}-${{github.ref_name}}-macos.zip
+          filename: ${{ env.APP }}-dev-macos.zip
 
       - name: Review ZIP exists
         run: ls -lh build/macos/Build/Products/Release
@@ -217,7 +217,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-zip
-          path: build/macos/Build/Products/Release/${{ env.APP }}-${{github.ref_name}}-macos.zip
+          path: build/macos/Build/Products/Release/${{ env.APP }}-dev-macos.zip
 
   ########################################################################
   # WINDOWS
