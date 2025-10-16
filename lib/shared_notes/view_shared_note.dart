@@ -156,7 +156,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                         ),
                       ],
                       // Edit if write access
-                      if (_accessList.contains('control')) ...[
+                      if (_accessList.contains('edit')) ...[
                         NoteActionButton(
                           label: ButtonLabel.edit,
                           icon: const Icon(Icons.edit),
