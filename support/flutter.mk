@@ -341,11 +341,12 @@ test:
 # create a narrated video. A INTERACT of 5 or more is then useful.
 
 %.itest:
-	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
-	if [ -z "$$device_id" ]; then \
-		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
-		exit 1; \
-	fi; \
+	@case "$$(uname -s)" in \
+		Linux*) device_id="linux" ;; \
+		Darwin*) device_id="macos" ;; \
+		MINGW*|MSYS*|CYGWIN*) device_id="windows" ;; \
+		*) echo "Unsupported platform: $$(uname -s)"; exit 1 ;; \
+	esac; \
 	flutter test --dart-define=INTERACT=5 --device-id $$device_id integration_test/$*.dart
 
 # For a run over all tests interactively we INTERACT a little but not as
@@ -353,11 +354,12 @@ test:
 
 .PHONY: itest
 itest:
-	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
-	if [ -z "$$device_id" ]; then \
-		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
-		exit 1; \
-	fi; \
+	@case "$$(uname -s)" in \
+		Linux*) device_id="linux" ;; \
+		Darwin*) device_id="macos" ;; \
+		MINGW*|MSYS*|CYGWIN*) device_id="windows" ;; \
+		*) echo "Unsupported platform: $$(uname -s)"; exit 1 ;; \
+	esac; \
 	for t in integration_test/*.dart; do flutter test --dart-define=INTERACT=2 --device-id $$device_id $$t; done
 	@echo $(SEPARATOR)
 
@@ -366,11 +368,12 @@ itest:
 
 .PHONY: qtest
 qtest:
-	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
-	if [ -z "$$device_id" ]; then \
-		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
-		exit 1; \
-	fi; \
+	@case "$$(uname -s)" in \
+		Linux*) device_id="linux" ;; \
+		Darwin*) device_id="macos" ;; \
+		MINGW*|MSYS*|CYGWIN*) device_id="windows" ;; \
+		*) echo "Unsupported platform: $$(uname -s)"; exit 1 ;; \
+	esac; \
 	for t in $$(find integration_test -name "*_test.dart" | sort); do \
 		echo "========================================"; \
 		echo $$t; /bin/echo -n $$t >&2; \
@@ -384,11 +387,12 @@ qtest:
 	@echo $(SEPARATOR)
 
 %.qtest:
-	@device_id=$(shell flutter devices | grep -E 'linux|macos|windows' | perl -pe 's|^[^•]*• ([^ ]*) .*|\1|'); \
-	if [ -z "$$device_id" ]; then \
-		echo "No desktop device found. Please ensure you have the correct desktop platform enabled."; \
-		exit 1; \
-	fi; \
+	@case "$$(uname -s)" in \
+		Linux*) device_id="linux" ;; \
+		Darwin*) device_id="macos" ;; \
+		MINGW*|MSYS*|CYGWIN*) device_id="windows" ;; \
+		*) echo "Unsupported platform: $$(uname -s)"; exit 1 ;; \
+	esac; \
 	flutter test --dart-define=INTERACT=0 --device-id $$device_id --reporter failures-only integration_test/$*.dart 2>/dev/null
 
 .PHONY: qtest.all
