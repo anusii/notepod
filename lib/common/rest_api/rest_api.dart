@@ -33,8 +33,8 @@ import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
-import 'package:notepod/models/own_notes_call_result.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/own_notes_call_result.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
 /// Get the list of user's notes object.

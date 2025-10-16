@@ -328,7 +328,8 @@ class _ListNotesState extends State<ListNotes> {
                               ? BoxDecoration(
                                   color: theme.colorScheme.onInverseSurface,
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(5)),
+                                    Radius.circular(5),
+                                  ),
                                 )
                               : const BoxDecoration(
                                   borderRadius:
