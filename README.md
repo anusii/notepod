@@ -250,7 +250,9 @@ of Pods-based apps with flutter
 
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
+<!-- markdownlint-disable MD036 -->
 *Time-stamp: <Thursday 2025-10-16 08:41:13 +1100 Graham Williams>*
+<!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
 [comment]: # (Local Variables:)
