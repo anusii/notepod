@@ -50,7 +50,7 @@ class TitleExternalNoteScreen extends StatefulWidget {
 
 class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
   static Future? _asyncDataFetch;
-  late final FoundExternalNote _note;
+  late FoundExternalNote _note;
 
   @override
   void initState() {
