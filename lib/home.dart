@@ -90,7 +90,7 @@ class AppHomePageState extends State<AppHomePage> {
             onPressed: () {
               navToChildPage(
                 context: context,
-                childPage: NewNote(),
+                childPage: const NewNote(),
               );
             },
           ),
@@ -103,7 +103,7 @@ class AppHomePageState extends State<AppHomePage> {
             onPressed: () {
               navToChildPage(
                 context: context,
-                childPage: ListNotesScreen(),
+                childPage: const ListNotesScreen(),
               );
             },
           ),
@@ -122,7 +122,7 @@ class AppHomePageState extends State<AppHomePage> {
             onPressed: () {
               navToChildPage(
                 context: context,
-                childPage: ListExternalNotesScreen(),
+                childPage: const ListExternalNotesScreen(),
               );
             },
           ),

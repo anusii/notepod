@@ -103,7 +103,7 @@ class NoteSaveButton extends StatelessWidget {
                 WidgetStateProperty.all<Color>(ButtonBackgroundColor.save),
             // Larger edgeinsets to emphasise save button
             padding: WidgetStateProperty.all<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 20),
+              const EdgeInsets.symmetric(horizontal: 20),
             ),
           ),
       label: const Text(

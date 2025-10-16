@@ -47,8 +47,8 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
 
   @override
   void initState() {
-    _asyncDataFetch =
-        getExtNotes(context: context, childPage: ListExternalNotesScreen());
+    _asyncDataFetch = getExtNotes(
+        context: context, childPage: const ListExternalNotesScreen());
     super.initState();
   }
 

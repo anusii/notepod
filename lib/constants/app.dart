@@ -136,4 +136,4 @@ const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 
 /// Button shape decoration for list pages
 ShapeDecoration buttonShapeList =
-    ShapeDecoration(color: Colors.grey, shape: CircleBorder());
+    const ShapeDecoration(color: Colors.grey, shape: CircleBorder());

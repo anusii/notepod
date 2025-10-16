@@ -114,11 +114,10 @@ Future<OwnNotesCallResult> getNoteList({
       final Map<String, Map<String, dynamic>> nestedNoteMaps;
       nestedNoteMaps = notes.toMap();
 
-      if (!context.mounted) return OwnNotesCallResult();
+      if (!context.mounted) return const OwnNotesCallResult();
       // Get the authorised users of notes
       final tmpMapOfMaps = await getAccessLists(
         nestedNoteMaps,
-        // notesMap, // notes,
         context,
         childPage,
         isFilePath: false,

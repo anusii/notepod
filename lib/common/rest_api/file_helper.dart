@@ -386,7 +386,7 @@ class NoteFileHelper with PodOperationsMixin {
               // Create filename
               noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
               data: newContent,
-              childPage: ListNotesScreen(),
+              childPage: const ListNotesScreen(),
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');

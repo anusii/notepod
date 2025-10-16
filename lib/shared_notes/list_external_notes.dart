@@ -205,7 +205,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       '$sharedNotesTitle (created by other people)',
                       style: titleStyle,
                     ),
@@ -265,7 +265,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5.0,
                             ),
                             // Owner Sort Label and Button
@@ -292,7 +292,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             // Only display permissions sort
                             // when window is not narrow
                             if (!isNarrow) ...[
-                              SizedBox(
+                              const SizedBox(
                                 width: 5.0,
                               ),
                               // Permission Sort Label and Button
@@ -339,7 +339,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                       ),
                       child: Center(
                         child: ListTile(
-                          leading: CircleAvatar(
+                          leading: const CircleAvatar(
                             radius: 26,
                             backgroundColor: Colors.grey,
                             child: Icon(Icons.edit_document),
@@ -416,7 +416,7 @@ class TitleExternalNote extends StatelessWidget {
             note: _note,
           ),
         ] else ...[
-          Text('Title access requires read permission'),
+          const Text('Title access requires read permission'),
         ],
       ],
     );

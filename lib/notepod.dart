@@ -54,7 +54,7 @@ class NotePod extends StatelessWidget {
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
-      home: SolidLogin(
+      home: const SolidLogin(
         title: 'NOTEPOD - A Note Taker',
         appDirectory: 'notepod',
         image: AssetImage('assets/images/notepod-background.jpg'),

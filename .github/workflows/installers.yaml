@@ -14,7 +14,7 @@ on:
 env:
   APP: notepod
   LINUX_PKGS: libsecret-1-dev
-  FLUTTER_VERSION: '3.35.5'
+  FLUTTER_VERSION: '3.35.6'
 
 jobs:
 

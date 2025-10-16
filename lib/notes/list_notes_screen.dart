@@ -58,7 +58,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   @override
   void initState() {
     _asyncDataFetch =
-        getNoteList(context: context, childPage: ListNotesScreen());
+        getNoteList(context: context, childPage: const ListNotesScreen());
     super.initState();
     _scrollController = ScrollController();
   }
@@ -112,7 +112,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               NoteListMsg.writeFirstNote,
               isSmall: true,
             ),
-            NewNote(),
+            const NewNote(),
           ],
         ),
       ),

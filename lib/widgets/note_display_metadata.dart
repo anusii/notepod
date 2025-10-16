@@ -102,7 +102,7 @@ class DisplayNoteMetadata extends StatelessWidget {
           // Show path info (filename and path)
           if (showPathInfo && noteFileName != '' && noteUrl != '')
             ShowPathMetadata(filename: noteFileName, fileUrl: noteUrl),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );

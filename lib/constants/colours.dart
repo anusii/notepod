@@ -112,7 +112,7 @@ ThemeData lightThemeData(BuildContext context) {
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundWhite,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: darkGreen, // Colors.green[300],
       //   foregroundColor: Colors.black,
       //   iconTheme: IconThemeData(
@@ -179,7 +179,7 @@ ThemeData darkThemeData(BuildContext context) {
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: Colors.grey[900],
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: darkGreen, // Colors.green[900],
       // foregroundColor: Colors.white,
       // iconTheme: IconThemeData(
