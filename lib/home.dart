@@ -73,11 +73,12 @@ class AppHomePageState extends State<AppHomePage> {
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor:
-            Theme.of(context).appBarTheme.backgroundColor, // lightGreen,
+        backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
         centerTitle: true,
         title: Text(widget.title),
         actions: <Widget>[

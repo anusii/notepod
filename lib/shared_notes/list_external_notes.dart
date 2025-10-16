@@ -186,6 +186,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
   @override
   Widget build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Derive whether window is narrow
@@ -229,13 +232,13 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             ? Text(
                                 'Found ${_foundNotes.length} notes',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
                                 ),
                               )
                             : Text(
                                 'Found ${_foundNotes.length} note',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
                         Row(

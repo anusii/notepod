@@ -193,6 +193,9 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   Widget build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Derive whether window is narrow
@@ -234,22 +237,20 @@ class _ListNotesState extends State<ListNotes> {
                             ? Text(
                                 'Selected: $selectedCount notes',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
                                 ),
                               )
                             : _foundNotes.length > 1 || _foundNotes.isEmpty
                                 ? Text(
                                     'Found ${_foundNotes.length} notes',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   )
                                 : Text(
                                     'Found ${_foundNotes.length} note',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                         Row(
@@ -325,9 +326,7 @@ class _ListNotesState extends State<ListNotes> {
                         child: Container(
                           decoration: _foundNotes[index].isSelected
                               ? BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
+                                  color: theme.colorScheme.onInverseSurface,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                 )

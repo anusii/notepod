@@ -208,6 +208,9 @@ class NavDrawer extends StatelessWidget {
 
 // Make About Dialog
 Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
+  // Reduce calls to of(context).
+  final theme = Theme.of(context);
+
   return AboutDialog(
     applicationName: capitalize(appName),
     applicationIcon: SizedBox(
@@ -223,7 +226,7 @@ Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
         children: [
           RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium,
               children: [
                 TextSpan(text: 'An '),
                 TextSpan(
@@ -245,7 +248,7 @@ Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
           ),
           RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium,
               children: [
                 const TextSpan(
                   text: 'For more information see the ',
