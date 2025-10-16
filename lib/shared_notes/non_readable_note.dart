@@ -51,78 +51,104 @@ class NonReadableNote extends StatefulWidget {
 }
 
 class _NonReadableNoteState extends State<NonReadableNote> {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
   /// Boolean describing whether window is narrow
   late bool isNarrow;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     Map noteMetaData = widget.noteMetaData;
 
-    return Column(
-      children: <Widget>[
-        // Display note metadata - show sharing and path info but not dates (as requires noteContent)
-        NoteDisplayMetadata(
-          noteInfo: noteMetaData,
-          showSharing: true,
-          showPathInfo: true,
-        ),
-        // MsgCard style works in light and dark themes
-        buildMsgCard(
-          context,
-          Icons.info,
-          Colors.amber,
-          'Access Permission!',
-          nonReadableNoteMsg,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Derive whether window is narrow
-              isNarrow = WindowSize().isNarrowWindow(constraints);
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Share button
-                  if (noteMetaData[permissionListPred].contains('control')) ...[
-                    NoteActionButton(
-                      label: ButtonLabel.share,
-                      icon: const Icon(Icons.share),
-                      backgroundColor: ButtonBackgroundColor.share,
-                      childPage: ShareExternalNote(
-                        noteMetaData: noteMetaData,
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _scrollController,
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: <Widget>[
+            // Display note metadata - show sharing and path info but not dates (as requires noteContent)
+            NoteDisplayMetadata(
+              noteInfo: noteMetaData,
+              showSharing: true,
+              showPathInfo: true,
+            ),
+            // MsgCard style works in light and dark themes
+            buildMsgCard(
+              context,
+              Icons.info,
+              Colors.amber,
+              'Access Permission!',
+              nonReadableNoteMsg,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Share button
+                      if (noteMetaData[permissionListPred]
+                          .contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareExternalNote(
+                            noteMetaData: noteMetaData,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                      ],
+                      // /// Delete button
+                      // /// 20250719 jesscmoore Commented out as also commented out
+                      // /// external note with read-write-control-append access
+                      // if (noteMetaData[permissionListPred].contains('write')) ...[
+                      //   NoteDelButton(noteData: noteMetaData, isExternal: true),
+                      //   const SizedBox(
+                      //     width: 5,
+                      //   ),
+                      // ],
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: const SharedNotesScreen(),
+                        isNarrow: isNarrow,
                       ),
-                      isNarrow: isNarrow,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ],
-                  // /// Delete button
-                  // /// 20250719 jesscmoore Commented out as also commented out
-                  // /// external note with read-write-control-append access
-                  // if (noteMetaData[permissionListPred].contains('write')) ...[
-                  //   NoteDelButton(noteData: noteMetaData, isExternal: true),
-                  //   const SizedBox(
-                  //     width: 5,
-                  //   ),
-                  // ],
-                  NoteActionButton(
-                    label: ButtonLabel.back,
-                    icon: const Icon(Icons.keyboard_backspace),
-                    backgroundColor: ButtonBackgroundColor.back,
-                    childPage: const SharedNotesScreen(),
-                    isNarrow: isNarrow,
-                  ),
-                ],
-              );
-            },
-          ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+      ),
     );
   }
 }
