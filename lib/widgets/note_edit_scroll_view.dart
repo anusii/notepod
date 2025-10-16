@@ -107,6 +107,7 @@ class NoteEditScrollView extends StatelessWidget {
     Row noteEditActionBar() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        spacing: 5.0,
         children: (!isExisting)
             // New Note: save button only
             ? [
@@ -133,9 +134,6 @@ class NoteEditScrollView extends StatelessWidget {
                         prevOwnNote: prevOwnNote,
                         isExisting: true,
                       ),
-                const SizedBox(
-                  width: 5,
-                ),
                 // Back button
                 // Nav to view note or view isExternal note
                 (isExternal)
@@ -169,7 +167,9 @@ class NoteEditScrollView extends StatelessWidget {
             child: SingleChildScrollView(
               controller: _scrollController,
               child: Column(
+                spacing: 10.0,
                 children: [
+                  // Add space
                   const SizedBox(
                     height: 10,
                   ),
@@ -183,6 +183,7 @@ class NoteEditScrollView extends StatelessWidget {
                       autovalidateMode: AutovalidateMode.disabled,
                       skipDisabled: true,
                       child: Column(
+                        spacing: 10.0,
                         children: [
                           // New note: show current date
                           if (!isExisting) ...[
@@ -194,9 +195,6 @@ class NoteEditScrollView extends StatelessWidget {
                                   style: titleStyle,
                                 ),
                               ],
-                            ),
-                            const SizedBox(
-                              height: 10,
                             ),
                           ],
                           // Edit existing note: populated text field with
@@ -224,15 +222,13 @@ class NoteEditScrollView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   markdownEditor(
                     context,
                     _textController!,
                     _focusContent,
                     data,
                   ),
+                  // Add space
                   const SizedBox(
                     height: 20,
                   ),
@@ -248,6 +244,7 @@ class NoteEditScrollView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: noteEditActionBar(),
             ),
+            // Add space
             const SizedBox(
               height: 10,
             ),

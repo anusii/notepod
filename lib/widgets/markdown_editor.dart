@@ -44,8 +44,10 @@ Container markdownEditor(
     padding: const EdgeInsets.all(10),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 20,
       children: [
         Column(
+          spacing: 10.0,
           children: [
             SizedBox(
               width: cardWidth,
@@ -61,9 +63,6 @@ Container markdownEditor(
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
             SizedBox(
               width: cardWidth,
               child: MarkdownToolbar(
@@ -74,9 +73,6 @@ Container markdownEditor(
               ),
             ),
           ],
-        ),
-        const SizedBox(
-          width: 20,
         ),
         Column(
           mainAxisSize: MainAxisSize.min,

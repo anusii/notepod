@@ -134,6 +134,7 @@ class _ViewNoteState extends State<ViewNote> {
                   isNarrow = WindowSize().isNarrowWindow(constraints);
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
                     children: [
                       // Share button
                       NoteActionButton(
@@ -148,9 +149,7 @@ class _ViewNoteState extends State<ViewNote> {
                         ),
                         isNarrow: isNarrow,
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
+
                       // Edit button
                       NoteActionButton(
                         label: ButtonLabel.edit,
@@ -161,9 +160,6 @@ class _ViewNoteState extends State<ViewNote> {
                         ),
                         isNarrow: isNarrow,
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
 
                       /// Delete button
                       NoteDelButton(
@@ -171,9 +167,6 @@ class _ViewNoteState extends State<ViewNote> {
                         isExternal: false,
                         isNarrow: isNarrow,
                         childPage: const ListNotesScreen(),
-                      ),
-                      const SizedBox(
-                        width: 5,
                       ),
                       // Back button
                       NoteActionButton(

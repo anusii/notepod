@@ -104,6 +104,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               isNarrow = WindowSize().isNarrowWindow(constraints);
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
+                spacing: 5.0,
                 children: [
                   // Share button
                   if (_note.permissionList.contains('control')) ...[
@@ -115,9 +116,6 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                         note: _note,
                       ),
                       isNarrow: isNarrow,
-                    ),
-                    const SizedBox(
-                      width: 5,
                     ),
                   ],
                   // /// Delete button

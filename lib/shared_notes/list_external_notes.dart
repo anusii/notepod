@@ -243,6 +243,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                               ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
+                          spacing: 15.0,
                           children: [
                             // Filename Sort Label and Button
                             TextButton.icon(
@@ -264,9 +265,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                         : 'Filename',
                               ),
                               iconAlignment: IconAlignment.end,
-                            ),
-                            const SizedBox(
-                              width: 5.0,
                             ),
                             // Owner Sort Label and Button
                             TextButton.icon(
@@ -292,9 +290,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             // Only display permissions sort
                             // when window is not narrow
                             if (!isNarrow) ...[
-                              const SizedBox(
-                                width: 5.0,
-                              ),
                               // Permission Sort Label and Button
                               TextButton.icon(
                                 onPressed: () {
@@ -437,6 +432,7 @@ class SharedTrailingButtons extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
+      spacing: 5.0,
       children: [
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
@@ -445,9 +441,6 @@ class SharedTrailingButtons extends StatelessWidget {
             childPage: ShareExternalNote(
               note: _note,
             ),
-          ),
-          const SizedBox(
-            width: 5,
           ),
         ],
         // Open note icon

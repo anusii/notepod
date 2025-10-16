@@ -255,6 +255,7 @@ class _ListNotesState extends State<ListNotes> {
                                   ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
+                          spacing: 5.0,
                           children: [
                             // Title Sort Label and Button
                             TextButton.icon(
@@ -276,9 +277,6 @@ class _ListNotesState extends State<ListNotes> {
                                         : 'Title',
                               ),
                               iconAlignment: IconAlignment.end,
-                            ),
-                            const SizedBox(
-                              width: 5.0,
                             ),
                             // Date Sort Label and Button
                             TextButton.icon(
@@ -403,6 +401,7 @@ class TrailingButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 15,
       children: [
         // Share button
         SimpleActionButton(
@@ -411,9 +410,6 @@ class TrailingButtons extends StatelessWidget {
             note: _note,
             backPage: const ListNotesScreen(),
           ),
-        ),
-        const SizedBox(
-          width: 15,
         ),
         // Open note icon
         const Icon(

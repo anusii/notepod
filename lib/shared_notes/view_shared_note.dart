@@ -141,6 +141,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                   isNarrow = WindowSize().isNarrowWindow(constraints);
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
                     children: [
                       // Share if control access
                       if (_accessList.contains('control')) ...[
@@ -153,9 +154,6 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                           ),
                           isNarrow: isNarrow,
                         ),
-                        const SizedBox(
-                          width: 5,
-                        ),
                       ],
                       // Edit if write access
                       if (_accessList.contains('control')) ...[
@@ -167,9 +165,6 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                             note: _note,
                           ),
                           isNarrow: isNarrow,
-                        ),
-                        const SizedBox(
-                          width: 5,
                         ),
                       ],
                       // Back
