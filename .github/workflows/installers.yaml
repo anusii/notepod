@@ -7,9 +7,9 @@ name: Build Installers
 # directly to togaware.com and to build signed packages.
 
 on:
-  push # :
-#    branches:
-#      - dev
+  push:
+    branches:
+      - dev
 
 env:
   APP: notepod
