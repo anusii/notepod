@@ -11,6 +11,8 @@ ARCHIVE
 ignore
 pubspec.yaml.*
 
+qtest_*.txt
+
 installers/*.apk
 installers/*.exe
 installers/*.snap
@@ -20,6 +22,26 @@ installers/*-macos.zip
 installers/*-windows.zip
 
 .Rhistory
+
+# Puppeteer browser cache used in testing solidui apps
+
+.local-chrome/
+
+# Note: test_credentials.json and auth_tokens.json can be committed
+# for CI/CD as baseline/templates that are "stale" tokens that get
+# auto-regenerated when tests are run.  These are test-only
+# credentials for a dev POD server, not production.
+#
+# Because the files are already in the repo we need to tell git to
+# skip these files from the work tree so local chenges don't get committed
+#
+# git update-index --skip-worktree integration_test/fixtures/auth_tokens.json integration_test/fixtures/complete_auth_data.json
+
+# Integration test auth data (contains sensitive tokens)
+
+#integration/fixtures/auth_tokens.json
+#integration/fixtures/complete_auth_data.json
+#integration/fixtures/test_credentials.json
 
 ########################################################################
 # From https://github.com/flutter/flutter/blob/master/.gitignore

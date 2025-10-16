@@ -57,6 +57,9 @@ class NonReadableNote extends StatefulWidget {
 }
 
 class _NonReadableNoteState extends State<NonReadableNote> {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
@@ -66,83 +69,91 @@ class _NonReadableNoteState extends State<NonReadableNote> {
   @override
   void initState() {
     super.initState();
-    _note = widget.note;
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        // Display note metadata - show sharing and path info but not dates (as requires noteContent)
-        DisplayNoteMetadata(
-          noteOwner: _note.noteOwner,
-          permissionGranter: _note.permissionGranter,
-          permissionList: _note.permissionList,
-          noteFileName: _note.noteFileName,
-          noteUrl: _note.noteUrl,
-          showSharing: true,
-          showPathInfo: true,
-        ),
-        // MsgCard style works in light and dark themes
-        buildMsgCard(
-          context,
-          Icons.info,
-          Colors.amber,
-          'Access Permission!',
-          nonReadableNoteMsg,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Derive whether window is narrow
-              isNarrow = WindowSize().isNarrowWindow(constraints);
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                spacing: 5.0,
-                children: [
-                  // Share button
-                  if (_note.permissionList.contains('control')) ...[
-                    NoteActionButton(
-                      label: ButtonLabel.share,
-                      icon: const Icon(Icons.share),
-                      backgroundColor: ButtonBackgroundColor.share,
-                      childPage: ShareExternalNote(
-                        note: _note,
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _scrollController,
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: <Widget>[
+            // Display note metadata - show sharing and path info but not dates (as requires noteContent)
+            DisplayNoteMetadata(
+              noteOwner: _note.noteOwner,
+              permissionGranter: _note.permissionGranter,
+              permissionList: _note.permissionList,
+              noteFileName: _note.noteFileName,
+              noteUrl: _note.noteUrl,
+              showSharing: true,
+              showPathInfo: true,
+            ),
+            // MsgCard style works in light and dark themes
+            buildMsgCard(
+              context,
+              Icons.info,
+              Colors.amber,
+              'Access Permission!',
+              nonReadableNoteMsg,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
+                    children: [
+                      // Share button
+                      if (_note.permissionList.contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareExternalNote(
+                            note: _note,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+                      // /// Delete button
+                      // /// 20250719 jesscmoore Commented out as also commented out
+                      // /// external note with read-write-control-append access
+                      // if (noteMetaData[permissionListPred].contains('write')) ...[
+                      //   NoteDelButton(noteData: noteMetaData, isExternal: true),
+                      //   const SizedBox(
+                      //     width: 5,
+                      //   ),
+                      // ],
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: const ListExternalNotesScreen(),
+                        isNarrow: isNarrow,
                       ),
-                      isNarrow: isNarrow,
-                    ),
-                  ],
-                  // /// Delete button
-                  // /// 20250719 jesscmoore Commented out as also commented out
-                  // /// external note with read-write-control-append access
-                  // if (noteMetaData[permissionListPred].contains('write')) ...[
-                  //   NoteDelButton(noteData: noteMetaData, isExternal: true),
-                  //   const SizedBox(
-                  //     width: 5,
-                  //   ),
-                  // ],
-                  NoteActionButton(
-                    label: ButtonLabel.back,
-                    icon: const Icon(Icons.keyboard_backspace),
-                    backgroundColor: ButtonBackgroundColor.back,
-                    childPage: const ListExternalNotesScreen(),
-                    isNarrow: isNarrow,
-                  ),
-                ],
-              );
-            },
-          ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+      ),
     );
   }
 }

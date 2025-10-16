@@ -156,3 +156,35 @@ jobs:
           else
             echo "✅ All non-generated Dart files have copyright headers"
           fi
+
+  test_enforcement:
+    runs-on: ubuntu-latest
+    if: github.event.repository.private == false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for batch test commands
+        run: |
+          # Check for disallowed "flutter test integration_test/" usage in scripts/workflows
+          # Exclude comments and this CI check itself
+          batch_test_found=$(grep -r "flutter test integration_test/" \
+            .github/workflows/ \
+            support/ \
+            scripts/ \
+            Makefile 2>/dev/null | \
+            grep -v "# Check for disallowed" | \
+            grep -v "batch_test_found=" | \
+            grep -v "echo.*flutter test integration_test/" || true)
+          if [ -n "$batch_test_found" ]; then
+            echo "❌ Found disallowed batch test command 'flutter test integration_test/'"
+            echo ""
+            echo "Found in:"
+            echo "$batch_test_found"
+            echo ""
+            echo "⚠️  Batch testing fails on desktop due to Flutter framework limitations."
+            echo "✅ Use 'make qtest' instead - it runs tests individually."
+            echo ""
+            echo "See docs/TESTING_GUIDE.md for details."
+            exit 1
+          else
+            echo "✅ No batch test commands found - using recommended 'make qtest' approach"
+          fi
