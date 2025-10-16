@@ -4,15 +4,25 @@ name: Build Installers
 # bundles (.zip or .exe or .dmg files) are created as artefacts that
 # can be downloaded locally using the github command line `gh`. I am
 # not utilising github SECRETS yet but will do so to push the packages
-# directly to togaware.com and to build signed packages.
+# directly to repository and to build signed packages.
+
+# 20251017 gjw The dev branch used to be assumed in the naming of
+# artefacts below using `${{ github.ref_name }}`. But other branch
+# names are then problematic, particularly if the branch name includes
+# `/` (our usual practice) and we wanted to skip the `dev` check for
+# limiting the builds. For testing build processes in a separate
+# branch, named other than `dev` we now use a branch named
+# `build`. All `github.ref_name` are replaced with env.RELEASE.
 
 on:
   push:
     branches:
       - dev
+      - build
 
 env:
   APP: notepod
+  RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
   FLUTTER_VERSION: '3.35.6'
 
@@ -85,14 +95,14 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: ${{ env.APP }}-${{ github.ref_name }}-linux.zip
+          filename: ${{ env.APP }}-${{ env.RELEASE }}-linux.zip
           directory: build/linux/x64/release/bundle
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-linux-zip
-          path: build/linux/x64/release/bundle/${{ env.APP }}-${{ github.ref_name }}-linux.zip
+          path: build/linux/x64/release/bundle/${{ env.APP }}-${{ env.RELEASE }}-linux.zip
 
 
   package-linux-snap:
@@ -188,7 +198,7 @@ jobs:
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
             -ov -format UDZO \
-            "${{ env.APP }}-dev-macos-unsigned.dmg"
+            "${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg"
 
       - name: Note the DMG created
         run: |
@@ -198,7 +208,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dmg
-          path: ${{ env.APP }}-dev-macos-unsigned.dmg
+          path: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
 
       # Package as ZIP
 
@@ -208,7 +218,7 @@ jobs:
           type: 'zip'
           directory: build/macos/Build/Products/Release
           path: ${{ env.APP }}.app
-          filename: ${{ env.APP }}-dev-macos.zip
+          filename: ${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
       - name: Review ZIP exists
         run: ls -lh build/macos/Build/Products/Release
@@ -217,7 +227,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-zip
-          path: build/macos/Build/Products/Release/${{ env.APP }}-dev-macos.zip
+          path: build/macos/Build/Products/Release/${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
   ########################################################################
   # WINDOWS
@@ -258,14 +268,14 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          filename: ${{ env.APP }}-${{github.ref_name}}-windows.zip
+          filename: ${{ env.APP }}-${{env.RELEASE}}-windows.zip
           directory: build/windows/x64/runner/Release
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-windows-zip
-          path: build/windows/x64/runner/Release/${{ env.APP }}-${{github.ref_name}}-windows.zip
+          path: build/windows/x64/runner/Release/${{ env.APP }}-${{env.RELEASE}}-windows.zip
 
       # Package as EXE
 
