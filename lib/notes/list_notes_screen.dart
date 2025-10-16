@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/notes_call_result.dart';
+import 'package:notepod/models/own_notes_call_result.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
@@ -38,6 +38,7 @@ import 'package:notepod/widgets/note_list_del_dialog.dart';
 /// file name.
 ///
 /// Parameters: none
+
 class ListNotesScreen extends StatefulWidget {
   const ListNotesScreen({super.key});
 
@@ -48,7 +49,7 @@ class ListNotesScreen extends StatefulWidget {
 class _ListNotesScreenState extends State<ListNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  /// Future comprising notesData
+  /// Future function to retrieve user's notes list
   static Future? _asyncDataFetch;
 
   /// Scroll controller for single child scroll view
@@ -56,7 +57,8 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
 
   @override
   void initState() {
-    _asyncDataFetch = getNoteList(context, const ListNotesScreen());
+    _asyncDataFetch =
+        getNoteList(context: context, childPage: const ListNotesScreen());
     super.initState();
     _scrollController = ScrollController();
   }
@@ -72,20 +74,20 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// notes.
   ///
   /// Arguments:
-  ///   [results] - [NotesCallResult] class containing [notesMap] of files found in user's app data folder, and [badFiles] list of any unparseable files
-  Widget _loadedNotesScreen(NotesCallResult results) {
-    final notesMap = results.notesMap!;
+  ///   [results] - [OwnNotesCallResult] class containing [notes] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  Widget _loadedNotesScreen(OwnNotesCallResult results) {
+    final notes = results.notes!;
     final badFiles = results.badFiles!;
 
     if (badFiles.isNotEmpty) {
       return NotesDelDialog(
         badFiles: badFiles,
-        childPage: ListNotes(notesMap: notesMap),
+        childPage: ListNotes(notes: notes),
       );
-    } else if (notesMap.isEmpty) {
+    } else if (notes.isEmpty) {
       return _loadNewNote();
     } else {
-      return ListNotes(notesMap: notesMap);
+      return ListNotes(notes: notes);
     }
   }
 
@@ -137,9 +139,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                     'Error: data loading failed',
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {
-                  // Successfully returned NotesCallResult
+                  // Successfully returned OwnNotesCallResult
                   return _loadedNotesScreen(
-                    snapshot.data as NotesCallResult,
+                    snapshot.data as OwnNotesCallResult,
                   );
                 } else if (snapshot.data == null ||
                     snapshot.data.toString() == 'null') {

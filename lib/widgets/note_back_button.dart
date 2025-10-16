@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stylised back button widget.
 ///
 // Time-stamp: <Wednesday 2025-07-16 09:08:27 +1000 Graham Williams>
 ///
@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Graham Williams
+/// Authors: Graham Williams, Jess Moore
 
 library;
 
@@ -31,6 +31,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/save_dialog.dart';
 
@@ -38,12 +40,16 @@ import 'package:notepod/widgets/save_dialog.dart';
 ///
 /// Arguments:
 /// - [childPage] - The child page to navigate back to.
-/// - [formKey] - Key of the form to edit note metadata
 /// - [textController] - Optional text controller if back is being called from note editor.
-/// - [prevNoteData] - Optional map of previous data of an existing note, used if back
-/// called from note editor of existing note.
-/// - [notesMap] -  Map of current data of the note to write to Pod
-/// - [shared] - is boolean describing whether note is an external note.
+/// - [formKey] - Key of the form to edit note metadata
+/// - [prevExternalNote] - Optional existing external note data object. Required
+/// for saving existing externally owned notes. (Default: null).
+/// - [prevOwnNote] - Optional existing user's note data object. Required
+/// for saving existing notes owned by the user. (Default: null).
+/// - [isExternal] - Optional boolean denoting whether note is externally
+/// owned. (Default: false).
+/// - [isExisting] - Optional boolean denoting whether note already
+/// exists. (Default: false).
 
 class NoteBackButton extends StatelessWidget {
   const NoteBackButton({
@@ -51,20 +57,24 @@ class NoteBackButton extends StatelessWidget {
     required this.childPage,
     this.textController,
     this.formKey,
-    this.prevNoteData,
-    this.notesMap,
-    this.shared = false,
+    this.prevExternalNote,
+    this.prevOwnNote,
+    this.isExternal = false,
+    this.isExisting = false,
   });
 
   final Widget childPage;
   final TextEditingController? textController;
   final GlobalKey<FormBuilderState>? formKey;
-  final Map? prevNoteData;
-  final Map? notesMap;
-  final bool shared;
+  final FoundExternalNote? prevExternalNote;
+  final FoundOwnNote? prevOwnNote;
+  final bool isExternal;
+  final bool isExisting;
 
   @override
   Widget build(BuildContext context) {
+    String? prevNoteTitle;
+    String? prevNoteContent;
     return ElevatedButton.icon(
       // Uses Theme elevatedButtonTheme for all properties
       // except background color
@@ -77,32 +87,47 @@ class NoteBackButton extends StatelessWidget {
             String noteText = textController!.text;
             Map formData = formKey?.currentState?.value as Map;
             String noteTitle = formData[noteTitlePred].replaceAll('\n', '');
-            if (prevNoteData != null) {
-              if (noteTitle != prevNoteData![noteTitlePred] ||
-                  noteText != prevNoteData![noteContentPred]) {
+
+            if (isExisting) {
+              // Get previous title and content
+              if (isExternal) {
+                prevNoteTitle = prevExternalNote!.content!.noteTitle;
+                prevNoteContent = prevExternalNote!.content!.noteContent;
+              } else {
+                prevNoteTitle = prevOwnNote!.content.noteTitle;
+                prevNoteContent = prevOwnNote!.content.noteContent;
+              }
+              // Check if title or content changed
+              if (noteTitle != prevNoteTitle || noteText != prevNoteContent) {
                 showDialog<void>(
                   context: context,
                   barrierDismissible: false, // user must tap button!
                   builder: (BuildContext context) {
                     // Call save/don't save/cancel dialog
-                    return SaveDialog(
-                      childPage: childPage,
-                      textController: textController!,
-                      formKey: formKey!,
-                      notesMap: notesMap!,
-                      prevNoteData: prevNoteData,
-                      shared: shared,
-                    );
+                    return (isExternal)
+                        ? SaveDialog(
+                            childPage: childPage,
+                            textController: textController!,
+                            formKey: formKey!,
+                            prevExternalNote: prevExternalNote,
+                            isExternal: isExternal,
+                          )
+                        : SaveDialog(
+                            childPage: childPage,
+                            textController: textController!,
+                            formKey: formKey!,
+                            prevOwnNote: prevOwnNote,
+                          );
                   },
                 );
               } else {
                 debugPrint('No unsaved changes found');
-                navToChildPage(context, childPage);
+                navToChildPage(context: context, childPage: childPage);
               }
             }
           }
         } else {
-          navToChildPage(context, childPage);
+          navToChildPage(context: context, childPage: childPage);
         }
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(

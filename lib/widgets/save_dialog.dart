@@ -31,6 +31,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 
 /// A save note options dialog providing the user with the options to
@@ -40,26 +42,32 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// - [childPage] - child widget to navigate to.
 /// - [textController] - text controller holding text of the note body.
 /// - [formKey] - form key holding text of the note title.
-/// - [prevNoteData] - map of data for an existing note.
-/// - [notesMap] - map of note info.
-/// - [shared] - is boolean describing whether note is an external note.
+/// - [prevExternalNote] - Optional existing external note data object. Required
+/// for saving existing externally owned notes. (Default: null).
+/// - [prevOwnNote] - Optional existing user's note data object. Required
+/// for saving existing notes owned by the user. (Default: null).
+/// - [isExternal] - Optional boolean denoting whether note is externally
+/// owned. (Default: false).
 
 class SaveDialog extends StatelessWidget {
   final Widget childPage;
   final TextEditingController textController;
   final GlobalKey<FormBuilderState> formKey;
-  final Map? prevNoteData;
-  final Map notesMap;
-  final bool shared;
+  final FoundExternalNote? prevExternalNote;
+  final FoundOwnNote? prevOwnNote;
+  final bool isExternal;
+
+  /// Only called for existing notes
+  final bool isExisting = true;
 
   const SaveDialog({
     super.key,
     required this.childPage,
     required this.textController,
     required this.formKey,
-    this.prevNoteData,
-    required this.notesMap,
-    this.shared = false,
+    this.prevExternalNote,
+    this.prevOwnNote,
+    this.isExternal = false,
   });
 
   @override
@@ -83,21 +91,29 @@ class SaveDialog extends StatelessWidget {
           child: const Text('Save'),
           onPressed: () async {
             // Save note
-            await NoteFileHelper().saveNote(
-              context,
-              textController,
-              formKey,
-              prevNoteData,
-              shared,
-              notesMap,
-            );
+            (isExternal)
+                ? await NoteFileHelper().saveNote(
+                    context: context,
+                    textController: textController,
+                    formKey: formKey,
+                    prevExternalNote: prevExternalNote,
+                    isExisting: isExisting,
+                    isExternal: isExternal,
+                  )
+                : await NoteFileHelper().saveNote(
+                    context: context,
+                    textController: textController,
+                    formKey: formKey,
+                    prevOwnNote: prevOwnNote,
+                    isExisting: isExisting,
+                  );
           },
         ),
         // Don't save button
         TextButton(
           child: const Text('Don\'t Save'),
           onPressed: () {
-            navToChildPage(context, childPage);
+            navToChildPage(context: context, childPage: childPage);
           },
         ),
         // Cancel button

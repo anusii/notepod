@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for sharing a note owned by the user.
 ///
 // Time-stamp: <Wednesday 2025-07-16 10:21:24 +1000 Graham Williams>
 ///
@@ -29,26 +29,21 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
 /// A [StatefulWidget] for sharing a note owned by the user.
-/// Parameters:
-///   [noteData] - is the data of the selected note to be shared.
-///   [noteFilePath] - is the path of the selected note file.
-///   [notesMap] - is the file list map with data of all notes
-///                in the user's app data folder (required to support
-///                sharing with suggestion list of recipient WebIds)
+///
+/// Arguments:
+///   [note] - is the data of the selected note to be shared.
+
 class ShareNote extends StatefulWidget {
-  final Map noteData;
-  final String noteFilePath;
-  final Map notesMap;
+  final FoundOwnNote note;
   final Widget backPage;
 
   const ShareNote({
     super.key,
-    required this.noteData,
-    required this.noteFilePath,
-    this.notesMap = const {},
+    required this.note,
     required this.backPage,
   });
 
@@ -60,10 +55,14 @@ class ShareNoteState extends State<ShareNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Note
+  late final FoundOwnNote _note;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _note = widget.note;
   }
 
   @override
@@ -95,12 +94,9 @@ class ShareNoteState extends State<ShareNote> {
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: GrantPermissionUi(
                       showAppBar: false,
-                      fileName: widget.noteFilePath,
-                      dataFilesMap: widget.notesMap as Map<String, dynamic>,
+                      fileName: _note.noteFileName,
                       child: ShareNote(
-                        noteData: widget.noteData,
-                        noteFilePath: widget.noteFilePath,
-                        notesMap: widget.notesMap,
+                        note: _note,
                         backPage: widget.backPage,
                       ),
                     ),

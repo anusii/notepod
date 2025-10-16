@@ -155,14 +155,12 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
+              spacing: 5.0,
               children: [
                 /// Note list delete button
                 NoteListDelButton(
                   badFiles: widget.badFiles,
                   childPage: widget.childPage,
-                ),
-                const SizedBox(
-                  width: 5,
                 ),
                 // Back button
                 NoteBackButton(childPage: widget.childPage),

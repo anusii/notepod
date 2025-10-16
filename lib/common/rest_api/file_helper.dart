@@ -1,4 +1,4 @@
-/// File assistance
+/// File assistance class
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
@@ -35,7 +35,9 @@ import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -74,15 +76,15 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// Arguments:
   /// - [context] - The build context.
-  /// - [childpage] - The child widget to return to.
+  /// - [childPage] - The child widget to return to.
   ///
   /// Returns:
   /// - map of external files with filename as key and details of permissions.
 
-  Future<Map<dynamic, dynamic>> scanPermLogFile(
-    BuildContext context,
-    Widget childPage,
-  ) async {
+  Future<Map<dynamic, dynamic>> scanPermLogFile({
+    required BuildContext context,
+    required Widget childPage,
+  }) async {
     try {
       // SharedResources() parses log ttl to map
       debugPrint('');
@@ -90,7 +92,7 @@ class NoteFileHelper with PodOperationsMixin {
       // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
 
       if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
-        // sharedResources() failed login
+        // Return empty map if sharedResources() failed login
         return {};
       }
 
@@ -110,16 +112,16 @@ class NoteFileHelper with PodOperationsMixin {
   /// entry for note file.
   ///
   /// Arguments:
-  /// - [sharedFileDetails] - Map of details of external
-  ///                         note file shared to user.
-  /// - [sharedFileUrl] - URL of external file shared to user.
+  /// - [sharingMetadata] - Map of sharing metadata of the external
+  /// note file shared to user.
+  /// - [fileUrl] - URL of external file shared to user.
   ///
   /// Returns: parsed map of details of external note file.
 
-  static Map<String, dynamic>? extFileDetailsFromLog(
-    Map sharedFileDetails,
-    String sharedFileUrl,
-  ) {
+  static ExternalNote? extFileDetailsFromLog({
+    required Map sharingMetadata,
+    required String fileUrl,
+  }) {
     try {
       String? sharedTime;
       String? noteUrl;
@@ -132,11 +134,13 @@ class NoteFileHelper with PodOperationsMixin {
 
       // Extract external note details information
 
-      noteFileName = sharedFileUrl.split('/').last;
+      noteFileName = fileUrl.split('/').last;
+      // debugPrint('noteFileName: $noteFileName');
 
-      for (final entry in sharedFileDetails.entries) {
+      for (final entry in sharingMetadata.entries) {
         final predicate = entry.key.toString();
         final value = entry.value.toString();
+        // debugPrint('predicate: $predicate, value: $value');
 
         if (predicate.contains(PermissionLogLiteral.logtime.toString())) {
           sharedTime = value;
@@ -170,7 +174,7 @@ class NoteFileHelper with PodOperationsMixin {
         permissionRecepient: permissionRecepient!,
         permissionType: permissionType!,
         permissionList: permissionList!,
-      ).toJson();
+      );
     } catch (e) {
       debugPrint('Error: $e');
       return null;
@@ -181,27 +185,21 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// Arguments:
   /// - [context] - The build context.
-  /// - [noteData] - The note data map containing filename/fileUrl.
-  /// - [childpage] - The child widget to return to.
-  /// - [isExternal] - Boolean describing whether the note is an external note.
+  /// - [filename] - The note filename. For external notes this should be the note Url.
+  /// - [isExternal] - Boolean describing whether the note is an external note. (Default: false).
 
-  Future<void> deleteNote(
-    BuildContext context,
-    Map noteData,
-    Widget childPage,
-    bool isExternal,
-  ) async {
+  Future<void> deleteNote({
+    required BuildContext context,
+    required String filename,
+    bool isExternal = false,
+  }) async {
     try {
       // Delete file
       if (isExternal) {
-        await deleteExternalFile(noteData[noteUrlPred]);
+        await deleteExternalFile(filename);
       } else {
-        // Create note file path
-        String noteFilePath =
-            '$basePath/$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
         // Call solid delete file function
-        await deleteFile(noteFilePath);
+        await deleteFile('$basePath/$filename');
       }
     } catch (e) {
       debugPrint('Error deleting note: $e');
@@ -213,33 +211,43 @@ class NoteFileHelper with PodOperationsMixin {
   /// and then navigates to the appropriate return page.
   ///
   /// Examples:
-  /// - `saveNote(ontext, textController, formKey, prevNoteData, shared, notesMap)`
+  /// - `await saveNote(context: context, textController: textController, formKey: formKey, prevOwnNote: note, isExisting: true)` - to save note
+  /// owned by the user.
+  /// - `await saveNote(context: context, textController: textController, formKey: formKey, prevExternalNote: note, isExisting: true, isExternal: true)`
+  /// - to save an externally owned note.
   ///
-  /// - [context] - The build context
+  /// - [context] - The build context.
   /// - [textController] - Text controller of the note text content editor.
   /// - [formKey] - Key of the form to edit note metadata
-  /// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes (default: null)
-  /// - [shared] - Optional boolean denoting whether external note (default: false)
-  /// - [notesMap] - Map of current data of note to write to Pod
-  Future<void> saveNote(
-    BuildContext context,
-    TextEditingController textController,
-    GlobalKey<FormBuilderState> formKey, [
-    Map? prevNoteData,
-    bool shared = false,
-    Map notesMap = const {},
-  ]) async {
+  /// - [prevExternalNote] - Optional existing external note data object. Required
+  /// for saving existing externally owned notes. (Default: null).
+  /// - [prevOwnNote] - Optional existing user's note data object. Required
+  /// for saving existing notes owned by the user. (Default: null).
+  /// - [isExternal] - Optional boolean denoting whether note is externally
+  /// owned. (Default: false).
+  /// - [isExisting] - Optional boolean denoting whether note already
+  /// exists. (Default: false).
+
+  Future<void> saveNote({
+    required BuildContext context,
+    required TextEditingController textController,
+    required GlobalKey<FormBuilderState> formKey,
+    FoundExternalNote? prevExternalNote,
+    FoundOwnNote? prevOwnNote,
+    bool isExternal = false,
+    bool isExisting = false,
+  }) async {
     if (formKey.currentState?.saveAndValidate() ?? false) {
       // Compares to prevNoteData if previous note data provided
       // Adds sharing metadata if shared==true
 
-      // final SolidFunctionCallStatus createNoteStatus;
       Map formData = formKey.currentState?.value as Map;
       String noteText = textController.text;
-      Map noteNewData = {};
-
-      // Previous external note info, required for saving an external note
-      Map prevSharedNoteInfo = {};
+      final String prevNoteTitle;
+      final String prevNoteContent;
+      final FoundExternalNote updatedExternalNote;
+      final FoundOwnNote updatedOwnNote;
+      final Note updatedContent;
 
       // Note title need to be spaceless as we are using that name
       // to create a .acl file. And the acl file url cannot have spaces
@@ -249,75 +257,99 @@ class NoteFileHelper with PodOperationsMixin {
       String modifiedDateTimeStr =
           DateFormat('yyyyMMddTHHmmss').format(DateTime.now()).toString();
 
-      if (shared) {
-        Map prevNoteFullData = prevNoteData!;
-        prevNoteData = prevNoteFullData['sharedNoteContent'];
-        prevSharedNoteInfo = prevNoteFullData['sharedNoteInfo'];
-      }
-
-      if (prevNoteData != null) {
-        if (noteTitle == prevNoteData[noteTitlePred] &&
-            noteText == prevNoteData[noteContentPred]) {
+      if (isExisting) {
+        // Retrieve existing note title and content for comparison
+        if (isExternal) {
+          prevNoteTitle = prevExternalNote!.content!.noteTitle;
+          prevNoteContent = prevExternalNote.content!.noteContent;
+        } else {
+          prevNoteTitle = prevOwnNote!.content.noteTitle;
+          prevNoteContent = prevOwnNote.content.noteContent;
+        }
+        // Compare updated title and content to existing
+        // title and content
+        if (noteTitle == prevNoteTitle && noteText == prevNoteContent) {
           showErrDialog(context, ErrMsg.noChanges);
         } else {
-          try {
-            // Loading animation
-            showAnimationDialog(
-              context,
-              Msg.savingNote,
-              false,
-            );
+          // Loading animation
+          showAnimationDialog(
+            context,
+            Msg.savingNote,
+            false,
+          );
 
-            // Format new note data structure
-            noteNewData = makeNewNoteData(
-              prevNoteData[createdDateTimePred], // prev note creation date
-              modifiedDateTimeStr,
-              noteTitle,
-              noteText,
-            );
-          } on Exception catch (e) {
-            debugPrint('Exception (formatting update to existing note):\n $e');
-          }
-
-          if (shared) {
-            // Shared edited note
-            // New full note data
+          if (isExternal) {
+            // Update content of External note
             try {
-              Map newFullNoteData = {
-                'sharedNoteInfo': prevSharedNoteInfo,
-                'sharedNoteContent': noteNewData,
-              };
+              updatedContent = prevExternalNote!.content!.copyWith(
+                modifiedDateTime: modifiedDateTimeStr,
+                noteTitle: noteTitle,
+                noteContent: noteText,
+              );
+              updatedExternalNote =
+                  prevExternalNote.copyWith(content: updatedContent);
+            } on Exception catch (e) {
+              debugPrint(
+                'Exception (formatting update to existing note):\n $e',
+              );
+              rethrow;
+            }
 
+            // Save external note
+            try {
               if (!context.mounted) return;
+
+              debugPrint('save external note:');
+              debugPrint('noteUrl: ${prevExternalNote.noteUrl}');
+              debugPrint('noteFileName: ${prevExternalNote.noteFileName}');
+              debugPrint('noteOwner: ${prevExternalNote.noteOwner}');
 
               // External note
               // Encrypt note, create TTL, update file in POD
               await saveNoteToPod(
-                context,
-                noteNewData,
-                ViewSharedNote(
-                  fullNoteData: newFullNoteData,
+                context: context,
+                // Use existing file url
+                noteUrl: prevExternalNote.noteUrl,
+                noteOwner: prevExternalNote.noteOwner,
+                data: updatedContent,
+                childPage: ViewSharedNote(
+                  note: updatedExternalNote,
                 ),
-                shared,
-                prevSharedNoteInfo,
+                isExternal: isExternal,
               );
             } on Exception catch (e) {
               debugPrint('Exception (saving existing external note):\n $e');
             }
           } else {
-            // Edited my note
-            // Encrypt note, create TTL, update file in POD
+            // Update content of Own note
+            try {
+              updatedContent = prevOwnNote!.content.copyWith(
+                modifiedDateTime: modifiedDateTimeStr,
+                noteTitle: noteTitle,
+                noteContent: noteText,
+              );
+              updatedOwnNote = prevOwnNote.copyWith(content: updatedContent);
+            } on Exception catch (e) {
+              debugPrint(
+                'Exception (formatting update to existing note):\n $e',
+              );
+              rethrow;
+            }
+
+            // Save own note
             try {
               if (!context.mounted) return;
 
+              // Edited my note
+              // Encrypt note, create TTL, update file in POD
               await saveNoteToPod(
-                context,
-                noteNewData,
-                ViewNote(
-                  noteData: noteNewData,
-                  notesMap: notesMap,
+                context: context,
+                // Use existing filename
+                noteFileName: prevOwnNote.noteFileName,
+                data: updatedContent,
+                childPage: ViewNote(
+                  note: updatedOwnNote,
                 ),
-                // shared,
               );
             } on Exception catch (e) {
               debugPrint('Exception (saving existing my note):\n $e');
@@ -337,23 +369,23 @@ class NoteFileHelper with PodOperationsMixin {
               false,
             );
 
-            // Format new note data structure
-            // As new note, modoifiedDateTimeStr = creation datetimestamp
-            noteNewData = makeNewNoteData(
-              modifiedDateTimeStr,
-              modifiedDateTimeStr,
-              noteTitle,
-              noteText,
+            // Create new note data structure
+            final newContent = Note(
+              createdDateTime: modifiedDateTimeStr,
+              modifiedDateTime: modifiedDateTimeStr,
+              noteTitle: noteTitle,
+              noteContent: noteText,
             );
 
             // Encrypt note, create TTL and write to file in POD
             if (!context.mounted) return;
 
-            // createNoteStatus = await saveNoteToPod(
             await saveNoteToPod(
-              context,
-              noteNewData,
-              const ListNotesScreen(),
+              context: context,
+              // Create filename
+              noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
+              data: newContent,
+              childPage: const ListNotesScreen(),
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');
@@ -371,48 +403,36 @@ class NoteFileHelper with PodOperationsMixin {
     }
   }
 
-  /// Format the note data in json key-value structure used for notes, where keys are [noteTitlePred], [createdDateTimePred], [modifiedDateTimePred], and [noteContentPred].
-  ///
-  /// - [createdDateTimeStr] - date time stamp of file creation time
-  /// - [modifiedDateTimeStr] - data time stamp of last file modification time
-  /// - [noteTitle] - note title
-  /// - [noteText] - text of note content
-  Map<String, dynamic> makeNewNoteData(
-    String createdDateTimeStr,
-    String modifiedDateTimeStr,
-    String noteTitle,
-    String noteText,
-  ) {
-    Map<String, dynamic> noteNewData = {};
-
-    noteNewData[noteTitlePred] = noteTitle;
-    noteNewData[createdDateTimePred] = createdDateTimeStr;
-    noteNewData[modifiedDateTimePred] = modifiedDateTimeStr;
-    noteNewData[noteContentPred] = noteText;
-
-    return noteNewData;
-  }
-
   /// Write note to Pod and navigate to return page or display error dialog
   /// if write to Pod failed to return a successful SolidCallFunctionStatus.
   ///
   /// Examples:
-  /// - `await saveNoteToPod(context, noteNewData, ListNotesScreen())` writes metadata and encrypted content of a note owned by user to a turtle file (with filename based on the file creation date) in the user's Pod. On successful completion returns to my notes list.
-  /// - `await saveNoteToPod(context, noteNewData, ViewSharedNote(fullNoteData: newFullNoteData), shared, prevSharedNoteInfo)` writes metadata and encrypted content of an external note to the owner's Pod file. On successful completion returns to view that external note.
+  /// - `await saveNoteToPod(context: context, data: updatedContent, noteFileName: noteFileName, childPage: ListNotesScreen())` - to
+  /// save a note owned by the user.
+  /// - `await saveNoteToPod(context: context, data: updatedContent,
+  /// childPage: ListNotesScreen(), noteUrl: noteUrl, noteOwner: noteOwner,
+  /// isExternal: true)` - to save an externally owned note.
   ///
-  /// - [context] - The build context
-  /// - [noteNewData] - The map of note data to be encrypted and written to Pod
-  /// - [returnPage] - The destination widget to navigate to after note is saved
-  /// - [shared] - Optional boolean defining whether updating an existing external note (default: false)
-  /// - [prevSharedNoteInfo] - Optional map of existing note information. Required for updating existing external notes (default: {})
-  Future<void> saveNoteToPod(
-    BuildContext context,
-    Map noteNewData,
-    Widget returnPage, [
-    bool shared = false,
-    Map prevSharedNoteInfo = const {},
-  ]) async {
-    /// The returned status of the Solid function call to write
+  /// - [context] - The build context.
+  /// - [data] - The map of note data to be encrypted and written to Pod.
+  /// - [childPage] - The destination widget to navigate to after note is saved.
+  /// - [noteFileName] - Optional filename. Required for saving user's own notes.
+  /// - [noteUrl] - Optional note file url. Required for saving notes
+  /// that are externally owned.
+  /// - [noteOwner] - Optional note owner webId. Required for saving notes
+  /// that are externally owned.
+  /// - [isExternal] - Optional boolean defining whether updating an existing external note. (Default: false).
+
+  Future<void> saveNoteToPod({
+    required BuildContext context,
+    required Note data,
+    required Widget childPage,
+    String noteFileName = '',
+    String noteUrl = '',
+    String noteOwner = '',
+    bool isExternal = false,
+  }) async {
+    /// Status of the Solid function call to write
     /// data to Pod
     final SolidFunctionCallStatus createNoteStatus;
 
@@ -422,44 +442,36 @@ class NoteFileHelper with PodOperationsMixin {
       // at the moment rdflib cannot parse multiline text with
       // # (hash) values in them.
       String encNoteText = encryptVal(
-        noteNewData[noteContentPred],
-        noteNewData[createdDateTimePred],
+        plainText: data.noteContent,
+        encKey: data.createdDateTime,
       );
 
       // Create TTL body for note
       final noteTTLStr = genNoteTTLStr(
-        noteNewData[createdDateTimePred],
-        noteNewData[modifiedDateTimePred],
-        noteNewData[noteTitlePred],
+        data.createdDateTime,
+        data.modifiedDateTime,
+        data.noteTitle,
         encNoteText,
       );
 
-      if (shared) {
-        // Url of existing external note
-        String noteFileUrl = prevSharedNoteInfo[noteUrlPred];
-
-        // WebId of note owner of existing external note
-        String noteOwnerWebId = prevSharedNoteInfo[noteOwnerPred];
+      if (isExternal && noteUrl != '' && noteOwner != '') {
+        debugPrint('noteUrl: $noteUrl');
+        debugPrint('noteOwner: $noteOwner');
 
         createNoteStatus = await writeExternalPod(
-          noteFileUrl,
+          noteUrl,
           noteTTLStr,
-          noteOwnerWebId,
+          noteOwner,
           context,
-          returnPage,
+          childPage,
         );
       } else {
-        // Create note file name
-        String noteFileName =
-            '$noteFileNamePrefix${noteNewData[createdDateTimePred]}.ttl';
-
         // Write note to POD
         createNoteStatus = await writePod(
           noteFileName,
           noteTTLStr,
           context,
-          returnPage,
-          //encrypted: false, // save in plain text for now
+          childPage,
         );
       }
 
@@ -469,7 +481,7 @@ class NoteFileHelper with PodOperationsMixin {
         Navigator.of(context, rootNavigator: true)
             .pop(); // Dismiss the saving note dialog
 
-        navToChildPage(context, returnPage);
+        navToChildPage(context: context, childPage: childPage);
       } else {
         // Show SolidFunctionCallStatus after writePod() if not success
         debugPrint(

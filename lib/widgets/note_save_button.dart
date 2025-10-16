@@ -31,6 +31,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/own_note.dart';
 
 /// A stylised save button widget which on click saves the note content
 /// Pod. External notes are written to the note owner's Pod. Notes created
@@ -42,24 +44,31 @@ import 'package:notepod/constants/colours.dart';
 ///
 /// - [textController] - Text controller of the note text content editor.
 /// - [formKey] - Key of the form to edit the note metadata
-/// - [notesMap] - Map of current data of the note to write to Pod
-/// - [prevNoteData] - Optional map of previous data of an existing note. Required for existing notes
-/// - [shared] - Optional boolean denoting whether external note (default: false)
+/// - [prevExternalNote] - Optional existing external note data object. Required
+/// for saving existing externally owned notes. (Default: null).
+/// - [prevOwnNote] - Optional existing user's note data object. Required
+/// for saving existing notes owned by the user. (Default: null).
+/// - [isExternal] - Optional boolean denoting whether note is externally
+/// owned. (Default: false).
+/// - [isExisting] - Optional boolean denoting whether note already
+/// exists. (Default: false).
 
 class NoteSaveButton extends StatelessWidget {
   final TextEditingController textController;
   final GlobalKey<FormBuilderState> formKey;
-  final Map notesMap;
-  final Map? prevNoteData;
-  final bool shared;
+  final FoundExternalNote? prevExternalNote;
+  final FoundOwnNote? prevOwnNote;
+  final bool isExisting;
+  final bool isExternal;
 
   const NoteSaveButton({
     super.key,
     required this.textController,
     required this.formKey,
-    required this.notesMap,
-    this.prevNoteData,
-    this.shared = false,
+    this.prevExternalNote,
+    this.prevOwnNote,
+    this.isExisting = false,
+    this.isExternal = false,
   });
 
   @override
@@ -72,14 +81,22 @@ class NoteSaveButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Save note and redirect to view note page
-        await NoteFileHelper().saveNote(
-          context,
-          textController,
-          formKey,
-          prevNoteData,
-          shared,
-          notesMap,
-        );
+        (isExternal)
+            ? await NoteFileHelper().saveNote(
+                context: context,
+                textController: textController,
+                formKey: formKey,
+                prevExternalNote: prevExternalNote,
+                isExisting: isExisting,
+                isExternal: isExternal,
+              )
+            : await NoteFileHelper().saveNote(
+                context: context,
+                textController: textController,
+                formKey: formKey,
+                prevOwnNote: prevOwnNote,
+                isExisting: isExisting,
+              );
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor:

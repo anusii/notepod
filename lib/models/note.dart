@@ -25,68 +25,61 @@
 
 library;
 
+import 'package:solidpod/solidpod.dart';
+
 import 'package:notepod/constants/turtle_structures.dart';
 
-/// Note content data model
+/// Base data model for the nested note within a note object
 
 class Note {
   final String noteTitle;
   final String createdDateTime;
   final String modifiedDateTime;
   final String noteContent;
+  final List<String> authUsers;
 
   const Note({
     required this.noteTitle,
     required this.createdDateTime,
     required this.modifiedDateTime,
     required this.noteContent,
+    this.authUsers = const [],
   });
 
-  Note.fromJson(Map<String, dynamic> json)
-      : noteTitle = json[noteTitlePred] as String,
-        createdDateTime = json[createdDateTimePred] as String,
-        modifiedDateTime = json[modifiedDateTimePred] as String,
-        noteContent = json[noteContentPred] as String;
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      noteTitle: json[noteTitlePred] as String,
+      createdDateTime: json[createdDateTimePred] as String,
+      modifiedDateTime: json[modifiedDateTimePred] as String,
+      noteContent: json[noteContentPred] as String,
+      authUsers: (json[authUserPred] as Map).keys.toList().cast<String>(),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         noteTitlePred: noteTitle,
         createdDateTimePred: createdDateTime,
         modifiedDateTimePred: modifiedDateTime,
         noteContentPred: noteContent,
+        authUserPred: authUsers,
       };
-}
 
-/// External note details data model.
+  /// Copy method for creating a new instance that is an
+  /// updated copy of another instance
 
-class ExternalNote {
-  final String sharedTime;
-  final String noteUrl;
-  final String noteFileName;
-  final String noteOwner;
-  final String permissionGranter;
-  final String permissionRecepient;
-  final String permissionType;
-  final String permissionList;
-
-  const ExternalNote({
-    required this.sharedTime,
-    required this.noteUrl,
-    required this.noteFileName,
-    required this.noteOwner,
-    required this.permissionGranter,
-    required this.permissionRecepient,
-    required this.permissionType,
-    required this.permissionList,
-  });
-
-  Map<String, dynamic> toJson() => {
-        sharedTimePred: sharedTime,
-        noteUrlPred: noteUrl,
-        noteFileNamePred: noteFileName,
-        noteOwnerPred: noteOwner,
-        permissionGranterPred: permissionGranter,
-        permissionRecepientPred: permissionRecepient,
-        permissionTypePred: permissionType,
-        permissionListPred: permissionList,
-      };
+  Note copyWith({
+    String? noteTitle,
+    String? createdDateTime,
+    String? modifiedDateTime,
+    String? noteContent,
+    List<String>? authUsers,
+  }) {
+    return Note(
+      noteTitle: noteTitle ?? this.noteTitle,
+      createdDateTime: createdDateTime ?? this.createdDateTime,
+      modifiedDateTime: modifiedDateTime ?? this.modifiedDateTime,
+      noteContent: noteContent ?? this.noteContent,
+      authUsers: authUsers ?? this.authUsers,
+    );
+  }
 }

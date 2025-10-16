@@ -75,7 +75,7 @@ class SimpleActionButton extends StatelessWidget {
           icon: icon,
           onPressed: () async {
             // Redirect.
-            navToChildPage(context, childPage);
+            navToChildPage(context: context, childPage: childPage);
           },
         ),
       ),

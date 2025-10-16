@@ -28,8 +28,8 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
@@ -39,21 +39,16 @@ import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
 
 /// A [StatefulWidget] to display the text and selected metadata
-/// from the [noteData] of the selected note. Action buttons are
+/// from the [note] of the selected note. Action buttons are
 /// provided to edit and share the note, or go back to the note list.
 /// Parameters:
-///   [noteData] comprises the map of data for the selected note.
-///   [notesMap] comprises the map of data for all note files, owned
-///              by the user in their Pod (required to support
-///              WebId suggestions in note sharing).
+///   [note] comprises the data object for the selected note.
 class ViewNote extends StatefulWidget {
-  final Map noteData;
-  final Map? notesMap;
+  final FoundOwnNote note;
 
   const ViewNote({
     super.key,
-    required this.noteData,
-    this.notesMap,
+    required this.note,
   });
 
   @override
@@ -68,10 +63,14 @@ class _ViewNoteState extends State<ViewNote> {
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
+  /// Note
+  late final FoundOwnNote _note;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _note = widget.note;
   }
 
   @override
@@ -82,12 +81,6 @@ class _ViewNoteState extends State<ViewNote> {
 
   @override
   Widget build(BuildContext context) {
-    Map noteData = widget.noteData;
-
-    // Get note file path
-    String noteFilePath =
-        '$noteFileNamePrefix${noteData[createdDateTimePred]}.ttl';
-
     return Column(
       children: <Widget>[
         Expanded(
@@ -105,7 +98,7 @@ class _ViewNoteState extends State<ViewNote> {
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                           child: Text(
-                            noteData[noteTitlePred],
+                            _note.content.noteTitle,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
@@ -116,9 +109,15 @@ class _ViewNoteState extends State<ViewNote> {
                     ],
                   ),
                   // Display note metadata
-                  NoteDisplayMetadata(noteContent: noteData, showDates: true),
+                  DisplayNoteMetadata(
+                    createdDateTime: _note.content.createdDateTime,
+                    modifiedDateTime: _note.content.modifiedDateTime,
+                    showDates: true,
+                  ),
                   // Display markdown note content
-                  noteDisplayMarkdown(noteData[noteContentPred]),
+                  noteDisplayMarkdown(
+                    _note.content.noteContent,
+                  ),
                 ],
               ),
             ),
@@ -135,6 +134,7 @@ class _ViewNoteState extends State<ViewNote> {
                   isNarrow = WindowSize().isNarrowWindow(constraints);
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
                     children: [
                       // Share button
                       NoteActionButton(
@@ -142,43 +142,31 @@ class _ViewNoteState extends State<ViewNote> {
                         icon: const Icon(Icons.share),
                         backgroundColor: ButtonBackgroundColor.share,
                         childPage: ShareNote(
-                          noteData: noteData,
-                          noteFilePath: noteFilePath,
-                          notesMap: widget.notesMap as Map<dynamic, dynamic>,
+                          note: _note,
                           backPage: ViewNote(
-                            noteData: widget.noteData,
-                            notesMap: widget.notesMap,
+                            note: _note,
                           ),
                         ),
                         isNarrow: isNarrow,
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
+
                       // Edit button
                       NoteActionButton(
                         label: ButtonLabel.edit,
                         icon: const Icon(Icons.edit),
                         backgroundColor: ButtonBackgroundColor.edit,
                         childPage: EditNote(
-                          noteData: noteData,
-                          notesMap: widget.notesMap as Map<dynamic, dynamic>,
+                          note: _note,
                         ),
                         isNarrow: isNarrow,
-                      ),
-                      const SizedBox(
-                        width: 5,
                       ),
 
                       /// Delete button
                       NoteDelButton(
-                        noteData: noteData,
+                        filename: _note.noteFileName,
                         isExternal: false,
                         isNarrow: isNarrow,
                         childPage: const ListNotesScreen(),
-                      ),
-                      const SizedBox(
-                        width: 5,
                       ),
                       // Back button
                       NoteActionButton(

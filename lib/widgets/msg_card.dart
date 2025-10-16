@@ -82,6 +82,7 @@ Row buildMsgCard(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  spacing: 10.0,
                   children: [
                     Container(
                       height: 60,
@@ -96,10 +97,7 @@ Row buildMsgCard(
                         color: errColour,
                         size: 60,
                       ),
-                    ), //CircleAvatar
-                    const SizedBox(
-                      height: 10,
-                    ), //SizedBox
+                    ), //CircleAvatar //SizedBox
                     Text(
                       errTitle,
                       style: const TextStyle(
@@ -107,10 +105,7 @@ Row buildMsgCard(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ), //Textstyle
-                    ), //Text
-                    const SizedBox(
-                      height: 10,
-                    ), //SizedBox
+                    ), //Text//SizedBox
                     Text(
                       errBody,
                       style: const TextStyle(

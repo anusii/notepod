@@ -37,7 +37,7 @@ import 'package:notepod/utils/turtle/parsing_utils.dart';
 class TurtleSerializer {
   /// Parses a note from Turtle content.
 
-  static Map<String, dynamic>? noteFromTurtle(String ttlContent) {
+  static Note? noteFromTurtle(String ttlContent) {
     try {
       // safeParseTtl parses TTL to map
 
@@ -59,9 +59,6 @@ class TurtleSerializer {
 
           if (values.isNotEmpty) {
             final value = values.first.toString();
-            // debugPrint(
-            //   '[noteFromTurtle] predicate: $predicate, value: $values',
-            // );
 
             if (predicate.contains(noteTitlePred)) {
               noteTitle = value;
@@ -83,7 +80,7 @@ class TurtleSerializer {
         createdDateTime: createdDateTime!,
         modifiedDateTime: modifiedDateTime!,
         noteContent: noteContent!,
-      ).toJson();
+      );
     } catch (e) {
       return null;
     }

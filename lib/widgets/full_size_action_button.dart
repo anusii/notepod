@@ -67,7 +67,7 @@ class FullSizeActionButton extends StatelessWidget {
       icon: icon,
       onPressed: () async {
         // Redirect.
-        navToChildPage(context, childPage);
+        navToChildPage(context: context, childPage: childPage);
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),

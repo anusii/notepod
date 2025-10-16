@@ -33,6 +33,8 @@ import 'package:intl/intl.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
@@ -51,10 +53,11 @@ class NoteEditScrollView extends StatelessWidget {
     required FocusNode focusContent,
     required this.childPage,
     required this.data,
-    this.prevNoteData,
-    required this.shared,
-    this.notesMap = const {},
-    this.noteInfo = const {},
+    this.prevExternalNote,
+    this.prevOwnNote,
+    this.isExternal = false,
+    this.isExisting = false,
+    this.noteTitle,
   })  : _textController = textController,
         _scrollController = scrollController,
         _focusTitle = focusTitle,
@@ -78,78 +81,76 @@ class NoteEditScrollView extends StatelessWidget {
   final String data;
 
   /// Existing note data is note already exists
-  final Map? prevNoteData;
-
-  /// Sharing metadata about a note
-  final Map noteInfo;
+  final FoundExternalNote? prevExternalNote;
+  final FoundOwnNote? prevOwnNote;
 
   /// Boolean describing whether note is shared to pod owner from an
   /// external source.
-  final bool shared;
+  final bool isExternal;
 
-  /// Map comprising all the note files in a user's app data folder
-  /// on their Pod
-  final Map notesMap;
+  /// Boolean describing whether note already exists.
+  final bool isExisting;
+
+  /// Title of note where note already exists
+  final String? noteTitle;
 
   @override
   Widget build(BuildContext context) {
     String currDateStr = '';
-    Map noteContent = {};
 
-    if (prevNoteData == null) {
+    if (!isExisting) {
       // New note: fetch current date for heading
       currDateStr =
           DateFormat('dd MMMM yyyy').format(DateTime.now()).toString();
-    } else {
-      // Editing existing note (shared/unshared): extract content
-      if (shared) {
-        noteContent = prevNoteData!['sharedNoteContent'];
-        // noteInfo = prevNoteData!['sharedNoteInfo'];
-      } else {
-        noteContent = prevNoteData as Map<dynamic, dynamic>;
-      }
     }
 
     Row noteEditActionBar() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: (prevNoteData == null)
+        spacing: 5.0,
+        children: (!isExisting)
             // New Note: save button only
             ? [
                 NoteSaveButton(
                   textController: _textController!,
                   formKey: formKey,
-                  notesMap: notesMap,
+                  // notesMap: notesMap,
                 ),
               ]
             : [
                 // Edit Note: save and back buttons
-                NoteSaveButton(
-                  textController: _textController!,
-                  formKey: formKey,
-                  notesMap: notesMap,
-                  prevNoteData: prevNoteData,
-                  shared: shared,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                // Nav to view note or view shared note
-                (shared)
+                // Save button
+                (isExternal)
+                    ? NoteSaveButton(
+                        textController: _textController!,
+                        formKey: formKey,
+                        prevExternalNote: prevExternalNote,
+                        isExisting: true,
+                        isExternal: isExternal,
+                      )
+                    : NoteSaveButton(
+                        textController: _textController!,
+                        formKey: formKey,
+                        prevOwnNote: prevOwnNote,
+                        isExisting: true,
+                      ),
+                // Back button
+                // Nav to view note or view isExternal note
+                (isExternal)
                     ? NoteBackButton(
                         childPage: childPage,
                         textController: _textController,
                         formKey: formKey,
-                        prevNoteData: prevNoteData,
-                        notesMap: notesMap,
-                        shared: shared,
+                        prevExternalNote: prevExternalNote,
+                        isExisting: isExisting,
+                        isExternal: isExternal,
                       )
                     : NoteBackButton(
                         childPage: childPage,
                         textController: _textController,
                         formKey: formKey,
-                        prevNoteData: prevNoteData,
-                        notesMap: notesMap,
+                        prevOwnNote: prevOwnNote,
+                        isExisting: isExisting,
                       ),
               ],
       );
@@ -166,7 +167,9 @@ class NoteEditScrollView extends StatelessWidget {
             child: SingleChildScrollView(
               controller: _scrollController,
               child: Column(
+                spacing: 10.0,
                 children: [
+                  // Add space
                   const SizedBox(
                     height: 10,
                   ),
@@ -180,9 +183,10 @@ class NoteEditScrollView extends StatelessWidget {
                       autovalidateMode: AutovalidateMode.disabled,
                       skipDisabled: true,
                       child: Column(
+                        spacing: 10.0,
                         children: [
                           // New note: show current date
-                          if (prevNoteData == null) ...[
+                          if (!isExisting) ...[
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -192,17 +196,12 @@ class NoteEditScrollView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
                           ],
                           // Edit existing note: populated text field with
                           // previous note data
                           FormBuilderTextField(
                             name: noteTitlePred,
-                            initialValue: (prevNoteData != null)
-                                ? noteContent[noteTitlePred]
-                                : null,
+                            initialValue: (isExisting) ? noteTitle : null,
                             // Initial focus in title field
                             autofocus: true,
                             focusNode: _focusTitle,
@@ -223,15 +222,13 @@ class NoteEditScrollView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   markdownEditor(
                     context,
                     _textController!,
                     _focusContent,
                     data,
                   ),
+                  // Add space
                   const SizedBox(
                     height: 20,
                   ),
@@ -247,6 +244,7 @@ class NoteEditScrollView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: noteEditActionBar(),
             ),
+            // Add space
             const SizedBox(
               height: 10,
             ),

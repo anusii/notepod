@@ -1,6 +1,6 @@
-/// DESCRIPTION
+/// A widget to display note metadata.
 ///
-// Time-stamp: <Friday 2025-07-18 06:44:23 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-10-14 14:59:05 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
@@ -26,33 +26,48 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/show_access_metadata.dart';
+import 'package:notepod/widgets/show_date_metadata.dart';
+import 'package:notepod/widgets/show_path_metadata.dart';
 
-/// Display the metadata of the note.
-/// One of fullNoteData, noteContent or noteInfo must be supplied.
-/// One of showDates, showSharing or showPathInfo must be supplied.
-/// showDates requires fullNoteData or noteContent.
-/// showSharing requires fullNoteData or noteInfo.
-/// showPathInfo requires fullNoteData or noteInfo.
-/// Variables thisNoteContent and thisNoteInfo are assigned the noteContent
-/// and noteInfo data from one or more of fullNoteData, noteContent and
-/// noteInfo, depending on which was provided.
+/// Display the metadata of an externally owned note.
+/// showDates requires created and modified date time.
+/// showSharing requires note owner, premission granter and
+/// permission list.
+/// showPathInfo requires note file name and note url.
+///
+/// Arguments:
+/// - [createdDateTime] - note created date time.
+/// - [modifiedDateTime] - note last modified data time.
+/// - [noteOwner] - webId of note owner.
+/// - [permissionGranter] - webId of entity that shared the note
+/// to the user.
+/// - [permissionList] - list of permissions granted to the user.
+/// - [noteFileName] - note file name.
+/// - [noteUrl] - url of note.
 
-class NoteDisplayMetadata extends StatelessWidget {
-  final Map fullNoteData;
-  final Map noteContent;
-  final Map noteInfo;
+class DisplayNoteMetadata extends StatelessWidget {
+  final String createdDateTime;
+  final String modifiedDateTime;
+  final String noteOwner;
+  final String permissionGranter;
+  final String permissionList;
+  final String noteFileName;
+  final String noteUrl;
+
   final bool showDates;
   final bool showSharing;
   final bool showPathInfo;
 
-  const NoteDisplayMetadata({
+  const DisplayNoteMetadata({
     super.key,
-    this.fullNoteData = const {},
-    this.noteContent = const {},
-    this.noteInfo = const {},
+    this.createdDateTime = '',
+    this.modifiedDateTime = '',
+    this.noteOwner = '',
+    this.permissionGranter = '',
+    this.permissionList = '',
+    this.noteFileName = '',
+    this.noteUrl = '',
     this.showDates = false,
     this.showSharing = false,
     this.showPathInfo = false,
@@ -60,17 +75,6 @@ class NoteDisplayMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map thisNoteInfo = {};
-    Map thisNoteContent = {};
-    if (fullNoteData.isNotEmpty) {
-      thisNoteInfo = fullNoteData['sharedNoteInfo'];
-      thisNoteContent = fullNoteData['sharedNoteContent'];
-    } else if (noteInfo.isNotEmpty) {
-      thisNoteInfo = noteInfo;
-    } else if (noteContent.isNotEmpty) {
-      thisNoteContent = noteContent;
-    }
-
     return Container(
       color: Theme.of(context).colorScheme.onInverseSurface,
       child: Column(
@@ -78,145 +82,29 @@ class NoteDisplayMetadata extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // ShowDates (created and modified)
-          if (showDates) dateInfo(thisNoteContent, context),
+          if (showDates &&
+              createdDateTime.isNotEmpty &&
+              modifiedDateTime.isNotEmpty)
+            ShowDateMetadata(
+              createdDateTime: createdDateTime,
+              modifiedDateTime: modifiedDateTime,
+            ),
           // Show sharing info (owner, provider, access list)
-          if (showSharing) accessInfo(thisNoteInfo, context),
+          if (showSharing &&
+              noteOwner != '' &&
+              permissionGranter != '' &&
+              permissionList != '')
+            ShowAccessMetadata(
+              noteOwner: noteOwner,
+              permissionGranter: permissionGranter,
+              permissionList: permissionList,
+            ),
           // Show path info (filename and path)
-          if (showPathInfo) pathInfo(thisNoteInfo, context),
+          if (showPathInfo && noteFileName != '' && noteUrl != '')
+            ShowPathMetadata(filename: noteFileName, fileUrl: noteUrl),
           const SizedBox(height: 10),
         ],
       ),
     );
   }
-}
-
-/// Display sharing metadata (owner, provider, access list).
-Widget accessInfo(Map thisNoteInfo, BuildContext context) {
-  return Container(
-    color: Theme.of(context).colorScheme.onInverseSurface,
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Owner: ${thisNoteInfo[noteOwnerPred]}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Shared by: ${thisNoteInfo[permissionGranterPred]}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Permissions: ${thisNoteInfo[permissionListPred]}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-/// Display path metadata (filename and path).
-Widget pathInfo(Map thisNoteInfo, BuildContext context) {
-  return Container(
-    color: Theme.of(context).colorScheme.onInverseSurface,
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Note file name: ${thisNoteInfo[noteFileNamePred]}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Note path: ${thisNoteInfo[noteUrlPred]}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-/// Show date metadata (creation date, modified date)
-Widget dateInfo(Map thisNoteContent, BuildContext context) {
-  return Container(
-    color: Theme.of(context).colorScheme.onInverseSurface,
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Created on: ${getDateTimeStr(thisNoteContent[createdDateTimePred])}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Container(
-                padding: metadataPadding,
-                child: Text(
-                  'Last modified on: ${getDateTimeStr(thisNoteContent[modifiedDateTimePred])}',
-                  style: metadataTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
 }

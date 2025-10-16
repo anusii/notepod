@@ -24,30 +24,28 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
-
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/home.dart';
+import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
 /// Parameters:
-///   [notesMap] - is the file list map with data of all notes
+///   [notes] - is the file list map with data of all notes
 ///                in the user's app data folder (required to
 ///                display sharing information and support
 ///                sharing with suggestion list of recipient WebIds).
 class ListNotes extends StatefulWidget {
-  final Map notesMap;
+  final List<OwnNote> notes;
 
   const ListNotes({
     super.key,
-    required this.notesMap,
+    required this.notes,
   });
 
   @override
@@ -56,8 +54,8 @@ class ListNotes extends StatefulWidget {
 }
 
 class _ListNotesState extends State<ListNotes> {
-  Map _foundNotes = {};
-  List fileNames = [];
+  /// Searched/sorted notes
+  List<FoundOwnNote> _foundNotes = [];
 
   // Sort order
   // true: ascending (A-Z), false: descending (Z-A)
@@ -91,14 +89,13 @@ class _ListNotesState extends State<ListNotes> {
   void updateSelected(int index) {
     setState(() {
       // Increment/decrement selected count
-      if (_foundNotes[fileNames[index]][isSelectedPred]) {
+      if (_foundNotes[index].isSelected) {
         selectedCount--;
       } else {
         selectedCount++;
       }
       // Swap selected status of file
-      _foundNotes[fileNames[index]][isSelectedPred] =
-          !_foundNotes[fileNames[index]][isSelectedPred];
+      _foundNotes[index].isSelected = !_foundNotes[index].isSelected;
     });
   }
 
@@ -107,8 +104,7 @@ class _ListNotesState extends State<ListNotes> {
     super.initState();
 
     // By default _foundNotes is the full list of notes
-    _foundNotes = widget.notesMap;
-    fileNames = _foundNotes.keys.toList();
+    _foundNotes = widget.notes.toListFoundOwnNote();
 
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
@@ -117,11 +113,6 @@ class _ListNotesState extends State<ListNotes> {
     currSortMethod = 'sortByTitle';
 
     _scrollController = ScrollController();
-
-    // Add selected status to note map
-    for (var i = 0; i < _foundNotes.length; i++) {
-      _foundNotes[fileNames[i]][isSelectedPred] = false;
-    }
   }
 
   @override
@@ -134,14 +125,14 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByTitle(bool ascending) {
     setState(() {
       _sortTitleAscending = ascending;
-      fileNames.sort(
+      _foundNotes.sort(
         (a, b) => _sortTitleAscending
-            ? _foundNotes[a][noteTitlePred]
+            ? a.content.noteTitle
                 .toLowerCase()
-                .compareTo(_foundNotes[b][noteTitlePred].toLowerCase())
-            : _foundNotes[b][noteTitlePred]
+                .compareTo(b.content.noteTitle.toLowerCase())
+            : b.content.noteTitle
                 .toLowerCase()
-                .compareTo(_foundNotes[a][noteTitlePred].toLowerCase()),
+                .compareTo(a.content.noteTitle.toLowerCase()),
       );
 
       // Update current sort method
@@ -153,12 +144,14 @@ class _ListNotesState extends State<ListNotes> {
   void _sortByModDate(bool ascending) {
     setState(() {
       _sortModDateAscending = ascending;
-      fileNames.sort(
+      _foundNotes.sort(
         (a, b) => _sortModDateAscending
-            ? _foundNotes[a][modifiedDateTimePred]
-                .compareTo(_foundNotes[b][modifiedDateTimePred])
-            : _foundNotes[b][modifiedDateTimePred]
-                .compareTo(_foundNotes[a][modifiedDateTimePred]),
+            ? a.content.modifiedDateTime
+                .toLowerCase()
+                .compareTo(b.content.modifiedDateTime.toLowerCase())
+            : b.content.modifiedDateTime
+                .toLowerCase()
+                .compareTo(a.content.modifiedDateTime.toLowerCase()),
       );
 
       // Update current sort method
@@ -168,29 +161,25 @@ class _ListNotesState extends State<ListNotes> {
 
   // Search notes
   void _searchNotes(String enteredKeyword) {
-    Map results = {};
+    List<FoundOwnNote> results = [];
     if (enteredKeyword.isEmpty) {
       // Display all notes if no search string
-      results = widget.notesMap;
+      results = widget.notes.toListFoundOwnNote();
     } else {
       // Display notes with title or contents containing search string
-      results = Map.fromEntries(
-        widget.notesMap.entries.where(
-          (note) =>
-              (note.value as Map)[noteTitlePred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              (note.value as Map)[noteContentPred]
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()),
-        ),
-      );
+      results = widget.notes.toListFoundOwnNote().where((note) {
+        return note.content.noteTitle
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.content.noteContent
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase());
+      }).toList();
     }
 
     // Refresh the UI
     setState(() {
       _foundNotes = results;
-      fileNames = _foundNotes.keys.toList();
     });
 
     // Sort by current sort method and polarity
@@ -204,6 +193,9 @@ class _ListNotesState extends State<ListNotes> {
 
   @override
   Widget build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Derive whether window is narrow
@@ -245,26 +237,25 @@ class _ListNotesState extends State<ListNotes> {
                             ? Text(
                                 'Selected: $selectedCount notes',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: theme.colorScheme.primary,
                                 ),
                               )
                             : _foundNotes.length > 1 || _foundNotes.isEmpty
                                 ? Text(
                                     'Found ${_foundNotes.length} notes',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   )
                                 : Text(
                                     'Found ${_foundNotes.length} note',
                                     style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
+                          spacing: 5.0,
                           children: [
                             // Title Sort Label and Button
                             TextButton.icon(
@@ -286,9 +277,6 @@ class _ListNotesState extends State<ListNotes> {
                                         : 'Title',
                               ),
                               iconAlignment: IconAlignment.end,
-                            ),
-                            const SizedBox(
-                              width: 5.0,
                             ),
                             // Date Sort Label and Button
                             TextButton.icon(
@@ -334,12 +322,9 @@ class _ListNotesState extends State<ListNotes> {
                     itemBuilder: (context, index) => Card(
                       child: Center(
                         child: Container(
-                          decoration: _foundNotes[fileNames[index]]
-                                  [isSelectedPred]
+                          decoration: _foundNotes[index].isSelected
                               ? BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onInverseSurface,
+                                  color: theme.colorScheme.onInverseSurface,
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(5),
                                   ),
@@ -356,8 +341,7 @@ class _ListNotesState extends State<ListNotes> {
                                 child: Ink(
                                   decoration: buttonShapeList,
                                   child: IconButton(
-                                    icon: _foundNotes[fileNames[index]]
-                                            [isSelectedPred]
+                                    icon: _foundNotes[index].isSelected
                                         ? const Icon(Icons.done)
                                         : const Icon(Icons.edit_document),
                                     onPressed: () {
@@ -368,37 +352,27 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                             ),
                             title: Text(
-                              _foundNotes[fileNames[index]][noteTitlePred],
+                              _foundNotes[index].content.noteTitle,
                             ),
                             subtitle: Text(
-                              'Created on: ${getDateTimeStr(_foundNotes[fileNames[index]][createdDateTimePred])} \n'
-                              'Last modified: ${getDateTimeStr(_foundNotes[fileNames[index]][modifiedDateTimePred])}\n'
-                              'Shared with: ${getRecipNbrStr(_foundNotes[fileNames[index]][authUserPred].length)}',
+                              'Created on: ${getDateTimeStr(_foundNotes[index].content.createdDateTime)} \n'
+                              'Last modified: ${getDateTimeStr(_foundNotes[index].content.modifiedDateTime)}\n'
+                              'Shared with: ${getRecipNbrStr(_foundNotes[index].content.authUsers.length)}',
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
                               height: NoteIconSize.height,
                               width: NoteIconSize.twoIconWidth,
                               child: TrailingButtons(
-                                foundNotes: _foundNotes,
-                                fileNames: fileNames,
-                                index: index,
+                                note: _foundNotes[index],
                               ),
                             ),
                             onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AppHomePage(
-                                    title: topBarTitle,
-                                    childPage: ViewNote(
-                                      noteData: _foundNotes[fileNames[index]],
-                                      notesMap: widget.notesMap,
-                                    ),
-                                  ),
+                              navToChildPage(
+                                context: context,
+                                childPage: ViewNote(
+                                  note: _foundNotes[index],
                                 ),
-                                (Route<dynamic> route) =>
-                                    false, // This predicate ensures all previous routes are removed
                               );
                             },
                           ),
@@ -419,32 +393,23 @@ class _ListNotesState extends State<ListNotes> {
 class TrailingButtons extends StatelessWidget {
   const TrailingButtons({
     super.key,
-    required Map foundNotes,
-    required this.fileNames,
-    required this.index,
-  }) : _foundNotes = foundNotes;
+    required FoundOwnNote note,
+  }) : _note = note;
 
-  final Map _foundNotes;
-  final List fileNames;
-  final int index;
+  final FoundOwnNote _note;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 15,
       children: [
         // Share button
         SimpleActionButton(
           icon: const Icon(Icons.share),
           childPage: ShareNote(
-            noteData: _foundNotes[fileNames[index]],
-            noteFilePath: // Get note file path
-                '$noteFileNamePrefix${_foundNotes[fileNames[index]][createdDateTimePred]}.ttl',
-            notesMap: _foundNotes,
+            note: _note,
             backPage: const ListNotesScreen(),
           ),
-        ),
-        const SizedBox(
-          width: 15,
         ),
         // Open note icon
         const Icon(

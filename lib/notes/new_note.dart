@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for creating a new note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 14:43:37 +1000 Graham Williams>
 ///
@@ -34,7 +34,9 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
-// Parameters: none
+///
+/// Parameters: none
+
 class NewNote extends StatefulWidget {
   const NewNote({
     super.key,
@@ -58,6 +60,7 @@ class NewNoteState extends State<NewNote> {
   /// Focus node for note content text field.
   late final FocusNode _focusContent;
 
+  /// Initialise note content text string.
   String data = '';
 
   @override
@@ -130,7 +133,6 @@ class NewNoteState extends State<NewNote> {
       focusContent: _focusContent,
       childPage: const ListNotesScreen(),
       data: data,
-      shared: false,
     );
   }
 }

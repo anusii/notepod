@@ -32,7 +32,8 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -72,11 +73,12 @@ class AppHomePageState extends State<AppHomePage> {
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor:
-            Theme.of(context).appBarTheme.backgroundColor, // lightGreen,
+        backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
         centerTitle: true,
         title: Text(widget.title),
         actions: <Widget>[
@@ -86,16 +88,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.add_circle,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AppHomePage(
-                    title: topBarTitle,
-                    childPage: NewNote(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: const NewNote(),
               );
             },
           ),
@@ -106,16 +101,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.view_list,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AppHomePage(
-                    title: topBarTitle,
-                    childPage: ListNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: const ListNotesScreen(),
               );
             },
           ),
@@ -132,16 +120,9 @@ class AppHomePageState extends State<AppHomePage> {
               Icons.groups,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AppHomePage(
-                    title: topBarTitle,
-                    childPage: SharedNotesScreen(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: const ListExternalNotesScreen(),
               );
             },
           ),
