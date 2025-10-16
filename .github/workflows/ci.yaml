@@ -131,11 +131,6 @@ jobs:
     if: github.event.repository.private == false
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: ${{env.FLUTTER_VERSION}}
-      - run: flutter pub get
       - name: Check copyright headers
         run: |
           # Find Dart files without proper copyright headers, excluding generated files
