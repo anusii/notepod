@@ -1,7 +1,11 @@
 name: notepod
 description: "Privacy preserving note taking app using PODs."
 publish_to: "none"
+<<<<<<< HEAD
 version: 0.2.45+13
+=======
+version: 0.2.45+14
+>>>>>>> dev
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
