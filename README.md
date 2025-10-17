@@ -155,8 +155,8 @@ you can create a Pod, make and share notes.
 
 ### Extra setup for MacOS
 
-Running the app on MacOS requires, additional configuration in
-Xcode. Open the project macos folder in Xcode with
+Building and signing the app on MacOS requires, additional
+configuration in Xcode. Open the project macos folder in Xcode with
 
 ```shell
 cd notepod/macos
@@ -251,7 +251,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Thursday 2025-10-16 17:00:33 +1100 Graham Williams>*
+*Time-stamp: <Friday 2025-10-17 09:46:15 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
