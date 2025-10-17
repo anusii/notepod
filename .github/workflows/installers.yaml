@@ -229,14 +229,14 @@ jobs:
       - name: Note the build location
         run: |
           pwd
-          ls -lh ${{ env.APP }}
+          ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}
 
       # Package as DMG
 
       - name: Create DMG (Unsigned)
         run: |
           mkdir -p dmg_temp
-          cp -R "${{ env.APP }}/${{ env.APP }}.app" dmg_temp/
+          cp -R "${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}.app" dmg_temp/
           ln -s /Applications dmg_temp/Applications
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
