@@ -26,6 +26,10 @@ env:
   RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
   FLUTTER_VERSION: '3.35.6'
+  MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
+  MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+  MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+  MACOS_KEYCHAIN_PWD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
 
 jobs:
 
@@ -186,7 +190,7 @@ jobs:
       - name: Note the build location
         run: |
           pwd
-          ls -lh build/macos/Build/Products/Release
+          ls -lh ${{ env.APP }}
 
 
       # Package as DMG
@@ -194,7 +198,7 @@ jobs:
       - name: Create DMG (Unsigned)
         run: |
           mkdir -p dmg_temp
-          cp -R "build/macos/Build/Products/Release/${{ env.APP }}.app" dmg_temp/
+          cp -R "${{ env.APP }}/${{ env.APP }}.app" dmg_temp/
           ln -s /Applications dmg_temp/Applications
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
