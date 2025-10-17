@@ -737,10 +737,11 @@
 				AUTOMATION_APPLE_EVENTS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Release.entitlements;
-				/* 20251017 gjw comment for now "CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development"; */
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development"; /*20251017 gjw TO UPDATE */
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				/* 20251017 gjw comment for now DEVELOPMENT_TEAM = K8FD5P5QNG; */
+				DEVELOPMENT_TEAM = G7843T3SD3; /*20251017 gjw TO UPDATE */
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
