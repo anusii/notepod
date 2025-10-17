@@ -737,8 +737,7 @@
 				AUTOMATION_APPLE_EVENTS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Release.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				/* 20251018 gjw This breaks the build: "CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development"; */
+				/* 20251017 gjw comment for now "CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development"; */
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				/* 20251018 gjw This breaks the build: DEVELOPMENT_TEAM = G7843T3SD3; */
