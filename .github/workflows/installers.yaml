@@ -30,6 +30,7 @@ env:
   LINUX_PKGS: libsecret-1-dev
   FLUTTER_VERSION: '3.35.6'
   MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
+  IOS_APP_RELEASE_PATH: build/ios/ipa
 
 jobs:
 
@@ -247,7 +248,7 @@ jobs:
         run: |
           ls -lh
 
-      - name: Upload Artefact
+      - name: Upload DMG Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dmg
@@ -266,16 +267,117 @@ jobs:
       - name: Review ZIP exists
         run: ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}
 
-      - name: Upload Artefact
+      - name: Upload ZIP Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-zip
           path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
-      # Are we using a self hosted runner rather than github hosted runner?
-      # See below for required cleanup of keychain and provisioning profile if using
-      # self hosted runner. Not required for github hosted runner.
-      # https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
+########################################################################
+  # IOS
+
+  package-ios-ipa-zip:
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build macos')
+    runs-on: macos-latest
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{env.FLUTTER_VERSION}}
+
+      - name: Confirm Flutter Version
+        run: flutter --version
+
+      - name: Install Flutter Project Dependencies
+        run: flutter pub get
+
+      - name: Enable iOS
+        run: flutter config --enable-ios
+
+      # Install certificate and provisioning profile for app signing
+
+      - name: Install Apple certificate and provisioning profile
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_PROVISION_PROFILE: ${{ secrets.MACOS_PROVISION_PROFILE }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
+        run: |
+
+          echo "Create variables for filepaths for certificate, provisioning profile, and keychain"
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo "Import certificate and provisioning profile from secrets"
+          echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
+
+          echo "Create temporary keychain"
+          security create-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+
+          echo "Import certificate to keychain"
+          security import $CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          echo "Add to partition list to allow access to keychain"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          echo "Apply provisioning profile"
+          # Although specifies mobile, this location is meant to be correct for
+          # macos and ios provisioning profiles
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # Build and sign the app
+
+      - name: Build Flutter iOS app archive
+        run: flutter build ipa --release
+
+      - name: Note the build location
+        run: |
+          pwd
+          ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
+
+      - name: Note the IPA created
+        run: |
+          ls -lh
+
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-ipa
+          path: ${{ env.APP }}.ipa
+
+      # Package as ZIP
+
+      - name: Create ZIP
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: ${{ env.IOS_APP_RELEASE_PATH }}
+          path: ${{ env.APP }}.ipa
+          filename: ${{ env.APP }}-${{env.RELEASE}}-ios.zip
+
+      - name: Review ZIP exists
+        run: ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
+
+      - name: Upload ZIP Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-ios-zip
+          path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-ios.zip
+
 
   ########################################################################
   # WINDOWS
