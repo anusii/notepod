@@ -22,7 +22,7 @@ on:
     branches:
       - dev
       - build
-      - jess/macos_installer
+      - jess/ios_installer
 
 env:
   APP: notepod
