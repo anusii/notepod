@@ -8,6 +8,7 @@
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+[![Build Installers](https://github.com/anusii/notepod/actions/workflows/installers.yaml/badge.svg)](https://github.com/anusii/notepod/actions/workflows/installers.yaml)
 
 An app to support the secure and private storage and sharing of
 personal notes on your own encrypted personal online datastore (Pod)
