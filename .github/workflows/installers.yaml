@@ -18,11 +18,11 @@ name: Build Installers
 # build and added signing workflow as per <https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications>
 
 on:
-  push #:
-#    branches:
-#      - dev
-#      - build
-#      - jess/macos_installer
+  push:
+    branches:
+      - dev
+      - build
+      - jess/macos_installer
 
 env:
   APP: notepod
