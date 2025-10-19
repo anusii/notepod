@@ -49,8 +49,7 @@ class ListExternalNotes extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ListExternalNotesState createState() => _ListExternalNotesState();
+  State<ListExternalNotes> createState() => _ListExternalNotesState();
 }
 
 class _ListExternalNotesState extends State<ListExternalNotes> {
@@ -411,7 +410,8 @@ class TitleExternalNote extends StatelessWidget {
             note: _note,
           ),
         ] else ...[
-          const Text('Title access requires read permission'),
+          // Display nothing as no read permission
+          const Text(''),
         ],
       ],
     );
