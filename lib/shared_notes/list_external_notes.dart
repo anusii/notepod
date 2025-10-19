@@ -410,7 +410,8 @@ class TitleExternalNote extends StatelessWidget {
             note: _note,
           ),
         ] else ...[
-          const Text('Title access requires read permission'),
+          // Display nothing as no read permission
+          const Text(''),
         ],
       ],
     );
