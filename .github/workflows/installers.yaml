@@ -185,9 +185,9 @@ jobs:
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
 
-      # Install certificate and provisioning profile for app signing
+      # Install certificate and MACOS provisioning profile for app signing
 
-      - name: Install Apple certificate and provisioning profile
+      - name: Install Apple certificate and MACOS provisioning profile
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
@@ -223,12 +223,18 @@ jobs:
       # Build and sign the app
 
       - name: Build Flutter macOS app
+      # By default, app is codesigned, unless --no-codesign is used.
         run: flutter build macos --release
 
       - name: Note the build location
         run: |
           pwd
           ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}
+
+      - name: Note .app signing and notarizing status
+        run: |
+          spctl -a -v
+          "${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
@@ -251,6 +257,13 @@ jobs:
         with:
           name: ${{ env.APP }}-macos-dmg
           path: ${{ env.APP }}-${{env.RELEASE}}-macos.dmg
+
+      # 20251018 jesscmoore:
+      # App needs testing on other desktops, not linked to our
+      # Apple Developer Program account. It may still need to be
+      # notarised to avoid being blocked by macOS Gatekeeper on
+      # other user's macOS desktops. Same for the iOS IPA.
+      # https://help.apple.com/xcode/mac/current/#/dev033e997ca
 
       # Package as ZIP
 
@@ -300,13 +313,19 @@ jobs:
       - name: Enable iOS
         run: flutter config --enable-ios
 
-      # Install certificate and provisioning profile for app signing
+      # Install certificate and IOS provisioning profile for app signing
 
-      - name: Install Apple certificate and provisioning profile
+      # iOS entitlements are different to the macOS entitlements
+      # so uses a provisioning profile for iOS.
+      # The provisioning profile links the signing certificate, Apple
+      # developer account and entitlements for the app build.
+
+
+      - name: Install Apple certificate and IOS provisioning profile
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
-          MACOS_PROVISION_PROFILE: ${{ secrets.MACOS_PROVISION_PROFILE }}
+          IOS_PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
         run: |
 
@@ -317,7 +336,7 @@ jobs:
 
           echo "Import certificate and provisioning profile from secrets"
           echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
-          echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
+          echo -n "$IOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
 
           echo "Create temporary keychain"
           security create-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
@@ -327,27 +346,37 @@ jobs:
           echo "Import certificate to keychain"
           security import $CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
 
-          echo "Add to partition list to allow access to keychain"
+          echo "Add apple and apple-tool to partition list for key to allow build codesign to access keychain"
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          # Display temporary keychain
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          echo "Apply provisioning profile"
+          # TODO: make this the save path for the decoded profile
+          echo "Save provisioning profile to location expected by Xcode build"
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build and sign the app
 
       - name: Build Flutter iOS app archive
-        run: flutter build ipa --release
+      # By default `ipa` produces a release mode .ipa archived version of
+      # .app bundle, with settings tailored for Apple App Store
+      # distribution. Use --export-method
+      # By default, app is codesigned, unless --no-codesign is used.
+        run: flutter build ipa
 
       - name: Note the build location
         run: |
           pwd
-          ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
+          ls -lh
 
       - name: Note the IPA created
         run: |
-          ls -lh
+          ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
+
+      - name: Note IPA signing and notarizing status
+        run: |
+          spctl -a -v "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa"
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
@@ -355,24 +384,11 @@ jobs:
           name: ${{ env.APP }}-ipa
           path: ${{ env.APP }}.ipa
 
-      # Package as ZIP
-
-      - name: Create ZIP
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          directory: ${{ env.IOS_APP_RELEASE_PATH }}
-          path: ${{ env.APP }}.ipa
-          filename: ${{ env.APP }}-${{env.RELEASE}}-ios.zip
-
-      - name: Review ZIP exists
-        run: ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
-
-      - name: Upload ZIP Artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP }}-ios-zip
-          path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-ios.zip
+      # 20251018 jesscmoore:
+      # If ipa not distributed through the app store or enterprise MDM
+      # users will asked to trust developer in iOS settings during
+      # the install:
+      # https://help.apple.com/xcode/mac/current/#/dev96a12fb84
 
 
   ########################################################################
