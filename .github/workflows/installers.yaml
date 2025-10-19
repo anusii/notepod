@@ -17,6 +17,9 @@ name: Build Installers
 # 20251017 jesscmoore Added github secrets for macos signing during
 # build and added signing workflow as per <https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications>
 
+# 20251018 jesscmoore Added github secrets for ios signing
+# and workflow for ios ipa archive.
+
 on:
   push:
     branches:
@@ -323,8 +326,8 @@ jobs:
 
       - name: Install Apple certificate and IOS provisioning profile
         env:
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PWD: ${{ secrets.IOS_CERTIFICATE_PWD }}
           IOS_PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
         run: |
@@ -335,7 +338,7 @@ jobs:
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           echo "Import certificate and provisioning profile from secrets"
-          echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$IOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$IOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
 
           echo "Create temporary keychain"
@@ -344,7 +347,7 @@ jobs:
           security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
 
           echo "Import certificate to keychain"
-          security import $CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
 
           echo "Add apple and apple-tool to partition list for key to allow build codesign to access keychain"
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
