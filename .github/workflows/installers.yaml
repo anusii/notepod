@@ -20,6 +20,9 @@ name: Build Installers
 # 20251018 jesscmoore Added github secrets for ios signing
 # and workflow for ios ipa archive.
 
+# 20251020 jesscmoore Added IOS development provisioning profile in
+# Apple Developer Program to use with manual signing
+
 on:
   push:
     branches:
@@ -416,6 +419,12 @@ jobs:
       # users will asked to trust developer in iOS settings during
       # the install:
       # https://help.apple.com/xcode/mac/current/#/dev96a12fb84
+
+      # 20251020 jesscmoore:
+      # Using a "development" provisioning profile
+      # may limit installation to only devices
+      # registered in the Apple Developer Program
+      # account.
 
 
   ########################################################################
