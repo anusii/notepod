@@ -287,6 +287,14 @@ jobs:
           name: ${{ env.APP }}-macos-zip
           path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
+      # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $KEYCHAIN_PATH
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.provisionprofile
+
+
 ########################################################################
   # IOS
 
@@ -351,13 +359,20 @@ jobs:
 
           echo "Add apple and apple-tool to partition list for key to allow build codesign to access keychain"
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          # Display temporary keychain
-          security list-keychain -d user -s $KEYCHAIN_PATH
 
           # TODO: make this the save path for the decoded profile
           echo "Save provisioning profile to location expected by Xcode build"
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Display temporary keychain
+        run:  |
+
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+      - name: List installed provisioning profiles
+        run: ls -lh ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build and sign the app
 
@@ -367,6 +382,8 @@ jobs:
       # distribution. Use --export-method
       # By default, app is codesigned, unless --no-codesign is used.
         run: flutter build ipa
+        # Option for manual signing
+        # run: flutter build ipa --release --export-options-plist=ios/GithubActionsExportOptions.plist
 
       - name: Note the build location
         run: |
@@ -385,7 +402,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-ipa
-          path: ${{ env.APP }}.ipa
+          path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa
+
+      # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $KEYCHAIN_PATH
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
       # 20251018 jesscmoore:
       # If ipa not distributed through the app store or enterprise MDM
