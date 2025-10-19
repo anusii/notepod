@@ -51,8 +51,7 @@ class ViewSharedNote extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ViewSharedNoteState createState() => _ViewSharedNoteState();
+  State<ViewSharedNote> createState() => _ViewSharedNoteState();
 }
 
 class _ViewSharedNoteState extends State<ViewSharedNote> {

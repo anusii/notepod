@@ -52,8 +52,7 @@ class NonReadableNote extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NonReadableNoteState createState() => _NonReadableNoteState();
+  State<NonReadableNote> createState() => _NonReadableNoteState();
 }
 
 class _NonReadableNoteState extends State<NonReadableNote> {
