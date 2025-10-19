@@ -69,6 +69,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _note = widget.note;
   }
 
   @override
