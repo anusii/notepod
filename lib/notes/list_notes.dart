@@ -49,8 +49,7 @@ class ListNotes extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ListNotesState createState() => _ListNotesState();
+  State<ListNotes> createState() => _ListNotesState();
 }
 
 class _ListNotesState extends State<ListNotes> {

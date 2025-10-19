@@ -52,8 +52,7 @@ class ViewNote extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ViewNoteState createState() => _ViewNoteState();
+  State<ViewNote> createState() => _ViewNoteState();
 }
 
 class _ViewNoteState extends State<ViewNote> {
