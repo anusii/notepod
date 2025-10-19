@@ -15,7 +15,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 	<!-- 20251019 jesscmoore: Update these with app id and profile name -->
-	<key>com.togaware.notepod</key>
+	<key>XC com togaware notepod (com.togaware.notepod)</key>
 	<string>IOS Development Profile (cecs71 device)</string>
 	</dict>
 	<key>stripSwiftSymbols</key>
