@@ -384,9 +384,9 @@ jobs:
       # .app bundle, with settings tailored for Apple App Store
       # distribution. Use --export-method
       # By default, app is codesigned, unless --no-codesign is used.
-        run: flutter build ipa
+        # run: flutter build ipa
         # Option for manual signing
-        # run: flutter build ipa --release --export-options-plist=ios/GithubActionsExportOptions.plist
+        run: flutter build ipa --release --export-options-plist=ios/GithubActionsExportOptions.plist
 
       - name: Note the build location
         run: |
