@@ -344,10 +344,11 @@ jobs:
           IOS_CERTIFICATE_PWD: ${{ secrets.IOS_CERTIFICATE_PWD }}
           IOS_PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
+          CERTIFICATE_PATH: $RUNNER_TEMP/build_certificate.p12
         run: |
 
           echo "Create variables for filepaths for certificate, provisioning profile, and keychain"
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          # CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
