@@ -36,7 +36,6 @@ env:
   LINUX_PKGS: libsecret-1-dev
   FLUTTER_VERSION: '3.35.6'
   MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
-  IOS_APP_RELEASE_PATH: build/ios/ipa
 
 jobs:
 
@@ -308,6 +307,10 @@ jobs:
       contains(github.event.head_commit.message, 'build ios')
     runs-on: macos-latest
 
+    env:
+      IOS_APP_RELEASE_PATH: build/ios/ipa
+      IOS_ARCHIVE_RELEASE_PATH: build/ios/archive
+
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -386,25 +389,32 @@ jobs:
       # By default, app is codesigned, unless --no-codesign is used.
         # run: flutter build ipa
         # Option for manual signing
-        run: flutter build ipa --verbose --export-options-plist=ios/GithubActionsExportOptions.plist
-
-      - name: Note the build location
-        run: |
-          pwd
-          ls -lh
+        # Use --verbose to debug build and signing issues
+        run: flutter build ipa --export-options-plist=ios/GithubActionsExportOptions.plist
 
       - name: Note the xcarchive created
         run: |
-          IOS_ARCHIVE_PATH=build/ios/archive
-          ls -lh $IOS_ARCHIVE_PATH
+          ls -lh ${{ env.IOS_ARCHIVE_RELEASE_PATH }}
 
       - name: Note the IPA created
         run: |
           ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
 
-      - name: Note IPA signing and notarizing status
+      - name:  Extract IPA
         run: |
-          spctl -a -v "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa"
+          mkdir "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
+          unzip "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa" -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
+
+      - name: Find .app bundle extracted from IPA
+        id: find_app
+        run: |
+          APP_PATH=$(find "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa" -name "*.app" -print -quit)
+
+      - name: Check IPA code signature
+        # Ensure an app bundle was found
+        if: steps.find_app.outputs.APP_PATH != ''
+        run: |
+          codesign --display --verbose=2 "${{ steps.find_app.outputs.APP_PATH }}"
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
@@ -412,12 +422,12 @@ jobs:
           name: ${{ env.APP }}-ipa
           path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa
 
-      # Important! Cleanup: remove the certificate and provisioning profile from the runner!
-      - name: Clean up keychain and provisioning profile
-        if: ${{ always() }}
-        run: |
-          security delete-keychain $KEYCHAIN_PATH
-          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+      # # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+      # - name: Clean up keychain and provisioning profile
+      #   if: ${{ always() }}
+      #   run: |
+      #     security delete-keychain $KEYCHAIN_PATH
+      #     rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
       # 20251018 jesscmoore:
       # If ipa not distributed through the app store or enterprise MDM
@@ -426,10 +436,19 @@ jobs:
       # https://help.apple.com/xcode/mac/current/#/dev96a12fb84
 
       # 20251020 jesscmoore:
-      # Using a "development" provisioning profile
+      # Using a "development" certificate and associated
+      # provisioning profile
+      # and "debugging" export method
       # may limit installation to only devices
       # registered in the Apple Developer Program
       # account.
+      # Use a "distribution" certificate and associated
+      # provisioning profile and "ad-hoc" export method for
+      # testing on devices that don't need to be registered
+      # on Apple Develop Program account.
+      # The distribution certificate and associated
+      # provisioning profile can be used with app-store export
+      # method.
 
 
   ########################################################################
