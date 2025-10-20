@@ -18,10 +18,10 @@
 	<key>com.togaware.notepod</key>
 	<string>IOS Development Profile (cecs71 device)</string>
 	</dict>
-	<key>signingCertificate</key>
-	<string>Jessica Moore</string>
-	<key>installerSigningCertificate</key>
-	<string>Jessica Moore</string>
+	<!-- <key>signingCertificate</key> -->
+	<!-- <string>Jessica Moore</string> -->
+	<!-- <key>installerSigningCertificate</key> -->
+	<!-- <string>Jessica Moore</string> -->
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
