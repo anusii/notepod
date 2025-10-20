@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Monday 2025-09-15 09:30:12 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:45:38 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -55,7 +55,7 @@ class NotePod extends StatelessWidget {
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
       home: const SolidLogin(
-        title: 'NOTEPOD - A Note Taker',
+        title: 'NotePod\nPrivate and Shareable Notes',
         appDirectory: 'notepod',
         image: AssetImage('assets/images/notepod-background.jpg'),
         logo: AssetImage('assets/images/notepod.png'),

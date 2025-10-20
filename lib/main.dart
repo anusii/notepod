@@ -1,6 +1,6 @@
 /// NotePod - Define the main entry point for the app.
 ///
-// Time-stamp: <Friday 2025-08-15 08:17:36 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:43:32 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
@@ -66,7 +66,7 @@ void main() async {
 
       // alwaysOnTop: true,
 
-      title: 'NotePod - A note taking app with private PODs',
+      title: 'NotePod - Private and Shareable Notes',
     );
 
     // Once the window manager is ready we reconfigure it a little.

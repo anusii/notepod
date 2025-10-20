@@ -1,4 +1,4 @@
-# NotePod &mdash; A notepad for your Data Vault
+# NotePod &mdash; Private and Shareable Notes
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
@@ -17,16 +17,15 @@ Server](https://solidporject.org/about). The app was developed by the
 written by Anushka Vidanage, [Graham
 Williams](https://togaware.com/Graham.Williams.html), and Jessica
 Moore. You can install the app from
-[SnapCraft](https://snapcraft.io/notepod) for Linux. You can also run
-the app online at
-[innerpod.solidcommunity.au](https://notepod.solidcommunity.au)
-&mdash; no installation required. For running directly on your own
-device:
+[SnapCraft](https://snapcraft.io/notepod) for Linux. To install the
+app directly on your own device for a published repository visit:
 
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
-The latest version of the app can be downloaded and installed from the
-[Solid Community AU](https://solidcommunity.au):
+The latest version of the app can be run online at
+[innerpod.solidcommunity.au](https://notepod.solidcommunity.au) with
+no installation required, or download and install for your platform
+from the [Solid Community AU](https://solidcommunity.au) repository:
 
 + **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
@@ -251,7 +250,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Friday 2025-10-17 09:46:15 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-21 08:41:11 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->

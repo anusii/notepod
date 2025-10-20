@@ -1,6 +1,6 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// Colour related costants used throughout the app.
 ///
-// Time-stamp: <Monday 2025-09-15 08:31:39 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:44:18 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
