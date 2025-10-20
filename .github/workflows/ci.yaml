@@ -152,6 +152,13 @@ jobs:
             echo "✅ All non-generated Dart files have copyright headers"
           fi
 
+  # 20251017 gjw The usual command for running the integration tests
+  # is `flutter test interaction_test` and each `*_test.dart`  is
+  # run. However for our testing of apps using solidui we need to
+  # authenticate through an external browser login. The usual `flutter
+  # test` will not properly authenticate. Instead, we should run `make
+  # qtest.all` to run the tests. This action
+
   test_enforcement:
     runs-on: ubuntu-latest
     if: github.event.repository.private == false
@@ -161,7 +168,7 @@ jobs:
         run: |
           # Check for disallowed "flutter test integration_test/" usage in scripts/workflows
           # Exclude comments and this CI check itself
-          batch_test_found=$(grep -r "flutter test integration_test/" \
+          batch_test_found=$(grep -r "flutter test integration_test" \
             .github/workflows/ \
             support/ \
             scripts/ \
