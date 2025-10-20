@@ -393,6 +393,11 @@ jobs:
           pwd
           ls -lh
 
+      - name: Note the xcarchive created
+        run: |
+          IOS_ARCHIVE_PATH=build/ios/archive
+          ls -lh $IOS_ARCHIVE_PATH
+
       - name: Note the IPA created
         run: |
           ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
