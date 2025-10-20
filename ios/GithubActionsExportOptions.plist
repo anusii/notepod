@@ -16,7 +16,7 @@
 	<!-- 20251019 jesscmoore: Update these with app id and profile name -->
 	<dict>
 	<key>com.togaware.notepod</key>
-	<string>IOS Development Profile (cecs71 device)</string>
+	<string>IOS Development Profile</string>
 	</dict>
 	<!-- <key>signingCertificate</key> -->
 	<!-- <string>Jessica Moore</string> -->
