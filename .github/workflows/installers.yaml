@@ -413,10 +413,10 @@ jobs:
           # echo "extracted .app path: $APP_PATH"
           if test -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"; then
             echo "IPA extracted to extracted_ipa/Payload/Runner.app."
-            echo "APP_EXTRACTED=true" >> "$GITHUB_OUTPUT"
+            echo "APP_EXTRACTED=true" >> $GITHUB_OUTPUT
           else
             echo ".app bundle not extracted from IPA."
-            echo "APP_EXTRACTED=false" >> "$GITHUB_OUTPUT"
+            echo "APP_EXTRACTED=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Check IPA code signature
