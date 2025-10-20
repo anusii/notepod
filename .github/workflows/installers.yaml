@@ -405,16 +405,25 @@ jobs:
           mkdir "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
           unzip "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa" -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
 
-      - name: Find .app bundle extracted from IPA
-        id: find_app
+      - name: Check .app bundle extracted from IPA
+        # Check app bundle was extracted
+        id: check_app
         run: |
-          APP_PATH=$(find "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa" -name "*.app" -print -quit)
+          # APP_PATH=$(find "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload" -d -name "*.app" -print -quit)
+          # echo "extracted .app path: $APP_PATH"
+          if test -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"; then
+            echo "IPA extracted to extracted_ipa/Payload/Runner.app."
+            echo "APP_EXTRACTED=true" >> "$GITHUB_OUTPUT"
+          else
+            echo ".app bundle not extracted from IPA."
+            echo "APP_EXTRACTED=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Check IPA code signature
-        # Ensure an app bundle was found
-        if: steps.find_app.outputs.APP_PATH != ''
+        # Ensure an app bundle was extracted
+        if: steps.check_app.outputs.APP_EXTRACTED != 'true'
         run: |
-          codesign --display --verbose=2 "${{ steps.find_app.outputs.APP_PATH }}"
+          codesign --display --verbose=2 "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
