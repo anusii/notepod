@@ -300,7 +300,7 @@ jobs:
 ########################################################################
   # IOS
 
-  package-ios-ipa-zip:
+  package-ios-ipa:
     if: |
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
@@ -421,8 +421,9 @@ jobs:
 
       - name: Check IPA code signature
         # Ensure an app bundle was extracted
-        if: steps.check_app.outputs.APP_EXTRACTED != 'true'
+        # if: steps.check_app.outputs.APP_EXTRACTED == 'true'
         run: |
+          echo "App extracted: ${{ steps.check_app.outputs.APP_EXTRACTED }}"
           codesign --display --verbose=2 "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"
 
       - name: Upload Artefact
