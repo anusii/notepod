@@ -80,12 +80,12 @@ Desktop version:
 
 <!-- markdownlint-disable MD033 MD045 MD013 -->
 <img
-src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png" width=400>
+src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping.png" width=600>
 
 Mobile Phone version:
 
 <img
-src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png" width=200>
+src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping_android.png" width=200>
 <!-- markdownlint-enable MD033 MD045 MD013 -->
 
 ## Obtaining a Pod
@@ -119,7 +119,7 @@ On starting up the app you will see the login screen where a user's
 WebID is to be entered. The app itself does not know your login
 details. That is handled by a remote Identify Provider of your choice.
 
-![login](https://raw.githubusercontent.com/anusii/notepod/dev/images/login.png)
+![login](https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/login.png)
 
 ## Contribute to the NotePod Flutter App
 
@@ -257,7 +257,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-21 20:43:58 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-22 08:15:30 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
