@@ -45,8 +45,8 @@ flutter:
   ignore          Look for usage of ignore directives.
   license	  Look for missing top license in source code.
 
-  test	    Run `flutter test` for testing.
-  itest	    Run `flutter test integration_test` for interation testing.
+  test	    Run flutter testing.
+  itest	    Run flutter interation testing.
   qtest	    Run above test with PAUSE=0.
   coverage  Run with `--coverage`.
     coview  View the generated html coverage in browser.
