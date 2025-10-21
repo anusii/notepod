@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Tuesday 2025-10-21 08:45:38 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2025-10-22 08:30:24 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -49,7 +49,7 @@ class NotePod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Note Taker',
+      title: 'Note Pod',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),

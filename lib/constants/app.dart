@@ -29,7 +29,7 @@ import 'package:flutter/material.dart';
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String siiUrl = 'https://sii.anu.edu.au';
-const String topBarTitle = 'NotePod - Private and Shareable Notes';
+const String topBarTitle = 'NotePod';
 
 const String authors =
     'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
