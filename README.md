@@ -76,11 +76,15 @@ A simple example of a shopping list, available anywhere, anytime.
 
 Desktop version:
 
-![shopping_desktop](https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png)
+<!-- markdownlint-disable MD033 MD045 MD013 -->
+<img
+src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png" width=400>
 
 Mobile Phone version:
 
-![shopping_android](https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png)
+<img
+src="https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png" width=200>
+<!-- markdownlint-enable MD033 MD045 MD013 -->
 
 ## Obtaining a Pod
 
@@ -251,7 +255,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-21 19:53:31 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-21 20:15:45 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
