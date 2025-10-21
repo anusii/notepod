@@ -17,8 +17,8 @@ Server](https://solidporject.org/about). The app was developed by the
 written by [Anushka Vidanage](https://github.com/anushkavidanage),
 [Graham Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore). You can install the app from
-[SnapCraft](https://snapcraft.io/notepod) for Linux. To install the
-app directly on your own device for a published repository visit:
+[SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
+published by the following repositories:
 
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
@@ -250,7 +250,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-21 19:51:29 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-21 19:53:31 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
