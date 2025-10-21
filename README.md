@@ -85,7 +85,7 @@ src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/sho
 Mobile Phone version:
 
 <img
-src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping_android.png" width=200>
+src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping_android.png" width=300>
 <!-- markdownlint-enable MD033 MD045 MD013 -->
 
 ## Obtaining a Pod
@@ -257,7 +257,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-22 08:15:30 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-22 08:21:15 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
