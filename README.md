@@ -44,7 +44,10 @@ from the [Solid Community AU](https://solidcommunity.au) repository:
 Contributions are welcome. Visit
 [github](https://github.com/gjwgit/notepod) to submit an issue or,
 even better, fork the repository yourself, update the code, and submit
-a Pull Request. Thanks.
+a Pull Request. The app is implemented in
+[Flutter](https://flutter.dev) using
+[solidpod](https://pub.dev/packages/solidpod) for Flutter to manage
+the Solid Pod interactions. Thanks.
 
 ## Introduction
 
@@ -255,7 +258,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-21 20:15:45 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-21 20:43:58 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
