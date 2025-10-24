@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Wednesday 2025-10-22 08:30:24 +1100 Graham Williams>
+// Time-stamp: <Friday 2025-10-24 11:59:49 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
