@@ -28,7 +28,15 @@ dependencies:
   markdown_widget: ^2.3.2+8
   package_info_plus: ^8.3.0
   rdflib: ^0.2.12
-  solidpod: ^0.7.13
+  # solidpod: ^0.7.13
+  solidpod:
+    git:
+      url: https://github.com/anusii/solidpod.git
+      ref: dev
+  solidui:
+    git:
+      url: https://github.com/anusii/solidui.git
+      ref: dev
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.5
