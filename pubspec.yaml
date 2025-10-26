@@ -40,7 +40,7 @@ dependencies:
       ref: dev
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
-  version_widget: ^1.0.5
+  version_widget: ^1.0.6
   window_manager: ^0.5.1
 
 dev_dependencies:
