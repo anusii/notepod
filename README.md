@@ -10,13 +10,14 @@
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 [![Build Installers](https://github.com/anusii/notepod/actions/workflows/installers.yaml/badge.svg)](https://github.com/anusii/notepod/actions/workflows/installers.yaml)
 
-An app to support the secure and private storage and sharing of
-personal notes on your own encrypted personal online datastore (Pod)
-hosted in your Data Vault on a [Solid
-Server](https://solidproject.org/about). The app was developed by the
-[ANU Software Innovation Institute](https://sii.anu.edu.au) and
-written by [Anushka Vidanage](https://github.com/anushkavidanage),
-[Graham Williams](https://github.com/gjwgit), and [Jessica
+A [solidui](https://github.com/anusii/solidui) based app to support
+the secure and private storage and sharing of personal notes on your
+own encrypted personal online datastore (Pod) hosted in your Data
+Vault on a [Solid Server](https://solidproject.org/about). The app was
+developed by the [ANU Software Innovation
+Institute](https://sii.anu.edu.au) and written by [Anushka
+Vidanage](https://github.com/anushkavidanage), [Graham
+Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore). You can install the app from
 [SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
 published by the following repositories:
@@ -258,7 +259,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Friday 2025-10-24 16:49:02 +1100 Graham Williams>*
+*Time-stamp: <Monday 2025-10-27 09:37:43 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
