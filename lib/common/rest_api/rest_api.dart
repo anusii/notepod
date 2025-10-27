@@ -125,8 +125,6 @@ Future<OwnNotesCallResult> getNoteList({
       // Convert to list of notes (including authorised users)
       fullNotes = mapOfMapsToListOwnNote(tmpMapOfMaps);
 
-      debugPrint('Retrieved permission lists of owners files');
-
       if (badFiles.isEmpty) {
         results = OwnNotesCallResult(notes: fullNotes);
       } else {
