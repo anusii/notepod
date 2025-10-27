@@ -15,7 +15,8 @@ name: Build Installers
 # `build`. All `github.ref_name` are replaced with env.RELEASE.
 
 # 20251017 jesscmoore Added github secrets for macos signing during
-# build and added signing workflow as per <https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications>
+# build and added signing workflow as per
+# <https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications>
 
 on:
   push:
@@ -184,7 +185,7 @@ jobs:
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
 
-      # Install certificate and provisioning profile for app signing
+      # Install certificate and provisioning profile for app signing.
 
       - name: Install Apple certificate and provisioning profile
         env:
@@ -272,9 +273,10 @@ jobs:
           name: ${{ env.APP }}-macos-zip
           path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
-      # Are we using a self hosted runner rather than github hosted runner?
-      # See below for required cleanup of keychain and provisioning profile if using
-      # self hosted runner. Not required for github hosted runner.
+      # Are we using a self hosted runner rather than github hosted
+      # runner?  See below for required cleanup of keychain and
+      # provisioning profile if using self hosted runner. Not required
+      # for github hosted runner.
       # https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
   ########################################################################
