@@ -21,6 +21,10 @@ Moore](https://github.com/jesscmoore). You can install the app from
 [SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
 published by the following repositories:
 
+If you appreciate the app then please show some ❤️ and star the GitHub
+Repository to support the project.
+
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
 The latest version of the app can be run online at
@@ -258,7 +262,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Monday 2025-10-27 09:37:43 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-28 10:18:49 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
