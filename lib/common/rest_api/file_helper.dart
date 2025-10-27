@@ -191,19 +191,45 @@ class NoteFileHelper with PodOperationsMixin {
   Future<void> deleteNote({
     required BuildContext context,
     required String filename,
+    required Widget child,
     bool isExternal = false,
   }) async {
-    try {
-      // Delete file
-      if (isExternal) {
+    // Delete file
+    if (isExternal) {
+      try {
+        // Delete external file
         await deleteExternalFile(filename);
-      } else {
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting to external note: $e');
+        rethrow;
+      }
+    } else {
+      try {
+        // Revoke permission to recipients:
+        // to avoid the permission log of recipients still
+        // showing the recipient as having access to the
+        // file that is being deleted
+        if (!context.mounted) return;
+        await revokePermissionToRecipients(
+          fileName: filename,
+          context: context,
+          child: child,
+        );
+      } catch (e) {
+        // Error revoking permissions to user's file
+        debugPrint('Error revoking permissions to user\'s note: $e');
+        rethrow;
+      }
+
+      try {
         // Call solid delete file function
         await deleteFile('$basePath/$filename');
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting user\' note: $e');
+        rethrow;
       }
-    } catch (e) {
-      debugPrint('Error deleting note: $e');
-      rethrow;
     }
   }
 
