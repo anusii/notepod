@@ -22,15 +22,15 @@ Moore](https://github.com/jesscmoore).
 
 If you appreciate the app then please show some ❤️ and star the GitHub
 Repository to support the project.  You can install the app from
-[SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
-published by the following repositories:
+different repositories including
+[SnapCraft](https://snapcraft.io/notepod) for Linux.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
 The latest version of the app can be run online at
-[innerpod.solidcommunity.au](https://notepod.solidcommunity.au) with
-no installation required, or download and install for your platform
+[notepod.solidcommunity.au](https://notepod.solidcommunity.au) with no
+installation required, or downloaded and installed for your platform
 from the [Solid Community AU](https://solidcommunity.au) repository:
 
 + **Android**
@@ -263,7 +263,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-28 10:20:53 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-28 10:37:12 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
