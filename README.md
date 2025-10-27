@@ -17,12 +17,12 @@ developed by the [ANU Software Innovation
 Institute](https://sii.anu.edu.au) and written by [Anushka
 Vidanage](https://github.com/anushkavidanage), [Graham
 Williams](https://github.com/gjwgit), and [Jessica
-Moore](https://github.com/jesscmoore). You can install the app from
-[SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
-published by the following repositories:
+Moore](https://github.com/jesscmoore).
 
 If you appreciate the app then please show some ❤️ and star the GitHub
-Repository to support the project.
+Repository to support the project.  You can install the app from
+[SnapCraft](https://snapcraft.io/notepod) for Linux. Our app is
+published by the following repositories:
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
@@ -262,7 +262,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-28 10:18:49 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-28 10:20:53 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
