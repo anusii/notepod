@@ -159,6 +159,9 @@ jobs:
   ########################################################################
   # MACOS
 
+  # Uses Mac App Distrtibution cert and associated profile
+  # created 29/10/2025
+
   package-macos-dmg-zip:
     if: |
       contains(github.event.head_commit.message, 'bump version') ||
@@ -277,11 +280,7 @@ jobs:
           name: ${{ env.APP }}-macos-zip
           path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
 
-      # Are we using a self hosted runner rather than github hosted
-      # runner?  See below for required cleanup of keychain and
-      # provisioning profile if using self hosted runner. Not required
-      # for github hosted runner.
-      # https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
+      # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
   ########################################################################
   # WINDOWS
