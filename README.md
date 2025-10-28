@@ -1,13 +1,16 @@
-# NotePod &mdash; Private and Shareable Notes
+# Private and Shareable Notes
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
+[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://github.com/anusii/notepod?tab=GPL-3.0-1-ov-file)
 [![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+
+[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
 A [solidui](https://github.com/anusii/solidui) based app to support
 the secure and private storage and sharing of personal notes on your
@@ -23,9 +26,6 @@ If you appreciate the app then please show some ❤️ and star the GitHub
 Repository to support the project.  You can install the app from
 different repositories including
 [SnapCraft](https://snapcraft.io/notepod) for Linux.
-
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
-[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
 The latest version of the app can be run online at
 [notepod.solidcommunity.au](https://notepod.solidcommunity.au) with no
@@ -51,7 +51,7 @@ even better, fork the repository yourself, update the code, and submit
 a Pull Request. The app is implemented in
 [Flutter](https://flutter.dev) using
 [solidpod](https://pub.dev/packages/solidpod) for Flutter to manage
-the Solid Pod interactions. Thanks.
+the Solid Pod interactions. Thank you.
 
 ## Introduction
 
@@ -262,7 +262,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-28 10:37:12 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-28 20:33:22 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
