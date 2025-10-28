@@ -12,11 +12,11 @@
 
 [![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
 
-A [solidui](https://github.com/anusii/solidui) based app to support
-the secure and private storage and sharing of personal notes on your
-own encrypted personal online datastore (Pod) hosted in your Data
-Vault on a [Solid Server](https://solidproject.org/about). The app was
-developed by the [ANU Software Innovation
+NotePod is a [solidui](https://github.com/anusii/solidui) based app to
+support the secure and private storage and sharing of personal notes
+on your own encrypted personal online datastore (Pod) hosted in your
+Data Vault on a [Solid Server](https://solidproject.org/about). The
+app was developed by the [ANU Software Innovation
 Institute](https://sii.anu.edu.au) and written by [Anushka
 Vidanage](https://github.com/anushkavidanage), [Graham
 Williams](https://github.com/gjwgit), and [Jessica
@@ -262,7 +262,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-28 20:33:22 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2025-10-28 20:35:57 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
