@@ -206,23 +206,6 @@ class NoteFileHelper with PodOperationsMixin {
       }
     } else {
       try {
-        // Revoke permission to recipients:
-        // to avoid the permission log of recipients still
-        // showing the recipient as having access to the
-        // file that is being deleted
-        if (!context.mounted) return;
-        await revokePermissionToRecipients(
-          fileName: filename,
-          context: context,
-          child: child,
-        );
-      } catch (e) {
-        // Error revoking permissions to user's file
-        debugPrint('Error revoking permissions to user\'s note: $e');
-        rethrow;
-      }
-
-      try {
         // Call solid delete file function
         await deleteFile('$basePath/$filename');
       } catch (e) {
