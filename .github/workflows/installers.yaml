@@ -232,6 +232,10 @@ jobs:
           pwd
           ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}
 
+      - name: Check macOS app code signature
+        run: |
+          codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}.app"
+
       # Package as DMG
 
       - name: Create DMG
