@@ -180,7 +180,9 @@ and sign in with your Apple ID account. In `Network`, select `Incoming
 Connections (Server)` and `Outgoing Connections (Client)`. The latter
 is needed to login to your Pod. Keychain access capability is also
 required to save authorisation and encryption key credentials to
-secure storage.
+secure storage. Macos app builds must use be signed with a valid developer
+certificate in order to add the keychain access capability required for
+local secure key storage.
 
 Edit `macos/Runner/DebugRunner.entitlements` to add:
 
