@@ -23,9 +23,9 @@ Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore).
 
 If you appreciate the app then please show some ❤️ and star the [GitHub
-Repository](https://github.com/anusii/msfatigue) to support the project.  You can install the app from
-different repositories including
-[SnapCraft](https://snapcraft.io/notepod) for Linux.
+Repository](https://github.com/anusii/msfatigue) to support the
+project.  You can install the app from different repositories
+including [SnapCraft](https://snapcraft.io/notepod) for Linux.
 
 The latest version of the app can be run online at
 [notepod.solidcommunity.au](https://notepod.solidcommunity.au) with no
@@ -262,7 +262,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Tuesday 2025-10-28 20:35:57 +1100 Graham Williams>*
+*Time-stamp: <Wednesday 2025-10-29 13:26:54 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
