@@ -37,7 +37,7 @@ env:
   RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
   FLUTTER_VERSION: '3.35.7'
-  MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
+  MACOS_APP_RELEASE_UNSIGNED_PATH: build/macos/Build/Products/Release-unsigned
   MACOS_APP_RELEASE_STAGING_PATH: build/macos/Build/Products/Release-staging
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
 
@@ -487,18 +487,18 @@ jobs:
       - name: Note the build location
         run: |
           pwd
-          ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}
+          ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
 
       - name: Check macOS app code signature
         run: |
-          codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}.app"
+          codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
       - name: Create DMG
         run: |
           mkdir -p dmg_temp
-          cp -R "${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}.app" dmg_temp/
+          cp -R "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app" dmg_temp/
           ln -s /Applications dmg_temp/Applications
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
@@ -521,18 +521,18 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          directory: ${{ env.MACOS_APP_RELEASE_PATH }}
+          directory: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
           path: ${{ env.APP }}.app
           filename: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
       - name: Review ZIP exists
-        run: ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
+        run: ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-unsigned-zip
-          path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
+          path: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
   ########################################################################
   # WINDOWS
