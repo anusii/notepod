@@ -194,14 +194,12 @@ Edit `macos/Runner/DebugProfile.entitlements` and
 
 ```xml
  <array>
-        <string>[$DEVELOPMENT_TEAM].[$PRODUCT_BUNDLE_IDENTIFIER]</string>
+        <string>$(AppIdentifierPrefix)PRODUCT_BUNDLE_IDENTIFIER</string>
     </array>
 ```
 
-where `$DEVELOPMENT_TEAM` found in
-`macos/Runner.xcodeproj/project.pbxproj` and
-`$PRODUCT_BUNDLE_IDENTIFIER` found in
-`macos/Runner/Configs/AppInfo.xcconfig`.
+where `PRODUCT_BUNDLE_IDENTIFIER` found in
+`macos/Runner/Configs/AppInfo.xcconfig`, e.g. `$(AppIdentifierPrefix)com.mycompany.myapp`.
 
 ### Extra setup for iOS
 
