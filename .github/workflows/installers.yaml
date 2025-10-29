@@ -280,7 +280,7 @@ jobs:
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-dmg
+          name: ${{ env.APP }}-macos-staging-dmg
           path: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
 
       # Package as ZIP
@@ -299,7 +299,7 @@ jobs:
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-zip
+          name: ${{ env.APP }}-macos-staging-zip
           path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
@@ -439,7 +439,7 @@ jobs:
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-zip
+          name: ${{ env.APP }}-macos-dev-zip
           path: ${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-dev.zip
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
@@ -477,10 +477,10 @@ jobs:
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
 
-      # Build and sign the app
+      # Build an unsigned app
 
       - name: Build Flutter macOS app
-        run: flutter build macos --release
+        run: flutter build macos --release --no-codesign
 
       - name: Note the build location
         run: |
@@ -510,7 +510,7 @@ jobs:
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-dev-dmg
+          name: ${{ env.APP }}-macos-unsigned-dmg
           path: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
 
       # Package as ZIP
@@ -529,7 +529,7 @@ jobs:
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-zip
+          name: ${{ env.APP }}-macos-unsigned-zip
           path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
   ########################################################################
