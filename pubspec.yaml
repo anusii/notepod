@@ -1,7 +1,7 @@
 name: notepod
 description: "Privacy preserving note taking app using PODs."
 publish_to: "none"
-version: 0.2.49+15
+version: 0.2.49+16
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
@@ -64,7 +64,7 @@ flutter:
 flutter_launcher_icons:
   image_path: "assets/images/app_icon.png"
   android: true
-  min_sdk_android: 21 # android min sdk min:16, default 21  ios: true
+  min_sdk_android: 21 # android min sdk min:16, default 21
   ios: true
   remove_alpha_ios: true
   background_color_ios: "#ffffff"
