@@ -23,6 +23,7 @@ name: Build Installers
 # certificate) and developer testing ('dev' flavor, uses development
 # certificate). Workflows added for building unsigned, signed ('dev'
 # and 'staging') macos apps.
+# https://docs.flutter.dev/deployment/flavors-ios
 
 on:
   push:
@@ -268,17 +269,17 @@ jobs:
           hdiutil create -volname "${{ env.APP }}" \
             -srcfolder dmg_temp \
             -ov -format UDZO \
-            "${{ env.APP }}-${{env.RELEASE}}-macos.dmg"
+            "${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg"
 
       - name: Note the DMG created
         run: |
-          ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos.dmg
+          ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dmg
-          path: ${{ env.APP }}-${{env.RELEASE}}-macos.dmg
+          path: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
 
       # Package as ZIP
 
@@ -288,16 +289,16 @@ jobs:
           type: 'zip'
           directory: ${{ env.MACOS_APP_RELEASE_PATH }}
           path: ${{ env.APP }}.app
-          filename: ${{ env.APP }}-${{env.RELEASE}}-macos.zip
+          filename: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
 
       - name: Review ZIP exists
-        run: ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
+        run: ls -lh ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
 
       - name: Upload Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-zip
-          path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos.zip
+          path: ${{ env.MACOS_APP_RELEASE_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
