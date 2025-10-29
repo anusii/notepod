@@ -18,6 +18,12 @@ name: Build Installers
 # build and added signing workflow as per
 # <https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications>
 
+# 20251029 jesscmoore Use flutter flavors to build with separate build
+# configurations for app store ('staging' flavor, uses distribution
+# certificate) and developer testing ('dev' flavor, uses development
+# certificate). Workflows added for building unsigned, signed ('dev'
+# and 'staging') macos apps.
+
 on:
   push:
     branches:
@@ -234,9 +240,14 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build and sign the app
+      # Uses a scheme 'staging' created in Xcode to have a separate
+      # build configuration to specify the cert and profile used for
+      # dev build. Then specify scheme name as flavour in flutter CLI.
+      # Certificate type (xcode var CODE_SIGN_IDENTITY)
+      # Provisioning profile name (xcode var PROVISIONING_PROFILE_SPECIFIER)
 
       - name: Build Flutter macOS app
-        run: flutter build macos --release
+        run: flutter build macos --release --flavor staging
 
       - name: Note the build location
         run: |
@@ -369,9 +380,14 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build and sign the app
+      # Uses a scheme 'dev' created in Xcode to have a separate
+      # build configuration to specify the cert and profile used for
+      # dev build. Then specify scheme name as flavour in flutter CLI.
+      # Certificate type (xcode var CODE_SIGN_IDENTITY)
+      # Provisioning profile name (xcode var PROVISIONING_PROFILE_SPECIFIER)
 
       - name: Build Flutter macOS app
-        run: flutter build macos --release
+        run: flutter build macos --release --flavor dev
 
       - name: Note the build location
         run: |
