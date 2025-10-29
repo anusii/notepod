@@ -25,6 +25,7 @@ flutter:
   emu	    Run with the android emulator;
   linux     Run with the linux device;
   qlinux    Run with the linux device and debugPrint() turned off;
+  macos     Run with the macos device;
 
   prep      Prep for PR by running tests, checks, docs.
   push      Do a git push and bump the build number if there is one.
@@ -59,6 +60,7 @@ flutter:
   distributions
     apk	    Builds installers/$(APP).apk
     tgz     Builds installers/$(APP).tar.gz
+	dmg     Builds macos app (TODO convert to dmg).
 
   publish   Publish a package to pub.dev
 
@@ -454,6 +456,12 @@ appbundle::
 realclean::
 	flutter clean
 	flutter pub get
+
+# Create a macos app
+# [20251029 jesscmoore] TODO: adapt for testing build flavours, and converting to dmg
+dmg::
+	flutter clean
+	flutter build macos --release
 
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
