@@ -22,8 +22,8 @@ Vidanage](https://github.com/anushkavidanage), [Graham
 Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore).
 
-If you appreciate the app then please show some ❤️ and star the GitHub
-Repository to support the project.  You can install the app from
+If you appreciate the app then please show some ❤️ and star the [GitHub
+Repository](https://github.com/anusii/msfatigue) to support the project.  You can install the app from
 different repositories including
 [SnapCraft](https://snapcraft.io/notepod) for Linux.
 
