@@ -449,7 +449,9 @@ jobs:
 
   # Build without signing certificate
   # for testing by developers
-  # May have limited capabilities
+  # Note: build without signing prevents build with keychain access capability
+  # This means the app fails to use secure local storage and the use needs to
+  # press login and security key submit buttons x2.
 
   package-macos-dmg-zip-unsigned:
     if: |
@@ -480,7 +482,7 @@ jobs:
       # Build an unsigned app
 
       - name: Build Flutter macOS app
-        run: flutter build macos --release --no-codesign
+        run: flutter build macos --release --flavor unsigned
 
       - name: Note the build location
         run: |

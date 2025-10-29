@@ -58,11 +58,12 @@ flutter:
   desktops  Set up for all desktop platforms (linux, windows, macos)
 
   distributions
-    apk	        Builds installers/$(APP).apk
-    tgz         Builds installers/$(APP).tar.gz
-    dmg-dev     Builds macos app with development certificate
-    dmg-staging Builds macos app with distribution certificate
-                (TODO convert to dmg).
+    apk	          Builds installers/$(APP).apk.
+    tgz           Builds installers/$(APP).tar.gz.
+    dmg-unsigned  Builds unsigned macos app.
+    dmg-dev       Builds macos app with development certificate.
+    dmg-staging   Builds macos app with distribution certificate.
+                  (TODO convert to dmg).
 
   publish   Publish a package to pub.dev
 
@@ -461,6 +462,11 @@ realclean::
 
 # Create a macos app
 # [20251029 jesscmoore] TODO: add converting to dmg
+# Build unsigned macos app
+dmg-unsigned::
+	flutter clean
+	flutter build macos --release --flavor unsigned
+
 # Build macos app signed with development certificate for testing
 # by App Developer Program togaware registered devices
 dmg-dev::
