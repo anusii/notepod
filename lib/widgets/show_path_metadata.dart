@@ -54,7 +54,7 @@ class ShowPathMetadata extends StatelessWidget {
                 child: Container(
                   padding: metadataPadding,
                   child: Text(
-                    'Note path: $fileUrl',
+                    'Note url: $fileUrl',
                     style: metadataTextStyle,
                   ),
                 ),
