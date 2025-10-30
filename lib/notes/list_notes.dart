@@ -354,6 +354,7 @@ class _ListNotesState extends State<ListNotes> {
                               _foundNotes[index].content.noteTitle,
                             ),
                             subtitle: Text(
+                              'Filename: ${_foundNotes[index].noteFileName} \n'
                               'Created on: ${getDateTimeStr(_foundNotes[index].content.createdDateTime)} \n'
                               'Last modified: ${getDateTimeStr(_foundNotes[index].content.modifiedDateTime)}\n'
                               'Shared with: ${getRecipNbrStr(_foundNotes[index].content.authUsers.length)}',

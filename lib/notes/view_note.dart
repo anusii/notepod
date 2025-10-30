@@ -111,7 +111,9 @@ class _ViewNoteState extends State<ViewNote> {
                   DisplayNoteMetadata(
                     createdDateTime: _note.content.createdDateTime,
                     modifiedDateTime: _note.content.modifiedDateTime,
+                    noteFileName: _note.noteFileName,
                     showDates: true,
+                    showFileName: true,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(

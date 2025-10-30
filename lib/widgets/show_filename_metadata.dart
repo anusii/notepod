@@ -1,6 +1,6 @@
-/// Widget for display of path metadata for a note
+/// Widget for display of filename metadata for a note
 ///
-// Time-stamp: <Friday 2025-10-14 14:59:05 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-10-30 16:36:05 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU
 ///
@@ -28,17 +28,17 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 
-/// Display path metadata of a note ie. the filename and path.
+/// Display filename metadata of a note ie. the filename.
 ///
 /// Arguments:
-/// - [fileUrl] - Url of the note.
+/// - [filename] - Filename of the note.
 
-class ShowPathMetadata extends StatelessWidget {
-  final String fileUrl;
+class ShowFilenameMetadata extends StatelessWidget {
+  final String filename;
 
-  const ShowPathMetadata({
+  const ShowFilenameMetadata({
     super.key,
-    required this.fileUrl,
+    required this.filename,
   });
 
   @override
@@ -54,7 +54,7 @@ class ShowPathMetadata extends StatelessWidget {
                 child: Container(
                   padding: metadataPadding,
                   child: Text(
-                    'Note path: $fileUrl',
+                    'Note file name: $filename',
                     style: metadataTextStyle,
                   ),
                 ),
