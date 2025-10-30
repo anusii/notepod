@@ -10,7 +10,7 @@
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 
-[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
+[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
 
 NotePod is a [solidui](https://github.com/anusii/solidui) based app to
 support the secure and private storage and sharing of personal notes
@@ -32,18 +32,20 @@ The latest version of the app can be run online at
 installation required, or downloaded and installed for your platform
 from the [Solid Community AU](https://solidcommunity.au) repository:
 
++ **Web**
+  [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
-[apk](https://solidcommunity.au/installers/notepod.apk);
+  [apk](https://solidcommunity.au/installers/notepod.apk);
 + **GNU/Linux**
-[snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
-[deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
-[zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
+  [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
+  [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
+  [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
 + **macOS**
-[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
-[zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
+  [dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
+  [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
 + **Windows**
-[zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
-[inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+  [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
+  [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
 Contributions are welcome. Visit
 [github](https://github.com/anusii/notepod) to submit an issue or,
@@ -262,7 +264,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-29 13:26:54 +1100 Graham Williams>*
+*Time-stamp: <Thursday 2025-10-30 15:57:14 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->

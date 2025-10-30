@@ -111,13 +111,17 @@ jobs:
             'lib/**/*.dart'
           fail: false
 
-      - name: Create Issue From File
-        if: steps.lychee.outputs.exit_code != 0
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: Link Checker Report
-          content-filepath: ./lychee/out.md
-          labels: report, automated issue
+      # 20251030 gjw Remove the automatic creation of an issue for
+      # now. It is creating too many and I am simply closing them. The
+      # failure of the lint test itself should be enough.
+
+      # - name: Create Issue From File
+      #   if: steps.lychee.outputs.exit_code != 0
+      #   uses: peter-evans/create-issue-from-file@v5
+      #   with:
+      #     title: Link Checker Report
+      #     content-filepath: ./lychee/out.md
+      #     labels: report, automated issue
 
   locmax:
     runs-on: ubuntu-latest
