@@ -97,6 +97,8 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
               // Data found
               return Text(
                 (snapshot.data as FoundExternalNote).content!.noteTitle,
+                maxLines: 1, // Limit to a single line
+                overflow: TextOverflow.ellipsis,
               );
             } else if (snapshot.hasError) {
               debugPrint('Error: ${snapshot.error.toString()}');
