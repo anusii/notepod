@@ -148,54 +148,60 @@ Future<OwnNotesCallResult> getNoteList({
 /// Arguments:
 /// - [context] - The build context.
 /// - [childPage] - The child widget to return to.
-/// - [filesWithGrantAccess] - Boolean defines whether retrieving files
-/// which user currently has granted access. If false, all files
-/// which the user has or has previously been granted access will be returned. (Default: true).
+/// - [hasCurrentAccess] - Flag describing whether user has current
+/// access (ie. not revoked) to external file. If false, all files
+/// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
+/// that user has current access to.
 
 Future<List<ExternalNote>?> getExtNotes({
   required BuildContext context,
   required Widget childPage,
-  bool filesWithGrantAccess = true,
+  bool hasCurrentAccess = true,
 }) async {
   try {
-    final Map<dynamic, dynamic> sharedNotesLogMap;
+    final Map<dynamic, dynamic> externalNotesLog;
 
     if (!context.mounted) return null;
-    sharedNotesLogMap = await NoteFileHelper()
+    externalNotesLog = await NoteFileHelper()
         .scanPermLogFile(context: context, childPage: childPage);
 
+    debugPrint('');
+    debugPrint('User\'s Permission Log:');
+
     final List<ExternalNote> notes = [];
-    List<String> badFiles = [];
+    List<String> unparseableLogRecords = [];
 
-    if (sharedNotesLogMap.isNotEmpty) {
-      for (final fileUrl in sharedNotesLogMap.keys) {
-        final sharingMetadata = sharedNotesLogMap[fileUrl];
+    if (externalNotesLog.isNotEmpty) {
+      for (final fileUrl in externalNotesLog.keys) {
+        final logRecordOfFile = externalNotesLog[fileUrl];
 
-        // Extract details of external files with permissions
-        // granted to the user in the latest log entry by
-        // selecting for [filesWithGrantAccess] = true
-        if (filesWithGrantAccess &&
-            sharingMetadata[PermissionLogLiteral.type] == 'revoke') {
+        debugPrint('External file: $fileUrl');
+        debugPrint(logRecordOfFile.toString());
+
+        // Ignore log records of files where access has been
+        // revoked
+        if (hasCurrentAccess &&
+            logRecordOfFile[PermissionLogLiteral.type] == 'revoke') {
           continue;
         }
 
         try {
           final ExternalNote? note;
 
-          // Parse external note file details
+          // Extract log record of each external note
+          // where user currently has access
           note = NoteFileHelper.extFileDetailsFromLog(
-            sharingMetadata: sharingMetadata,
+            logRecordOfFile: logRecordOfFile,
             fileUrl: fileUrl,
           );
 
           if (note != null) {
-            // Add external note details to notes map.
-            // sharedNotesMap[fileUrl] = note;
+            // Add log details of note to notes map.
             notes.add(note);
           } else {
-            // Found external note file with unparseable permissions details
-            // Add to bad notes map
-            badFiles.add(fileUrl);
+            // Found unparseable log record
+            // Add to bad notes list
+            unparseableLogRecords.add(fileUrl);
           }
         } catch (e) {
           // Error deserializing external note permissions
@@ -204,12 +210,12 @@ Future<List<ExternalNote>?> getExtNotes({
       }
     }
 
-    if (badFiles.isNotEmpty) {
+    if (unparseableLogRecords.isNotEmpty) {
       debugPrint(
-        'Unparseable permission details of files: ${badFiles.toString()}',
+        'Found external files with unparseable records: $unparseableLogRecords',
       );
     } else {
-      debugPrint('All external file details parsed successfully!');
+      debugPrint('All log records of external file parsed successfully!');
     }
 
     // return sharedNotesMap;

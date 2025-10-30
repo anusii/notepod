@@ -119,7 +119,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// Returns: parsed map of details of external note file.
 
   static ExternalNote? extFileDetailsFromLog({
-    required Map sharingMetadata,
+    required Map logRecordOfFile,
     required String fileUrl,
   }) {
     try {
@@ -137,7 +137,7 @@ class NoteFileHelper with PodOperationsMixin {
       noteFileName = fileUrl.split('/').last;
       // debugPrint('noteFileName: $noteFileName');
 
-      for (final entry in sharingMetadata.entries) {
+      for (final entry in logRecordOfFile.entries) {
         final predicate = entry.key.toString();
         final value = entry.value.toString();
         // debugPrint('predicate: $predicate, value: $value');
