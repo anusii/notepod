@@ -10,7 +10,7 @@
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 
-[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
+[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
 
 NotePod is a [solidui](https://github.com/anusii/solidui) based app to
 support the secure and private storage and sharing of personal notes
@@ -264,7 +264,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Thursday 2025-10-30 14:05:13 +1100 Graham Williams>*
+*Time-stamp: <Thursday 2025-10-30 15:57:14 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
