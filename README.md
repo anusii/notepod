@@ -32,6 +32,7 @@ The latest version of the app can be run online at
 installation required, or downloaded and installed for your platform
 from the [Solid Community AU](https://solidcommunity.au) repository:
 
++ **Web** [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 + **GNU/Linux**
@@ -262,7 +263,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2025-10-29 13:26:54 +1100 Graham Williams>*
+*Time-stamp: <Thursday 2025-10-30 13:59:41 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
