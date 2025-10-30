@@ -159,7 +159,7 @@ Future<List<ExternalNote>?> getExtNotes({
   bool hasCurrentAccess = true,
 }) async {
   try {
-    final Map<dynamic, dynamic> externalNotesLog;
+    final Map<String, Map<PermissionLogLiteral, String>> externalNotesLog;
 
     if (!context.mounted) return null;
     externalNotesLog = await NoteFileHelper()
@@ -173,7 +173,9 @@ Future<List<ExternalNote>?> getExtNotes({
 
     if (externalNotesLog.isNotEmpty) {
       for (final fileUrl in externalNotesLog.keys) {
-        final logRecordOfFile = externalNotesLog[fileUrl];
+        // Each log record of an external file
+        final Map<PermissionLogLiteral, String> logRecordOfFile =
+            externalNotesLog[fileUrl] as Map<PermissionLogLiteral, String>;
 
         debugPrint('External file: $fileUrl');
         debugPrint(logRecordOfFile.toString());
@@ -218,7 +220,6 @@ Future<List<ExternalNote>?> getExtNotes({
       debugPrint('All log records of external file parsed successfully!');
     }
 
-    // return sharedNotesMap;
     return notes;
   } on Object catch (e) {
     // Error finding files
