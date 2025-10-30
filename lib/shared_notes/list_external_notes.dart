@@ -344,6 +344,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                           ),
                           subtitle: Text(
                             'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter)} \nPermissions: ${_foundNotes[index].permissionList}',
+                            maxLines: 4, // Limit to 4 lines
+                            overflow: TextOverflow.ellipsis,
                           ),
 
                           // Define width to avoid consuming full width
@@ -403,7 +405,7 @@ class TitleExternalNote extends StatelessWidget {
   Widget build(BuildContext context) {
     List accessList = _note.permissionList.split(',');
 
-    return Row(
+    return Wrap(
       children: [
         if (accessList.contains('read')) ...[
           TitleExternalNoteScreen(
