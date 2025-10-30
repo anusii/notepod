@@ -1,7 +1,7 @@
 name: notepod
 description: "Privacy preserving note taking app using PODs."
 publish_to: "none"
-version: 0.2.49+16
+version: 0.2.51+16
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
@@ -29,19 +29,15 @@ dependencies:
   package_info_plus: ^8.3.0
   rdflib: ^0.2.12
   # solidpod: ^0.7.14
-  # solidpod:
-  #   git:
-  #     url: https://github.com/anusii/solidpod.git
-  #     ref: jess/revoke_with_del_file # dev
-  solidpod:
-    path: ../solidpod/
   # solidui: ^0.0.5
+  solidpod:
+    git:
+      url: https://github.com/anusii/solidpod.git
+      ref: dev
   solidui:
     git:
       url: https://github.com/anusii/solidui.git
       ref: dev
-  # solidui:
-  #   path: ../solidui/
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.6
