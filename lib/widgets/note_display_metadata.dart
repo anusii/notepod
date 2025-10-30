@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/widgets/show_access_metadata.dart';
 import 'package:notepod/widgets/show_date_metadata.dart';
+import 'package:notepod/widgets/show_filename_metadata.dart';
 import 'package:notepod/widgets/show_path_metadata.dart';
 
 /// Display the metadata of an externally owned note.
@@ -45,6 +46,14 @@ import 'package:notepod/widgets/show_path_metadata.dart';
 /// - [permissionList] - list of permissions granted to the user.
 /// - [noteFileName] - note file name.
 /// - [noteUrl] - url of note.
+/// - [showDates] - flag describing whether to show data metadata of
+/// note.
+/// - [showFileName] - flag describing whether to show filename of
+/// note.
+/// - [showSharing] - flag describing whether to show sharing
+/// metadata of note.
+/// - [showPathInfo] - flag describing whether to show url path of
+/// note.
 
 class DisplayNoteMetadata extends StatelessWidget {
   final String createdDateTime;
@@ -56,6 +65,7 @@ class DisplayNoteMetadata extends StatelessWidget {
   final String noteUrl;
 
   final bool showDates;
+  final bool showFileName;
   final bool showSharing;
   final bool showPathInfo;
 
@@ -69,6 +79,7 @@ class DisplayNoteMetadata extends StatelessWidget {
     this.noteFileName = '',
     this.noteUrl = '',
     this.showDates = false,
+    this.showFileName = false,
     this.showSharing = false,
     this.showPathInfo = false,
   });
@@ -81,6 +92,9 @@ class DisplayNoteMetadata extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // ShowFileName
+          if (showFileName && noteFileName.isNotEmpty)
+            ShowFilenameMetadata(filename: noteFileName),
           // ShowDates (created and modified)
           if (showDates &&
               createdDateTime.isNotEmpty &&
@@ -100,8 +114,7 @@ class DisplayNoteMetadata extends StatelessWidget {
               permissionList: permissionList,
             ),
           // Show path info (filename and path)
-          if (showPathInfo && noteFileName != '' && noteUrl != '')
-            ShowPathMetadata(filename: noteFileName, fileUrl: noteUrl),
+          if (showPathInfo && noteUrl != '') ShowPathMetadata(fileUrl: noteUrl),
           const SizedBox(height: 10),
         ],
       ),

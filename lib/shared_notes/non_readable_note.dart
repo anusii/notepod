@@ -94,6 +94,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
               permissionList: _note.permissionList,
               noteFileName: _note.noteFileName,
               noteUrl: _note.noteUrl,
+              showFileName: true,
               showSharing: true,
               showPathInfo: true,
             ),
