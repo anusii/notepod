@@ -36,12 +36,12 @@ dependencies:
   solidpod:
     path: ../solidpod/
   # solidui: ^0.0.5
-  # solidui:
-  #   git:
-  #     url: https://github.com/anusii/solidui.git
-  #     ref: dev
   solidui:
-    path: ../solidui/
+    git:
+      url: https://github.com/anusii/solidui.git
+      ref: dev
+  # solidui:
+  #   path: ../solidui/
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.6
