@@ -256,7 +256,7 @@ class NoteFileHelper with PodOperationsMixin {
       final String prevNoteContent;
       final FoundExternalNote updatedExternalNote;
       final FoundOwnNote updatedOwnNote;
-      final Note updatedContent;
+      final NoteContent updatedContent;
 
       // Note title need to be spaceless as we are using that name
       // to create a .acl file. And the acl file url cannot have spaces
@@ -379,7 +379,7 @@ class NoteFileHelper with PodOperationsMixin {
             );
 
             // Create new note data structure
-            final newContent = Note(
+            final newContent = NoteContent(
               createdDateTime: modifiedDateTimeStr,
               modifiedDateTime: modifiedDateTimeStr,
               noteTitle: noteTitle,
@@ -423,7 +423,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// isExternal: true)` - to save an externally owned note.
   ///
   /// - [context] - The build context.
-  /// - [data] - The map of note data to be encrypted and written to Pod.
+  /// - [data] - The note content data to be encrypted and written to Pod.
   /// - [childPage] - The destination widget to navigate to after note is saved.
   /// - [noteFileName] - Optional filename. Required for saving user's own notes.
   /// - [noteUrl] - Optional note file url. Required for saving notes
@@ -434,7 +434,7 @@ class NoteFileHelper with PodOperationsMixin {
 
   Future<void> saveNoteToPod({
     required BuildContext context,
-    required Note data,
+    required NoteContent data,
     required Widget childPage,
     String noteFileName = '',
     String noteUrl = '',

@@ -59,7 +59,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     _asyncDataFetch = getSharedNoteContent(
       context: context,
       childPage: const ListExternalNotesScreen(),
-      fullNote: _note,
+      note: _note,
     );
     super.initState();
   }
@@ -72,7 +72,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     _asyncDataFetch = getSharedNoteContent(
       context: context,
       childPage: const ListExternalNotesScreen(),
-      fullNote: _note,
+      note: _note,
     );
   }
 
