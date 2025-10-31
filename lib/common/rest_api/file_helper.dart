@@ -81,7 +81,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// Returns:
   /// - map of external files with filename as key and details of permissions.
 
-  Future<Map<String, Map<PermissionLogLiteral, String>>> scanPermLogFile({
+  Future<Map<dynamic, dynamic>> scanPermLogFile({
     required BuildContext context,
     required Widget childPage,
   }) async {
@@ -98,7 +98,7 @@ class NoteFileHelper with PodOperationsMixin {
 
       // debugPrint('latestLogMap != SolidFuctionCallStatus');
       // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
-      return latestLogMap as Map<String, Map<PermissionLogLiteral, String>>;
+      return latestLogMap;
     } catch (e) {
       if (!isFileNotFoundError(e) && !isPermissionError(e)) {
         // Error reading permission log

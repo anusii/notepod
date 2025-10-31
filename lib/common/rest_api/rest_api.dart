@@ -159,7 +159,7 @@ Future<List<ExternalNote>?> getExtNotes({
   bool hasCurrentAccess = true,
 }) async {
   try {
-    final Map<String, Map<PermissionLogLiteral, String>> externalNotesLog;
+    final Map<dynamic, dynamic> externalNotesLog;
 
     if (!context.mounted) return null;
     externalNotesLog = await NoteFileHelper()
@@ -174,8 +174,8 @@ Future<List<ExternalNote>?> getExtNotes({
     if (externalNotesLog.isNotEmpty) {
       for (final fileUrl in externalNotesLog.keys) {
         // Each log record of an external file
-        final Map<PermissionLogLiteral, String> logRecordOfFile =
-            externalNotesLog[fileUrl] as Map<PermissionLogLiteral, String>;
+        final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
+            externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
 
         debugPrint('External file: $fileUrl');
         debugPrint(logRecordOfFile.toString());
@@ -187,6 +187,7 @@ Future<List<ExternalNote>?> getExtNotes({
           continue;
         }
 
+        // Deserialise external note log record
         try {
           final ExternalNote? note;
 
@@ -206,15 +207,17 @@ Future<List<ExternalNote>?> getExtNotes({
             unparseableLogRecords.add(fileUrl);
           }
         } catch (e) {
-          // Error deserializing external note permissions
+          // Error deserializing external note log record
           debugPrint(e.toString());
         }
+
+        // Deserialize external note content
       }
     }
 
     if (unparseableLogRecords.isNotEmpty) {
       debugPrint(
-        'Found external files with unparseable records: $unparseableLogRecords',
+        'Found external files with unparseable log records: $unparseableLogRecords',
       );
     } else {
       debugPrint('All log records of external file parsed successfully!');
