@@ -106,22 +106,26 @@ chrome:
 pubspec.lock:
 	flutter pub get
 
+.PHONY: upgrade
+upgrade:
+	flutter pub upgrade
+
 .PHONY: linux
-linux: pubspec.lock $(BUILD_RUNNER)
+linux: pubspec.lock $(BUILD_RUNNER) upgrade
 	flutter run --device-id linux
 
 # Turn off debugPrint() output.
 
 .PHONY: qlinux
-qlinux: pubspec.lock $(BUILD_RUNNER)
+qlinux: pubspec.lock $(BUILD_RUNNER) upgrade
 	flutter run --dart-define DEBUG_PRINT="FALSE" --device-id linux
 
 .PHONY: macos
-macos: $(BUILD_RUNNER)
+macos: $(BUILD_RUNNER) upgrade
 	flutter run --device-id macos
 
 .PHONY: android
-android: $(BUILD_RUNNER)
+android: $(BUILD_RUNNER) upgrade
 	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ')
 
 .PHONY: emu
