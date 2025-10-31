@@ -352,12 +352,16 @@ class _ListNotesState extends State<ListNotes> {
                             ),
                             title: Text(
                               _foundNotes[index].content.noteTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             subtitle: Text(
                               'Filename: ${_foundNotes[index].noteFileName} \n'
                               'Created on: ${getDateTimeStr(_foundNotes[index].content.createdDateTime)} \n'
                               'Last modified: ${getDateTimeStr(_foundNotes[index].content.modifiedDateTime)}\n'
                               'Shared with: ${getRecipNbrStr(_foundNotes[index].content.authUsers.length)}',
+                              maxLines: 3, // Limit to 3 lines
+                              overflow: TextOverflow.ellipsis,
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
