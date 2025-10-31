@@ -108,7 +108,7 @@ class ExternalNote {
 
 /// Class to operate on list of notes
 
-extension ListOwnNoteExtension on List<ExternalNote> {
+extension ListExternalNoteExtension on List<ExternalNote> {
   /// Assign list of external notes to list of found external notes
   /// usign default values.
   List<FoundExternalNote> toListFoundExternalNote() {
