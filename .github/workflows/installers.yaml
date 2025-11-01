@@ -119,6 +119,11 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v4
 
+      - name: Update system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+
       - name: Build snap
         if: hashFiles('snap/**') != ''
         uses: snapcore/action-build@v1
