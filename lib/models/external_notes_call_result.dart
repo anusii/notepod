@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Monday 2025-11-02 13:12:01 +1100 Graham Williams>
+// Time-stamp: <Sunday 2025-11-02 13:12:01 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
