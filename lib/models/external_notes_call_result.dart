@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Monday 2025-10-06 14:42:01 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-11-02 13:12:01 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,10 +31,12 @@ import 'package:notepod/models/external_note.dart';
 
 class ExternalNotesCallResult {
   final List<ExternalNote>? notes;
-  final List<String>? badFiles;
+  final List<String>? unparseableFiles;
+  final List<String>? nonExistentFiles;
 
   const ExternalNotesCallResult({
     this.notes = const [],
-    this.badFiles = const [],
+    this.unparseableFiles = const [],
+    this.nonExistentFiles = const [],
   });
 }

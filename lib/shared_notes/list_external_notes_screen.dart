@@ -61,18 +61,26 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
   /// these notes.
   ///
   /// Arguments:
-  ///   [results] - [ExternalNotesCallResult] class containing [notes] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  ///   [results] - [ExternalNotesCallResult] class containing [notes]
+  /// of files found in user's app data folder, and [badFiles] list of
+  /// any unparseable files.
   Widget _loadedExternalNotesScreen(ExternalNotesCallResult results) {
     final notes = results.notes!;
-    final badFiles = results.badFiles!;
+    final unparseableFiles = results.unparseableFiles!;
+    final nonExistentFiles = results.nonExistentFiles!;
 
-    if (badFiles.isNotEmpty) {
-      debugPrint('Badfiles: $badFiles');
+    if (nonExistentFiles.isNotEmpty) {
+      debugPrint('Non existent files: $nonExistentFiles');
       // return NotesRevokeDialog(
       //   badFiles: badFiles,
       //   childPage: ListExternalNotes(notes: notes),
       // );
     }
+
+    if (unparseableFiles.isNotEmpty) {
+      debugPrint('Non existent files: $nonExistentFiles');
+    }
+
     // } else if (notes.isEmpty) {
     if (notes.isEmpty) {
       return _noExternalNotes();

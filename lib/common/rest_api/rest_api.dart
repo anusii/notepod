@@ -31,6 +31,7 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
+import 'package:notepod/models/call_status.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/models/note.dart';
@@ -231,22 +232,17 @@ Future<ExternalNotesCallResult> getExternalNoteList({
     debugPrint(e.toString());
   }
 
-  // Fetch content of each external note
+  // Fetch and deserialize external note content
+  // or count bad files according to error type
   try {
     List<ExternalNote> fullNotes = [];
-    List<String> badFiles = [];
+    List<String> nonExistentFiles = [];
+    List<String> unparseableFiles = [];
     ExternalNotesCallResult results;
-
-    // Deserialize external note content
-    // final List<ExternalNote> notesWithContent;
-
-    // TODO: integrate getExternalNoteContent() here
-    // and return the note objects list with content
-    // and list of badFiles.
 
     if (notes.isNotEmpty) {
       for (final note in notes) {
-        final ExternalNote? noteWithContent;
+        final dynamic noteWithContent;
 
         // Retrieve content
         if (!context.mounted) return const ExternalNotesCallResult();
@@ -256,27 +252,24 @@ Future<ExternalNotesCallResult> getExternalNoteList({
           note: note,
         );
 
-        if (noteWithContent != null) {
+        if (noteWithContent == FileCallStatus.parsingFail) {
+          unparseableFiles.add(note.noteFileName);
+        } else if (noteWithContent == FileCallStatus.fileNotExists) {
+          nonExistentFiles.add(note.noteFileName);
+        } else if (noteWithContent != null) {
           // Add note content data to note objects list
           fullNotes.add(noteWithContent);
-        } else {
-          // File was non-existent or file content did not exist
-          // Add note that failed parsing to bad notes list
-          badFiles.add(note.noteFileName);
-          debugPrint('Found unparseable file: ${note.noteFileName}');
         }
       }
     }
 
-    if (badFiles.isEmpty) {
-      results = ExternalNotesCallResult(notes: fullNotes);
-    } else {
-      results = ExternalNotesCallResult(notes: fullNotes, badFiles: badFiles);
-    }
+    results = ExternalNotesCallResult(
+      notes: fullNotes,
+      nonExistentFiles: nonExistentFiles,
+      unparseableFiles: unparseableFiles,
+    );
 
     return results;
-
-    // return notes;
   } on Object catch (e) {
     // Error finding files
     debugPrint(e.toString());
@@ -286,44 +279,28 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 
 /// Get the content of an externally owned note shared with the user.
 ///
-/// Examples:
-/// - `_asyncDataFetch = getExternalNoteContent(context: context, childPage:
-/// ListExternalNotesScreen(), note: _note!,)`
-///
 /// Arguments:
 /// - [context] - The build context.
 /// - [childPage] - The widget return page.
 /// - [note] - The externally owned note data object including metadata.
 
-// Future<FoundExternalNote?> getExternalNoteContent({
-Future<ExternalNote?> getExternalNoteContent({
+Future<dynamic> getExternalNoteContent({
   required BuildContext context,
   required Widget childPage,
-  // required FoundExternalNote note,
   required ExternalNote note,
 }) async {
   try {
-    String badFile;
-
     // Get decrypted note content from external file
     final noteContentResult =
         await readExternalPod(note.noteUrl, context, childPage);
 
-    // Extract external note ttl data to noteContent
-    if (noteContentResult == SolidFunctionCallStatus.notLoggedIn) {
-      debugPrint(
-        'readExternalPod() returned ${SolidFunctionCallStatus.notLoggedIn.toString()}',
-      );
-      // return {};
-      return null;
-    } else if (noteContentResult == null || noteContentResult == {}) {
-      // Occurs if sharedNoteUrl file does not exist
-      badFile = note.noteUrl; // sharedNoteUrl;
-      debugPrint('File not found or empty: $badFile');
-      // return {};
-      return null;
+    if (noteContentResult == SolidFunctionCallStatus.fileNotExists) {
+      // debugPrint(
+      //   '[getExternalNoteContent] file does not exist: ${note.noteUrl}',
+      // );
+      return FileCallStatus.fileNotExists;
     } else {
-      // noteContentResult.isNotEmpty
+      // Extract external note ttl data to noteContent
       try {
         // Deserialize note context
         final NoteContent? content;
@@ -336,15 +313,15 @@ Future<ExternalNote?> getExternalNoteContent({
           return note;
         } else {
           // Found external note file with unparseable note content
-          badFile = note.noteUrl; // sharedNoteUrl;
-          return null;
+          // debugPrint(
+          //   '[getExternalNoteContent] file parsing failed: ${note.noteUrl}',
+          // );
+          return FileCallStatus.parsingFail;
         }
       } catch (e) {
         // Error deserializing note
-        badFile = note.noteUrl; // sharedNoteUrl;
-        debugPrint('Error deserializing note content for: $badFile');
         debugPrint(e.toString());
-        return null;
+        return FileCallStatus.parsingFail;
       }
     }
   } on Object catch (e) {
