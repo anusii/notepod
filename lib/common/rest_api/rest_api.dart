@@ -32,6 +32,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/own_note.dart';
 import 'package:notepod/models/own_notes_call_result.dart';
@@ -154,22 +155,26 @@ Future<OwnNotesCallResult> getNoteList({
 /// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
 /// that user has current access to.
 
-Future<List<ExternalNote>?> getExtNotes({
+// Future<List<ExternalNote>?> getExternalNoteList({
+Future<ExternalNotesCallResult> getExternalNoteList({
   required BuildContext context,
   required Widget childPage,
   bool hasCurrentAccess = true,
 }) async {
+  final List<ExternalNote> notes = [];
+  // Build list of external notes shared to user
   try {
     final Map<dynamic, dynamic> externalNotesLog;
 
-    if (!context.mounted) return null;
+    // if (!context.mounted) return null;
+    if (!context.mounted) return const ExternalNotesCallResult();
     externalNotesLog = await NoteFileHelper()
         .scanPermLogFile(context: context, childPage: childPage);
 
     debugPrint('');
     debugPrint('User\'s Permission Log:');
 
-    final List<ExternalNote> notes = [];
+    // final List<ExternalNote> notes = [];
     List<String> unparseableLogRecords = [];
 
     if (externalNotesLog.isNotEmpty) {
@@ -178,8 +183,8 @@ Future<List<ExternalNote>?> getExtNotes({
         final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
             externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
 
-        debugPrint('External file: $fileUrl');
-        debugPrint(logRecordOfFile.toString());
+        // debugPrint('External file: $fileUrl');
+        // debugPrint(logRecordOfFile.toString());
 
         // Ignore log records of files where access has been
         // revoked
@@ -211,8 +216,6 @@ Future<List<ExternalNote>?> getExtNotes({
           // Error deserializing external note log record
           debugPrint(e.toString());
         }
-
-        // Deserialize external note content
       }
     }
 
@@ -223,8 +226,57 @@ Future<List<ExternalNote>?> getExtNotes({
     } else {
       debugPrint('All log records of external file parsed successfully!');
     }
+  } on Object catch (e) {
+    // Error building external notes list
+    debugPrint(e.toString());
+  }
 
-    return notes;
+  // Fetch content of each external note
+  try {
+    List<ExternalNote> fullNotes = [];
+    List<String> badFiles = [];
+    ExternalNotesCallResult results;
+
+    // Deserialize external note content
+    // final List<ExternalNote> notesWithContent;
+
+    // TODO: integrate getExternalNoteContent() here
+    // and return the note objects list with content
+    // and list of badFiles.
+
+    if (notes.isNotEmpty) {
+      for (final note in notes) {
+        final ExternalNote? noteWithContent;
+
+        // Retrieve content
+        if (!context.mounted) return const ExternalNotesCallResult();
+        noteWithContent = await getExternalNoteContent(
+          context: context,
+          childPage: childPage,
+          note: note,
+        );
+
+        if (noteWithContent != null) {
+          // Add note content data to note objects list
+          fullNotes.add(noteWithContent);
+        } else {
+          // File was non-existent or file content did not exist
+          // Add note that failed parsing to bad notes list
+          badFiles.add(note.noteFileName);
+          debugPrint('Found unparseable file: ${note.noteFileName}');
+        }
+      }
+    }
+
+    if (badFiles.isEmpty) {
+      results = ExternalNotesCallResult(notes: fullNotes);
+    } else {
+      results = ExternalNotesCallResult(notes: fullNotes, badFiles: badFiles);
+    }
+
+    return results;
+
+    // return notes;
   } on Object catch (e) {
     // Error finding files
     debugPrint(e.toString());
@@ -235,7 +287,7 @@ Future<List<ExternalNote>?> getExtNotes({
 /// Get the content of an externally owned note shared with the user.
 ///
 /// Examples:
-/// - `_asyncDataFetch = getSharedNoteContent(context: context, childPage:
+/// - `_asyncDataFetch = getExternalNoteContent(context: context, childPage:
 /// ListExternalNotesScreen(), note: _note!,)`
 ///
 /// Arguments:
@@ -243,10 +295,12 @@ Future<List<ExternalNote>?> getExtNotes({
 /// - [childPage] - The widget return page.
 /// - [note] - The externally owned note data object including metadata.
 
-Future<FoundExternalNote?> getSharedNoteContent({
+// Future<FoundExternalNote?> getExternalNoteContent({
+Future<ExternalNote?> getExternalNoteContent({
   required BuildContext context,
   required Widget childPage,
-  required FoundExternalNote note,
+  // required FoundExternalNote note,
+  required ExternalNote note,
 }) async {
   try {
     String badFile;
@@ -283,7 +337,6 @@ Future<FoundExternalNote?> getSharedNoteContent({
         } else {
           // Found external note file with unparseable note content
           badFile = note.noteUrl; // sharedNoteUrl;
-          // return {};
           return null;
         }
       } catch (e) {
@@ -291,7 +344,6 @@ Future<FoundExternalNote?> getSharedNoteContent({
         badFile = note.noteUrl; // sharedNoteUrl;
         debugPrint('Error deserializing note content for: $badFile');
         debugPrint(e.toString());
-        // return {};
         return null;
       }
     }

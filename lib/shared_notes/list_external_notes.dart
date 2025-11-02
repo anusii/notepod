@@ -29,8 +29,9 @@ import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
-import 'package:notepod/shared_notes/title_external_note_screen.dart';
-import 'package:notepod/shared_notes/view_shared_note_screen.dart';
+// import 'package:notepod/shared_notes/title_external_note_screen.dart';
+// import 'package:notepod/shared_notes/view_shared_note_screen.dart';
+import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
@@ -339,9 +340,23 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             child: Icon(Icons.edit_document),
                           ),
                           // Define width to avoid consuming full width
-                          title: TitleExternalNote(
-                            note: _foundNotes[index],
-                          ),
+                          // title: TitleExternalNote(
+                          //   note: _foundNotes[index],
+                          // ),
+                          //         if (accessList.contains('read')) ...[
+//           TitleExternalNoteScreen(
+//             note: _note,
+//           ),
+//         ] else ...[
+//           // Display nothing as no read permission
+//           const Text(''),
+//         ],
+                          // title: const Text(''),
+                          title: (_foundNotes[index]
+                                  .permissionList
+                                  .contains('read'))
+                              ? Text(_foundNotes[index].content!.noteTitle)
+                              : const Text(''),
                           subtitle: Text(
                             'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter)} \nPermissions: ${_foundNotes[index].permissionList}',
                             maxLines: 4, // Limit to 4 lines
@@ -366,9 +381,12 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             if (access.contains('read')) {
                               navToChildPage(
                                 context: context,
-                                childPage: ViewSharedNoteScreen(
+                                childPage: ViewSharedNote(
                                   note: _foundNotes[index],
                                 ),
+                                // childPage: ViewSharedNoteScreen(
+                                //   note: _foundNotes[index],
+                                // ),
                               );
                             } else {
                               navToChildPage(
@@ -393,32 +411,32 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   }
 }
 
-class TitleExternalNote extends StatelessWidget {
-  final FoundExternalNote _note;
+// class TitleExternalNote extends StatelessWidget {
+//   final FoundExternalNote _note;
 
-  const TitleExternalNote({
-    super.key,
-    required note,
-  }) : _note = note;
+//   const TitleExternalNote({
+//     super.key,
+//     required note,
+//   }) : _note = note;
 
-  @override
-  Widget build(BuildContext context) {
-    List accessList = _note.permissionList.split(',');
+//   @override
+//   Widget build(BuildContext context) {
+//     List accessList = _note.permissionList.split(',');
 
-    return Wrap(
-      children: [
-        if (accessList.contains('read')) ...[
-          TitleExternalNoteScreen(
-            note: _note,
-          ),
-        ] else ...[
-          // Display nothing as no read permission
-          const Text(''),
-        ],
-      ],
-    );
-  }
-}
+//     return Wrap(
+//       children: [
+//         if (accessList.contains('read')) ...[
+//           TitleExternalNoteScreen(
+//             note: _note,
+//           ),
+//         ] else ...[
+//           // Display nothing as no read permission
+//           const Text(''),
+//         ],
+//       ],
+//     );
+//   }
+// }
 
 class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({

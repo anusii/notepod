@@ -25,10 +25,12 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/shared_notes/list_external_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
+// import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
 class ListExternalNotesScreen extends StatefulWidget {
   const ListExternalNotesScreen({
@@ -47,14 +49,39 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
 
   @override
   void initState() {
-    _asyncDataFetch = getExtNotes(
+    _asyncDataFetch = getExternalNoteList(
       context: context,
       childPage: const ListExternalNotesScreen(),
     );
     super.initState();
   }
 
-  Center _noSharedNotes() {
+  /// Load external notes if notes found. If any unaccessible note
+  /// records found, first navigate to a dialog to revoke access to
+  /// these notes.
+  ///
+  /// Arguments:
+  ///   [results] - [ExternalNotesCallResult] class containing [notes] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  Widget _loadedExternalNotesScreen(ExternalNotesCallResult results) {
+    final notes = results.notes!;
+    final badFiles = results.badFiles!;
+
+    if (badFiles.isNotEmpty) {
+      debugPrint('Badfiles: $badFiles');
+      // return NotesRevokeDialog(
+      //   badFiles: badFiles,
+      //   childPage: ListExternalNotes(notes: notes),
+      // );
+    }
+    // } else if (notes.isEmpty) {
+    if (notes.isEmpty) {
+      return _noExternalNotes();
+    } else {
+      return ListExternalNotes(notes: notes);
+    }
+  }
+
+  Center _noExternalNotes() {
     return Center(
       child: Row(
         children: <Widget>[
@@ -92,16 +119,20 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
                     context,
                     'Error: data loading failed',
                   );
-                } else if (snapshot.hasData &&
-                    snapshot.data != null &&
-                    snapshot.data.length > 0) {
+                  // } else if (snapshot.hasData &&
+                  //     snapshot.data != null &&
+                  //     snapshot.data.length > 0) {
+                } else if (snapshot.hasData && snapshot.data != null) {
                   // Notes found
-                  return ListExternalNotes(notes: snapshot.data);
+                  // return ListExternalNotes(notes: snapshot.data);
+                  return _loadedExternalNotesScreen(
+                    snapshot.data as ExternalNotesCallResult,
+                  );
                 } else if (snapshot.data == null ||
                     snapshot.data.toString() == 'null' ||
                     snapshot.data.length == 0) {
                   // No shared notes found
-                  return _noSharedNotes();
+                  return _noExternalNotes();
                 } else {
                   // Unknown error
                   return errCard(

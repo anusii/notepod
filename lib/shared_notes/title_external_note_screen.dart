@@ -56,7 +56,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
   void initState() {
     _note = widget.note;
 
-    _asyncDataFetch = getSharedNoteContent(
+    _asyncDataFetch = getExternalNoteContent(
       context: context,
       childPage: const ListExternalNotesScreen(),
       note: _note,
@@ -69,7 +69,7 @@ class _TitleExternalNoteScreenState extends State<TitleExternalNoteScreen> {
     super.didUpdateWidget(oldWidget);
     // Fetch data when the widget configuration changes (eg new data).
     _note = widget.note;
-    _asyncDataFetch = getSharedNoteContent(
+    _asyncDataFetch = getExternalNoteContent(
       context: context,
       childPage: const ListExternalNotesScreen(),
       note: _note,
