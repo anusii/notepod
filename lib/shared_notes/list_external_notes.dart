@@ -29,8 +29,6 @@ import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
-// import 'package:notepod/shared_notes/title_external_note_screen.dart';
-// import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/utils/nav_to_child.dart';
@@ -332,19 +330,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             backgroundColor: Colors.grey,
                             child: Icon(Icons.edit_document),
                           ),
-                          // Define width to avoid consuming full width
-                          // title: TitleExternalNote(
-                          //   note: _foundNotes[index],
-                          // ),
-                          //         if (accessList.contains('read')) ...[
-//           TitleExternalNoteScreen(
-//             note: _note,
-//           ),
-//         ] else ...[
-//           // Display nothing as no read permission
-//           const Text(''),
-//         ],
-                          // title: const Text(''),
+                          // Note info
                           title: (_foundNotes[index]
                                   .permissionList
                                   .contains('read'))
@@ -381,9 +367,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                 childPage: ViewSharedNote(
                                   note: _foundNotes[index],
                                 ),
-                                // childPage: ViewSharedNoteScreen(
-                                //   note: _foundNotes[index],
-                                // ),
                               );
                             } else {
                               navToChildPage(

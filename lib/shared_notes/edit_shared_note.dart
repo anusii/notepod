@@ -31,7 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:notepod/models/external_note.dart';
-import 'package:notepod/shared_notes/view_shared_note_screen.dart';
+import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit externally owned notes shared to
@@ -142,9 +142,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: ViewSharedNoteScreen(
-        note: _note,
-      ),
+      childPage: ViewSharedNote(note: _note),
       data: data,
       prevExternalNote: _note,
       noteTitle: _note.content!.noteTitle,
