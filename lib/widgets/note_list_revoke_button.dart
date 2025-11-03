@@ -31,7 +31,6 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
-// import 'package:notepod/constants/paths.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/loading_animation.dart';
@@ -84,10 +83,6 @@ class NoteListRevokeButton extends StatelessWidget {
 
                     // Update log with revoke record for each file
                     for (ExternalNote note in nonExistentNotes) {
-                      debugPrint(
-                        '[RevokeButton] Revoking access to ${note.noteFileName}',
-                      );
-
                       // Call Solidpod function to update user
                       // permission log with a revoke record for
                       // this non-existent file
