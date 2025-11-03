@@ -1,12 +1,12 @@
-/// Data models for result of get external notes future call.
+/// A function to return the user id part of a webId.
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute
+/// Copyright (C) 2023, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Sunday 2025-11-02 13:12:01 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-11-03 12:12:04 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,18 +25,14 @@
 
 library;
 
-import 'package:notepod/models/external_note.dart';
+/// Return id part of a webId
+///
+/// Arguments:
+/// - [webId] - webId from which to extract the id.
 
-/// Data model for result of get external notes list future call
+String getId(webId) {
+  final Uri uri = Uri.parse(webId);
+  final String id = uri.pathSegments.first;
 
-class ExternalNotesCallResult {
-  final List<ExternalNote>? notes;
-  final List<ExternalNote>? unparseableNotes;
-  final List<ExternalNote>? nonExistentNotes;
-
-  const ExternalNotesCallResult({
-    this.notes = const [],
-    this.unparseableNotes = const [],
-    this.nonExistentNotes = const [],
-  });
+  return id;
 }

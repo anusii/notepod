@@ -30,7 +30,7 @@ import 'package:notepod/shared_notes/list_external_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
-// import 'package:notepod/widgets/note_list_revoke_dialog.dart';
+import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
 class ListExternalNotesScreen extends StatefulWidget {
   const ListExternalNotesScreen({
@@ -56,33 +56,31 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     super.initState();
   }
 
-  /// Load external notes if notes found. If any unaccessible note
-  /// records found, first navigate to a dialog to revoke access to
-  /// these notes.
+  /// Load external notes if notes found. If any records of
+  /// non-existent notes were found, it will first navigate to
+  /// a dialog to revoke access to these notes.
   ///
   /// Arguments:
-  ///   [results] - [ExternalNotesCallResult] class containing [notes]
-  /// of files found in user's app data folder, and [badFiles] list of
-  /// any unparseable files.
+  ///   [results] - [ExternalNotesCallResult] class containing notes
+  /// of files shared to the user, and unparseableNotes list of
+  /// any unparseable files, and non-existentNotes list of any notes
+  /// that were externally deleted before access was revoked to the user.
+
   Widget _loadedExternalNotesScreen(ExternalNotesCallResult results) {
     final notes = results.notes!;
-    final unparseableFiles = results.unparseableFiles!;
-    final nonExistentFiles = results.nonExistentFiles!;
+    final unparseableNotes = results.unparseableNotes!;
+    final nonExistentNotes = results.nonExistentNotes!;
 
-    if (nonExistentFiles.isNotEmpty) {
-      debugPrint('Non existent files: $nonExistentFiles');
-      // return NotesRevokeDialog(
-      //   badFiles: badFiles,
-      //   childPage: ListExternalNotes(notes: notes),
-      // );
+    if (unparseableNotes.isNotEmpty) {
+      debugPrint('Unparseable note files: $unparseableNotes');
     }
 
-    if (unparseableFiles.isNotEmpty) {
-      debugPrint('Non existent files: $nonExistentFiles');
-    }
-
-    // } else if (notes.isEmpty) {
-    if (notes.isEmpty) {
+    if (nonExistentNotes.isNotEmpty) {
+      return NotesRevokeDialog(
+        nonExistentNotes: nonExistentNotes,
+        childPage: ListExternalNotes(notes: notes),
+      );
+    } else if (notes.isEmpty) {
       return _noExternalNotes();
     } else {
       return ListExternalNotes(notes: notes);
@@ -127,12 +125,8 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
                     context,
                     'Error: data loading failed',
                   );
-                  // } else if (snapshot.hasData &&
-                  //     snapshot.data != null &&
-                  //     snapshot.data.length > 0) {
                 } else if (snapshot.hasData && snapshot.data != null) {
                   // Notes found
-                  // return ListExternalNotes(notes: snapshot.data);
                   return _loadedExternalNotesScreen(
                     snapshot.data as ExternalNotesCallResult,
                   );

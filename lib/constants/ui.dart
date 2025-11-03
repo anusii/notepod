@@ -145,6 +145,9 @@ class ButtonLabel {
   /// Delete button label
   static const String delete = 'DELETE';
 
+  /// Revoke button label
+  static const String revoke = 'REVOKE';
+
   /// Save button label
   static const String save = 'SAVE';
 

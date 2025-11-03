@@ -32,6 +32,7 @@ import 'package:notepod/shared_notes/share_external_note.dart';
 // import 'package:notepod/shared_notes/title_external_note_screen.dart';
 // import 'package:notepod/shared_notes/view_shared_note_screen.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
+import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
@@ -174,14 +175,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
       // Sort results by filename
       _sortByFilename(_sortFilenameAscending);
     });
-  }
-
-  /// Return id part of a webId
-  String getId(webId) {
-    final Uri uri = Uri.parse(webId);
-    final String id = uri.pathSegments.first;
-
-    return id;
   }
 
   @override
@@ -355,7 +348,11 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                           title: (_foundNotes[index]
                                   .permissionList
                                   .contains('read'))
-                              ? Text(_foundNotes[index].content!.noteTitle)
+                              ? Text(
+                                  _foundNotes[index].content!.noteTitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
                               : const Text(''),
                           subtitle: Text(
                             'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter)} \nPermissions: ${_foundNotes[index].permissionList}',

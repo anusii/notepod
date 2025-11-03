@@ -172,9 +172,6 @@ Future<ExternalNotesCallResult> getExternalNoteList({
     externalNotesLog = await NoteFileHelper()
         .scanPermLogFile(context: context, childPage: childPage);
 
-    debugPrint('');
-    debugPrint('User\'s Permission Log:');
-
     // final List<ExternalNote> notes = [];
     List<String> unparseableLogRecords = [];
 
@@ -236,8 +233,8 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   // or count bad files according to error type
   try {
     List<ExternalNote> fullNotes = [];
-    List<String> nonExistentFiles = [];
-    List<String> unparseableFiles = [];
+    List<ExternalNote> nonExistentNotes = [];
+    List<ExternalNote> unparseableNotes = [];
     ExternalNotesCallResult results;
 
     if (notes.isNotEmpty) {
@@ -253,9 +250,9 @@ Future<ExternalNotesCallResult> getExternalNoteList({
         );
 
         if (noteWithContent == FileCallStatus.parsingFail) {
-          unparseableFiles.add(note.noteFileName);
+          unparseableNotes.add(note);
         } else if (noteWithContent == FileCallStatus.fileNotExists) {
-          nonExistentFiles.add(note.noteFileName);
+          nonExistentNotes.add(note);
         } else if (noteWithContent != null) {
           // Add note content data to note objects list
           fullNotes.add(noteWithContent);
@@ -265,8 +262,8 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 
     results = ExternalNotesCallResult(
       notes: fullNotes,
-      nonExistentFiles: nonExistentFiles,
-      unparseableFiles: unparseableFiles,
+      nonExistentNotes: nonExistentNotes,
+      unparseableNotes: unparseableNotes,
     );
 
     return results;
