@@ -30,9 +30,9 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/ui.dart';
 // import 'package:notepod/constants/paths.dart';
 import 'package:notepod/models/external_note.dart';
-import 'package:notepod/constants/ui.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
