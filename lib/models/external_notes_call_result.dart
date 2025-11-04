@@ -26,12 +26,13 @@
 library;
 
 import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/unparseable_note.dart';
 
 /// Data model for result of get external notes list future call
 
 class ExternalNotesCallResult {
   final List<ExternalNote>? notes;
-  final List<ExternalNote>? unparseableNotes;
+  final List<UnparseableNote>? unparseableNotes;
   final List<ExternalNote>? nonExistentNotes;
 
   const ExternalNotesCallResult({

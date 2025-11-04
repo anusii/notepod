@@ -32,22 +32,23 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/unparseable_note.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/loading_animation.dart';
 
 /// A delete button widget for deleting a list of notes.
 ///
 /// Arguments:
-/// - [badFiles] - list of filenames of corrupted files.
+/// - [unparseableNotes] - list of unparseable notes.
 /// - [childPage] - child widget to return to.
 
 class NoteListDelButton extends StatelessWidget {
-  final List<String> badFiles;
+  final List<UnparseableNote> unparseableNotes;
   final Widget childPage;
 
   const NoteListDelButton({
     super.key,
-    required this.badFiles,
+    required this.unparseableNotes,
     required this.childPage,
   });
 
@@ -66,7 +67,7 @@ class NoteListDelButton extends StatelessWidget {
             return AlertDialog(
               title: const Text(Msg.plsConfirm),
               content: Text(
-                badFiles.length > 1
+                unparseableNotes.length > 1
                     ? Msg.confirmDeleteMultiple
                     : Msg.confirmDelete,
               ),
@@ -81,9 +82,9 @@ class NoteListDelButton extends StatelessWidget {
                     );
 
                     // Delete file
-                    for (String fileName in badFiles) {
+                    for (final UnparseableNote note in unparseableNotes) {
                       // Create note file path
-                      String noteFilePath = '$basePath/$fileName';
+                      String noteFilePath = '$basePath/${note.noteFileName}';
                       debugPrint('Deleting $noteFilePath...');
 
                       // Call solid delete file function

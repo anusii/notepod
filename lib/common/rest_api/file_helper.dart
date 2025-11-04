@@ -272,8 +272,8 @@ class NoteFileHelper with PodOperationsMixin {
           prevNoteTitle = prevExternalNote!.content!.noteTitle;
           prevNoteContent = prevExternalNote.content!.noteContent;
         } else {
-          prevNoteTitle = prevOwnNote!.content.noteTitle;
-          prevNoteContent = prevOwnNote.content.noteContent;
+          prevNoteTitle = prevOwnNote!.content!.noteTitle;
+          prevNoteContent = prevOwnNote.content!.noteContent;
         }
         // Compare updated title and content to existing
         // title and content
@@ -332,7 +332,7 @@ class NoteFileHelper with PodOperationsMixin {
           } else {
             // Update content of Own note
             try {
-              updatedContent = prevOwnNote!.content.copyWith(
+              updatedContent = prevOwnNote!.content!.copyWith(
                 modifiedDateTime: modifiedDateTimeStr,
                 noteTitle: noteTitle,
                 noteContent: noteText,

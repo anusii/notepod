@@ -30,6 +30,7 @@ import 'package:notepod/shared_notes/list_external_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
 class ListExternalNotesScreen extends StatefulWidget {
@@ -72,10 +73,11 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     final nonExistentNotes = results.nonExistentNotes!;
 
     if (unparseableNotes.isNotEmpty) {
-      debugPrint('Unparseable note files: $unparseableNotes');
-    }
-
-    if (nonExistentNotes.isNotEmpty) {
+      return NotesDelDialog(
+        unparseableNotes: unparseableNotes,
+        childPage: ListExternalNotes(notes: notes),
+      );
+    } else if (nonExistentNotes.isNotEmpty) {
       return NotesRevokeDialog(
         nonExistentNotes: nonExistentNotes,
         childPage: ListExternalNotes(notes: notes),

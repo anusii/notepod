@@ -29,6 +29,7 @@ import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
 
 /// Data model for externally owned note shared with the user
+
 class ExternalNote {
   NoteContent? content;
   final String sharedTime;
@@ -111,6 +112,7 @@ class ExternalNote {
 extension ListExternalNoteExtension on List<ExternalNote> {
   /// Assign list of external notes to list of found external notes
   /// usign default values.
+
   List<FoundExternalNote> toListFoundExternalNote() {
     List<FoundExternalNote> listFoundNotes = map((item) {
       return FoundExternalNote(
