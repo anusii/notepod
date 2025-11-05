@@ -141,10 +141,7 @@ Future<OwnNotesCallResult> getNoteList({
       final List<String> fileList =
           notes.map((note) => note.noteFileName).toList();
 
-      // TODO: remove UI parameters from getAccessLists()
-      final Map<dynamic, dynamic> permissionMaps = await getAccessLists(
-        context: context,
-        child: childPage,
+      final Map<dynamic, dynamic> permissionMaps = await readPermissionFileList(
         fileList: fileList,
       );
 
@@ -326,7 +323,6 @@ Future<dynamic> getExternalNoteContent({
 
         if (content != null) {
           // Add note content data to external notes object
-          debugPrint('External file content retrieved successfully');
           note.content = content;
           return note;
         } else {
