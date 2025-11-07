@@ -43,7 +43,7 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// Get the list of user's note objects.
 ///
 /// Example:
-/// - `_asyncDataFetch = getNoteList(context: context, childPage: ListNotesScreen())`
+/// - `_asyncDataFetch = getOwnNoteList(context: context, childPage: ListNotesScreen())`
 /// - used to define async function in future call to get user's notes.
 ///
 /// Arguments:
@@ -55,11 +55,12 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// - [unparseableNotes] - list of [UnparseableNote] objects of
 /// unparseable notes.
 
-Future<OwnNotesCallResult> getNoteList({
+Future<OwnNotesCallResult> getOwnNoteList({
   required BuildContext context,
   required Widget childPage,
 }) async {
   try {
+    final startTime = DateTime.now();
     final List<String> fileList;
     final List<OwnNote> notes = [];
     final List<UnparseableNote> unparseableNotes = [];
@@ -70,61 +71,77 @@ Future<OwnNotesCallResult> getNoteList({
     // Get file list in owner's Pod
     fileList = await NoteFileHelper().scanFileListDirectory();
 
-    // Retrieve note data
+    // Create a list of future functions for reading pod and
+    // getting fileUrl
+    List<Future<String>> futuresFileUrl = [];
+    List<Future<String>> futuresNoteContentResult = [];
     for (final fileName in fileList) {
-      final fileUrl = await filenameToResourceUrl(
-        fileName: fileName,
+      futuresFileUrl.add(
+        filenameToResourceUrl(
+          fileName: fileName,
+        ),
       );
-      // Read file content
       if (context.mounted) {
-        String noteContentResult =
-            await readPod('$basePath/$fileName', context, childPage);
-
-        // Extract ttl data to content data of notes object
-        if (noteContentResult.isNotEmpty) {
-          try {
-            // Extract note from turtle string
-            final NoteContent? content;
-            content = TurtleSerializer.noteFromTurtle(noteContentResult);
-
-            if (content != null) {
-              // Add note content data to note objects list
-              notes.add(
-                OwnNote(
-                  noteFileName: fileName,
-                  noteUrl: fileUrl,
-                  noteOwner: noteOwner,
-                  content: content,
-                ),
-              );
-            } else {
-              // Found unparseable file content
-              // Add note that failed parsing to bad notes list
-              unparseableNotes.add(
-                UnparseableNote(
-                  noteFileName: fileName,
-                  noteUrl: fileUrl,
-                  noteOwner: noteOwner,
-                ),
-              );
-              debugPrint('Found unparseable file: $fileName');
-            }
-          } catch (e) {
-            // Error deserializing note content
-            debugPrint(e.toString());
-          }
-        } else {
-          // If empty, add to unparseable file object list
-          unparseableNotes.add(
-            UnparseableNote(
-              noteFileName: fileName,
-              noteUrl: fileUrl,
-              noteOwner: noteOwner,
-            ),
-          );
-          debugPrint('Found empty file: $fileName');
-        }
+        futuresNoteContentResult.add(
+          readPod('$basePath/$fileName', context, childPage),
+        );
       }
+    }
+
+    // Read note file content and fetch file Urls
+    List<String> fileUrls = await Future.wait(futuresFileUrl);
+    List<String> noteContentResults =
+        await Future.wait(futuresNoteContentResult);
+
+    // Retrieve note data
+    for (int i = 0; i < fileList.length; i++) {
+      // Extract ttl data to content data of notes object
+      if (noteContentResults[i].isNotEmpty) {
+        try {
+          // Extract note from turtle string
+          final NoteContent? content;
+          content = TurtleSerializer.noteFromTurtle(
+            noteContentResults[i],
+          );
+
+          if (content != null) {
+            // Add note content data to note objects list
+            notes.add(
+              OwnNote(
+                noteFileName: fileList[i],
+                noteUrl: fileUrls[i],
+                noteOwner: noteOwner,
+                content: content,
+              ),
+            );
+          } else {
+            // Found unparseable file content
+            // Add note that failed parsing to bad notes list
+            unparseableNotes.add(
+              UnparseableNote(
+                noteFileName: fileList[i],
+                noteUrl: fileUrls[i],
+                noteOwner: noteOwner,
+              ),
+            );
+            debugPrint('Found unparseable file: ${fileList[i]}');
+          }
+        } catch (e) {
+          // Error deserializing note content
+          debugPrint(e.toString());
+        }
+      } else {
+        // If empty, add to unparseable file object list
+        unparseableNotes.add(
+          UnparseableNote(
+            noteFileName: fileList[i],
+            noteUrl: fileUrls[i],
+            noteOwner: noteOwner,
+          ),
+        );
+        debugPrint('Found empty file: ${fileList[i]}'); //
+      }
+      // }
     }
 
     if (unparseableNotes.isNotEmpty) {
@@ -151,6 +168,9 @@ Future<OwnNotesCallResult> getNoteList({
         notes: fullNotes,
         unparseableNotes: unparseableNotes,
       );
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+      debugPrint('[getOwnNoteList] Load time: ${duration.inMilliseconds} ms');
 
       return results;
     } catch (e) {
@@ -174,13 +194,22 @@ Future<OwnNotesCallResult> getNoteList({
 /// access (ie. not revoked) to external file. If false, all files
 /// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
 /// that user has current access to.
+///
+/// Returns: [ExternalNotesCallResult] object comprising:
+/// - [notes] - list of [ExternalNote] note objects.
+/// - [unparseableNotes] - list of [UnparseableNote] objects of
+/// unparseable notes.
+/// - [nonExistentNotes] - list of non-existent [ExternalNote] note
+/// objects, if external files were deleted by their owner without
+/// first revoking access to the user (and other recipients).
 
-// Future<List<ExternalNote>?> getExternalNoteList({
 Future<ExternalNotesCallResult> getExternalNoteList({
   required BuildContext context,
   required Widget childPage,
   bool hasCurrentAccess = true,
 }) async {
+  final startTime = DateTime.now();
+
   final List<ExternalNote> notes = [];
   // Build list of external notes shared to user
   try {
@@ -253,30 +282,39 @@ Future<ExternalNotesCallResult> getExternalNoteList({
     final ExternalNotesCallResult results;
 
     if (notes.isNotEmpty) {
+      // Create a list of future functions for reading external Pods
+      List<Future<dynamic>> futuresExtNoteContentResult = [];
       for (final note in notes) {
-        final dynamic noteWithContent;
-
-        // Retrieve content
-        if (!context.mounted) return const ExternalNotesCallResult();
-        noteWithContent = await getExternalNoteContent(
-          context: context,
-          childPage: childPage,
-          note: note,
-        );
-
-        if (noteWithContent == FileCallStatus.parsingFail) {
-          unparseableNotes.add(
-            UnparseableNote(
-              noteFileName: note.noteFileName,
-              noteUrl: note.noteUrl,
-              noteOwner: note.noteOwner,
+        if (context.mounted) {
+          futuresExtNoteContentResult.add(
+            getExternalNoteContent(
+              context: context,
+              childPage: childPage,
+              note: note,
             ),
           );
-        } else if (noteWithContent == FileCallStatus.fileNotExists) {
-          nonExistentNotes.add(note);
-        } else if (noteWithContent != null) {
+        }
+      }
+
+      List<dynamic> extNoteWithContentResults =
+          await Future.wait(futuresExtNoteContentResult);
+
+      // Retrieve note data
+      for (int i = 0; i < notes.length; i++) {
+        if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
+          unparseableNotes.add(
+            UnparseableNote(
+              noteFileName: notes[i].noteFileName,
+              noteUrl: notes[i].noteUrl,
+              noteOwner: notes[i].noteOwner,
+            ),
+          );
+        } else if (extNoteWithContentResults[i] ==
+            FileCallStatus.fileNotExists) {
+          nonExistentNotes.add(notes[i]);
+        } else if (extNoteWithContentResults[i] != null) {
           // Add note content data to note objects list
-          fullNotes.add(noteWithContent);
+          fullNotes.add(extNoteWithContentResults[i]);
         }
       }
     }
@@ -285,6 +323,12 @@ Future<ExternalNotesCallResult> getExternalNoteList({
       notes: fullNotes,
       nonExistentNotes: nonExistentNotes,
       unparseableNotes: unparseableNotes,
+    );
+
+    final endTime = DateTime.now();
+    final duration = endTime.difference(startTime);
+    debugPrint(
+      '[getExternalNoteList] Load time: ${duration.inMilliseconds} ms',
     );
 
     return results;
@@ -301,6 +345,12 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// - [context] - The build context.
 /// - [childPage] - The widget return page.
 /// - [note] - The externally owned note data object including metadata.
+///
+/// Returns: [FileCallStatus] object comprising one of:
+/// - [note] - [ExternalNote] note object containing note content.
+/// - [FileCallStatus] - where [FileCallStatus] captures read failures
+/// including [FileCallStatus.fileNoteExists] and
+/// [FileCallStatus.parsingFail].
 
 Future<dynamic> getExternalNoteContent({
   required BuildContext context,
