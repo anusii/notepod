@@ -76,6 +76,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
         childPage: ListExternalNotes(notes: notes),
+        isExternal: true,
       );
     } else if (nonExistentNotes.isNotEmpty) {
       return NotesRevokeDialog(
