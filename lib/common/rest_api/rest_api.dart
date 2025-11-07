@@ -349,7 +349,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// Returns: [FileCallStatus] object comprising one of:
 /// - [note] - [ExternalNote] note object containing note content.
 /// - [FileCallStatus] - where [FileCallStatus] captures read failures
-/// including [FileCallStatus.fileNoteExists] and
+/// including [FileCallStatus.fileNotExists] and
 /// [FileCallStatus.parsingFail].
 
 Future<dynamic> getExternalNoteContent({
