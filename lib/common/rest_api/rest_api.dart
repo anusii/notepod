@@ -28,6 +28,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/paths.dart';
@@ -60,6 +61,9 @@ Future<OwnNotesCallResult> getNoteList({
   required Widget childPage,
 }) async {
   try {
+    // Get security key if required
+    await getKeyFromUserIfRequired(context, childPage);
+
     final List<String> fileList;
     final List<OwnNote> notes = [];
     final List<UnparseableNote> unparseableNotes = [];
@@ -184,6 +188,9 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   final List<ExternalNote> notes = [];
   // Build list of external notes shared to user
   try {
+    // Get security key if required
+    await getKeyFromUserIfRequired(context, childPage);
+
     final Map<dynamic, dynamic> externalNotesLog;
 
     if (!context.mounted) return const ExternalNotesCallResult();

@@ -25,7 +25,7 @@
 
 library;
 
-import 'package:solidpod/solidpod.dart' show parseTTLMap, turtleToTripleMap;
+import 'package:solidpod/solidpod.dart' show turtleToTripleMap;
 
 /// Turtle parsing utilities.
 
@@ -37,18 +37,6 @@ class TurtleParsingUtils {
   ) {
     try {
       return turtleToTripleMap(ttlContent);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// Safely parses TTL content to map.
-
-  static Map<String, dynamic>? safeParseTtlToMap(
-    String ttlContent,
-  ) {
-    try {
-      return parseTTLMap(ttlContent);
     } catch (e) {
       return null;
     }
