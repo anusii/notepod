@@ -169,6 +169,9 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   final List<ExternalNote> notes = [];
   // Build list of external notes shared to user
   try {
+    // Get security key if required
+    await getKeyFromUserIfRequired(context, childPage);
+
     final Map<dynamic, dynamic> externalNotesLog;
 
     // if (!context.mounted) return null;
