@@ -3,10 +3,21 @@ platform :osx, '10.15'
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
+# [20251029 jesscmoore] Updated to match new dev and staging schemes
+# added in Xcode for building with flutter flavours.
 project 'Runner', {
   'Debug' => :debug,
+  'Debug-dev' => :debug,
+  'Debug-staging' => :debug,
+  'Debug-unsigned' => :debug,
   'Profile' => :release,
+  'Profile-dev' => :release,
+  'Profile-staging' => :release,
+  'Profile-unsigned' => :release,
   'Release' => :release,
+  'Release-dev' => :release,
+  'Release-staging' => :release,
+  'Release-unsigned' => :release,
 }
 
 def flutter_root

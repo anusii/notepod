@@ -9,6 +9,7 @@
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
+[![Build Installers](https://github.com/anusii/notepod/actions/workflows/installers.yaml/badge.svg)](https://github.com/anusii/notepod/actions/workflows/installers.yaml)
 
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
 
@@ -23,7 +24,7 @@ Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore).
 
 If you appreciate the app then please show some ❤️ and star the [GitHub
-Repository](https://github.com/anusii/msfatigue) to support the
+Repository](https://github.com/anusii/notepod) to support the
 project.  You can install the app from different repositories
 including [SnapCraft](https://snapcraft.io/notepod) for Linux.
 
@@ -181,7 +182,9 @@ and sign in with your Apple ID account. In `Network`, select `Incoming
 Connections (Server)` and `Outgoing Connections (Client)`. The latter
 is needed to login to your Pod. Keychain access capability is also
 required to save authorisation and encryption key credentials to
-secure storage.
+secure storage. Macos app builds must use be signed with a valid developer
+certificate in order to add the keychain access capability required for
+local secure key storage.
 
 Edit `macos/Runner/DebugRunner.entitlements` to add:
 
@@ -195,14 +198,12 @@ Edit `macos/Runner/DebugProfile.entitlements` and
 
 ```xml
  <array>
-        <string>[$DEVELOPMENT_TEAM].[$PRODUCT_BUNDLE_IDENTIFIER]</string>
+        <string>$(AppIdentifierPrefix)PRODUCT_BUNDLE_IDENTIFIER</string>
     </array>
 ```
 
-where `$DEVELOPMENT_TEAM` found in
-`macos/Runner.xcodeproj/project.pbxproj` and
-`$PRODUCT_BUNDLE_IDENTIFIER` found in
-`macos/Runner/Configs/AppInfo.xcconfig`.
+where `PRODUCT_BUNDLE_IDENTIFIER` found in
+`macos/Runner/Configs/AppInfo.xcconfig`, e.g. `$(AppIdentifierPrefix)com.mycompany.myapp`.
 
 ### Extra setup for iOS
 
