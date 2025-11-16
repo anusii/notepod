@@ -33,7 +33,7 @@ dependencies:
   solidpod:
     git:
       url: https://github.com/anusii/solidpod.git
-      ref: jess/add_revoke_to_user_log   # dev
+      ref: jess/allow_concurrent_pod_file_reading   # dev
   solidui:
     path: ../solidui/
     # git:
