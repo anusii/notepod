@@ -33,7 +33,7 @@ dependencies:
   solidpod:
     git:
       url: https://github.com/anusii/solidpod.git
-      ref: jess/allow_concurrent_pod_file_reading   # dev
+      ref: jess/139_opt_note_load_time   # dev
   solidui:
     path: ../solidui/
     # git:
