@@ -97,7 +97,7 @@ class _ViewNoteState extends State<ViewNote> {
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                           child: Text(
-                            _note.content.noteTitle,
+                            _note.content!.noteTitle,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
@@ -109,15 +109,15 @@ class _ViewNoteState extends State<ViewNote> {
                   ),
                   // Display note metadata
                   DisplayNoteMetadata(
-                    createdDateTime: _note.content.createdDateTime,
-                    modifiedDateTime: _note.content.modifiedDateTime,
+                    createdDateTime: _note.content!.createdDateTime,
+                    modifiedDateTime: _note.content!.modifiedDateTime,
                     noteFileName: _note.noteFileName,
                     showDates: true,
                     showFileName: true,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(
-                    _note.content.noteContent,
+                    _note.content!.noteContent,
                   ),
                 ],
               ),

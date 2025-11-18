@@ -94,8 +94,8 @@ class NoteBackButton extends StatelessWidget {
                 prevNoteTitle = prevExternalNote!.content!.noteTitle;
                 prevNoteContent = prevExternalNote!.content!.noteContent;
               } else {
-                prevNoteTitle = prevOwnNote!.content.noteTitle;
-                prevNoteContent = prevOwnNote!.content.noteContent;
+                prevNoteTitle = prevOwnNote!.content!.noteTitle;
+                prevNoteContent = prevOwnNote!.content!.noteContent;
               }
               // Check if title or content changed
               if (noteTitle != prevNoteTitle || noteText != prevNoteContent) {

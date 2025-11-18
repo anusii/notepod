@@ -126,12 +126,12 @@ class _ListNotesState extends State<ListNotes> {
       _sortTitleAscending = ascending;
       _foundNotes.sort(
         (a, b) => _sortTitleAscending
-            ? a.content.noteTitle
+            ? a.content!.noteTitle
                 .toLowerCase()
-                .compareTo(b.content.noteTitle.toLowerCase())
-            : b.content.noteTitle
+                .compareTo(b.content!.noteTitle.toLowerCase())
+            : b.content!.noteTitle
                 .toLowerCase()
-                .compareTo(a.content.noteTitle.toLowerCase()),
+                .compareTo(a.content!.noteTitle.toLowerCase()),
       );
 
       // Update current sort method
@@ -145,12 +145,12 @@ class _ListNotesState extends State<ListNotes> {
       _sortModDateAscending = ascending;
       _foundNotes.sort(
         (a, b) => _sortModDateAscending
-            ? a.content.modifiedDateTime
+            ? a.content!.modifiedDateTime
                 .toLowerCase()
-                .compareTo(b.content.modifiedDateTime.toLowerCase())
-            : b.content.modifiedDateTime
+                .compareTo(b.content!.modifiedDateTime.toLowerCase())
+            : b.content!.modifiedDateTime
                 .toLowerCase()
-                .compareTo(a.content.modifiedDateTime.toLowerCase()),
+                .compareTo(a.content!.modifiedDateTime.toLowerCase()),
       );
 
       // Update current sort method
@@ -167,10 +167,10 @@ class _ListNotesState extends State<ListNotes> {
     } else {
       // Display notes with title or contents containing search string
       results = widget.notes.toListFoundOwnNote().where((note) {
-        return note.content.noteTitle
+        return note.content!.noteTitle
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            note.content.noteContent
+            note.content!.noteContent
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase());
       }).toList();
@@ -351,15 +351,15 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                             ),
                             title: Text(
-                              _foundNotes[index].content.noteTitle,
+                              _foundNotes[index].content!.noteTitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             subtitle: Text(
                               'Filename: ${_foundNotes[index].noteFileName} \n'
-                              'Created on: ${getDateTimeStr(_foundNotes[index].content.createdDateTime)} \n'
-                              'Last modified: ${getDateTimeStr(_foundNotes[index].content.modifiedDateTime)}\n'
-                              'Shared with: ${getRecipNbrStr(_foundNotes[index].content.authUsers.length)}',
+                              'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                              'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                              'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)}',
                               maxLines: 4, // Limit to 4 lines
                               overflow: TextOverflow.ellipsis,
                             ),

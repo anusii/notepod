@@ -1,4 +1,4 @@
-/// A dialog for deleting corrupt files.
+/// A dialog for deleting unparseable files.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -27,24 +27,33 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/unparseable_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 
-/// A page listing corrupted note files with button to delete
+/// A page listing unparseable note files with button to delete
 /// all files in the list.
 ///
 /// Arguments:
-/// - [badFiles] - list of filenames of corrupted files.
-/// - [childPage] - child widget to return to.
+/// - [unparseableNotes] - list of unparseable notes.
+/// - [childPage] - child widget to navigate to after delete dialog.
+/// - [isExternal] - flag describing whether files are externally owned.
 
 class NotesDelDialog extends StatefulWidget {
-  final List<String> badFiles;
+  final List<UnparseableNote> unparseableNotes;
+
+  /// Childpage to navigate to after delete dialog
   final Widget childPage;
+
+  /// Boolean describing whether note is external
+  final bool isExternal;
 
   const NotesDelDialog({
     super.key,
-    required this.badFiles,
+    required this.unparseableNotes,
     required this.childPage,
+    this.isExternal = false,
   });
 
   @override
@@ -54,6 +63,13 @@ class NotesDelDialog extends StatefulWidget {
 class _NotesDelDialogState extends State<NotesDelDialog> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Aspect ratio (width / height) for gridview
+  /// cards to display note items
+  late double cardAspectRatio = 2.0;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
 
   @override
   void initState() {
@@ -70,108 +86,118 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Column(
-        children: [
-          // Title and count of corrupted notes
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Derive whether window is narrow
+        isNarrow = WindowSize().isNarrowWindow(constraints);
+        // Calculate the aspect radio for grid cards
+        cardAspectRatio = NoteItemSize()
+            .calculateCardAspectRatio(constraints, widget.isExternal);
+        return SizedBox(
+          child: Column(
+            children: [
+              // Title and count of corrupted notes
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.error,
-                        color: Colors.amber,
-                        size: 60,
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ],
-                ), //CircleAvatar
-                const SizedBox(
-                  height: 30,
-                ),
-                const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 60,
+                          width: 60,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.error,
+                            color: Colors.amber,
+                            size: 60,
+                          ),
+                        ),
+                      ],
+                    ), //CircleAvatar
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          NoteListMsg.badFilesFound,
+                          style: titleStyle,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                     Text(
-                      NoteListMsg.badFilesFound,
-                      style: titleStyle,
+                      widget.unparseableNotes.length > 1
+                          ? 'Found ${widget.unparseableNotes.length} unparseable notes'
+                          : 'Found ${widget.unparseableNotes.length} unparseable note',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  widget.badFiles.length > 1
-                      ? 'Found ${widget.badFiles.length} corrupt notes'
-                      : 'Found ${widget.badFiles.length} corrupt note',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // List of corrupted notes
-          Expanded(
-            child: Scrollbar(
-              thumbVisibility: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(10),
-                itemCount: widget.badFiles.length,
-                itemExtent: badListItemHeight,
-                itemBuilder: (context, index) => Card(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        'Filename: ${widget.badFiles[index]}',
+              ),
+              // List of unparseable notes
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller: _scrollController,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(10),
+                    itemCount: widget.unparseableNotes.length,
+                    itemExtent: badListItemHeight,
+                    itemBuilder: (context, index) => Card(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Filename: ${widget.unparseableNotes[index].noteFileName}',
+                          ),
+                          // Define width to avoid consuming full width
+                        ),
                       ),
-                      // Define width to avoid consuming full width
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              spacing: 5.0,
-              children: [
-                /// Note list delete button
-                NoteListDelButton(
-                  badFiles: widget.badFiles,
-                  childPage: widget.childPage,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 5.0,
+                  children: [
+                    /// Note list delete button
+                    NoteListDelButton(
+                      unparseableNotes: widget.unparseableNotes,
+                      childPage: widget.childPage,
+                      isExternal: widget.isExternal,
+                    ),
+                    // Back button
+                    NoteBackButton(childPage: widget.childPage),
+                  ],
                 ),
-                // Back button
-                NoteBackButton(childPage: widget.childPage),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

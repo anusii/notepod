@@ -74,14 +74,17 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// notes.
   ///
   /// Arguments:
-  ///   [results] - [OwnNotesCallResult] class containing [notes] of files found in user's app data folder, and [badFiles] list of any unparseable files
+  ///   [results] - [OwnNotesCallResult] class containing [notes] of
+  /// files found in user's app data folder, and [unparseableNotes]
+  /// list of any unparseable files.
+
   Widget _loadedNotesScreen(OwnNotesCallResult results) {
     final notes = results.notes!;
-    final badFiles = results.badFiles!;
+    final unparseableNotes = results.unparseableNotes!;
 
-    if (badFiles.isNotEmpty) {
+    if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
-        badFiles: badFiles,
+        unparseableNotes: unparseableNotes,
         childPage: ListNotes(notes: notes),
       );
     } else if (notes.isEmpty) {
