@@ -360,7 +360,7 @@ class _ListNotesState extends State<ListNotes> {
                               'Created on: ${getDateTimeStr(_foundNotes[index].content.createdDateTime)} \n'
                               'Last modified: ${getDateTimeStr(_foundNotes[index].content.modifiedDateTime)}\n'
                               'Shared with: ${getRecipNbrStr(_foundNotes[index].content.authUsers.length)}',
-                              maxLines: 3, // Limit to 3 lines
+                              maxLines: 4, // Limit to 4 lines
                               overflow: TextOverflow.ellipsis,
                             ),
                             // Define width to avoid consuming full width

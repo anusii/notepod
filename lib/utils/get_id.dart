@@ -1,12 +1,12 @@
-/// Turtle parsing utilities
+/// A function to return the user id part of a webId.
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute
+/// Copyright (C) 2023, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Friday 2025-10-03 13:56:10 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-11-03 12:12:04 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,20 +25,14 @@
 
 library;
 
-import 'package:solidpod/solidpod.dart' show turtleToTripleMap;
+/// Return id part of a webId
+///
+/// Arguments:
+/// - [webId] - webId from which to extract the id.
 
-/// Turtle parsing utilities.
+String getId(webId) {
+  final Uri uri = Uri.parse(webId);
+  final String id = uri.pathSegments.first;
 
-class TurtleParsingUtils {
-  /// Safely parses TTL content to triple map.
-
-  static Map<String, Map<String, List<dynamic>>>? safeParseTtlToTriple(
-    String ttlContent,
-  ) {
-    try {
-      return turtleToTripleMap(ttlContent);
-    } catch (e) {
-      return null;
-    }
-  }
+  return id;
 }

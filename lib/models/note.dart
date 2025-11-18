@@ -31,14 +31,14 @@ import 'package:notepod/constants/turtle_structures.dart';
 
 /// Base data model for the nested note within a note object
 
-class Note {
+class NoteContent {
   final String noteTitle;
   final String createdDateTime;
   final String modifiedDateTime;
   final String noteContent;
   final List<String> authUsers;
 
-  const Note({
+  const NoteContent({
     required this.noteTitle,
     required this.createdDateTime,
     required this.modifiedDateTime,
@@ -46,8 +46,8 @@ class Note {
     this.authUsers = const [],
   });
 
-  factory Note.fromJson(Map<String, dynamic> json) {
-    return Note(
+  factory NoteContent.fromJson(Map<String, dynamic> json) {
+    return NoteContent(
       noteTitle: json[noteTitlePred] as String,
       createdDateTime: json[createdDateTimePred] as String,
       modifiedDateTime: json[modifiedDateTimePred] as String,
@@ -67,14 +67,14 @@ class Note {
   /// Copy method for creating a new instance that is an
   /// updated copy of another instance
 
-  Note copyWith({
+  NoteContent copyWith({
     String? noteTitle,
     String? createdDateTime,
     String? modifiedDateTime,
     String? noteContent,
     List<String>? authUsers,
   }) {
-    return Note(
+    return NoteContent(
       noteTitle: noteTitle ?? this.noteTitle,
       createdDateTime: createdDateTime ?? this.createdDateTime,
       modifiedDateTime: modifiedDateTime ?? this.modifiedDateTime,

@@ -34,7 +34,7 @@ final String contentPred = 'content';
 
 class OwnNote {
   final String noteFileName;
-  final Note content;
+  final NoteContent content;
 
   const OwnNote({
     required this.noteFileName,
@@ -58,7 +58,7 @@ class OwnNote {
 
   OwnNote copyWith({
     String? noteFileName,
-    Note? content,
+    NoteContent? content,
   }) {
     return OwnNote(
       noteFileName: noteFileName ?? this.noteFileName,
@@ -85,7 +85,7 @@ class FoundOwnNote extends OwnNote {
   @override
   FoundOwnNote copyWith({
     String? noteFileName,
-    Note? content,
+    NoteContent? content,
     bool? isSelected,
   }) {
     return FoundOwnNote(
@@ -143,7 +143,7 @@ List<OwnNote> mapOfMapsToListOwnNote(
   listOfNoteMaps = mapOfNoteMaps.entries.map((entry) {
     return OwnNote(
       noteFileName: entry.key,
-      content: Note.fromJson(entry.value),
+      content: NoteContent.fromJson(entry.value),
     );
   }).toList();
 

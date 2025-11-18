@@ -69,6 +69,11 @@ const metadataTextStyle = TextStyle(
   fontSize: 12,
 );
 
+// Text style for advice
+const adviceStyle = TextStyle(
+  fontSize: 13,
+);
+
 // Titles for nav widgets to pages
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
@@ -77,6 +82,10 @@ const String sharedNotesTitle = 'Shared Notes';
 class NoteListMsg {
   /// Message displayed when corrupt files found
   static const String badFilesFound = 'Corrupt note files present';
+
+  /// Message displayed when non existent files found
+  static const String nonExistentNotesFound =
+      'Non-existent note files present without \'revoke\' entry in log';
 
   /// Message displayed when no notes found in user's Pod
   static const String noNotes = 'No notes yet!';
@@ -97,10 +106,22 @@ class Msg {
   static const String confirmDelete =
       'Are you sure you want to delete this note?';
 
+  /// Confirm delete multiple notes message
   static const String confirmDeleteMultiple =
       'Are you sure you want to delete these notes?';
 
-  // Please confirm message
+  /// Note deleting message
+  static const String revokingNote = 'Revoking access!';
+
+  /// Confirm revoke access to note message
+  static const String confirmRevoke =
+      'Are you sure you want to revoke access to this note?';
+
+  /// Confirm revoke access to multiple notes message
+  static const String confirmRevokeMultiple =
+      'Are you sure you want to revoke access to these notes?';
+
+  /// Please confirm message
   static const String plsConfirm = 'Please Confirm';
 }
 

@@ -30,7 +30,7 @@ import 'package:notepod/models/note.dart';
 
 /// Data model for externally owned note shared with the user
 class ExternalNote {
-  Note? content;
+  NoteContent? content;
   final String sharedTime;
   final String noteUrl;
   final String noteFileName;
@@ -82,7 +82,7 @@ class ExternalNote {
   /// updated copy of another instance
 
   ExternalNote copyWith({
-    Note? content,
+    NoteContent? content,
     String? sharedTime,
     String? noteUrl,
     String? noteFileName,
@@ -108,7 +108,7 @@ class ExternalNote {
 
 /// Class to operate on list of notes
 
-extension ListOwnNoteExtension on List<ExternalNote> {
+extension ListExternalNoteExtension on List<ExternalNote> {
   /// Assign list of external notes to list of found external notes
   /// usign default values.
   List<FoundExternalNote> toListFoundExternalNote() {
@@ -154,7 +154,7 @@ class FoundExternalNote extends ExternalNote {
 
   @override
   FoundExternalNote copyWith({
-    Note? content,
+    NoteContent? content,
     String? sharedTime,
     String? noteUrl,
     String? noteFileName,
