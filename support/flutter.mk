@@ -25,6 +25,7 @@ flutter:
   emu	    Run with the android emulator;
   linux     Run with the linux device;
   qlinux    Run with the linux device and debugPrint() turned off;
+  macos     Run with the macos device;
 
   prep      Prep for PR by running tests, checks, docs.
   push      Do a git push and bump the build number if there is one.
@@ -45,8 +46,8 @@ flutter:
   ignore          Look for usage of ignore directives.
   license	  Look for missing top license in source code.
 
-  test	    Run `flutter test` for testing.
-  itest	    Run `flutter test integration_test` for interation testing.
+  test	    Run flutter testing.
+  itest	    Run flutter interation testing.
   qtest	    Run above test with PAUSE=0.
   coverage  Run with `--coverage`.
     coview  View the generated html coverage in browser.
@@ -57,8 +58,12 @@ flutter:
   desktops  Set up for all desktop platforms (linux, windows, macos)
 
   distributions
-    apk	    Builds installers/$(APP).apk
-    tgz     Builds installers/$(APP).tar.gz
+    apk	          Builds installers/$(APP).apk.
+    tgz           Builds installers/$(APP).tar.gz.
+    dmg-unsigned  Builds unsigned macos app.
+    dmg-dev       Builds macos app with development certificate.
+    dmg-staging   Builds macos app with distribution certificate.
+                  (TODO convert to dmg).
 
   publish   Publish a package to pub.dev
 
@@ -106,22 +111,26 @@ chrome:
 pubspec.lock:
 	flutter pub get
 
+.PHONY: upgrade
+upgrade:
+	flutter pub upgrade
+
 .PHONY: linux
-linux: pubspec.lock $(BUILD_RUNNER)
+linux: pubspec.lock $(BUILD_RUNNER) upgrade
 	flutter run --device-id linux
 
 # Turn off debugPrint() output.
 
 .PHONY: qlinux
-qlinux: pubspec.lock $(BUILD_RUNNER)
+qlinux: pubspec.lock $(BUILD_RUNNER) upgrade
 	flutter run --dart-define DEBUG_PRINT="FALSE" --device-id linux
 
 .PHONY: macos
-macos: $(BUILD_RUNNER)
+macos: $(BUILD_RUNNER) upgrade
 	flutter run --device-id macos
 
 .PHONY: android
-android: $(BUILD_RUNNER)
+android: $(BUILD_RUNNER) upgrade
 	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ')
 
 .PHONY: emu
@@ -455,6 +464,25 @@ realclean::
 	flutter clean
 	flutter pub get
 
+# Create a macos app
+# [20251029 jesscmoore] TODO: add converting to dmg
+# Build unsigned macos app
+dmg-unsigned::
+	flutter clean
+	flutter build macos --release --flavor unsigned
+
+# Build macos app signed with development certificate for testing
+# by App Developer Program togaware registered devices
+dmg-dev::
+	flutter clean
+	flutter build macos --release --flavor dev
+
+# Build macos app signed with app store distribution for testing
+# on Testflight or publishing
+dmg-staging:
+	flutter clean
+	flutter build macos --release --flavor staging
+
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
 # flutter.mk). This is only undertaken through `make push` rather than
@@ -515,7 +543,7 @@ unused_files:
 .PHONY: lychee
 lychee:
 	@echo "Lychee: CHECK LINKS."
-	-lychee --no-progress --format compact 'assets/**/*.md' 'assets/**/*.html' 'lib/**/*.dart'
+	-lychee --no-progress --format compact *.md ./**/*.dart $(if $(wildcard ./**/*.md),./**/*.md) $(if $(wildcard ./**/*.html),./**/*.html)
 	@echo $(SEPARATOR)
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP

@@ -120,7 +120,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                     noteFileName: _note.noteFileName,
                     noteUrl: _note.noteUrl,
                     showDates: true,
+                    showFileName: true,
                     showSharing: true,
+                    showPathInfo: true,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(_note.content!.noteContent),

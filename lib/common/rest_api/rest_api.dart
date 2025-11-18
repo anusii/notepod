@@ -111,21 +111,18 @@ Future<OwnNotesCallResult> getNoteList({
       OwnNotesCallResult results;
 
       // Convert to map of maps with filename as key
-      final Map<String, Map<String, dynamic>> nestedNoteMaps;
-      nestedNoteMaps = notes.toMap();
+      final Map<String, Map<String, dynamic>> noteMaps;
+      noteMaps = notes.toMap();
 
       if (!context.mounted) return const OwnNotesCallResult();
       // Get the authorised users of notes
-      final tmpMapOfMaps = await getAccessLists(
-        nestedNoteMaps,
-        context,
-        childPage,
-        isFilePath: false,
+      final noteMapsWithPermissions = await getAccessLists(
+        dataMap: noteMaps,
+        context: context,
+        child: childPage,
       ) as Map<String, Map<String, dynamic>>;
       // Convert to list of notes (including authorised users)
-      fullNotes = mapOfMapsToListOwnNote(tmpMapOfMaps);
-
-      debugPrint('Retrieved permission lists of owners files');
+      fullNotes = mapOfMapsToListOwnNote(noteMapsWithPermissions);
 
       if (badFiles.isEmpty) {
         results = OwnNotesCallResult(notes: fullNotes);

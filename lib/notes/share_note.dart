@@ -1,6 +1,6 @@
 /// A stateful widget for sharing a note owned by the user.
 ///
-// Time-stamp: <Wednesday 2025-07-16 10:21:24 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-10-24 12:01:03 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU
 ///
@@ -94,7 +94,7 @@ class ShareNoteState extends State<ShareNote> {
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: GrantPermissionUi(
                       showAppBar: false,
-                      fileName: _note.noteFileName,
+                      resourceName: _note.noteFileName,
                       child: ShareNote(
                         note: _note,
                         backPage: widget.backPage,

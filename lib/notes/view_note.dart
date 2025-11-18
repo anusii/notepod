@@ -1,6 +1,6 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A widget to view the content of a note.
 ///
-// Time-stamp: <Wednesday 2025-07-16 10:22:24 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:44:50 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025 Software Innovation Institute, ANU
 ///
@@ -111,7 +111,9 @@ class _ViewNoteState extends State<ViewNote> {
                   DisplayNoteMetadata(
                     createdDateTime: _note.content.createdDateTime,
                     modifiedDateTime: _note.content.modifiedDateTime,
+                    noteFileName: _note.noteFileName,
                     showDates: true,
+                    showFileName: true,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(

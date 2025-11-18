@@ -191,19 +191,28 @@ class NoteFileHelper with PodOperationsMixin {
   Future<void> deleteNote({
     required BuildContext context,
     required String filename,
+    required Widget child,
     bool isExternal = false,
   }) async {
-    try {
-      // Delete file
-      if (isExternal) {
+    // Delete file
+    if (isExternal) {
+      try {
+        // Delete external file
         await deleteExternalFile(filename);
-      } else {
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting to external note: $e');
+        rethrow;
+      }
+    } else {
+      try {
         // Call solid delete file function
         await deleteFile('$basePath/$filename');
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting user\' note: $e');
+        rethrow;
       }
-    } catch (e) {
-      debugPrint('Error deleting note: $e');
-      rethrow;
     }
   }
 

@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Monday 2025-09-15 09:30:12 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-10-24 11:59:49 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
@@ -49,13 +49,13 @@ class NotePod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Note Taker',
+      title: 'Note Pod',
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
       home: const SolidLogin(
-        title: 'NOTEPOD - A Note Taker',
+        title: 'NotePod\nPrivate and Shareable Notes',
         appDirectory: 'notepod',
         image: AssetImage('assets/images/notepod-background.jpg'),
         logo: AssetImage('assets/images/notepod.png'),

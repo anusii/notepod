@@ -95,6 +95,7 @@ class NoteDelButton extends StatelessWidget {
                   context: context,
                   filename: filename,
                   isExternal: isExternal,
+                  child: childPage,
                 );
 
                 if (context.mounted) {
@@ -108,8 +109,9 @@ class NoteDelButton extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true)
-                    .pop(); // Dismiss the deleting note dialog
+                if (context.mounted) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                } // Dismiss the deleting note dialog
               },
               child: const Text(ButtonLabel.no),
             ),

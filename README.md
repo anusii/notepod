@@ -1,51 +1,60 @@
-# NotePod &mdash; A notepad for your Data Vault
+# Private and Shareable Notes
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/main/LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
+[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://github.com/anusii/notepod?tab=GPL-3.0-1-ov-file)
 [![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 [![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
-[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/gjwgit/rattle/commits/dev/)
+[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 [![Build Installers](https://github.com/anusii/notepod/actions/workflows/installers.yaml/badge.svg)](https://github.com/anusii/notepod/actions/workflows/installers.yaml)
 
-An app to support the secure and private storage and sharing of
-personal notes on your own encrypted personal online datastore (Pod)
-hosted in your Data Vault on a [Solid
-Server](https://solidporject.org/about). The app was developed by the
-[ANU Software Innovation Institute](https://sii.anu.edu.au) and
-written by Anushka Vidanage, [Graham
-Williams](https://togaware.com/Graham.Williams.html), and Jessica
-Moore. You can install the app from
-[SnapCraft](https://snapcraft.io/notepod) for Linux. You can also run
-the app online at
-[innerpod.solidcommunity.au](https://notepod.solidcommunity.au)
-&mdash; no installation required. For running directly on your own
-device:
+[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
 
-[![Snap](https://snapcraft.io/notepod/badge.svg)](https://snapcraft.io/notepod)
+NotePod is a [solidui](https://github.com/anusii/solidui) based app to
+support the secure and private storage and sharing of personal notes
+on your own encrypted personal online datastore (Pod) hosted in your
+Data Vault on a [Solid Server](https://solidproject.org/about). The
+app was developed by the [ANU Software Innovation
+Institute](https://sii.anu.edu.au) and written by [Anushka
+Vidanage](https://github.com/anushkavidanage), [Graham
+Williams](https://github.com/gjwgit), and [Jessica
+Moore](https://github.com/jesscmoore).
 
-The latest version of the app can be downloaded and installed from the
-[Solid Community AU](https://solidcommunity.au):
+If you appreciate the app then please show some ❤️ and star the [GitHub
+Repository](https://github.com/anusii/notepod) to support the
+project.  You can install the app from different repositories
+including [SnapCraft](https://snapcraft.io/notepod) for Linux.
 
+The latest version of the app can be run online at
+[notepod.solidcommunity.au](https://notepod.solidcommunity.au) with no
+installation required, or downloaded and installed for your platform
+from the [Solid Community AU](https://solidcommunity.au) repository:
+
++ **Web**
+  [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
-[apk](https://solidcommunity.au/installers/notepod.apk);
+  [apk](https://solidcommunity.au/installers/notepod.apk);
 + **GNU/Linux**
-[snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
-[deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
-[zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
+  [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
+  [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
+  [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
 + **macOS**
-[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
-[zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
+  [dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
+  [zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
 + **Windows**
-[zip](https://solidcommunity.au/ibnstallers/notepod-dev-windows.zip) or
-[inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+  [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
+  [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
 
 Contributions are welcome. Visit
-[github](https://github.com/gjwgit/notepod) to submit an issue or,
+[github](https://github.com/anusii/notepod) to submit an issue or,
 even better, fork the repository yourself, update the code, and submit
-a Pull Request. Thanks.
+a Pull Request. The app is implemented in
+[Flutter](https://flutter.dev) using
+[solidpod](https://pub.dev/packages/solidpod) for Flutter to manage
+the Solid Pod interactions. Thank you.
 
 ## Introduction
 
@@ -77,11 +86,15 @@ A simple example of a shopping list, available anywhere, anytime.
 
 Desktop version:
 
-![shopping_desktop](https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping.png)
+<!-- markdownlint-disable MD033 MD045 MD013 -->
+<img
+src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping.png" width=600>
 
 Mobile Phone version:
 
-![shopping_android](https://raw.githubusercontent.com/anusii/notepod/dev/images/shopping_android.png)
+<img
+src="https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/shopping_android.png" width=300>
+<!-- markdownlint-enable MD033 MD045 MD013 -->
 
 ## Obtaining a Pod
 
@@ -114,7 +127,7 @@ On starting up the app you will see the login screen where a user's
 WebID is to be entered. The app itself does not know your login
 details. That is handled by a remote Identify Provider of your choice.
 
-![login](https://raw.githubusercontent.com/anusii/notepod/dev/images/login.png)
+![login](https://raw.githubusercontent.com/anusii/notepod/dev/assets/screenshots/login.png)
 
 ## Contribute to the NotePod Flutter App
 
@@ -169,7 +182,9 @@ and sign in with your Apple ID account. In `Network`, select `Incoming
 Connections (Server)` and `Outgoing Connections (Client)`. The latter
 is needed to login to your Pod. Keychain access capability is also
 required to save authorisation and encryption key credentials to
-secure storage.
+secure storage. Macos app builds must use be signed with a valid developer
+certificate in order to add the keychain access capability required for
+local secure key storage.
 
 Edit `macos/Runner/DebugRunner.entitlements` to add:
 
@@ -183,14 +198,12 @@ Edit `macos/Runner/DebugProfile.entitlements` and
 
 ```xml
  <array>
-        <string>[$DEVELOPMENT_TEAM].[$PRODUCT_BUNDLE_IDENTIFIER]</string>
+        <string>$(AppIdentifierPrefix)PRODUCT_BUNDLE_IDENTIFIER</string>
     </array>
 ```
 
-where `$DEVELOPMENT_TEAM` found in
-`macos/Runner.xcodeproj/project.pbxproj` and
-`$PRODUCT_BUNDLE_IDENTIFIER` found in
-`macos/Runner/Configs/AppInfo.xcconfig`.
+where `PRODUCT_BUNDLE_IDENTIFIER` found in
+`macos/Runner/Configs/AppInfo.xcconfig`, e.g. `$(AppIdentifierPrefix)com.mycompany.myapp`.
 
 ### Extra setup for iOS
 
@@ -252,7 +265,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Friday 2025-10-17 09:46:15 +1100 Graham Williams>*
+*Time-stamp: <Thursday 2025-10-30 15:57:14 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
