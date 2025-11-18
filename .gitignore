@@ -238,10 +238,12 @@ android/app/.cxx/
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 ios/Flutter/
-ios/Runner.xcodeproj/
-ios/Runner.xcworkspace/
-ios/Runner/
 ios/RunnerTests/
+
+# 20251018 jesscmoore: ios Xcode build and signing settings need to be versioned
+# ios/Runner.xcodeproj/
+# ios/Runner.xcworkspace/
+# ios/Runner/
 
 #-----------------------------------------------------------------------
 # macOS

@@ -325,6 +325,10 @@ Future<ExternalNotesCallResult> getExternalNoteList({
         }
       }
     }
+  } on Object catch (e) {
+    // Error building external notes list
+    debugPrint(e.toString());
+  }
 
     results = ExternalNotesCallResult(
       notes: fullNotes,
