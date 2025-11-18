@@ -68,7 +68,10 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
-        child: AppHomePage(title: topBarTitle, childPage: ListNotesScreen()),
+        child: AppHomePage(
+          title: topBarTitle,
+          childPage: ListNotesScreen(),
+        ),
       ),
     );
   }

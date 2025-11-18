@@ -58,7 +58,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   @override
   void initState() {
     _asyncDataFetch =
-        getNoteList(context: context, childPage: const ListNotesScreen());
+        getOwnNoteList(context: context, childPage: const ListNotesScreen());
     super.initState();
     _scrollController = ScrollController();
   }
