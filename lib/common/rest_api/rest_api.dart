@@ -182,7 +182,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
       debugPrint(e.toString());
       rethrow;
     }
-  } on Object catch (e) {
+  } catch (e) {
     // Error finding files
     debugPrint(e.toString());
     rethrow;
@@ -216,68 +216,64 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 
   final List<ExternalNote> notes = [];
   // Build list of external notes shared to user
-  try {
-    // Get security key if required
-    await getKeyFromUserIfRequired(context, childPage);
 
-    final Map<dynamic, dynamic> externalNotesLog;
+  // Get security key if required
+  await getKeyFromUserIfRequired(context, childPage);
 
-    if (!context.mounted) return const ExternalNotesCallResult();
-    externalNotesLog = await NoteFileHelper()
-        .scanPermLogFile(context: context, childPage: childPage);
+  final Map<dynamic, dynamic> externalNotesLog;
 
-    // final List<ExternalNote> notes = [];
-    List<String> unparseableLogRecords = [];
+  if (!context.mounted) return const ExternalNotesCallResult();
+  externalNotesLog = await NoteFileHelper()
+      .scanPermLogFile(context: context, childPage: childPage);
 
-    if (externalNotesLog.isNotEmpty) {
-      for (final fileUrl in externalNotesLog.keys) {
-        // Each log record of an external file
-        final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
-            externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
+  // final List<ExternalNote> notes = [];
+  List<String> unparseableLogRecords = [];
 
-        // Ignore log records of files where access has been
-        // revoked
-        if (hasCurrentAccess &&
-            logRecordOfFile[PermissionLogLiteral.type] == 'revoke') {
-          continue;
+  if (externalNotesLog.isNotEmpty) {
+    for (final fileUrl in externalNotesLog.keys) {
+      // Each log record of an external file
+      final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
+          externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
+
+      // Ignore log records of files where access has been
+      // revoked
+      if (hasCurrentAccess &&
+          logRecordOfFile[PermissionLogLiteral.type] == 'revoke') {
+        continue;
+      }
+
+      // Deserialise external note log record
+      try {
+        final ExternalNote? note;
+
+        // Extract log record of each external note
+        // where user currently has access
+        note = NoteFileHelper.extFileDetailsFromLog(
+          logRecordOfFile: logRecordOfFile,
+          fileUrl: fileUrl,
+        );
+
+        if (note != null) {
+          // Add log details of note to ExternalNote objects list
+          notes.add(note);
+        } else {
+          // Found unparseable log record
+          // Add to unparseable notes list
+          unparseableLogRecords.add(fileUrl);
         }
-
-        // Deserialise external note log record
-        try {
-          final ExternalNote? note;
-
-          // Extract log record of each external note
-          // where user currently has access
-          note = NoteFileHelper.extFileDetailsFromLog(
-            logRecordOfFile: logRecordOfFile,
-            fileUrl: fileUrl,
-          );
-
-          if (note != null) {
-            // Add log details of note to ExternalNote objects list
-            notes.add(note);
-          } else {
-            // Found unparseable log record
-            // Add to unparseable notes list
-            unparseableLogRecords.add(fileUrl);
-          }
-        } catch (e) {
-          // Error deserializing external note log record
-          debugPrint(e.toString());
-        }
+      } catch (e) {
+        // Error deserializing external note log record
+        debugPrint(e.toString());
       }
     }
+  }
 
-    if (unparseableLogRecords.isNotEmpty) {
-      debugPrint(
-        'Found external files with unparseable log records: $unparseableLogRecords',
-      );
-    } else {
-      debugPrint('All log records of external file parsed successfully!');
-    }
-  } on Object catch (e) {
-    // Error building external notes list
-    debugPrint(e.toString());
+  if (unparseableLogRecords.isNotEmpty) {
+    debugPrint(
+      'Found external files with unparseable log records: $unparseableLogRecords',
+    );
+  } else {
+    debugPrint('All log records of external file parsed successfully!');
   }
 
   // Fetch and deserialize external note content
@@ -325,10 +321,6 @@ Future<ExternalNotesCallResult> getExternalNoteList({
         }
       }
     }
-  } on Object catch (e) {
-    // Error building external notes list
-    debugPrint(e.toString());
-  }
 
     results = ExternalNotesCallResult(
       notes: fullNotes,
@@ -343,7 +335,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
     );
 
     return results;
-  } on Object catch (e) {
+  } catch (e) {
     // Error finding files
     debugPrint(e.toString());
     rethrow;
