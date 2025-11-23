@@ -225,7 +225,7 @@ locmax:
 		| egrep -v '^ *$$' \
 		| egrep -v '^ *[)},]+, *$$' \
 		| wc -l \
-		| numfmt --grouping); \
+		| numfmt --format "%'f"); \
 	numf=$$(find lib -name "*.dart" -type f | wc -l); \
 	output=$$(find lib -name "*.dart" -exec sh -c ' \
 		lines=$$(bash $(LOC) "$$1"); \
