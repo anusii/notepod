@@ -98,16 +98,6 @@ migrate_working_dir/
 
 .vscode/
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-
 # Symbolication related
 app.*.symbols
 
@@ -238,12 +228,10 @@ android/app/.cxx/
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 ios/Flutter/
+ios/Runner.xcodeproj/
+ios/Runner.xcworkspace/
+ios/Runner/
 ios/RunnerTests/
-
-# 20251018 jesscmoore: ios Xcode build and signing settings need to be versioned
-# ios/Runner.xcodeproj/
-# ios/Runner.xcworkspace/
-# ios/Runner/
 
 #-----------------------------------------------------------------------
 # macOS
