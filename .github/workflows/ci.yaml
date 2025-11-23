@@ -13,7 +13,7 @@ on:
     types: [opened, reopened, synchronize]
 
 env:
-  FLUTTER_VERSION: '3.35.7'
+  FLUTTER_VERSION: '3.38.3'
 
 jobs:
 
@@ -104,12 +104,13 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with: # Don't fail for now but then create an issue - useful?
           args:
-            --verbose
+            --exclude-file .lycheeignore
             --no-progress
+            '*.md'
+            './**/*.dart'
             'assets/**/*.md'
             'assets/**/*.html'
-            'lib/**/*.dart'
-          fail: false
+          fail: true
 
       # 20251030 gjw Remove the automatic creation of an issue for
       # now. It is creating too many and I am simply closing them. The
