@@ -25,6 +25,8 @@
 
 library;
 
+import 'package:solidpod/solidpod.dart';
+
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
 
@@ -34,23 +36,35 @@ final String contentPred = 'content';
 
 class OwnNote {
   final String noteFileName;
-  final Note content;
+  final String noteUrl;
+  final String noteOwner;
+  final NoteContent? content;
+  final Map<dynamic, dynamic>? authUserList;
 
   const OwnNote({
     required this.noteFileName,
-    required this.content,
+    required this.noteUrl,
+    required this.noteOwner,
+    this.content,
+    this.authUserList,
   });
 
   factory OwnNote.fromJson(Map<String, dynamic> json) {
     return OwnNote(
       noteFileName: json[noteFileNamePred],
+      noteUrl: json[noteUrlPred],
+      noteOwner: json[noteOwnerPred],
       content: json[contentPred],
+      authUserList: json[authUserPred],
     );
   }
 
   Map<String, dynamic> toJson() => {
         noteFileNamePred: noteFileName,
+        noteUrlPred: noteUrl,
+        noteOwnerPred: noteOwner,
         contentPred: content,
+        authUserPred: authUserList,
       };
 
   /// Copy method for creating a new instance that is an
@@ -58,11 +72,17 @@ class OwnNote {
 
   OwnNote copyWith({
     String? noteFileName,
-    Note? content,
+    String? noteUrl,
+    String? noteOwner,
+    NoteContent? content,
+    Map<dynamic, dynamic>? authUserList,
   }) {
     return OwnNote(
       noteFileName: noteFileName ?? this.noteFileName,
+      noteUrl: noteUrl ?? this.noteUrl,
+      noteOwner: noteOwner ?? this.noteOwner,
       content: content ?? this.content,
+      authUserList: authUserList ?? this.authUserList,
     );
   }
 }
@@ -75,7 +95,10 @@ class FoundOwnNote extends OwnNote {
 
   FoundOwnNote({
     required super.noteFileName,
+    required super.noteUrl,
+    required super.noteOwner,
     required super.content,
+    required super.authUserList,
     this.isSelected = false,
   });
 
@@ -85,67 +108,60 @@ class FoundOwnNote extends OwnNote {
   @override
   FoundOwnNote copyWith({
     String? noteFileName,
-    Note? content,
+    String? noteUrl,
+    String? noteOwner,
+    NoteContent? content,
+    Map<dynamic, dynamic>? authUserList,
     bool? isSelected,
   }) {
     return FoundOwnNote(
       noteFileName: noteFileName ?? this.noteFileName,
+      noteUrl: noteUrl ?? this.noteUrl,
+      noteOwner: noteOwner ?? this.noteOwner,
       content: content ?? this.content,
+      authUserList: authUserList ?? this.authUserList,
       isSelected: isSelected ?? this.isSelected,
     );
   }
 }
 
-/// Class to operate on list of notes
+/// Class for operations on list of own notes
 
 extension ListOwnNoteExtension on List<OwnNote> {
-  /// Convert a List of note maps to a map of note
-  /// maps using the note filename as the key for each note
-  /// map
+  /// Method to add authorised user list map to each file in
+  /// list of own notes
+  ///
+  /// Arguments:
+  /// - [permissionMaps] - map of permission maps, with the
+  /// filename as key and the permission map obtained by
+  /// readPermissions() as value.
 
-  Map<String, Map<String, dynamic>> toMap() {
-    Map<String, Map<String, dynamic>> mapOfNoteMaps = {};
+  List<OwnNote> addAuthUserLists({required Map permissionMaps}) {
+    List<OwnNote> updatedNotes = [];
 
     for (var note in this) {
-      String key = note.noteFileName;
-      Map<String, dynamic> value = note.content.toJson();
-
-      // Add note to map with filename as key
-      mapOfNoteMaps[key] = value;
+      final OwnNote updatedNote = note.copyWith(
+        authUserList: permissionMaps[note.noteFileName][authUserPred],
+      );
+      updatedNotes.add(updatedNote);
     }
-    return mapOfNoteMaps;
+    return updatedNotes;
   }
 
   /// Assign list of own notes to list of found own notes
-  /// usign default values.
+  /// using default for isSelected values.
 
   List<FoundOwnNote> toListFoundOwnNote() {
     List<FoundOwnNote> listFoundNotes = map((item) {
       return FoundOwnNote(
         noteFileName: item.noteFileName,
+        noteUrl: item.noteUrl,
+        noteOwner: item.noteOwner,
         content: item.content,
+        authUserList: item.authUserList,
       );
     }).toList();
 
     return listFoundNotes;
   }
-}
-
-/// Convert map of maps to list of user's notes
-///
-/// Arguments:
-/// - [mapOfNoteMaps] - map of user's notes
-
-List<OwnNote> mapOfMapsToListOwnNote(
-  Map<String, Map<String, dynamic>> mapOfNoteMaps,
-) {
-  final List<OwnNote> listOfNoteMaps;
-  listOfNoteMaps = mapOfNoteMaps.entries.map((entry) {
-    return OwnNote(
-      noteFileName: entry.key,
-      content: Note.fromJson(entry.value),
-    );
-  }).toList();
-
-  return listOfNoteMaps;
 }

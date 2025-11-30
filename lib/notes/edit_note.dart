@@ -78,7 +78,7 @@ class EditNoteState extends State<EditNote> {
     _note = widget.note;
     // Initialise note content field
     _textController = TextEditingController();
-    _textController!.text = _note.content.noteContent;
+    _textController!.text = _note.content!.noteContent;
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _scrollController = ScrollController();
@@ -147,7 +147,7 @@ class EditNoteState extends State<EditNote> {
       ),
       data: data,
       prevOwnNote: _note,
-      noteTitle: _note.content.noteTitle,
+      noteTitle: _note.content!.noteTitle,
       isExisting: true,
     );
   }

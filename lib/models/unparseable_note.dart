@@ -1,4 +1,4 @@
-/// Data models for result of get notes future call.
+/// Data models for unparseable notes
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Monday 2025-10-06 14:42:01 +1100 Graham Williams>
+// Time-stamp: <Tuesday 2025-11-04 14:53:12 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,17 +25,16 @@
 
 library;
 
-import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/unparseable_note.dart';
+/// Data model for unparseable note
 
-/// Data model for result of get notes list future call
+class UnparseableNote {
+  final String noteFileName;
+  final String noteUrl;
+  final String noteOwner;
 
-class OwnNotesCallResult {
-  final List<OwnNote>? notes;
-  final List<UnparseableNote>? unparseableNotes;
-
-  const OwnNotesCallResult({
-    this.notes = const [],
-    this.unparseableNotes = const [],
+  const UnparseableNote({
+    required this.noteFileName,
+    required this.noteUrl,
+    required this.noteOwner,
   });
 }

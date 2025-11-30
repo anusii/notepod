@@ -25,12 +25,18 @@ name: Build Installers
 # and 'staging') macos apps.
 # https://docs.flutter.dev/deployment/flavors-ios
 
+# 20251018 jesscmoore Added github secrets for ios signing
+# and workflow for ios ipa archive.
+
+# 20251020 jesscmoore Added IOS development provisioning profile in
+# Apple Developer Program to use with manual signing
+
 on:
   push:
     branches:
       - dev
       - build
-      - jess/macos_installer
+      - jess/ios_installer
 
 env:
   APP: notepod
@@ -134,6 +140,11 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v4
 
+      - name: Update system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+
       - name: Build snap
         if: hashFiles('snap/**') != ''
         uses: snapcore/action-build@v1
@@ -167,7 +178,7 @@ jobs:
 
 
   ########################################################################
-  # MACOS - UNSIGNED (updated)
+  # MACOS - UNSIGNED
 
   # Build without signing certificate
   # for testing by developers
@@ -297,9 +308,9 @@ jobs:
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
 
-      # Install certificate and provisioning profile for app signing.
+      # Install certificate and MACOS provisioning profile for app signing
 
-      - name: Install Apple certificate and provisioning profile
+      - name: Install Apple certificate and MACOS provisioning profile
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
@@ -329,8 +340,6 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
           echo "Apply provisioning profile"
-          # Although specifies mobile, this location is meant to be correct for
-          # macos and ios provisioning profiles
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
@@ -482,7 +491,8 @@ jobs:
       # Provisioning profile name (xcode var PROVISIONING_PROFILE_SPECIFIER)
 
       - name: Build Flutter macOS app
-        run: flutter build macos --release --flavor dev
+      # By default, app is codesigned, unless --no-codesign is used.
+        run: flutter build macos --release
 
       - name: Note the build location
         run: |
@@ -492,6 +502,11 @@ jobs:
       - name: Check macOS app code signature
         run: |
           codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
+
+      - name: Note .app signing and notarizing status
+        run: |
+          spctl -a -v
+          "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
@@ -509,11 +524,18 @@ jobs:
         run: |
           ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-dev.dmg
 
-      - name: Upload Artefact
+      - name: Upload DMG Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dev-dmg
           path: ${{ env.APP }}-${{env.RELEASE}}-macos-dev.dmg
+
+      # 20251018 jesscmoore:
+      # App needs testing on other desktops, not linked to our
+      # Apple Developer Program account. It may still need to be
+      # notarised to avoid being blocked by macOS Gatekeeper on
+      # other user's macOS desktops. Same for the iOS IPA.
+      # https://help.apple.com/xcode/mac/current/#/dev033e997ca
 
       # Package as ZIP
 
@@ -528,13 +550,177 @@ jobs:
       - name: Review ZIP exists
         run: ls -lh ${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-dev.zip
 
-      - name: Upload Artefact
+      - name: Upload ZIP Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP }}-macos-dev-zip
           path: ${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-dev.zip
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
+
+
+########################################################################
+  # IOS
+
+  package-ios-ipa:
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build ios')
+    runs-on: macos-latest
+
+    env:
+      IOS_APP_RELEASE_PATH: build/ios/ipa
+      IOS_ARCHIVE_RELEASE_PATH: build/ios/archive
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{env.FLUTTER_VERSION}}
+
+      - name: Confirm Flutter Version
+        run: flutter --version
+
+      - name: Install Flutter Project Dependencies
+        run: flutter pub get
+
+      - name: Enable iOS
+        run: flutter config --enable-ios
+
+      # Install certificate and IOS provisioning profile for app signing
+
+      # iOS entitlements are different to the macOS entitlements
+      # so uses a provisioning profile for iOS.
+      # The provisioning profile links the signing certificate, Apple
+      # developer account and entitlements for the app build.
+
+
+      - name: Install Apple certificate and IOS provisioning profile
+        env:
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PWD: ${{ secrets.IOS_CERTIFICATE_PWD }}
+          IOS_PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
+        run: |
+
+          echo "Create variables for filepaths for certificate, provisioning profile, and keychain"
+          # These vars must be assigned at run time
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo "Import certificate and provisioning profile from secrets"
+          echo -n "$IOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$IOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
+
+          echo "Create temporary keychain"
+          security create-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+
+          echo "Import certificate to keychain"
+          security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          echo "Add apple and apple-tool to partition list for key to allow build codesign to access keychain"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # TODO: make this the save path for the decoded profile
+          echo "Save provisioning profile to location expected by Xcode build"
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Display temporary keychain
+        run:  |
+
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+      - name: List installed provisioning profiles
+        run: ls -lh ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # Build and sign the app
+
+      - name: Build Flutter iOS app archive
+      # By default `ipa` produces a release mode .ipa archived version of
+      # .app bundle, with settings tailored for Apple App Store
+      # distribution. Use --export-method
+      # By default, app is codesigned, unless --no-codesign is used.
+        # run: flutter build ipa
+        # Option for manual signing
+        # Use --verbose to debug build and signing issues
+        run: flutter build ipa --export-options-plist=ios/GithubActionsExportOptions.plist
+
+      - name: Note the xcarchive created
+        run: |
+          ls -lh ${{ env.IOS_ARCHIVE_RELEASE_PATH }}
+
+      - name: Note the IPA created
+        run: |
+          ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
+
+      - name:  Extract IPA
+        run: |
+          mkdir "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
+          unzip "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa" -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
+
+      - name: Check .app bundle extracted from IPA
+        # Check app bundle was extracted
+        id: check_app
+        run: |
+          # APP_PATH=$(find "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload" -d -name "*.app" -print -quit)
+          # echo "extracted .app path: $APP_PATH"
+          if test -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"; then
+            echo "IPA extracted to extracted_ipa/Payload/Runner.app."
+            echo "APP_EXTRACTED=true" >> $GITHUB_OUTPUT
+          else
+            echo ".app bundle not extracted from IPA."
+            echo "APP_EXTRACTED=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check IPA code signature
+        # Ensure an app bundle was extracted
+        if: steps.check_app.outputs.APP_EXTRACTED == 'true'
+        run: |
+          codesign --display --verbose=2 "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa/Payload/Runner.app"
+
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-ipa
+          path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa
+
+      # # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+      # - name: Clean up keychain and provisioning profile
+      #   if: ${{ always() }}
+      #   run: |
+      #     security delete-keychain $KEYCHAIN_PATH
+      #     rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+
+      # 20251018 jesscmoore:
+      # If ipa not distributed through the app store or enterprise MDM
+      # users will asked to trust developer in iOS settings during
+      # the install:
+      # https://help.apple.com/xcode/mac/current/#/dev96a12fb84
+
+      # 20251020 jesscmoore:
+      # Using a "development" certificate and associated
+      # provisioning profile
+      # and "debugging" export method
+      # may limit installation to only devices
+      # registered in the Apple Developer Program
+      # account.
+      # Use a "distribution" certificate and associated
+      # provisioning profile and "ad-hoc" export method for
+      # testing on devices that don't need to be registered
+      # on Apple Develop Program account.
+      # The distribution certificate and associated
+      # provisioning profile can be used with app-store export
+      # method.
 
 
   ########################################################################

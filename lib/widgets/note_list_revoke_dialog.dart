@@ -1,4 +1,4 @@
-/// A dialog for deleting unparseable files.
+/// A dialog for revoking access to any deleted external files.
 ///
 /// Copyright (C) 2023, Software Innovation Institute
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Monday 2025-10-06 16:03:04 +1100 Graham Williams>
+// Time-stamp: <Sunday 2025-11-02 17:03:04 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -28,39 +28,34 @@ import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/note_back_button.dart';
-import 'package:notepod/widgets/note_list_del_button.dart';
+import 'package:notepod/widgets/note_list_revoke_button.dart';
 
-/// A page listing unparseable note files with button to delete
-/// all files in the list.
+/// A page listing external note file records which no longer
+/// exist with button to update permission log with 'revoke'
+/// record for all files in the list.
 ///
 /// Arguments:
-/// - [unparseableNotes] - list of unparseable notes.
-/// - [childPage] - child widget to navigate to after delete dialog.
-/// - [isExternal] - flag describing whether files are externally owned.
+/// - [nonExistentNotes] - note list of non-existent files.
+/// - [childPage] - child widget to return to.
 
-class NotesDelDialog extends StatefulWidget {
-  final List<UnparseableNote> unparseableNotes;
-
-  /// Childpage to navigate to after delete dialog
+class NotesRevokeDialog extends StatefulWidget {
+  final List<ExternalNote> nonExistentNotes;
   final Widget childPage;
 
-  /// Boolean describing whether note is external
-  final bool isExternal;
-
-  const NotesDelDialog({
+  const NotesRevokeDialog({
     super.key,
-    required this.unparseableNotes,
+    required this.nonExistentNotes,
     required this.childPage,
-    this.isExternal = false,
   });
 
   @override
-  State<NotesDelDialog> createState() => _NotesDelDialogState();
+  State<NotesRevokeDialog> createState() => _NotesRevokeDialogState();
 }
 
-class _NotesDelDialogState extends State<NotesDelDialog> {
+class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -70,6 +65,9 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
+
+  /// Boolean describing whether note is external
+  final bool isExternal = true;
 
   @override
   void initState() {
@@ -91,12 +89,12 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
         // Derive whether window is narrow
         isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
-        cardAspectRatio = NoteItemSize()
-            .calculateCardAspectRatio(constraints, widget.isExternal);
+        cardAspectRatio =
+            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
         return SizedBox(
           child: Column(
             children: [
-              // Title and count of corrupted notes
+              // Title and count of non existent notes
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                 child: Column(
@@ -131,16 +129,23 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          NoteListMsg.badFilesFound,
+                          NoteListMsg.nonExistentNotesFound,
                           style: titleStyle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
+                    const Text(
+                      'Press \'Revoke\' to update log record',
+                      style: adviceStyle,
+                    ),
+                    const SizedBox(height: 30),
                     Text(
-                      widget.unparseableNotes.length > 1
-                          ? 'Found ${widget.unparseableNotes.length} unparseable notes'
-                          : 'Found ${widget.unparseableNotes.length} unparseable note',
+                      widget.nonExistentNotes.length > 1
+                          ? 'Found ${widget.nonExistentNotes.length} non-existent notes'
+                          : 'Found ${widget.nonExistentNotes.length} non-existent note',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -148,16 +153,20 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                   ],
                 ),
               ),
-              // List of unparseable notes
+              // List of non existent notes
               Expanded(
                 child: Scrollbar(
                   thumbVisibility: true,
                   controller: _scrollController,
-                  child: ListView.builder(
+                  child: GridView.builder(
                     controller: _scrollController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      // Aspect ratio calculated from LayoutBuilder box constraints
+                      crossAxisCount: 1,
+                      childAspectRatio: cardAspectRatio,
+                    ),
                     padding: const EdgeInsets.all(10),
-                    itemCount: widget.unparseableNotes.length,
-                    itemExtent: badListItemHeight,
+                    itemCount: widget.nonExistentNotes.length,
                     itemBuilder: (context, index) => Card(
                       child: Container(
                         decoration: const BoxDecoration(
@@ -165,7 +174,14 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'Filename: ${widget.unparseableNotes[index].noteFileName}',
+                            'Note Url: ${widget.nonExistentNotes[index].noteUrl}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            'Owner: ${getId(widget.nonExistentNotes[index].noteOwner)} \nShared by: ${getId(widget.nonExistentNotes[index].permissionGranter)} \nPermissions: ${widget.nonExistentNotes[index].permissionList}',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           // Define width to avoid consuming full width
                         ),
@@ -180,11 +196,10 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   spacing: 5.0,
                   children: [
-                    /// Note list delete button
-                    NoteListDelButton(
-                      unparseableNotes: widget.unparseableNotes,
+                    // Note list revoke button
+                    NoteListRevokeButton(
+                      nonExistentNotes: widget.nonExistentNotes,
                       childPage: widget.childPage,
-                      isExternal: widget.isExternal,
                     ),
                     // Back button
                     NoteBackButton(childPage: widget.childPage),

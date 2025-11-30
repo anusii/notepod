@@ -1,12 +1,12 @@
-/// Data models for result of get notes future call.
+/// A function to return the user id part of a webId.
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute
+/// Copyright (C) 2023, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Monday 2025-10-06 14:42:01 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-11-03 12:12:04 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,17 +25,14 @@
 
 library;
 
-import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/unparseable_note.dart';
+/// Return id part of a webId
+///
+/// Arguments:
+/// - [webId] - webId from which to extract the id.
 
-/// Data model for result of get notes list future call
+String getId(webId) {
+  final Uri uri = Uri.parse(webId);
+  final String id = uri.pathSegments.first;
 
-class OwnNotesCallResult {
-  final List<OwnNote>? notes;
-  final List<UnparseableNote>? unparseableNotes;
-
-  const OwnNotesCallResult({
-    this.notes = const [],
-    this.unparseableNotes = const [],
-  });
+  return id;
 }

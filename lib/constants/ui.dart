@@ -65,13 +65,15 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedOwnItemHeight = 190;
+  static const double compressedOwnItemHeight =
+      260; // (4 row subtitle) 190; (3 row subtitle)
 
   /// Approximate height of uncompressed item
   /// in user's own notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedOwnItemHeight = 108;
+  static const double uncompressedOwnItemHeight =
+      138; // (4 row subtitle) 108; (3 row subtitle)
 
   /// Approximate height of compressed item
   /// in user's external notes list
@@ -81,13 +83,13 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedExtItemHeight = 260;
+  static const double compressedExtItemHeight = 260; // (4 row subtitle)
 
   /// Approximate height of uncompressed item
   /// in user's external notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedExtItemHeight = 138;
+  static const double uncompressedExtItemHeight = 138; // (4 row subtitle)
 
   /// Calculate card aspect ratio to use for
   /// gridview builder cards using the box
@@ -142,6 +144,9 @@ class ButtonLabel {
 
   /// Delete button label
   static const String delete = 'DELETE';
+
+  /// Revoke button label
+  static const String revoke = 'REVOKE';
 
   /// Save button label
   static const String save = 'SAVE';

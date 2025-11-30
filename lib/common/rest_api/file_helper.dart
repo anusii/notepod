@@ -112,14 +112,14 @@ class NoteFileHelper with PodOperationsMixin {
   /// entry for note file.
   ///
   /// Arguments:
-  /// - [sharingMetadata] - Map of sharing metadata of the external
+  /// - [logRecordOfFile] - Log record of the external
   /// note file shared to user.
   /// - [fileUrl] - URL of external file shared to user.
   ///
   /// Returns: parsed map of details of external note file.
 
   static ExternalNote? extFileDetailsFromLog({
-    required Map sharingMetadata,
+    required Map logRecordOfFile,
     required String fileUrl,
   }) {
     try {
@@ -137,7 +137,7 @@ class NoteFileHelper with PodOperationsMixin {
       noteFileName = fileUrl.split('/').last;
       // debugPrint('noteFileName: $noteFileName');
 
-      for (final entry in sharingMetadata.entries) {
+      for (final entry in logRecordOfFile.entries) {
         final predicate = entry.key.toString();
         final value = entry.value.toString();
         // debugPrint('predicate: $predicate, value: $value');
@@ -191,19 +191,28 @@ class NoteFileHelper with PodOperationsMixin {
   Future<void> deleteNote({
     required BuildContext context,
     required String filename,
+    required Widget child,
     bool isExternal = false,
   }) async {
-    try {
-      // Delete file
-      if (isExternal) {
+    // Delete file
+    if (isExternal) {
+      try {
+        // Delete external file
         await deleteExternalFile(filename);
-      } else {
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting to external note: $e');
+        rethrow;
+      }
+    } else {
+      try {
         // Call solid delete file function
         await deleteFile('$basePath/$filename');
+      } catch (e) {
+        // Error deleting external file
+        debugPrint('Error deleting user\' note: $e');
+        rethrow;
       }
-    } catch (e) {
-      debugPrint('Error deleting note: $e');
-      rethrow;
     }
   }
 
@@ -247,7 +256,7 @@ class NoteFileHelper with PodOperationsMixin {
       final String prevNoteContent;
       final FoundExternalNote updatedExternalNote;
       final FoundOwnNote updatedOwnNote;
-      final Note updatedContent;
+      final NoteContent updatedContent;
 
       // Note title need to be spaceless as we are using that name
       // to create a .acl file. And the acl file url cannot have spaces
@@ -263,8 +272,8 @@ class NoteFileHelper with PodOperationsMixin {
           prevNoteTitle = prevExternalNote!.content!.noteTitle;
           prevNoteContent = prevExternalNote.content!.noteContent;
         } else {
-          prevNoteTitle = prevOwnNote!.content.noteTitle;
-          prevNoteContent = prevOwnNote.content.noteContent;
+          prevNoteTitle = prevOwnNote!.content!.noteTitle;
+          prevNoteContent = prevOwnNote.content!.noteContent;
         }
         // Compare updated title and content to existing
         // title and content
@@ -323,7 +332,7 @@ class NoteFileHelper with PodOperationsMixin {
           } else {
             // Update content of Own note
             try {
-              updatedContent = prevOwnNote!.content.copyWith(
+              updatedContent = prevOwnNote!.content!.copyWith(
                 modifiedDateTime: modifiedDateTimeStr,
                 noteTitle: noteTitle,
                 noteContent: noteText,
@@ -370,7 +379,7 @@ class NoteFileHelper with PodOperationsMixin {
             );
 
             // Create new note data structure
-            final newContent = Note(
+            final newContent = NoteContent(
               createdDateTime: modifiedDateTimeStr,
               modifiedDateTime: modifiedDateTimeStr,
               noteTitle: noteTitle,
@@ -414,7 +423,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// isExternal: true)` - to save an externally owned note.
   ///
   /// - [context] - The build context.
-  /// - [data] - The map of note data to be encrypted and written to Pod.
+  /// - [data] - The note content data to be encrypted and written to Pod.
   /// - [childPage] - The destination widget to navigate to after note is saved.
   /// - [noteFileName] - Optional filename. Required for saving user's own notes.
   /// - [noteUrl] - Optional note file url. Required for saving notes
@@ -425,7 +434,7 @@ class NoteFileHelper with PodOperationsMixin {
 
   Future<void> saveNoteToPod({
     required BuildContext context,
-    required Note data,
+    required NoteContent data,
     required Widget childPage,
     String noteFileName = '',
     String noteUrl = '',
