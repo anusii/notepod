@@ -165,6 +165,98 @@ jobs:
   #         snap: '*.snap'
   #         release: stable
 
+
+  ########################################################################
+  # MACOS - UNSIGNED (updated)
+
+  # Build without signing certificate
+  # for testing by developers
+  # Note: build without signing prevents build with keychain access capability
+  # This means the app fails to use secure local storage and the use needs to
+  # press login and security key submit buttons x2.
+
+  package-macos-dmg-zip-unsigned:
+    if: |
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build macos unsigned')
+    runs-on: macos-latest
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{env.FLUTTER_VERSION}}
+
+      - name: Confirm Flutter Version
+        run: flutter --version
+
+      - name: Install Flutter Project Dependencies
+        run: flutter pub get
+
+      - name: Enable macOS desktop
+        run: flutter config --enable-macos-desktop
+
+      # Build an unsigned app
+
+      - name: Build Flutter macOS app
+        run: flutter build macos --release --flavor unsigned
+
+      - name: Note the build location
+        run: |
+          pwd
+          ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
+
+      - name: Check macOS app code signature
+        run: |
+          codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app"
+
+      # Package as DMG
+
+      - name: Create DMG
+        run: |
+          mkdir -p dmg_temp
+          cp -R "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app" dmg_temp/
+          ln -s /Applications dmg_temp/Applications
+          hdiutil create -volname "${{ env.APP }}" \
+            -srcfolder dmg_temp \
+            -ov -format UDZO \
+            "${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg"
+
+      - name: Note the DMG created
+        run: |
+          ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
+
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-macos-unsigned-dmg
+          path: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
+
+      # Package as ZIP
+
+      - name: Create ZIP
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          directory: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
+          path: ${{ env.APP }}.app
+          filename: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
+
+      - name: Review ZIP exists
+        run: ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
+
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-macos-unsigned-zip
+          path: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
+
+
   ########################################################################
   # MACOS - DISTRIBUTION CERTIFICATE SIGNED FOR APP STORE
 
@@ -444,95 +536,6 @@ jobs:
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
-########################################################################
-  # MACOS - UNSIGNED (updated)
-
-  # Build without signing certificate
-  # for testing by developers
-  # Note: build without signing prevents build with keychain access capability
-  # This means the app fails to use secure local storage and the use needs to
-  # press login and security key submit buttons x2.
-
-  package-macos-dmg-zip-unsigned:
-    if: |
-      contains(github.event.head_commit.message, 'bump version') ||
-      contains(github.event.head_commit.message, 'build installers') ||
-      contains(github.event.head_commit.message, 'build macos unsigned')
-    runs-on: macos-latest
-
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: ${{env.FLUTTER_VERSION}}
-
-      - name: Confirm Flutter Version
-        run: flutter --version
-
-      - name: Install Flutter Project Dependencies
-        run: flutter pub get
-
-      - name: Enable macOS desktop
-        run: flutter config --enable-macos-desktop
-
-      # Build an unsigned app
-
-      - name: Build Flutter macOS app
-        run: flutter build macos --release --flavor unsigned
-
-      - name: Note the build location
-        run: |
-          pwd
-          ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
-
-      - name: Check macOS app code signature
-        run: |
-          codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app"
-
-      # Package as DMG
-
-      - name: Create DMG
-        run: |
-          mkdir -p dmg_temp
-          cp -R "${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}.app" dmg_temp/
-          ln -s /Applications dmg_temp/Applications
-          hdiutil create -volname "${{ env.APP }}" \
-            -srcfolder dmg_temp \
-            -ov -format UDZO \
-            "${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg"
-
-      - name: Note the DMG created
-        run: |
-          ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
-
-      - name: Upload Artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP }}-macos-unsigned-dmg
-          path: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.dmg
-
-      # Package as ZIP
-
-      - name: Create ZIP
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          directory: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
-          path: ${{ env.APP }}.app
-          filename: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
-
-      - name: Review ZIP exists
-        run: ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
-
-      - name: Upload Artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP }}-macos-unsigned-zip
-          path: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
   ########################################################################
   # WINDOWS
