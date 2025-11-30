@@ -445,7 +445,7 @@ jobs:
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
 ########################################################################
-  # MACOS - UNSIGNED
+  # MACOS - UNSIGNED (updated)
 
   # Build without signing certificate
   # for testing by developers
