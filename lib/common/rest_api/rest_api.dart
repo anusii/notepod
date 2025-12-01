@@ -31,7 +31,6 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
-import 'package:notepod/constants/paths.dart';
 import 'package:notepod/models/call_status.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/external_notes_call_result.dart';
@@ -87,7 +86,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
       );
       if (context.mounted) {
         futuresNoteContentResult.add(
-          readPod('$basePath/$fileName', context, childPage),
+          readPod(fileName),
         );
       }
     }
