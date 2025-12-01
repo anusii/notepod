@@ -30,12 +30,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-// import 'package:notepod/constants/colours.dart';
-// import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -90,11 +87,7 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.add_circle,
             tooltip: 'Navigate to $newNoteTitle',
             onPressed: () {
-              scaffoldController.navigateToSubPages(const NewNote());
-              // navToChildPage(
-              //   context: context,
-              //   childPage: const NewNote(),
-              // );
+              scaffoldController.navigateToSubpage(const NewNote());
             },
           ),
           // My Notes (Owner's Notes)
@@ -102,10 +95,7 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.view_list,
             tooltip: 'Go to $myNotesTitle',
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const ListNotesScreen(),
-              );
+              scaffoldController.navigateToSubpage(const ListNotesScreen());
             },
           ),
           // External Notes (Shared Notes)
@@ -113,10 +103,8 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.groups,
             tooltip: 'Go to $sharedNotesTitle',
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const ListExternalNotesScreen(),
-              );
+              scaffoldController
+                  .navigateToSubpage(const ListExternalNotesScreen());
             },
           ),
           // Login/logout
@@ -141,6 +129,13 @@ class AppHomePageState extends State<AppHomePage> {
           icon: Icons.groups,
           child: ListExternalNotesScreen(),
           tooltip: 'Navigate to $sharedNotesTitle',
+        ),
+        // New Note
+        const SolidMenuItem(
+          title: newNoteTitle,
+          icon: Icons.add_circle,
+          child: NewNote(),
+          tooltip: 'Navigate to $newNoteTitle',
         ),
       ],
       statusBar: SolidStatusBarConfig(
