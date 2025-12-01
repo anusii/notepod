@@ -30,6 +30,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
@@ -54,15 +55,14 @@ class AppHomePageState extends State<AppHomePage> {
   @override
   void initState() {
     super.initState();
-    // FIXME: Incoming change, check if needed
-    // _loadAppInfo();
   }
 
-  // Toggle login status
-  void _toggleLogin() {
+  /// Logout
+  void _logout() async {
     setState(() {
-      _webId = _webId == null ? 'user@example.com' : null;
+      _webId = _webId == null ? defWebID : null;
     });
+    await logoutPopup(context, const NotePod());
   }
 
   Future<({String name, String? webId})> _getInfo() async =>
@@ -111,7 +111,7 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarAction(
             icon: _webId != null ? Icons.logout : Icons.login,
             tooltip: _webId != null ? 'Logout' : 'Login',
-            onPressed: _toggleLogin,
+            onPressed: _logout,
           ),
         ],
       ),
@@ -147,7 +147,7 @@ class AppHomePageState extends State<AppHomePage> {
         ),
         loginStatus: SolidLoginStatus(
           webId: _webId,
-          onTap: _toggleLogin,
+          onTap: _logout,
           loggedInText: 'Logged In',
           loggedOutText: 'Not Logged In',
           loggedInTooltip: 'Click to log out',
