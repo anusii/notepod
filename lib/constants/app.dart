@@ -30,7 +30,6 @@ import 'package:flutter/material.dart';
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String appChangeLog =
     'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
-const String siiUrl = 'https://sii.anu.edu.au';
 const String defWebID = 'https://pods.solidcommunity.au';
 const String topBarTitle = 'Note Pod';
 const String shortTitle = 'Note Taker';
@@ -40,9 +39,6 @@ const String appOwner = '''© 2025 Software Innovation Institute''';
 
 const String aboutText =
     '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
-
-const String authors =
-    'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
 
 const String appDir = 'notepod';
 
