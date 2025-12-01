@@ -52,6 +52,8 @@ class AppHomePageState extends State<AppHomePage> {
 
   // String _appVersion = '';
 
+  final scaffoldController = SolidScaffoldController();
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +75,7 @@ class AppHomePageState extends State<AppHomePage> {
     // Reduce calls to of(context).
     final theme = Theme.of(context);
     return SolidScaffold(
+      controller: scaffoldController,
       appBar: SolidAppBarConfig(
         title: topBarTitle,
         backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
@@ -87,10 +90,11 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.add_circle,
             tooltip: 'Navigate to $newNoteTitle',
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const NewNote(),
-              );
+              scaffoldController.navigateToSubPages(const NewNote());
+              // navToChildPage(
+              //   context: context,
+              //   childPage: const NewNote(),
+              // );
             },
           ),
           // My Notes (Owner's Notes)
