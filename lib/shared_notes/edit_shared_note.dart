@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for editing an externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 14:43:29 +1000 Graham Williams>
 ///
@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Jess Moore
 
@@ -30,27 +30,29 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit externally owned notes shared to
 /// the user.
-/// Parameters:
-///   [fullNoteData] - is the data of that note, with information
-///                    about the owner, person who shared the note
-///                    to the user, and the user's access rights
-///                    to the note.
-class EditSharedNote extends StatefulWidget {
-  final Map fullNoteData;
+///
+/// Arguments:
+/// - [note] - the externally owned note.
 
-  const EditSharedNote({super.key, required this.fullNoteData});
+class EditSharedNote extends StatefulWidget {
+  final FoundExternalNote note;
+
+  const EditSharedNote({
+    super.key,
+    required this.note,
+  });
 
   @override
   EditSharedNoteState createState() => EditSharedNoteState();
 }
 
-class EditSharedNoteState extends State<EditSharedNote>
-    with SingleTickerProviderStateMixin {
+class EditSharedNoteState extends State<EditSharedNote> {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
@@ -64,14 +66,18 @@ class EditSharedNoteState extends State<EditSharedNote>
   /// Focus node for note content text field.
   late final FocusNode _focusContent;
 
+  /// Edited note content
   String data = '';
+
+  /// Note
+  late final FoundExternalNote _note;
 
   @override
   void initState() {
     super.initState();
+    _note = widget.note;
     _textController = TextEditingController();
-    _textController!.text =
-        widget.fullNoteData['sharedNoteContent'][noteContentPred];
+    _textController!.text = _note.content!.noteContent;
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _scrollController = ScrollController();
@@ -102,7 +108,7 @@ class EditSharedNoteState extends State<EditSharedNote>
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(
+    //         NoteFileHelper().saveNote(
     //             context, _textController!, formKey, widget.fullNoteData, true);
     //       }
     //       return KeyEventResult.handled;
@@ -136,10 +142,12 @@ class EditSharedNoteState extends State<EditSharedNote>
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      childPage: ViewSharedNote(note: _note),
       data: data,
-      prevNoteData: widget.fullNoteData,
-      shared: true,
-      noteInfo: widget.fullNoteData['sharedNoteInfo'],
+      prevExternalNote: _note,
+      noteTitle: _note.content!.noteTitle,
+      isExternal: true,
+      isExisting: true,
     );
   }
 }

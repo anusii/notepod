@@ -1,12 +1,12 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Monday 2025-09-15 09:30:12 +1000 Graham Williams>
+// Time-stamp: <Friday 2025-10-24 11:59:49 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
+/// License: https://opensource.org/license/gpl-3-0.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,17 +19,18 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Graham Williams, Anushka Vidanage
+/// Authors: Graham Williams, Anushka Vidanage, Jess Moore
 
 library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 
@@ -43,24 +44,17 @@ import 'package:notepod/notes/list_notes_screen.dart';
 class NotePod extends StatelessWidget {
   const NotePod({super.key});
 
+  final ThemeMode _themeMode = ThemeMode.light;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: shortTitle,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-        // Make Scrollbars() visible by default
-        // before user starts scrolling in pages
-        // where content exceeds container
-        // jm 20250916: Known issue with scrollbarTheme not applying
-        // in iOS https://github.com/flutter/flutter/issues/143926
-        // thumbVisibility: true still required in Scrollbar() instances
-        scrollbarTheme: ScrollbarThemeData(
-          thumbVisibility: WidgetStateProperty.all(true),
-        ),
-      ),
-      home: SolidLogin(
+      theme: lightThemeData(context),
+      darkTheme: darkThemeData(context),
+      themeMode: _themeMode,
+      home: const SolidLogin(
         title: longTitle,
         appDirectory: appDir,
         image: backgroundImg,

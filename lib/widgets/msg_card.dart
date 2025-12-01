@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: AUTHORS
 
@@ -30,6 +30,8 @@ import 'package:flutter/material.dart';
 import 'package:notepod/common/responsive.dart';
 import 'package:notepod/constants/colours.dart';
 
+/// Builds a stylised card for display of messages,
+/// which works in light and dark themes
 Row buildMsgCard(
   BuildContext context,
   IconData errIcon,
@@ -80,6 +82,7 @@ Row buildMsgCard(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  spacing: 10.0,
                   children: [
                     Container(
                       height: 60,
@@ -94,10 +97,7 @@ Row buildMsgCard(
                         color: errColour,
                         size: 60,
                       ),
-                    ), //CircleAvatar
-                    const SizedBox(
-                      height: 10,
-                    ), //SizedBox
+                    ), //CircleAvatar //SizedBox
                     Text(
                       errTitle,
                       style: const TextStyle(
@@ -105,10 +105,7 @@ Row buildMsgCard(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ), //Textstyle
-                    ), //Text
-                    const SizedBox(
-                      height: 10,
-                    ), //SizedBox
+                    ), //Text//SizedBox
                     Text(
                       errBody,
                       style: const TextStyle(

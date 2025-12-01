@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: AUTHORS
 
@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:loading_indicator/loading_indicator.dart';
+import 'package:new_loading_indicator/new_loading_indicator.dart';
 
 import 'package:notepod/constants/colours.dart';
 
@@ -43,16 +43,12 @@ showAnimationDialog(
       return Padding(
         padding: const EdgeInsets.all(50),
         child: Center(
-          // child: SpinKitThreeBounce(
-          //   color: anuCopper,
-          //   size: 100.0,
-          //   //controller: AnimationController(vsync: this, duration: const Duration(milliseconds: 1200)),
-          // ),
           child: SizedBox(
             width: 150,
             height: 250,
             child: Column(
               children: [
+                // Colours work in light and dark themes
                 LoadingIndicator(
                   indicatorType: Indicator.ballScaleRipple,
                   colors: defaultNotepodColors,

@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget to view an externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 10:18:07 +1000 Graham Williams>
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: GNU General Public License, Version 3 (the "License")
 ///
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
@@ -27,38 +27,51 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/edit_shared_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
-import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_edit_button.dart';
-import 'package:notepod/widgets/note_share_button.dart';
+
+/// A [stateful] widget for viewing an externally owned note.
+///
+/// Arguments:
+/// - [note] - The note to view.
 
 class ViewSharedNote extends StatefulWidget {
-  final Map fullNoteData;
+  final FoundExternalNote note;
 
   const ViewSharedNote({
     super.key,
-    required this.fullNoteData,
+    required this.note,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ViewSharedNoteState createState() => _ViewSharedNoteState();
+  State<ViewSharedNote> createState() => _ViewSharedNoteState();
 }
 
 class _ViewSharedNoteState extends State<ViewSharedNote> {
-  // /// Scroll controller for single child scroll view
-  // final ScrollController _scrollController = ScrollController();
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
+  /// Note data
+  late final FoundExternalNote _note;
+
+  /// List of user's permissions
+  late final List<String> _accessList;
 
   @override
   void initState() {
     super.initState();
+    _note = widget.note;
+    _accessList = _note.permissionList.split(',');
     _scrollController = ScrollController();
   }
 
@@ -70,10 +83,6 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
 
   @override
   Widget build(BuildContext context) {
-    Map sharedNoteInfo = widget.fullNoteData['sharedNoteInfo'];
-    Map sharedNoteContent = widget.fullNoteData['sharedNoteContent'];
-    List accessList = sharedNoteInfo[permissionList].split(',');
-
     return Column(
       children: [
         Expanded(
@@ -91,7 +100,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
                           child: Text(
-                            sharedNoteContent[noteTitlePred],
+                            _note.content!.noteTitle,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
@@ -102,14 +111,21 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                     ],
                   ),
                   // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note pag)
-                  NoteDisplayMetadata(
-                    fullNoteData: widget.fullNoteData,
+                  DisplayNoteMetadata(
+                    createdDateTime: _note.content!.createdDateTime,
+                    modifiedDateTime: _note.content!.modifiedDateTime,
+                    noteOwner: _note.noteOwner,
+                    permissionGranter: _note.permissionGranter,
+                    permissionList: _note.permissionList,
+                    noteFileName: _note.noteFileName,
+                    noteUrl: _note.noteUrl,
                     showDates: true,
+                    showFileName: true,
                     showSharing: true,
+                    showPathInfo: true,
                   ),
-                  Divider(),
                   // Display markdown note content
-                  noteDisplayMarkdown(sharedNoteContent[noteContentPred]),
+                  noteDisplayMarkdown(_note.content!.noteContent),
                 ],
               ),
             ),
@@ -120,35 +136,53 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Share if control access
-                  if (accessList.contains('control')) ...[
-                    NoteShareButton(
-                      childPage: ShareExternalNote(
-                        // noteMetaData: noteMetaData,
-                        fullNoteData: widget.fullNoteData,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
+                    children: [
+                      // Share if control access
+                      if (_accessList.contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareExternalNote(
+                            note: _note,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+                      // Edit if write access
+                      if (_accessList.contains('write')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.edit,
+                          icon: const Icon(Icons.edit),
+                          backgroundColor: ButtonBackgroundColor.edit,
+                          childPage: EditSharedNote(
+                            note: _note,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+                      // Back
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: const ListExternalNotesScreen(),
+                        isNarrow: isNarrow,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ],
-                  // Edit if write access
-                  if (accessList.contains('write')) ...[
-                    NoteEditButton(
-                      childPage: EditSharedNote(
-                        fullNoteData: widget.fullNoteData,
+                      // Add space
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    // Back
-                    NoteBackButton(childPage: SharedNotesScreen()),
-                  ],
-                ],
+                    ],
+                  );
+                },
               ),
             ),
             const SizedBox(

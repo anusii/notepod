@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 library;
@@ -28,18 +28,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version_widget/version_widget.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/home.dart';
 import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 
 class NavDrawer extends StatelessWidget {
   final String webId;
@@ -56,8 +56,14 @@ class NavDrawer extends StatelessWidget {
       name = 'Not logged in';
     }
 
+    String url = '';
+    if (webId.isNotEmpty) {
+      Uri uri = Uri.parse(webId);
+      url = '${uri.scheme}://${uri.host}';
+    }
+
     return Drawer(
-      shape: Border(),
+      shape: const Border(),
       child: ListView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         children: <Widget>[
@@ -85,7 +91,7 @@ class NavDrawer extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    webId,
+                    url,
                     style:
                         const TextStyle(color: backgroundWhite, fontSize: 14),
                   ),
@@ -95,18 +101,11 @@ class NavDrawer extends StatelessWidget {
                   child: VersionWidget(
                     version: appVersion,
                     changelogUrl:
-                        // Currently (VersionWidget version 1.0.3) for the chrome/web
-                        // deployment the first URL below results in CORS blocking while
-                        // the second works. However the second renders raw text when
-                        // tapped while the first renders the Markdown which is a whole
-                        // lot nicer. So with the first on chrome/web the version
-                        // checking does not work. (20250717 gjw)
                         'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md',
-                    // 'https://raw.githubusercontent.com/anusii/notepod/dev/CHANGELOG.md',
                     showDate: true,
                     // User specified text style - see branch on version_widget package
                     // fontSize: 12.0,
-                    userTextStyle: TextStyle(
+                    userTextStyle: const TextStyle(
                       color: backgroundWhite,
                       fontSize: 12,
                     ),
@@ -124,15 +123,9 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.note_add_outlined),
                   title: const Text('New Note'),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          childPage: NewNote(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: const NewNote(),
                     );
                   },
                 ),
@@ -140,15 +133,9 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.view_list),
                   title: const Text('My Notes'),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          childPage: ListNotesScreen(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: const ListNotesScreen(),
                     );
                   },
                 ),
@@ -159,29 +146,20 @@ class NavDrawer extends StatelessWidget {
                   leading: const Icon(Icons.groups),
                   title: const Text(sharedNotesTitle),
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppHomePage(
-                          childPage: SharedNotesScreen(),
-                          // childPage: SharedNotes(),
-                        ),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // This predicate ensures all previous routes are removed
+                    navToChildPage(
+                      context: context,
+                      childPage: const ListExternalNotesScreen(),
                     );
                   },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Settings'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                const Divider(),
+                // ListTile(
+                //   leading: const Icon(Icons.settings),
+                //   title: const Text('Settings'),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //   },
+                // ),
                 ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Logout'),
@@ -192,9 +170,7 @@ class NavDrawer extends StatelessWidget {
                           await logoutPopup(context, const NotePod());
                         },
                 ),
-                const Divider(
-                  color: titleAsh,
-                ),
+                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: const Text('About'),
@@ -208,7 +184,7 @@ class NavDrawer extends StatelessWidget {
                       showDialog<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          return _aboutDialog(appName, version);
+                          return _aboutDialog(appName, version, context);
                         },
                       );
                     }
@@ -224,7 +200,10 @@ class NavDrawer extends StatelessWidget {
 }
 
 // Make About Dialog
-Widget _aboutDialog(String appName, String appVersion) {
+Widget _aboutDialog(String appName, String appVersion, BuildContext context) {
+  // Reduce calls to of(context).
+  final theme = Theme.of(context);
+
   return AboutDialog(
     applicationName: capitalize(appName),
     applicationIcon: SizedBox(
@@ -240,9 +219,9 @@ Widget _aboutDialog(String appName, String appVersion) {
         children: [
           RichText(
             text: TextSpan(
-              text: 'An ',
-              style: const TextStyle(color: Colors.black),
+              style: theme.textTheme.bodyMedium,
               children: [
+                const TextSpan(text: 'An '),
                 TextSpan(
                   text: 'ANU Software Innovation Institute',
                   style: const TextStyle(color: Colors.blue),
@@ -253,7 +232,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' demo project for Solid PODs.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -263,10 +241,10 @@ Widget _aboutDialog(String appName, String appVersion) {
           ),
           RichText(
             text: TextSpan(
+              style: theme.textTheme.bodyMedium,
               children: [
                 const TextSpan(
                   text: 'For more information see the ',
-                  style: TextStyle(color: Colors.black),
                 ),
                 TextSpan(
                   text: capitalize(appName),
@@ -278,7 +256,6 @@ Widget _aboutDialog(String appName, String appVersion) {
                 ),
                 const TextSpan(
                   text: ' github repository.',
-                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),

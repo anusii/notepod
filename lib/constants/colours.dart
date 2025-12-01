@@ -1,12 +1,12 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// Colour related costants used throughout the app.
 ///
-// Time-stamp: <Monday 2025-09-15 08:31:39 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:44:18 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -21,19 +21,15 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
 /// Colour contants for the app.
 
 import 'package:flutter/material.dart';
-
-/// Shaded colour for meta data in displaying a note.
-
-final metaDataShade = Colors.grey[100];
 
 // Ideally name constants by function.
 
@@ -54,7 +50,7 @@ const lighterGray = Color.fromARGB(255, 243, 243, 243);
 //const warningRed = Colors.red;
 
 const lightRed = Color.fromARGB(255, 255, 88, 77);
-const darkRed = Color.fromARGB(255, 139, 38, 30);
+// const darkRed = Color.fromARGB(255, 139, 38, 30);
 
 //const confirmGreen = Colors.green;
 
@@ -65,3 +61,177 @@ List<Color> defaultNotepodColors = const [
   titleAsh,
   lightBlue,
 ];
+
+/// Foreground colours of action buttons in note view
+/// pages.
+/// Required for the simple action buttons created with
+/// an icon inside a Ink().
+
+class ButtonForegroundColor {
+  /// Buttons on view pages
+  static const Color view = backgroundWhite;
+
+  /// Buttons on lists
+  static const Color list = titleAsh;
+}
+
+/// Background colours of action buttons in note view
+/// pages.
+/// Required for the simple action buttons created with
+/// an icon inside a Ink().
+
+class ButtonBackgroundColor {
+  /// Share button colour
+  static const Color share = darkBlue;
+
+  /// Back button colour
+  static const Color back = lightGray;
+
+  /// Edit button colour
+  static const Color edit = lightGreen;
+
+  /// Delete button colour
+  static const Color delete = lightRed;
+
+  /// Save button colour
+  static const Color save = lightBlue;
+
+  /// Default button colour - used for list item buttons
+  static const Color def = Colors.grey;
+}
+
+// 20250529 JM: Additional settings commented below as options
+
+// Light theme
+ThemeData lightThemeData(BuildContext context) {
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: darkGreen, // Colors.green,
+      brightness: Brightness.light,
+    ),
+    scaffoldBackgroundColor: backgroundWhite,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: darkGreen, // Colors.green[300],
+      //   foregroundColor: Colors.black,
+      //   iconTheme: IconThemeData(
+      //     color: Colors.black,
+      //   ),
+    ),
+    // iconTheme: IconThemeData(
+    //   color: Colors.white,
+    // ),
+    // listTileTheme: ListTileThemeData(
+    //   iconColor: Theme.of(context).colorScheme.primary,
+    //   tileColor: surfaceTintLight,
+    //   textColor: Theme.of(context).colorScheme.primary,
+    // ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: backgroundWhite,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    ),
+    // textButtonTheme: TextButtonThemeData(
+    //   style: TextButton.styleFrom(
+    //     // Label and icon use foreground colour
+    //     foregroundColor: Colors.black,
+    //     textStyle: TextStyle(
+    //       fontSize: 12,
+    //     ),
+    //   ),
+    // ),
+    // dividerTheme: DividerThemeData(
+    //   color: titleAsh,
+    // ),
+    // textTheme: TextTheme(
+    //   bodyMedium: TextStyle(
+    //     color: Colors.black,
+    //   ),
+    // ),
+    // Make Scrollbars() visible by default
+    // before user starts scrolling in pages
+    // where content exceeds container
+    // jm 20250916: Known issue with scrollbarTheme not applying
+    // in iOS https://github.com/flutter/flutter/issues/143926
+    // thumbVisibility: true still required in Scrollbar() instances
+    scrollbarTheme: ScrollbarThemeData(
+      thumbVisibility: WidgetStateProperty.all(true),
+    ),
+  );
+}
+
+// Dark theme
+ThemeData darkThemeData(BuildContext context) {
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.green,
+      brightness: Brightness.dark,
+    ),
+    scaffoldBackgroundColor: Colors.grey[900],
+    appBarTheme: const AppBarTheme(
+      backgroundColor: darkGreen, // Colors.green[900],
+      // foregroundColor: Colors.white,
+      // iconTheme: IconThemeData(
+      //   color: Colors.white,
+      // ),
+    ),
+    // iconTheme: IconThemeData(
+    //   color: Colors.black,
+    // ),
+    // listTileTheme: ListTileThemeData(
+    //   iconColor: Theme.of(context).colorScheme.onPrimary,
+    //   tileColor: surfaceTintLight,
+    //   textColor: Theme.of(context).colorScheme.onPrimary,
+    // ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        // Label and icon use foreground colour
+        foregroundColor: backgroundWhite,
+        backgroundColor: ButtonBackgroundColor.def, // Colors.grey,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    ),
+    // textButtonTheme: TextButtonThemeData(
+    //   style: TextButton.styleFrom(
+    //     // Label and icon use foreground colour
+    //     foregroundColor: Colors.white,
+    //     textStyle: TextStyle(
+    //       fontSize: 12,
+    //     ),
+    //   ),
+    // ),
+    // dividerTheme: DividerThemeData(
+    //   color: backgroundWhite,
+    // ),
+    // textTheme: TextTheme(
+    //   bodyMedium: TextStyle(
+    //     color: Colors.white,
+    //   ),
+    // ),
+    // Make Scrollbars() visible by default
+    // before user starts scrolling in pages
+    // where content exceeds container
+    // jm 20250916: Known issue with scrollbarTheme not applying
+    // in iOS https://github.com/flutter/flutter/issues/143926
+    // thumbVisibility: true still required in Scrollbar() instances
+    scrollbarTheme: ScrollbarThemeData(
+      thumbVisibility: WidgetStateProperty.all(true),
+    ),
+  );
+}

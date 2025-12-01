@@ -1,12 +1,12 @@
 /// NotePod - Define the main entry point for the app.
 ///
-// Time-stamp: <Friday 2025-08-15 08:17:36 +1000 Graham Williams>
+// Time-stamp: <Tuesday 2025-10-21 08:43:32 +1100 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
+/// License: https://opensource.org/license/gpl-3-0.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Anushka Vidanage
 
@@ -49,7 +49,10 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   if (isDesktop) {
-    // await windowManager.ensureInitialized();
+    // 20251009 jm: Required to initialize the
+    // window_manager plugin. Failure to include
+    // causes a build failure on macos
+    await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
       // Set various desktop window options here, specifically the title.
@@ -63,7 +66,7 @@ void main() async {
 
       // alwaysOnTop: true,
 
-      title: 'NotePod - A note taking app with private PODs',
+      title: 'NotePod - Private and Shareable Notes',
     );
 
     // Once the window manager is ready we reconfigure it a little.

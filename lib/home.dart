@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html.
+/// License: https://opensource.org/license/gpl-3-0.
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Jess Moore
 library;
@@ -30,10 +30,12 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/colours.dart';
+// import 'package:notepod/constants/colours.dart';
+// import 'package:notepod/nav_drawer.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/utils/nav_to_child.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -45,8 +47,7 @@ class AppHomePage extends StatefulWidget {
   AppHomePageState createState() => AppHomePageState();
 }
 
-class AppHomePageState extends State<AppHomePage>
-    with SingleTickerProviderStateMixin {
+class AppHomePageState extends State<AppHomePage> {
   String? _webId;
 
   // String _appVersion = '';
@@ -54,6 +55,8 @@ class AppHomePageState extends State<AppHomePage>
   @override
   void initState() {
     super.initState();
+    // FIXME: Incoming change, check if needed
+    // _loadAppInfo();
   }
 
   // Toggle login status
@@ -67,11 +70,13 @@ class AppHomePageState extends State<AppHomePage>
       (name: await AppInfo.name, webId: await getWebId());
 
   Widget _build(BuildContext context) {
+    // Reduce calls to of(context).
+    final theme = Theme.of(context);
     return SolidScaffold(
       appBar: SolidAppBarConfig(
         title: topBarTitle,
-        backgroundColor: lightGreen,
-        versionConfig: SolidVersionConfig(
+        backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
+        versionConfig: const SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
           // tooltip: 'Custom version tooltip',
@@ -82,15 +87,31 @@ class AppHomePageState extends State<AppHomePage>
             icon: Icons.add_circle,
             tooltip: 'Navigate to $newNoteTitle',
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AppHomePage(
-                    childPage: NewNote(),
-                  ),
-                ),
-                (Route<dynamic> route) =>
-                    false, // This predicate ensures all previous routes are removed
+              navToChildPage(
+                context: context,
+                childPage: const NewNote(),
+              );
+            },
+          ),
+          // My Notes (Owner's Notes)
+          SolidAppBarAction(
+            icon: Icons.view_list,
+            tooltip: 'Go to $myNotesTitle',
+            onPressed: () {
+              navToChildPage(
+                context: context,
+                childPage: const ListNotesScreen(),
+              );
+            },
+          ),
+          // External Notes (Shared Notes)
+          SolidAppBarAction(
+            icon: Icons.groups,
+            tooltip: 'Go to $sharedNotesTitle',
+            onPressed: () {
+              navToChildPage(
+                context: context,
+                childPage: const ListExternalNotesScreen(),
               );
             },
           ),
@@ -104,17 +125,17 @@ class AppHomePageState extends State<AppHomePage>
       ),
       menu: [
         // My Notes
-        SolidMenuItem(
+        const SolidMenuItem(
           title: myNotesTitle,
           icon: Icons.view_list,
           child: ListNotesScreen(),
           tooltip: 'Navigate to $myNotesTitle',
         ),
         // Shared Notes
-        SolidMenuItem(
+        const SolidMenuItem(
           title: sharedNotesTitle,
           icon: Icons.groups,
-          child: SharedNotesScreen(),
+          child: ListExternalNotesScreen(),
           tooltip: 'Navigate to $sharedNotesTitle',
         ),
       ],
@@ -122,7 +143,7 @@ class AppHomePageState extends State<AppHomePage>
         serverInfo: SolidServerInfo(
           serverUri: _webId!,
         ),
-        securityKeyStatus: SolidSecurityKeyStatus(
+        securityKeyStatus: const SolidSecurityKeyStatus(
           tooltip: 'Manage security keys',
         ),
         loginStatus: SolidLoginStatus(
@@ -138,7 +159,7 @@ class AppHomePageState extends State<AppHomePage>
       themeToggle: const SolidThemeToggleConfig(
         enabled: true,
       ),
-      aboutConfig: SolidAboutConfig(
+      aboutConfig: const SolidAboutConfig(
         applicationName: topBarTitle,
         applicationIcon: Icon(Icons.apps, size: 64),
         applicationLegalese: appOwner,

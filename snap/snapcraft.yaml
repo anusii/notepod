@@ -1,0 +1,85 @@
+name: notepod
+version: 0.2.51
+summary: Privacy preserving note taking app using PODs.
+description: |
+  Notepod is a note taking app, storing your notes within your Solid
+  Pod. Make notes anywhere, anytime, on any device and review them
+  later on. Great for that bush walk where you've suddenly come up
+  with a great idea you don't want to lose, or sharing the shopping
+  list with the family so whoever is next at the shops has it at their
+  finger tips.
+
+base: core22
+grade: stable
+confinement: strict
+
+# 20251013 gjw Plugins that may be needed include the following, but are
+# not required for every app:
+#
+#      - audio-playback
+#      - pulseaudio
+#      - screen-inhibit-control
+
+apps:
+  notepod:
+    command: notepod
+    extensions: [gnome] # gnome includes the libraries required by flutter
+    plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
+      - opengl
+      - network
+      - home
+
+# 20251013 gjw The `flutter_secure_storage` package (and maybe
+# `vault_storage`) is used by `solidpod/solidui` to save secrets
+# locally, if the app provides this option to the user to do so. Thus
+# `libsecret-1-dev` and `libjsoncpp-dev` are required to build the
+# installer and `libsecret-1-0` and `libjsoncpp1` to run the
+# application. See
+#
+# https://github.com/juliansteenbakker/flutter_secure_storage/blob/develop/README.md
+# https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
+#
+#    build-packages:
+#      - libsecret-1-dev
+#      - libjsoncpp-dev
+#
+#    stage-packages:
+#      - libsecret-1-0
+#      - libjsoncpp-dev
+#
+# 20251013 gjw If using the `audioplayers` package for flutter then
+# the gstreamer packages are required for bulding the installer
+# running the app.
+#
+#    build-packages:
+#      - libgstreamer1.0-dev
+#      - libgstreamer-plugins-base1.0-dev
+#      - libgstreamer-plugins-good1.0-dev
+#    stage-packages:
+#      - libgstreamer1.0-0
+#      - libgstreamer-plugins-base1.0-0
+#      - libgstreamer-plugins-good1.0-0
+#      - gstreamer1.0-plugins-good
+#      - gstreamer1.0-plugins-base
+
+parts:
+  notepod:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
+    build-packages:
+      - clang
+      - cmake
+      - ninja-build
+      - libgtk-3-dev
+      - libblkid-dev
+      - liblzma-dev
+      - libsecret-1-dev
+      - libjsoncpp-dev
+    stage-packages:
+      - libsecret-1-0
+      - libjsoncpp-dev

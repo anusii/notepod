@@ -1,10 +1,10 @@
-/// DESCRIPTION
+/// Functions used to fetch data in future builders.
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
@@ -28,128 +28,368 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/utils/rdf.dart';
+import 'package:notepod/common/rest_api/file_helper.dart';
+import 'package:notepod/constants/paths.dart';
+import 'package:notepod/models/call_status.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/external_notes_call_result.dart';
+import 'package:notepod/models/note.dart';
+import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/own_notes_call_result.dart';
+import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/utils/turtle/note_serializer.dart';
 
-/// Get the map comprising the list of notes and their data to return notesMap.
-/// Parameters:
-///   [childPage] is the child widget to return to
-Future<Map<String, dynamic>> getNoteList(
-  BuildContext context,
-  Widget childPage,
-) async {
-  final List<String> fileList;
+/// Get the list of user's note objects.
+///
+/// Example:
+/// - `_asyncDataFetch = getOwnNoteList(context: context, childPage: ListNotesScreen())`
+/// - used to define async function in future call to get user's notes.
+///
+/// Arguments:
+/// - [context] - the build context.
+/// - [childPage] - is the child widget to return to.
+///
+/// Returns: [OwnNotesCallResult] object comprising:
+/// - [notes] - list of [OwnNote] note objects.
+/// - [unparseableNotes] - list of [UnparseableNote] objects of
+/// unparseable notes.
 
-  // Get list of files in user's Pod
-  fileList = await getResources(context, childPage);
-
+Future<OwnNotesCallResult> getOwnNoteList({
+  required BuildContext context,
+  required Widget childPage,
+}) async {
   try {
-    String webId = await getWebId() as String;
-    webId = webId.replaceAll(profCard, '');
+    final startTime = DateTime.now();
+    // Get security key if required
+    await getKeyFromUserIfRequired(context, childPage);
 
-    Map<String, dynamic> notesMap = {};
-    // Loop through file list to retrieve note data
-    // for each file
+    final List<String> fileList;
+    final List<OwnNote> notes = [];
+    final List<UnparseableNote> unparseableNotes = [];
+
+    // Get note owner
+    final String noteOwner = await getWebId() ?? '';
+
+    // Get file list in owner's Pod
+    fileList = await NoteFileHelper().scanFileListDirectory();
+
+    // Create a list of future functions for reading pod and
+    // getting fileUrl
+    List<Future<String>> futuresFileUrl = [];
+    List<Future<String>> futuresNoteContentResult = [];
     for (final fileName in fileList) {
-      // Read file content
+      futuresFileUrl.add(
+        filenameToResourceUrl(
+          fileName: fileName,
+        ),
+      );
       if (context.mounted) {
-        String noteContent =
-            await readPod(fileName.replaceAll(webId, ''), context, childPage);
-        //debugPrint('NoteInfoMap: $fileName');
-        notesMap[fileName] = noteInfoMap(noteContent);
-        //debugPrint('$fileName => ${notesMap[fileName]}');
+        futuresNoteContentResult.add(
+          readPod('$basePath/$fileName', context, childPage),
+        );
       }
     }
-    return notesMap;
-  } on Object catch (e) {
+
+    // Read note file content and fetch file Urls
+    List<String> fileUrls = await Future.wait(futuresFileUrl);
+    List<String> noteContentResults =
+        await Future.wait(futuresNoteContentResult);
+
+    // Retrieve note data
+    for (int i = 0; i < fileList.length; i++) {
+      // Extract ttl data to content data of notes object
+      if (noteContentResults[i].isNotEmpty) {
+        try {
+          // Extract note from turtle string
+          final NoteContent? content;
+          content = TurtleSerializer.noteFromTurtle(
+            noteContentResults[i],
+          );
+
+          if (content != null) {
+            // Add note content data to note objects list
+            notes.add(
+              OwnNote(
+                noteFileName: fileList[i],
+                noteUrl: fileUrls[i],
+                noteOwner: noteOwner,
+                content: content,
+              ),
+            );
+          } else {
+            // Found unparseable file content
+            // Add note that failed parsing to bad notes list
+            unparseableNotes.add(
+              UnparseableNote(
+                noteFileName: fileList[i],
+                noteUrl: fileUrls[i],
+                noteOwner: noteOwner,
+              ),
+            );
+            debugPrint('Found unparseable file: ${fileList[i]}');
+          }
+        } catch (e) {
+          // Error deserializing note content
+          debugPrint(e.toString());
+        }
+      } else {
+        // If empty, add to unparseable file object list
+        unparseableNotes.add(
+          UnparseableNote(
+            noteFileName: fileList[i],
+            noteUrl: fileUrls[i],
+            noteOwner: noteOwner,
+          ),
+        );
+        debugPrint('Found empty file: ${fileList[i]}'); //
+      }
+      // }
+    }
+
+    if (unparseableNotes.isNotEmpty) {
+      debugPrint('Found ${unparseableNotes.length} unparseable or empty files');
+    } else {
+      debugPrint('All owners files parsed successfully!');
+    }
+
+    // Fetch permission lists of who each note is shared with
+    try {
+      final List<OwnNote> fullNotes;
+      final OwnNotesCallResult results;
+
+      final List<String> fileList =
+          notes.map((note) => note.noteFileName).toList();
+
+      final Map<dynamic, dynamic> permissionMaps = await readPermissionFileList(
+        fileList: fileList,
+      );
+
+      fullNotes = notes.addAuthUserLists(permissionMaps: permissionMaps);
+
+      results = OwnNotesCallResult(
+        notes: fullNotes,
+        unparseableNotes: unparseableNotes,
+      );
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+      debugPrint('[getOwnNoteList] Load time: ${duration.inMilliseconds} ms');
+
+      return results;
+    } catch (e) {
+      // Error retrieving permission lists of each note
+      debugPrint(e.toString());
+      rethrow;
+    }
+  } catch (e) {
+    // Error finding files
     debugPrint(e.toString());
     rethrow;
   }
 }
 
-// Creates and outputs a map containing the content of a note
-Map noteInfoMap(String noteContent) {
-  // Parse turtle file
-  final rdfMap = parseTTLMap(noteContent);
+/// Get data object of externally owned notes shared with the user.
+///
+/// Arguments:
+/// - [context] - The build context.
+/// - [childPage] - The child widget to return to.
+/// - [hasCurrentAccess] - Flag describing whether user has current
+/// access (ie. not revoked) to external file. If false, all files
+/// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
+/// that user has current access to.
+///
+/// Returns: [ExternalNotesCallResult] object comprising:
+/// - [notes] - list of [ExternalNote] note objects.
+/// - [unparseableNotes] - list of [UnparseableNote] objects of
+/// unparseable notes.
+/// - [nonExistentNotes] - list of non-existent [ExternalNote] note
+/// objects, if external files were deleted by their owner without
+/// first revoking access to the user (and other recipients).
 
-  // Create note info map
-  Map noteInfoMap = {
-    noteTitlePred: rdfMap[meKey]['$notepodTerms$noteTitlePred'].first,
-    createdDateTimePred:
-        rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    modifiedDateTimePred:
-        rdfMap[meKey]['$notepodTerms$modifiedDateTimePred'].first,
-    noteContentPred: decryptVal(
-      rdfMap[meKey]['$notepodTerms$noteContentPred'].first,
-      rdfMap[meKey]['$notepodTerms$createdDateTimePred'].first,
-    ),
-  };
-
-  return noteInfoMap;
-}
-
-// Get the Map of shared notes with the current user. If [filesWithGrantAccess]
-// is set to true, the function will only output notes with grant permission
-// access as the latest log entry.
-Future<Map> getSharedNotes(
-  BuildContext context,
-  Widget childPage, {
-  bool filesWithGrantAccess = true,
+Future<ExternalNotesCallResult> getExternalNoteList({
+  required BuildContext context,
+  required Widget childPage,
+  bool hasCurrentAccess = true,
 }) async {
-  final loggedIn = await loginIfRequired(context);
-  String webId = await getWebId() as String;
-  webId = webId.replaceAll(profCard, '');
+  final startTime = DateTime.now();
 
-  if (loggedIn && context.mounted) {
-    Map sharedNotesLogMap = await sharedResources(context, childPage);
+  final List<ExternalNote> notes = [];
+  // Build list of external notes shared to user
 
-    Map sharedNotesMap = {};
+  // Get security key if required
+  await getKeyFromUserIfRequired(context, childPage);
 
-    if (sharedNotesLogMap.isNotEmpty) {
-      for (final sharedFilaUrl in sharedNotesLogMap.keys) {
-        final sharedFileDetails = sharedNotesLogMap[sharedFilaUrl];
+  final Map<dynamic, dynamic> externalNotesLog;
 
-        // If [filesWithGrantAccess] is set to true record only the files
-        // with grant permission as the latest log entry
-        if (filesWithGrantAccess &&
-            sharedFileDetails[PermissionLogLiteral.type] == 'revoke') {
-          continue;
+  if (!context.mounted) return const ExternalNotesCallResult();
+  externalNotesLog = await NoteFileHelper()
+      .scanPermLogFile(context: context, childPage: childPage);
+
+  // final List<ExternalNote> notes = [];
+  List<String> unparseableLogRecords = [];
+
+  if (externalNotesLog.isNotEmpty) {
+    for (final fileUrl in externalNotesLog.keys) {
+      // Each log record of an external file
+      final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
+          externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
+
+      // Ignore log records of files where access has been
+      // revoked
+      if (hasCurrentAccess &&
+          logRecordOfFile[PermissionLogLiteral.type] == 'revoke') {
+        continue;
+      }
+
+      // Deserialise external note log record
+      try {
+        final ExternalNote? note;
+
+        // Extract log record of each external note
+        // where user currently has access
+        note = NoteFileHelper.extFileDetailsFromLog(
+          logRecordOfFile: logRecordOfFile,
+          fileUrl: fileUrl,
+        );
+
+        if (note != null) {
+          // Add log details of note to ExternalNote objects list
+          notes.add(note);
+        } else {
+          // Found unparseable log record
+          // Add to unparseable notes list
+          unparseableLogRecords.add(fileUrl);
         }
+      } catch (e) {
+        // Error deserializing external note log record
+        debugPrint(e.toString());
+      }
+    }
+  }
 
-        sharedNotesMap[sharedFilaUrl] = {
-          sharedTime: sharedFileDetails[PermissionLogLiteral.logtime],
-          noteUrl: sharedFileDetails[PermissionLogLiteral.resource],
-          noteFileName: sharedFilaUrl.split('/').last,
-          noteOwner: sharedFileDetails[PermissionLogLiteral.owner],
-          permissionGranter: sharedFileDetails[PermissionLogLiteral.granter],
-          permissionRecepient:
-              sharedFileDetails[PermissionLogLiteral.recepient],
-          permissionType: sharedFileDetails[PermissionLogLiteral.type],
-          permissionList: sharedFileDetails[PermissionLogLiteral.permissions],
-        };
+  if (unparseableLogRecords.isNotEmpty) {
+    debugPrint(
+      'Found external files with unparseable log records: $unparseableLogRecords',
+    );
+  } else {
+    debugPrint('All log records of external file parsed successfully!');
+  }
+
+  // Fetch and deserialize external note content
+  // or count bad files according to error type
+  try {
+    final List<ExternalNote> fullNotes = [];
+    final List<ExternalNote> nonExistentNotes = [];
+    final List<UnparseableNote> unparseableNotes = [];
+    final ExternalNotesCallResult results;
+
+    if (notes.isNotEmpty) {
+      // Create a list of future functions for reading external Pods
+      List<Future<dynamic>> futuresExtNoteContentResult = [];
+      for (final note in notes) {
+        if (context.mounted) {
+          futuresExtNoteContentResult.add(
+            getExternalNoteContent(
+              context: context,
+              childPage: childPage,
+              note: note,
+            ),
+          );
+        }
+      }
+
+      List<dynamic> extNoteWithContentResults =
+          await Future.wait(futuresExtNoteContentResult);
+
+      // Retrieve note data
+      for (int i = 0; i < notes.length; i++) {
+        if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
+          unparseableNotes.add(
+            UnparseableNote(
+              noteFileName: notes[i].noteFileName,
+              noteUrl: notes[i].noteUrl,
+              noteOwner: notes[i].noteOwner,
+            ),
+          );
+        } else if (extNoteWithContentResults[i] ==
+            FileCallStatus.fileNotExists) {
+          nonExistentNotes.add(notes[i]);
+        } else if (extNoteWithContentResults[i] != null) {
+          // Add note content data to note objects list
+          fullNotes.add(extNoteWithContentResults[i]);
+        }
       }
     }
 
-    return sharedNotesMap;
-  } else {
-    return {};
+    results = ExternalNotesCallResult(
+      notes: fullNotes,
+      nonExistentNotes: nonExistentNotes,
+      unparseableNotes: unparseableNotes,
+    );
+
+    final endTime = DateTime.now();
+    final duration = endTime.difference(startTime);
+    debugPrint(
+      '[getExternalNoteList] Load time: ${duration.inMilliseconds} ms',
+    );
+
+    return results;
+  } catch (e) {
+    // Error finding files
+    debugPrint(e.toString());
+    rethrow;
   }
 }
 
-// Get the content of a shared note
-Future<Map> getSharedNoteContent(
-  BuildContext context,
-  Widget childPage,
-  Map sharedNoteData,
-) async {
-  final sharedNoteUrl = sharedNoteData[noteUrl];
+/// Get the content of an externally owned note shared with the user.
+///
+/// Arguments:
+/// - [context] - The build context.
+/// - [childPage] - The widget return page.
+/// - [note] - The externally owned note data object including metadata.
+///
+/// Returns: [FileCallStatus] object comprising one of:
+/// - [note] - [ExternalNote] note object containing note content.
+/// - [FileCallStatus] - where [FileCallStatus] captures read failures
+/// including [FileCallStatus.fileNotExists] and
+/// [FileCallStatus.parsingFail].
 
-  // Get note content
-  final noteContent = await readExternalPod(sharedNoteUrl, context, childPage);
+Future<dynamic> getExternalNoteContent({
+  required BuildContext context,
+  required Widget childPage,
+  required ExternalNote note,
+}) async {
+  try {
+    // Get decrypted note content from external file
+    final noteContentResult =
+        await readExternalPod(note.noteUrl, context, childPage);
 
-  final noteContentMap = noteInfoMap(noteContent);
+    if (noteContentResult == SolidFunctionCallStatus.fileNotExists) {
+      return FileCallStatus.fileNotExists;
+    } else {
+      // Extract external note ttl data to noteContent
+      try {
+        // Deserialize note context
+        final NoteContent? content;
+        content = TurtleSerializer.noteFromTurtle(noteContentResult);
 
-  return noteContentMap;
+        if (content != null) {
+          // Add note content data to external notes object
+          note.content = content;
+          return note;
+        } else {
+          // Found external note file with unparseable note content
+          return FileCallStatus.parsingFail;
+        }
+      } catch (e) {
+        // Error deserializing note
+        debugPrint(e.toString());
+        return FileCallStatus.parsingFail;
+      }
+    }
+  } on Object catch (e) {
+    debugPrint('Exception details: $e');
+    rethrow;
+  }
 }

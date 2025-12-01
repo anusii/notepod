@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for creating a new note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 14:43:37 +1000 Graham Williams>
 ///
@@ -6,7 +6,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Graham Williams, Anushka Vidanage, Jess Moore
 
@@ -30,10 +30,13 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
-// Parameters: none
+///
+/// Parameters: none
+
 class NewNote extends StatefulWidget {
   const NewNote({
     super.key,
@@ -43,7 +46,7 @@ class NewNote extends StatefulWidget {
   NewNoteState createState() => NewNoteState();
 }
 
-class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
+class NewNoteState extends State<NewNote> {
   final formKey = GlobalKey<FormBuilderState>();
 
   TextEditingController? _textController;
@@ -57,6 +60,7 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
   /// Focus node for note content text field.
   late final FocusNode _focusContent;
 
+  /// Initialise note content text string.
   String data = '';
 
   @override
@@ -94,7 +98,7 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
     //         evt.logicalKey.keyLabel == 'Enter') {
     //       if (evt is KeyDownEvent) {
     //         // Save note when enter (not shift-enter) pressed
-    //         saveNote(context, _textController!, formKey);
+    //         NoteFileHelper().saveNote(context, _textController!, formKey);
     //       }
     //       return KeyEventResult.handled;
     //     } else {
@@ -127,8 +131,8 @@ class NewNoteState extends State<NewNote> with SingleTickerProviderStateMixin {
       scrollController: _scrollController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      childPage: const ListNotesScreen(),
       data: data,
-      shared: false,
     );
   }
 }

@@ -1,4 +1,4 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// A stateful widget for unreadable externally owned note.
 ///
 // Time-stamp: <Wednesday 2025-07-16 10:19:02 +1000 Graham Williams>
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: GNU General Public License, Version 3 (the "License")
 ///
-/// https://www.gnu.org/licenses/gpl-3.0.en.html
+/// https://opensource.org/license/gpl-3-0
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams
 
@@ -28,80 +28,133 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/constants/colours.dart';
+import 'package:notepod/constants/ui.dart';
+import 'package:notepod/models/external_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
-import 'package:notepod/shared_notes/shared_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
-import 'package:notepod/widgets/note_back_button.dart';
+import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
-import 'package:notepod/widgets/note_share_button.dart';
+
+/// A [stateful] widget for displaying a message when the user tries to view
+/// an externally owned widget shared to the user.
+///
+/// Arguments:
+/// - [note] - The externally owned note shared to the user.
 
 class NonReadableNote extends StatefulWidget {
-  final Map noteMetaData;
+  final ExternalNote note;
 
   const NonReadableNote({
     super.key,
-    required this.noteMetaData,
+    required this.note,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NonReadableNoteState createState() => _NonReadableNoteState();
+  State<NonReadableNote> createState() => _NonReadableNoteState();
 }
 
 class _NonReadableNoteState extends State<NonReadableNote> {
+  /// Scroll controller for single child scroll view
+  late final ScrollController _scrollController;
+
+  /// Boolean describing whether window is narrow
+  late bool isNarrow;
+
+  /// Note
+  late final ExternalNote _note;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _note = widget.note;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map noteMetaData = widget.noteMetaData;
-
-    return Column(
-      children: <Widget>[
-        // Display note metadata - show sharing and path info but not dates (as requires noteContent)
-        NoteDisplayMetadata(
-          noteInfo: noteMetaData,
-          showSharing: true,
-          showPathInfo: true,
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _scrollController,
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: <Widget>[
+            // Display note metadata - show sharing and path info but not dates (as requires noteContent)
+            DisplayNoteMetadata(
+              noteOwner: _note.noteOwner,
+              permissionGranter: _note.permissionGranter,
+              permissionList: _note.permissionList,
+              noteFileName: _note.noteFileName,
+              noteUrl: _note.noteUrl,
+              showFileName: true,
+              showSharing: true,
+              showPathInfo: true,
+            ),
+            // MsgCard style works in light and dark themes
+            buildMsgCard(
+              context,
+              Icons.info,
+              Colors.amber,
+              'Access Permission!',
+              nonReadableNoteMsg,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Derive whether window is narrow
+                  isNarrow = WindowSize().isNarrowWindow(constraints);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 5.0,
+                    children: [
+                      // Share button
+                      if (_note.permissionList.contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareExternalNote(
+                            note: _note,
+                          ),
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+                      // /// Delete button
+                      // /// 20250719 jesscmoore Commented out as also commented out
+                      // /// external note with read-write-control-append access
+                      // if (noteMetaData[permissionListPred].contains('write')) ...[
+                      //   NoteDelButton(noteData: noteMetaData, isExternal: true),
+                      //   const SizedBox(
+                      //     width: 5,
+                      //   ),
+                      // ],
+                      NoteActionButton(
+                        label: ButtonLabel.back,
+                        icon: const Icon(Icons.keyboard_backspace),
+                        backgroundColor: ButtonBackgroundColor.back,
+                        childPage: const ListExternalNotesScreen(),
+                        isNarrow: isNarrow,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        buildMsgCard(
-          context,
-          Icons.info,
-          Colors.amber,
-          'Access Permission!',
-          nonReadableNoteMsg,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // Share button
-              if (noteMetaData[permissionList].contains('control')) ...[
-                NoteShareButton(
-                  childPage: ShareExternalNote(
-                    noteMetaData: noteMetaData,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-              ],
-              // /// Delete button
-              // /// 20250719 jesscmoore Commented out as also commented out
-              // /// external note with read-write-control-append access
-              // if (noteMetaData[permissionList].contains('write')) ...[
-              //   NoteDelButton(noteData: noteMetaData, shared: true),
-              //   const SizedBox(
-              //     width: 5,
-              //   ),
-              // ],
-              NoteBackButton(childPage: SharedNotesScreen()),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+      ),
     );
   }
 }

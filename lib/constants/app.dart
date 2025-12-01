@@ -4,7 +4,7 @@
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
-/// License: https://www.gnu.org/licenses/gpl-3.0.en.html
+/// License: https://opensource.org/license/gpl-3-0
 //
 // Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
@@ -19,7 +19,7 @@
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://www.gnu.org/licenses/>.
+// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
@@ -27,16 +27,14 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/colours.dart';
-
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String appChangeLog =
     'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
 const String siiUrl = 'https://sii.anu.edu.au';
 const String defWebID = 'https://pods.solidcommunity.au';
-const String topBarTitle = 'Pod Note Taker';
+const String topBarTitle = 'Note Pod';
 const String shortTitle = 'Note Taker';
-const String longTitle = 'NOTEPOD - A Note Taker';
+const String longTitle = 'NotePod\nPrivate and Shareable Notes';
 
 const String appOwner = '''© 2025 Software Innovation Institute''';
 
@@ -56,9 +54,7 @@ const AssetImage logoImg = AssetImage('assets/images/notepod.png');
 const double normalLoadingScreenHeight = 200.0;
 //const double buttonBorderRadius = 5;
 //const double standardSpace = 20.0;
-const double ownListItemHeight = 108.0;
-const double sharedListItemHeight =
-    130.0; // (with 4 row subtitle) // 108.0 (with 3 row subtitle)
+const double badListItemHeight = 68.0;
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 //double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
@@ -89,15 +85,31 @@ const metadataTextStyle = TextStyle(
   fontSize: 12,
 );
 
-// Text style for list sort buttons
-const smallTextStyle = TextStyle(
-  fontSize: 12,
+// Text style for advice
+const adviceStyle = TextStyle(
+  fontSize: 13,
 );
 
 // Titles for nav widgets to pages
 const String newNoteTitle = 'New Note';
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
+
+/// Note list messages
+class NoteListMsg {
+  /// Message displayed when corrupt files found
+  static const String badFilesFound = 'Corrupt note files present';
+
+  /// Message displayed when non existent files found
+  static const String nonExistentNotesFound =
+      'Non-existent note files present without \'revoke\' entry in log';
+
+  /// Message displayed when no notes found in user's Pod
+  static const String noNotes = 'No notes yet!';
+
+  /// Advises user to write their first note
+  static const String writeFirstNote = 'Write your first note';
+}
 
 /// Note action messages
 class Msg {
@@ -111,7 +123,22 @@ class Msg {
   static const String confirmDelete =
       'Are you sure you want to delete this note?';
 
-  // Please confirm message
+  /// Confirm delete multiple notes message
+  static const String confirmDeleteMultiple =
+      'Are you sure you want to delete these notes?';
+
+  /// Note deleting message
+  static const String revokingNote = 'Revoking access!';
+
+  /// Confirm revoke access to note message
+  static const String confirmRevoke =
+      'Are you sure you want to revoke access to this note?';
+
+  /// Confirm revoke access to multiple notes message
+  static const String confirmRevokeMultiple =
+      'Are you sure you want to revoke access to these notes?';
+
+  /// Please confirm message
   static const String plsConfirm = 'Please Confirm';
 }
 
@@ -130,23 +157,21 @@ class ErrMsg {
   /// Error message when fails to save note file to POD
   static const String saveFailed =
       'Failed to store the note file in your POD. Try again!';
+
+  /// Unsaved changes found
+  static const String unsavedChanges = 'Unsaved changed found!';
+}
+
+class NoteIconSize {
+  static const double width = 50;
+  static const double height = 50;
+  static const double twoIconWidth = (width * 2) + gap;
+  static const double gap = 15;
 }
 
 // EdgeInsets for metadata block on view notes
 const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 
-/// Button style for view pages
-ButtonStyle buttonStyleView = ElevatedButton.styleFrom(
-  foregroundColor: darkBlue,
-  backgroundColor: lightBlue, // foreground
-  padding: const EdgeInsets.symmetric(
-    horizontal: 15,
-  ),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(20),
-  ),
-);
-
 /// Button shape decoration for list pages
 ShapeDecoration buttonShapeList =
-    ShapeDecoration(color: Colors.grey, shape: CircleBorder());
+    const ShapeDecoration(color: Colors.grey, shape: CircleBorder());
