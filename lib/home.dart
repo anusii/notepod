@@ -159,7 +159,7 @@ class AppHomePageState extends State<AppHomePage> {
         enabled: true,
       ),
       aboutConfig: const SolidAboutConfig(
-        applicationName: topBarTitle,
+        applicationName: longTitle,
         applicationIcon: Icon(Icons.apps, size: 64),
         applicationLegalese: appOwner,
         text: aboutText,
