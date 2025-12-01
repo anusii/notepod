@@ -87,7 +87,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
       );
       if (context.mounted) {
         futuresNoteContentResult.add(
-          readPod('$basePath/$fileName', context, childPage),
+          readPod('$basePath/$fileName'),
         );
       }
     }
