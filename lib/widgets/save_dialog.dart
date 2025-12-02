@@ -29,6 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/external_note.dart';
@@ -41,6 +43,7 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// Arguments:
 /// - [childPage] - child widget to navigate to.
 /// - [textController] - text controller holding text of the note body.
+///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [formKey] - form key holding text of the note title.
 /// - [prevExternalNote] - Optional existing external note data object. Required
 /// for saving existing externally owned notes. (Default: null).
@@ -52,6 +55,7 @@ import 'package:notepod/utils/nav_to_child.dart';
 class SaveDialog extends StatelessWidget {
   final Widget childPage;
   final TextEditingController textController;
+  final SolidScaffoldController scaffoldController;
   final GlobalKey<FormBuilderState> formKey;
   final FoundExternalNote? prevExternalNote;
   final FoundOwnNote? prevOwnNote;
@@ -64,6 +68,7 @@ class SaveDialog extends StatelessWidget {
     super.key,
     required this.childPage,
     required this.textController,
+    required this.scaffoldController,
     required this.formKey,
     this.prevExternalNote,
     this.prevOwnNote,
@@ -95,6 +100,7 @@ class SaveDialog extends StatelessWidget {
                 ? await NoteFileHelper().saveNote(
                     context: context,
                     textController: textController,
+                    scaffoldController: scaffoldController,
                     formKey: formKey,
                     prevExternalNote: prevExternalNote,
                     isExisting: isExisting,
@@ -103,6 +109,7 @@ class SaveDialog extends StatelessWidget {
                 : await NoteFileHelper().saveNote(
                     context: context,
                     textController: textController,
+                    scaffoldController: scaffoldController,
                     formKey: formKey,
                     prevOwnNote: prevOwnNote,
                     isExisting: isExisting,

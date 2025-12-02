@@ -62,13 +62,16 @@ class AppHomePageState extends State<AppHomePage> {
     setState(() {
       _webId = _webId == null ? defWebID : null;
     });
-    await logoutPopup(context, const NotePod());
+    await logoutPopup(context, NotePod());
   }
 
   Future<({String name, String? webId})> _getInfo() async =>
       (name: await AppInfo.name, webId: await getWebId());
 
-  Widget _build(BuildContext context) {
+  Widget _build(
+    BuildContext context,
+    SolidScaffoldController scaffoldController,
+  ) {
     // Reduce calls to of(context).
     final theme = Theme.of(context);
     return SolidScaffold(
@@ -87,7 +90,11 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.add_circle,
             tooltip: 'Navigate to $newNoteTitle',
             onPressed: () {
-              scaffoldController.navigateToSubpage(const NewNote());
+              scaffoldController.navigateToSubpage(
+                NewNote(
+                  scaffoldController: scaffoldController,
+                ),
+              );
             },
           ),
           // My Notes (Owner's Notes)
@@ -95,7 +102,11 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.view_list,
             tooltip: 'Go to $myNotesTitle',
             onPressed: () {
-              scaffoldController.navigateToSubpage(const ListNotesScreen());
+              scaffoldController.navigateToSubpage(
+                ListNotesScreen(
+                  scaffoldController: scaffoldController,
+                ),
+              );
             },
           ),
           // External Notes (Shared Notes)
@@ -103,8 +114,11 @@ class AppHomePageState extends State<AppHomePage> {
             icon: Icons.groups,
             tooltip: 'Go to $sharedNotesTitle',
             onPressed: () {
-              scaffoldController
-                  .navigateToSubpage(const ListExternalNotesScreen());
+              scaffoldController.navigateToSubpage(
+                ListExternalNotesScreen(
+                  scaffoldController: scaffoldController,
+                ),
+              );
             },
           ),
           // Login/logout
@@ -117,24 +131,28 @@ class AppHomePageState extends State<AppHomePage> {
       ),
       menu: [
         // My Notes
-        const SolidMenuItem(
+        SolidMenuItem(
           title: myNotesTitle,
           icon: Icons.view_list,
-          child: ListNotesScreen(),
+          child: ListNotesScreen(scaffoldController: scaffoldController),
           tooltip: 'Navigate to $myNotesTitle',
         ),
         // Shared Notes
-        const SolidMenuItem(
+        SolidMenuItem(
           title: sharedNotesTitle,
           icon: Icons.groups,
-          child: ListExternalNotesScreen(),
+          child: ListExternalNotesScreen(
+            scaffoldController: scaffoldController,
+          ),
           tooltip: 'Navigate to $sharedNotesTitle',
         ),
         // New Note
-        const SolidMenuItem(
+        SolidMenuItem(
           title: newNoteTitle,
           icon: Icons.add_circle,
-          child: NewNote(),
+          child: NewNote(
+            scaffoldController: scaffoldController,
+          ),
           tooltip: 'Navigate to $newNoteTitle',
         ),
       ],
@@ -175,7 +193,7 @@ class AppHomePageState extends State<AppHomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _webId = snapshot.data?.webId;
-          return _build(context);
+          return _build(context, scaffoldController);
         } else {
           return const Scaffold(body: CircularProgressIndicator());
         }

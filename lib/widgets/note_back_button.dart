@@ -29,6 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/external_note.dart';
@@ -40,6 +42,7 @@ import 'package:notepod/widgets/save_dialog.dart';
 ///
 /// Arguments:
 /// - [childPage] - The child page to navigate back to.
+///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [textController] - Optional text controller if back is being called from note editor.
 /// - [formKey] - Key of the form to edit note metadata
 /// - [prevExternalNote] - Optional existing external note data object. Required
@@ -55,6 +58,7 @@ class NoteBackButton extends StatelessWidget {
   const NoteBackButton({
     super.key,
     required this.childPage,
+    required this.scaffoldController,
     this.textController,
     this.formKey,
     this.prevExternalNote,
@@ -64,6 +68,7 @@ class NoteBackButton extends StatelessWidget {
   });
 
   final Widget childPage;
+  final SolidScaffoldController scaffoldController;
   final TextEditingController? textController;
   final GlobalKey<FormBuilderState>? formKey;
   final FoundExternalNote? prevExternalNote;
@@ -107,6 +112,7 @@ class NoteBackButton extends StatelessWidget {
                     return (isExternal)
                         ? SaveDialog(
                             childPage: childPage,
+                            scaffoldController: scaffoldController,
                             textController: textController!,
                             formKey: formKey!,
                             prevExternalNote: prevExternalNote,
@@ -114,6 +120,7 @@ class NoteBackButton extends StatelessWidget {
                           )
                         : SaveDialog(
                             childPage: childPage,
+                            scaffoldController: scaffoldController,
                             textController: textController!,
                             formKey: formKey!,
                             prevOwnNote: prevOwnNote,

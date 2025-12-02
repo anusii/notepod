@@ -81,5 +81,5 @@ void main() async {
   // The runApp() function takes the given Widget and makes it the root of the
   // widget tree.
 
-  runApp(const NotePod());
+  runApp(NotePod());
 }

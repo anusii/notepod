@@ -30,6 +30,8 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
@@ -38,14 +40,17 @@ import 'package:notepod/widgets/note_edit_scroll_view.dart';
 ///
 /// Arguments:
 ///   [note] - is the data of that note.
+///   [scaffoldController] - Controller for the Solid scaffold.
 
 class EditNote extends StatefulWidget {
   /// Data object for the selected note.
   final FoundOwnNote note;
+  final SolidScaffoldController scaffoldController;
 
   const EditNote({
     super.key,
     required this.note,
+    required this.scaffoldController,
   });
 
   @override
@@ -59,6 +64,9 @@ class EditNoteState extends State<EditNote> {
 
   /// Scroll controller for single child scroll view.
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Focus node for note title text field.
   late final FocusNode _focusTitle;
@@ -76,6 +84,7 @@ class EditNoteState extends State<EditNote> {
   void initState() {
     super.initState();
     _note = widget.note;
+    _scaffoldController = widget.scaffoldController;
     // Initialise note content field
     _textController = TextEditingController();
     _textController!.text = _note.content!.noteContent;
@@ -140,10 +149,12 @@ class EditNoteState extends State<EditNote> {
       formKey: formKey,
       textController: _textController,
       scrollController: _scrollController,
+      scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
       childPage: ViewNote(
         note: _note,
+        scaffoldController: _scaffoldController,
       ),
       data: data,
       prevOwnNote: _note,

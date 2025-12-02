@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
@@ -45,10 +47,12 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 
 class NonReadableNote extends StatefulWidget {
   final ExternalNote note;
+  final SolidScaffoldController scaffoldController;
 
   const NonReadableNote({
     super.key,
     required this.note,
+    required this.scaffoldController,
   });
 
   @override
@@ -58,6 +62,9 @@ class NonReadableNote extends StatefulWidget {
 class _NonReadableNoteState extends State<NonReadableNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
@@ -69,6 +76,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
     _note = widget.note;
   }
 
@@ -124,7 +132,12 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                           backgroundColor: ButtonBackgroundColor.share,
                           childPage: ShareExternalNote(
                             note: _note,
+                            backPage: ListExternalNotesScreen(
+                              scaffoldController: _scaffoldController,
+                            ),
+                            scaffoldController: _scaffoldController,
                           ),
+                          scaffoldController: _scaffoldController,
                           isNarrow: isNarrow,
                         ),
                       ],
@@ -141,7 +154,10 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: const ListExternalNotesScreen(),
+                        childPage: ListExternalNotesScreen(
+                          scaffoldController: _scaffoldController,
+                        ),
+                        scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
                       const SizedBox(

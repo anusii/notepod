@@ -38,6 +38,7 @@ import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
+import 'package:solidui/solidui.dart';
 
 /// A [StatelessWidget] widget setup for calling the
 /// SingleChildScrollView() to edit a note, whether a
@@ -49,6 +50,7 @@ class NoteEditScrollView extends StatelessWidget {
     required this.formKey,
     required TextEditingController? textController,
     required ScrollController scrollController,
+    required SolidScaffoldController scaffoldController,
     required FocusNode focusTitle,
     required FocusNode focusContent,
     required this.childPage,
@@ -60,6 +62,7 @@ class NoteEditScrollView extends StatelessWidget {
     this.noteTitle,
   })  : _textController = textController,
         _scrollController = scrollController,
+        _scaffoldController = scaffoldController,
         _focusTitle = focusTitle,
         _focusContent = focusContent;
 
@@ -68,6 +71,9 @@ class NoteEditScrollView extends StatelessWidget {
 
   /// Scroll controller for single child scroll view
   final ScrollController _scrollController;
+
+  /// Scaffold controller
+  final SolidScaffoldController _scaffoldController;
 
   /// Focus node for note title field
   final FocusNode _focusTitle;
@@ -114,6 +120,7 @@ class NoteEditScrollView extends StatelessWidget {
                 NoteSaveButton(
                   textController: _textController!,
                   formKey: formKey,
+                  scaffoldController: _scaffoldController,
                   // notesMap: notesMap,
                 ),
               ]
@@ -124,6 +131,7 @@ class NoteEditScrollView extends StatelessWidget {
                     ? NoteSaveButton(
                         textController: _textController!,
                         formKey: formKey,
+                        scaffoldController: _scaffoldController,
                         prevExternalNote: prevExternalNote,
                         isExisting: true,
                         isExternal: isExternal,
@@ -131,6 +139,7 @@ class NoteEditScrollView extends StatelessWidget {
                     : NoteSaveButton(
                         textController: _textController!,
                         formKey: formKey,
+                        scaffoldController: _scaffoldController,
                         prevOwnNote: prevOwnNote,
                         isExisting: true,
                       ),
@@ -141,6 +150,7 @@ class NoteEditScrollView extends StatelessWidget {
                         childPage: childPage,
                         textController: _textController,
                         formKey: formKey,
+                        scaffoldController: _scaffoldController,
                         prevExternalNote: prevExternalNote,
                         isExisting: isExisting,
                         isExternal: isExternal,
@@ -149,6 +159,7 @@ class NoteEditScrollView extends StatelessWidget {
                         childPage: childPage,
                         textController: _textController,
                         formKey: formKey,
+                        scaffoldController: _scaffoldController,
                         prevOwnNote: prevOwnNote,
                         isExisting: isExisting,
                       ),

@@ -47,7 +47,6 @@ const AssetImage backgroundImg =
 const AssetImage logoImg = AssetImage('assets/images/notepod.png');
 
 //const kDefaultPadding = 20.0;
-const double normalLoadingScreenHeight = 200.0;
 //const double buttonBorderRadius = 5;
 //const double standardSpace = 20.0;
 const double badListItemHeight = 68.0;

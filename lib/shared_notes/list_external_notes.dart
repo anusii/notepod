@@ -24,6 +24,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
@@ -31,7 +33,6 @@ import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/get_id.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [stateful] widget to list externally owned notes shared to the
@@ -39,13 +40,16 @@ import 'package:notepod/widgets/simple_action_button.dart';
 ///
 /// Arguments:
 /// - [notes] - The externally owned notes shared to the user.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class ListExternalNotes extends StatefulWidget {
   final List<ExternalNote> notes;
+  final SolidScaffoldController scaffoldController;
 
   const ListExternalNotes({
     super.key,
     required this.notes,
+    required this.scaffoldController,
   });
 
   @override
@@ -68,6 +72,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
+
   /// Aspect ratio (width / height) for gridview
   /// cards to display note items
   late double cardAspectRatio = 2.0;
@@ -82,6 +89,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
 
     // By default _foundNotes is the full list of notes
     _foundNotes = widget.notes.toListFoundExternalNote();
@@ -352,6 +360,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             width: 120,
                             child: SharedTrailingButtons(
                               note: _foundNotes[index],
+                              scaffoldController: _scaffoldController,
                             ),
                           ),
 
@@ -362,17 +371,17 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             //         [permissionListPred];
                             String access = _foundNotes[index].permissionList;
                             if (access.contains('read')) {
-                              navToChildPage(
-                                context: context,
-                                childPage: ViewSharedNote(
+                              _scaffoldController.navigateToSubpage(
+                                ViewSharedNote(
                                   note: _foundNotes[index],
+                                  scaffoldController: _scaffoldController,
                                 ),
                               );
                             } else {
-                              navToChildPage(
-                                context: context,
-                                childPage: NonReadableNote(
+                              _scaffoldController.navigateToSubpage(
+                                NonReadableNote(
                                   note: _foundNotes[index],
+                                  scaffoldController: _scaffoldController,
                                 ),
                               );
                             }
@@ -422,9 +431,12 @@ class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({
     super.key,
     required FoundExternalNote note,
-  }) : _note = note;
+    required SolidScaffoldController scaffoldController,
+  })  : _note = note,
+        _scaffoldController = scaffoldController;
 
   final FoundExternalNote _note;
+  final SolidScaffoldController _scaffoldController;
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +452,13 @@ class SharedTrailingButtons extends StatelessWidget {
             icon: const Icon(Icons.share),
             childPage: ShareExternalNote(
               note: _note,
+              backPage: ViewSharedNote(
+                note: _note,
+                scaffoldController: _scaffoldController,
+              ),
+              scaffoldController: _scaffoldController,
             ),
+            scaffoldController: _scaffoldController,
           ),
         ],
         // Open note icon

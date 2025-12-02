@@ -33,6 +33,7 @@ import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:solidui/solidui.dart';
 
 /// A stylised save button widget which on click saves the note content
 /// Pod. External notes are written to the note owner's Pod. Notes created
@@ -43,7 +44,8 @@ import 'package:notepod/models/own_note.dart';
 /// - `NoteSaveButton(textController: _textController!, formKey: formKey, prevNoteData: prevNoteData, shared: shared, notesMap: notesMap)` save the updated metadata and content of an existing note to the owner's Pod (whether that be the user or an external owner).
 ///
 /// - [textController] - Text controller of the note text content editor.
-/// - [formKey] - Key of the form to edit the note metadata
+/// - [formKey] - Key of the form to edit the note metadata.
+///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [prevExternalNote] - Optional existing external note data object. Required
 /// for saving existing externally owned notes. (Default: null).
 /// - [prevOwnNote] - Optional existing user's note data object. Required
@@ -56,6 +58,7 @@ import 'package:notepod/models/own_note.dart';
 class NoteSaveButton extends StatelessWidget {
   final TextEditingController textController;
   final GlobalKey<FormBuilderState> formKey;
+  final SolidScaffoldController scaffoldController;
   final FoundExternalNote? prevExternalNote;
   final FoundOwnNote? prevOwnNote;
   final bool isExisting;
@@ -65,6 +68,7 @@ class NoteSaveButton extends StatelessWidget {
     super.key,
     required this.textController,
     required this.formKey,
+    required this.scaffoldController,
     this.prevExternalNote,
     this.prevOwnNote,
     this.isExisting = false,
@@ -86,6 +90,7 @@ class NoteSaveButton extends StatelessWidget {
                 context: context,
                 textController: textController,
                 formKey: formKey,
+                scaffoldController: scaffoldController,
                 prevExternalNote: prevExternalNote,
                 isExisting: isExisting,
                 isExternal: isExternal,
@@ -94,6 +99,7 @@ class NoteSaveButton extends StatelessWidget {
                 context: context,
                 textController: textController,
                 formKey: formKey,
+                scaffoldController: scaffoldController,
                 prevOwnNote: prevOwnNote,
                 isExisting: isExisting,
               );

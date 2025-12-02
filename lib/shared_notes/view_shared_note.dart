@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
@@ -41,13 +43,16 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 ///
 /// Arguments:
 /// - [note] - The note to view.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class ViewSharedNote extends StatefulWidget {
   final FoundExternalNote note;
+  final SolidScaffoldController scaffoldController;
 
   const ViewSharedNote({
     super.key,
     required this.note,
+    required this.scaffoldController,
   });
 
   @override
@@ -57,6 +62,9 @@ class ViewSharedNote extends StatefulWidget {
 class _ViewSharedNoteState extends State<ViewSharedNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
@@ -73,6 +81,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
     _note = widget.note;
     _accessList = _note.permissionList.split(',');
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
   }
 
   @override
@@ -152,7 +161,13 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                           backgroundColor: ButtonBackgroundColor.share,
                           childPage: ShareExternalNote(
                             note: _note,
+                            backPage: ViewSharedNote(
+                              note: _note,
+                              scaffoldController: _scaffoldController,
+                            ),
+                            scaffoldController: _scaffoldController,
                           ),
+                          scaffoldController: _scaffoldController,
                           isNarrow: isNarrow,
                         ),
                       ],
@@ -164,7 +179,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                           backgroundColor: ButtonBackgroundColor.edit,
                           childPage: EditSharedNote(
                             note: _note,
+                            scaffoldController: _scaffoldController,
                           ),
+                          scaffoldController: _scaffoldController,
                           isNarrow: isNarrow,
                         ),
                       ],
@@ -173,7 +190,10 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: const ListExternalNotesScreen(),
+                        childPage: ListExternalNotesScreen(
+                          scaffoldController: _scaffoldController,
+                        ),
+                        scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
                       // Add space

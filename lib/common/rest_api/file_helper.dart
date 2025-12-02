@@ -44,7 +44,8 @@ import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/loading_animation.dart' as loading;
+import 'package:solidui/solidui.dart';
 
 /// Helper class for note file operations.
 
@@ -227,7 +228,8 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// - [context] - The build context.
   /// - [textController] - Text controller of the note text content editor.
-  /// - [formKey] - Key of the form to edit note metadata
+  /// - [formKey] - Key of the form to edit note metadata.
+  ///   [scaffoldController] - Controller for the Solid scaffold.
   /// - [prevExternalNote] - Optional existing external note data object. Required
   /// for saving existing externally owned notes. (Default: null).
   /// - [prevOwnNote] - Optional existing user's note data object. Required
@@ -241,6 +243,7 @@ class NoteFileHelper with PodOperationsMixin {
     required BuildContext context,
     required TextEditingController textController,
     required GlobalKey<FormBuilderState> formKey,
+    required SolidScaffoldController scaffoldController,
     FoundExternalNote? prevExternalNote,
     FoundOwnNote? prevOwnNote,
     bool isExternal = false,
@@ -281,7 +284,7 @@ class NoteFileHelper with PodOperationsMixin {
           showErrDialog(context, ErrMsg.noChanges);
         } else {
           // Loading animation
-          showAnimationDialog(
+          loading.showAnimationDialog(
             context,
             Msg.savingNote,
             false,
@@ -323,6 +326,7 @@ class NoteFileHelper with PodOperationsMixin {
                 data: updatedContent,
                 childPage: ViewSharedNote(
                   note: updatedExternalNote,
+                  scaffoldController: scaffoldController,
                 ),
                 isExternal: isExternal,
               );
@@ -358,6 +362,7 @@ class NoteFileHelper with PodOperationsMixin {
                 data: updatedContent,
                 childPage: ViewNote(
                   note: updatedOwnNote,
+                  scaffoldController: scaffoldController,
                 ),
               );
             } on Exception catch (e) {
@@ -372,7 +377,7 @@ class NoteFileHelper with PodOperationsMixin {
         if (noteText.trim() != '') {
           try {
             // Loading animation
-            showAnimationDialog(
+            loading.showAnimationDialog(
               context,
               Msg.savingNote,
               false,
@@ -394,7 +399,9 @@ class NoteFileHelper with PodOperationsMixin {
               // Create filename
               noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
               data: newContent,
-              childPage: const ListNotesScreen(),
+              childPage: ListNotesScreen(
+                scaffoldController: scaffoldController,
+              ),
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');

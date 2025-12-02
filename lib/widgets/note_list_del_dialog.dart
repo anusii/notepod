@@ -26,6 +26,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/unparseable_note.dart';
@@ -38,6 +40,7 @@ import 'package:notepod/widgets/note_list_del_button.dart';
 /// Arguments:
 /// - [unparseableNotes] - list of unparseable notes.
 /// - [childPage] - child widget to navigate to after delete dialog.
+///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [isExternal] - flag describing whether files are externally owned.
 
 class NotesDelDialog extends StatefulWidget {
@@ -46,6 +49,9 @@ class NotesDelDialog extends StatefulWidget {
   /// Childpage to navigate to after delete dialog
   final Widget childPage;
 
+  /// Scaffold controller
+  final SolidScaffoldController scaffoldController;
+
   /// Boolean describing whether note is external
   final bool isExternal;
 
@@ -53,6 +59,7 @@ class NotesDelDialog extends StatefulWidget {
     super.key,
     required this.unparseableNotes,
     required this.childPage,
+    required this.scaffoldController,
     this.isExternal = false,
   });
 
@@ -63,6 +70,9 @@ class NotesDelDialog extends StatefulWidget {
 class _NotesDelDialogState extends State<NotesDelDialog> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Aspect ratio (width / height) for gridview
   /// cards to display note items
@@ -76,6 +86,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
     super.initState();
 
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
   }
 
   @override
@@ -187,7 +198,10 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                       isExternal: widget.isExternal,
                     ),
                     // Back button
-                    NoteBackButton(childPage: widget.childPage),
+                    NoteBackButton(
+                      childPage: widget.childPage,
+                      scaffoldController: _scaffoldController,
+                    ),
                   ],
                 ),
               ),

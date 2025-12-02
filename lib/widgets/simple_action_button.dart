@@ -27,8 +27,9 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 
 /// Simple action button widget with icon only for using in narrow
 /// windows or list items.
@@ -36,6 +37,7 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// Arguments:
 /// - [icon] - icon to show on button.
 /// - [childPage] - child page to navigate to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 /// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
 /// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
 
@@ -45,6 +47,9 @@ class SimpleActionButton extends StatelessWidget {
 
   /// Childpage
   final Widget childPage;
+
+  /// Solid Scaffold Controller
+  final SolidScaffoldController scaffoldController;
 
   /// Button background color
   final Color backgroundColor;
@@ -56,6 +61,7 @@ class SimpleActionButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.childPage,
+    required this.scaffoldController,
     this.backgroundColor = ButtonBackgroundColor.def,
     // When SimpleActionButton called independently, default foreground color
     // is ButtonForegroundColor.list
@@ -75,7 +81,7 @@ class SimpleActionButton extends StatelessWidget {
           icon: icon,
           onPressed: () async {
             // Redirect.
-            navToChildPage(context: context, childPage: childPage);
+            scaffoldController.navigateToSubpage(childPage);
           },
         ),
       ),

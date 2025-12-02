@@ -26,6 +26,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
@@ -40,15 +42,20 @@ import 'package:notepod/widgets/note_list_revoke_button.dart';
 /// Arguments:
 /// - [nonExistentNotes] - note list of non-existent files.
 /// - [childPage] - child widget to return to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class NotesRevokeDialog extends StatefulWidget {
   final List<ExternalNote> nonExistentNotes;
   final Widget childPage;
 
+  /// Scaffold controller
+  final SolidScaffoldController scaffoldController;
+
   const NotesRevokeDialog({
     super.key,
     required this.nonExistentNotes,
     required this.childPage,
+    required this.scaffoldController,
   });
 
   @override
@@ -58,6 +65,9 @@ class NotesRevokeDialog extends StatefulWidget {
 class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Aspect ratio (width / height) for gridview
   /// cards to display note items
@@ -74,6 +84,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
     super.initState();
 
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
   }
 
   @override
@@ -202,7 +213,10 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                       childPage: widget.childPage,
                     ),
                     // Back button
-                    NoteBackButton(childPage: widget.childPage),
+                    NoteBackButton(
+                      childPage: widget.childPage,
+                      scaffoldController: _scaffoldController,
+                    ),
                   ],
                 ),
               ),
