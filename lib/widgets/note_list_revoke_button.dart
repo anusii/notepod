@@ -27,13 +27,13 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
-import 'package:notepod/utils/nav_to_child.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// A revoke button widget for updating the log record for a list
 /// of notes.
@@ -41,15 +41,18 @@ import 'package:notepod/widgets/loading_animation.dart';
 /// Arguments:
 /// - [nonExistentNotes] - note list of non-existent files.
 /// - [childPage] - child widget to return to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class NoteListRevokeButton extends StatelessWidget {
   final List<ExternalNote> nonExistentNotes;
   final Widget childPage;
+  final SolidScaffoldController scaffoldController;
 
   const NoteListRevokeButton({
     super.key,
     required this.nonExistentNotes,
     required this.childPage,
+    required this.scaffoldController,
   });
 
   @override
@@ -75,7 +78,7 @@ class NoteListRevokeButton extends StatelessWidget {
                 // The "Yes" button
                 TextButton(
                   onPressed: () async {
-                    showAnimationDialog(
+                    loading.showAnimationDialog(
                       context,
                       Msg.revokingNote,
                       false,
@@ -102,8 +105,7 @@ class NoteListRevokeButton extends StatelessWidget {
                     if (context.mounted) {
                       Navigator.of(context, rootNavigator: true)
                           .pop(); // Dismiss the revoking note dialog
-
-                      navToChildPage(context: context, childPage: childPage);
+                      scaffoldController.navigateToSubpage(childPage);
                     }
                   },
                   child: const Text(ButtonLabel.yes),

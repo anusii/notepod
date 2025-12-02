@@ -28,32 +28,36 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/unparseable_note.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// A delete button widget for deleting a list of notes.
 ///
 /// Arguments:
 /// - [unparseableNotes] - list of unparseable notes.
 /// - [childPage] - child widget to return to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 /// - [isExternal] - flag denoting whether note is an external
 /// note shared to the user.
 
 class NoteListDelButton extends StatelessWidget {
   final List<UnparseableNote> unparseableNotes;
   final Widget childPage;
+  final SolidScaffoldController scaffoldController;
   final bool isExternal;
 
   const NoteListDelButton({
     super.key,
     required this.unparseableNotes,
     required this.childPage,
+    required this.scaffoldController,
     this.isExternal = false,
   });
 
@@ -81,7 +85,7 @@ class NoteListDelButton extends StatelessWidget {
                       // The "Yes" button
                       TextButton(
                         onPressed: () async {
-                          showAnimationDialog(
+                          loading.showAnimationDialog(
                             context,
                             Msg.deletingNote,
                             false,
@@ -108,10 +112,7 @@ class NoteListDelButton extends StatelessWidget {
                             Navigator.of(context, rootNavigator: true)
                                 .pop(); // Dismiss the deleting note dialog
 
-                            navToChildPage(
-                              context: context,
-                              childPage: childPage,
-                            );
+                            scaffoldController.navigateToSubpage(childPage);
                           }
                         },
                         child: const Text(ButtonLabel.yes),

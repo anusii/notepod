@@ -184,6 +184,7 @@ class _ViewNoteState extends State<ViewNote> {
                         childPage: ListNotesScreen(
                           scaffoldController: _scaffoldController,
                         ),
+                        scaffoldController: _scaffoldController,
                       ),
                       // Back button
                       NoteActionButton(

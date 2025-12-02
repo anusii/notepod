@@ -195,6 +195,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                     NoteListDelButton(
                       unparseableNotes: widget.unparseableNotes,
                       childPage: widget.childPage,
+                      scaffoldController: _scaffoldController,
                       isExternal: widget.isExternal,
                     ),
                     // Back button

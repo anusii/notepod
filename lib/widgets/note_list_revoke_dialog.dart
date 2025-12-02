@@ -211,6 +211,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                     NoteListRevokeButton(
                       nonExistentNotes: widget.nonExistentNotes,
                       childPage: widget.childPage,
+                      scaffoldController: _scaffoldController,
                     ),
                     // Back button
                     NoteBackButton(

@@ -35,7 +35,6 @@ import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/own_note.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/save_dialog.dart';
 
 /// A stylised back button widget for notes. On click it checks if edited data exists, if found it asks if the user wants to save or not save or cancel the back action. Then it navigates to the provided child page.
@@ -129,12 +128,12 @@ class NoteBackButton extends StatelessWidget {
                 );
               } else {
                 debugPrint('No unsaved changes found');
-                navToChildPage(context: context, childPage: childPage);
+                scaffoldController.navigateToSubpage(childPage);
               }
             }
           }
         } else {
-          navToChildPage(context: context, childPage: childPage);
+          scaffoldController.navigateToSubpage(childPage);
         }
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
