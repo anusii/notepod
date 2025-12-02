@@ -72,6 +72,11 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   /// Load external notes if notes found. If any records of
   /// non-existent notes were found, it will first navigate to
   /// a dialog to revoke access to these notes.
