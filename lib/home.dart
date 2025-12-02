@@ -50,11 +50,19 @@ class AppHomePageState extends State<AppHomePage> {
 
   // String _appVersion = '';
 
-  final scaffoldController = SolidScaffoldController();
+  late final SolidScaffoldController
+      _scaffoldController; //  = SolidScaffoldController();
 
   @override
   void initState() {
     super.initState();
+    _scaffoldController = SolidScaffoldController();
+  }
+
+  @override
+  void dispose() {
+    _scaffoldController.dispose(); // Dispose the scaffoldController
+    super.dispose();
   }
 
   /// Logout
@@ -193,7 +201,7 @@ class AppHomePageState extends State<AppHomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _webId = snapshot.data?.webId;
-          return _build(context, scaffoldController);
+          return _build(context, _scaffoldController);
         } else {
           return const Scaffold(body: CircularProgressIndicator());
         }
