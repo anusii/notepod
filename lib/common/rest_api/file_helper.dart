@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/app.dart';
@@ -44,7 +45,6 @@ import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
-import 'package:solidui/solidui.dart';
 
 /// Helper class for note file operations.
 

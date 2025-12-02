@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
@@ -38,7 +39,6 @@ import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
-import 'package:solidui/solidui.dart';
 
 /// A [StatelessWidget] widget setup for calling the
 /// SingleChildScrollView() to edit a note, whether a

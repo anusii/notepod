@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/notes/list_notes_screen.dart';

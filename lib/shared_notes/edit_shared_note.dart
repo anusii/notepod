@@ -28,9 +28,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:solidui/solidui.dart';
-
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
