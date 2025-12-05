@@ -14,6 +14,10 @@ https://pods.dev.solidcommunity.au/.oidc/token
 
 https://pods.solidcommunity.au/my-moviestar/profile/card#me
 
+# POD server base URL - has temporary availability issues.
+
+https://pods.solidcommunity.au/
+
 # ANU Software Innovation Institute website (frequent timeouts in CI)
 
 https://sii.anu.edu.au/
