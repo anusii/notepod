@@ -94,7 +94,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     echo ""
 
-    echo '***** UPLOAD MACOS DMG'
+    echo '***** UPLOAD MACOS DMG UNSIGNED'
 
     ## gh run download ${bumpId} --name ${APP}-macos-zip
 
@@ -111,7 +111,41 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
     echo ""
 
-    echo '***** UPLOAD MACOS ZIP'
+    echo '***** UPLOAD MACOS DMG STAGING'
+
+    ## gh run download ${bumpId} --name ${APP}-macos-zip
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-macos-staging-dmg")) | .id' | head -n 1)
+    echo "artifact id: $artifactId"
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
+    unzip artifact.zip
+    rm -f artifact.zip
+
+    rsync -avzh ${APP}-dev-macos-staging.dmg ${DEST}
+    mv ${APP}-dev-macos-staging.dmg ARCHIVE/${APP}_${version}_macos_staging.dmg
+    ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}-dev-macos-staging.dmg"
+
+    echo ""
+
+    echo '***** UPLOAD MACOS DMG DEV'
+
+    ## gh run download ${bumpId} --name ${APP}-macos-zip
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-macos-dev-dmg")) | .id' | head -n 1)
+    echo "artifact id: $artifactId"
+    gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
+    unzip artifact.zip
+    rm -f artifact.zip
+
+    rsync -avzh ${APP}-dev-macos-dev.dmg ${DEST}
+    mv ${APP}-dev-macos-dev.dmg ARCHIVE/${APP}_${version}_macos_dev.dmg
+    ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}-dev-macos-dev.dmg"
+
+    echo ""
+
+    echo '***** UPLOAD MACOS ZIP UNSIGNED'
 
     ## gh run download ${bumpId} --name ${APP}-macos-zip
 
