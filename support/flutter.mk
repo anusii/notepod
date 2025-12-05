@@ -46,11 +46,12 @@ flutter:
   ignore          Look for usage of ignore directives.
   license	  Look for missing top license in source code.
 
-  test	    Run flutter testing.
-  itest	    Run flutter interation testing.
-  qtest	    Run above test with PAUSE=0.
-  coverage  Run with `--coverage`.
-    coview  View the generated html coverage in browser.
+  test	    	  Run flutter testing.
+  itest	    	  Run flutter interation testing.
+  qtest	   	  Run above test with PAUSE=0.
+    qtest.all	  Run qtest with output redirected - good running all tests.
+  coverage  	  Run with `--coverage`.
+    coview  	  View the generated html coverage in browser.
 
   riverpod  Setup `pubspec.yaml` to support riverpod.
   runner    Build the auto generated code as *.g.dart files.
@@ -147,7 +148,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: analyze fix import_order_fix format dcm ignore license todo locmax markdown lychee depend bakfind test versions
+prep: analyze fix import_order_fix format dcm ignore license todo locmax markdown lychee depend bakfind test
 	@echo "ADVISORY: make tests docs"
 	@echo $(SEPARATOR)
 
