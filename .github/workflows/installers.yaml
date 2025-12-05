@@ -405,7 +405,7 @@ jobs:
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
-########################################################################
+  ########################################################################
   # MACOS - DEVELOPMENT CERTIFICATE SIGNED FOR DEV TESTING
 
   # Uses Development cert and associated profile
@@ -557,8 +557,7 @@ jobs:
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
-
-########################################################################
+  ########################################################################
   # IOS
 
   package-ios-ipa:
@@ -720,7 +719,6 @@ jobs:
       # The distribution certificate and associated
       # provisioning profile can be used with app-store export
       # method.
-
 
   ########################################################################
   # WINDOWS
