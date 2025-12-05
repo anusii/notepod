@@ -104,7 +104,7 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
     gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
     unzip artifact.zip
     rm -f artifact.zip
-    ls
+
     rsync -avzh ${APP}-dev-macos-unsigned.dmg ${DEST}
     mv ${APP}-dev-macos-unsigned.dmg ARCHIVE/${APP}_${version}_macos_unsigned.dmg
     ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}-dev-macos-unsigned.dmg"
