@@ -607,9 +607,6 @@ jobs:
           IOS_PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
         run: |
-          pwd
-          ls -lh ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
-
           echo "Create variables for filepaths for certificate, provisioning profile, and keychain"
           # These vars must be assigned at run time
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
