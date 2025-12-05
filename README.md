@@ -42,6 +42,8 @@ from the [Solid Community AU](https://solidcommunity.au) repository:
   [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
   [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
 + **macOS**
+  [dmg dev](https://solidcommunity.au/installers/notepod-dev-macos-staging.dmg) or
+  [zip dev](https://solidcommunity.au/installers/notepod-dev-macos-staging.zip) or
   [dmg staging](https://solidcommunity.au/installers/notepod-dev-macos-staging.dmg) or
   [zip staging](https://solidcommunity.au/installers/notepod-dev-macos-staging.zip) or
   [dmg unsigned](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
@@ -267,7 +269,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Saturday 2025-12-06 05:43:12 +1100 Graham Williams>*
+*Time-stamp: <Saturday 2025-12-06 05:45:43 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
