@@ -505,8 +505,7 @@ jobs:
 
       - name: Note .app signing and notarizing status
         run: |
-          spctl -a -v
-          "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
+          spctl -a -v "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
