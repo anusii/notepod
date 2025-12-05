@@ -33,6 +33,7 @@ The latest version of the app can be run online at
 installation required, or downloaded and installed for your platform
 from the [Solid Community AU](https://solidcommunity.au) repository:
 
+<!-- markdownlint-disable MD013 -->
 + **Web**
   [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
@@ -43,14 +44,13 @@ from the [Solid Community AU](https://solidcommunity.au) repository:
   [zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
 + **macOS**
   [dmg dev](https://solidcommunity.au/installers/notepod-dev-macos-staging.dmg) or
-  [zip dev](https://solidcommunity.au/installers/notepod-dev-macos-staging.zip) or
   [dmg staging](https://solidcommunity.au/installers/notepod-dev-macos-staging.dmg) or
-  [zip staging](https://solidcommunity.au/installers/notepod-dev-macos-staging.zip) or
   [dmg unsigned](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg) or
   [zip unsigned](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.zip);
 + **Windows**
   [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
   [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+<!-- markdownlint-enable MD013 -->
 
 Contributions are welcome. Visit
 [github](https://github.com/anusii/notepod) to submit an issue or,
@@ -269,7 +269,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Saturday 2025-12-06 05:45:43 +1100 Graham Williams>*
+*Time-stamp: <Saturday 2025-12-06 09:46:53 +1100 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->

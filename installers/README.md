@@ -21,7 +21,7 @@ Download the latest version:
 **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 **macOS**
-[zip](https://solidcommunity.au/installers/notepod-dev-macos.zip);
+[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg);
 **Windows**
 [zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
 [inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
@@ -96,7 +96,7 @@ Alt-F2 and type `notepod` then Enter.
 ## MacOS
 
 The zip file
-[notepod-dev-macos.zip](https://solidcommunity.au/installers/notepod-dev-macos.zip)
+[notepod-dev-macos-unsigned.zip](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.zip)
 can be installed on MacOS. Download the file and open it on your
 Mac. Then, holding the Control key click on the app icon to display a
 menu. Choose `Open`. Then accept the warning to then run the app. The
