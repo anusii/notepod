@@ -31,7 +31,7 @@ import 'package:new_loading_indicator/new_loading_indicator.dart';
 
 import 'package:notepod/constants/colours.dart';
 
-showAnimationDialog(
+Future<dynamic> showAnimationDialog(
   BuildContext context,
   String alertMsg,
   bool showPathBackground,

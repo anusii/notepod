@@ -30,7 +30,7 @@ library;
 /// Arguments:
 /// - [webId] - webId from which to extract the id.
 
-String getId(webId) {
+String getId(String webId) {
   final Uri uri = Uri.parse(webId);
   final String id = uri.pathSegments.first;
 
