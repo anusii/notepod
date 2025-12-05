@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/widgets/full_size_action_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
@@ -40,6 +42,7 @@ import 'package:notepod/widgets/simple_action_button.dart';
 /// - [label] - text label to show on button.
 /// - [icon] - icon to show on button.
 /// - [childPage] - The child widget to navigate to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 /// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
 /// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
 /// - [showSimple] - Boolean describing whether to show
@@ -56,6 +59,9 @@ class NoteActionButton extends StatelessWidget {
 
   /// Childpage
   final Widget childPage;
+
+  /// Solid scaffold controller
+  final SolidScaffoldController scaffoldController;
 
   /// Button background color
   final Color backgroundColor;
@@ -74,6 +80,7 @@ class NoteActionButton extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.childPage,
+    required this.scaffoldController,
     this.backgroundColor = ButtonBackgroundColor.def,
     this.foregroundColor = ButtonForegroundColor.view,
     this.showSimple = false,
@@ -86,6 +93,7 @@ class NoteActionButton extends StatelessWidget {
         ? SimpleActionButton(
             icon: icon,
             childPage: childPage,
+            scaffoldController: scaffoldController,
             backgroundColor: backgroundColor,
             // When SimpleActionButton called from NoteActionButton, default foreground color
             // is ButtonForegroundColor.view
@@ -95,6 +103,7 @@ class NoteActionButton extends StatelessWidget {
             label: label,
             icon: icon,
             childPage: childPage,
+            scaffoldController: scaffoldController,
             backgroundColor: backgroundColor,
           );
   }

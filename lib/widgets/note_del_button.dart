@@ -26,12 +26,13 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/utils/nav_to_child.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// A stylised delete button widget for notes. A simpler version
 /// of the button is displayed with icon only if [simple] or
@@ -52,6 +53,9 @@ class NoteDelButton extends StatelessWidget {
   /// Childpage
   final Widget childPage;
 
+  /// Solid scaffold controller
+  final SolidScaffoldController scaffoldController;
+
   /// Boolean describing whether an external note
   final bool isExternal;
 
@@ -65,6 +69,7 @@ class NoteDelButton extends StatelessWidget {
     super.key,
     required this.filename,
     required this.childPage,
+    required this.scaffoldController,
     this.isExternal = false,
     this.showSimple = false,
     this.isNarrow = false,
@@ -84,7 +89,7 @@ class NoteDelButton extends StatelessWidget {
             // The "Yes" button
             TextButton(
               onPressed: () async {
-                showAnimationDialog(
+                loading.showAnimationDialog(
                   context,
                   Msg.deletingNote,
                   false,
@@ -101,8 +106,7 @@ class NoteDelButton extends StatelessWidget {
                 if (context.mounted) {
                   Navigator.of(context, rootNavigator: true)
                       .pop(); // Dismiss the deleting note dialog
-
-                  navToChildPage(context: context, childPage: childPage);
+                  scaffoldController.navigateToSubpage(childPage);
                 }
               },
               child: const Text(ButtonLabel.yes),

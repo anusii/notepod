@@ -24,6 +24,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/own_note.dart';
@@ -31,7 +33,6 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
@@ -40,12 +41,15 @@ import 'package:notepod/widgets/simple_action_button.dart';
 ///                in the user's app data folder (required to
 ///                display sharing information and support
 ///                sharing with suggestion list of recipient WebIds).
+///   [scaffoldController] - Controller for the Solid scaffold.
 class ListNotes extends StatefulWidget {
   final List<OwnNote> notes;
+  final SolidScaffoldController scaffoldController;
 
   const ListNotes({
     super.key,
     required this.notes,
+    required this.scaffoldController,
   });
 
   @override
@@ -70,6 +74,9 @@ class _ListNotesState extends State<ListNotes> {
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Count of selected notes
   int selectedCount = 0;
@@ -112,6 +119,8 @@ class _ListNotesState extends State<ListNotes> {
     currSortMethod = 'sortByTitle';
 
     _scrollController = ScrollController();
+
+    _scaffoldController = widget.scaffoldController;
   }
 
   @override
@@ -369,13 +378,14 @@ class _ListNotesState extends State<ListNotes> {
                               width: NoteIconSize.twoIconWidth,
                               child: TrailingButtons(
                                 note: _foundNotes[index],
+                                scaffoldController: _scaffoldController,
                               ),
                             ),
                             onTap: () {
-                              navToChildPage(
-                                context: context,
-                                childPage: ViewNote(
+                              _scaffoldController.navigateToSubpage(
+                                ViewNote(
                                   note: _foundNotes[index],
+                                  scaffoldController: _scaffoldController,
                                 ),
                               );
                             },
@@ -398,9 +408,12 @@ class TrailingButtons extends StatelessWidget {
   const TrailingButtons({
     super.key,
     required FoundOwnNote note,
-  }) : _note = note;
+    required SolidScaffoldController scaffoldController,
+  })  : _note = note,
+        _scaffoldController = scaffoldController;
 
   final FoundOwnNote _note;
+  final SolidScaffoldController _scaffoldController;
 
   @override
   Widget build(BuildContext context) {
@@ -412,8 +425,12 @@ class TrailingButtons extends StatelessWidget {
           icon: const Icon(Icons.share),
           childPage: ShareNote(
             note: _note,
-            backPage: const ListNotesScreen(),
+            backPage: ListNotesScreen(
+              scaffoldController: _scaffoldController,
+            ),
+            scaffoldController: _scaffoldController,
           ),
+          scaffoldController: _scaffoldController,
         ),
         // Open note icon
         const Icon(

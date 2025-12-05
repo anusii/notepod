@@ -29,6 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -39,13 +40,16 @@ import 'package:notepod/widgets/note_edit_scroll_view.dart';
 ///
 /// Arguments:
 /// - [note] - the externally owned note.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class EditSharedNote extends StatefulWidget {
   final FoundExternalNote note;
+  final SolidScaffoldController scaffoldController;
 
   const EditSharedNote({
     super.key,
     required this.note,
+    required this.scaffoldController,
   });
 
   @override
@@ -59,6 +63,9 @@ class EditSharedNoteState extends State<EditSharedNote> {
 
   /// Scroll controller for single child scroll view.
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Focus node for note title text field.
   late final FocusNode _focusTitle;
@@ -81,6 +88,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
     // Focus node for the title text field
     // If 'TAB' key press, move to note content text field
     _focusTitle = FocusNode(
@@ -140,9 +148,13 @@ class EditSharedNoteState extends State<EditSharedNote> {
       formKey: formKey,
       textController: _textController,
       scrollController: _scrollController,
+      scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: ViewSharedNote(note: _note),
+      childPage: ViewSharedNote(
+        note: _note,
+        scaffoldController: _scaffoldController,
+      ),
       data: data,
       prevExternalNote: _note,
       noteTitle: _note.content!.noteTitle,

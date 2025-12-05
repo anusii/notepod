@@ -42,35 +42,38 @@ import 'package:notepod/notes/list_notes_screen.dart';
 /// a login screen, though this is optional.
 
 class NotePod extends StatelessWidget {
-  const NotePod({super.key});
+  NotePod({super.key});
 
   final ThemeMode _themeMode = ThemeMode.light;
+
+  final scaffoldController = SolidScaffoldController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Note Pod',
+      title: shortTitle,
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
-      home: const SolidLogin(
-        title: 'NotePod\nPrivate and Shareable Notes',
-        appDirectory: 'notepod',
-        image: AssetImage('assets/images/notepod-background.jpg'),
-        logo: AssetImage('assets/images/notepod.png'),
-        link: 'https://github.com/anusii/notepod',
-        webID: 'https://pods.solidcommunity.au',
+      home: SolidLogin(
+        title: longTitle,
+        appDirectory: appDir,
+        image: backgroundImg,
+        logo: logoImg,
+        link: applicationRepo,
+        webID: defWebID,
         required: false,
-        loginButtonStyle: LoginButtonStyle(
+        loginButtonStyle: const LoginButtonStyle(
           background: Colors.lightGreenAccent,
           tooltip: 'You need to connect to your Solid account\n'
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
         child: AppHomePage(
-          title: topBarTitle,
-          childPage: ListNotesScreen(),
+          childPage: ListNotesScreen(
+            scaffoldController: scaffoldController,
+          ),
         ),
       ),
     );

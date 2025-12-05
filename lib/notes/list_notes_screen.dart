@@ -23,13 +23,14 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/own_notes_call_result.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
 
@@ -37,10 +38,16 @@ import 'package:notepod/widgets/note_list_del_dialog.dart';
 /// retrieving the note data map containing data and properties of each note
 /// file name.
 ///
-/// Parameters: none
+/// Parameters:
+///   [scaffoldController] - Controller for the Solid scaffold.
 
 class ListNotesScreen extends StatefulWidget {
-  const ListNotesScreen({super.key});
+  final SolidScaffoldController scaffoldController;
+
+  const ListNotesScreen({
+    super.key,
+    required this.scaffoldController,
+  });
 
   @override
   State<ListNotesScreen> createState() => _ListNotesScreenState();
@@ -55,11 +62,19 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
+
   @override
   void initState() {
-    _asyncDataFetch =
-        getOwnNoteList(context: context, childPage: const ListNotesScreen());
     super.initState();
+    _scaffoldController = widget.scaffoldController;
+    _asyncDataFetch = getOwnNoteList(
+      context: context,
+      childPage: ListNotesScreen(
+        scaffoldController: _scaffoldController,
+      ),
+    );
     _scrollController = ScrollController();
   }
 
@@ -78,26 +93,36 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// files found in user's app data folder, and [unparseableNotes]
   /// list of any unparseable files.
 
-  Widget _loadedNotesScreen(OwnNotesCallResult results) {
+  Widget _loadedNotesScreen(
+    OwnNotesCallResult results,
+    SolidScaffoldController scaffoldController,
+  ) {
     final notes = results.notes!;
     final unparseableNotes = results.unparseableNotes!;
 
     if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
-        childPage: ListNotes(notes: notes),
+        childPage: ListNotes(
+          notes: notes,
+          scaffoldController: scaffoldController,
+        ),
+        scaffoldController: _scaffoldController,
       );
     } else if (notes.isEmpty) {
-      return _loadNewNote();
+      return _loadNewNote(scaffoldController);
     } else {
-      return ListNotes(notes: notes);
+      return ListNotes(
+        notes: notes,
+        scaffoldController: scaffoldController,
+      );
     }
   }
 
   /// Advises user to create their first note if no notes found.
   ///
   /// Arguments: none.
-  Widget _loadNewNote() {
+  Widget _loadNewNote(SolidScaffoldController scaffoldController) {
     return Scrollbar(
       thumbVisibility: true,
       controller: _scrollController,
@@ -115,7 +140,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
               NoteListMsg.writeFirstNote,
               isSmall: true,
             ),
-            const NewNote(),
+            NewNote(
+              scaffoldController: scaffoldController,
+            ),
           ],
         ),
       ),
@@ -133,6 +160,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
             switch (snapshot.connectionState) {
               case (ConnectionState.waiting || ConnectionState.active):
                 return loadingScreen(normalLoadingScreenHeight);
+
               case ConnectionState.done:
                 if (snapshot.hasError) {
                   // future failed with error
@@ -145,11 +173,12 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                   // Successfully returned OwnNotesCallResult
                   return _loadedNotesScreen(
                     snapshot.data as OwnNotesCallResult,
+                    _scaffoldController,
                   );
                 } else if (snapshot.data == null ||
                     snapshot.data.toString() == 'null') {
                   // No notes found
-                  return _loadNewNote();
+                  return _loadNewNote(_scaffoldController);
                 } else {
                   // Unknown error
                   return errCard(

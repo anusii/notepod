@@ -27,20 +27,19 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/nav_drawer.dart';
+import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
-  const AppHomePage({super.key, required this.childPage, this.title = ''});
+  const AppHomePage({super.key, required this.childPage});
 
   final Widget childPage;
-  final String title;
 
   @override
   AppHomePageState createState() => AppHomePageState();
@@ -49,89 +48,147 @@ class AppHomePage extends StatefulWidget {
 class AppHomePageState extends State<AppHomePage> {
   String? _webId;
 
-  String _appVersion = '';
+  // String _appVersion = '';
+
+  late final SolidScaffoldController
+      _scaffoldController; //  = SolidScaffoldController();
 
   @override
   void initState() {
     super.initState();
-
-    _loadAppInfo();
+    _scaffoldController = SolidScaffoldController();
   }
 
-  /// Loads the app name and version from package_info_plus.
+  @override
+  void dispose() {
+    _scaffoldController.dispose(); // Dispose the scaffoldController
+    super.dispose();
+  }
 
-  Future<void> _loadAppInfo() async {
-    final appInfo = await getAppNameVersion();
-    if (mounted) {
-      setState(() {
-        _appVersion = appInfo.version;
-      });
-    }
+  /// Logout
+  void _logout() async {
+    setState(() {
+      _webId = _webId == null ? defWebID : null;
+    });
+    await logoutPopup(context, NotePod());
   }
 
   Future<({String name, String? webId})> _getInfo() async =>
       (name: await AppInfo.name, webId: await getWebId());
 
-  Widget _build(BuildContext context) {
+  Widget _build(
+    BuildContext context,
+    SolidScaffoldController scaffoldController,
+  ) {
     // Reduce calls to of(context).
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
+    return SolidScaffold(
+      controller: scaffoldController,
+      appBar: SolidAppBarConfig(
+        title: topBarTitle,
         backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
-        centerTitle: true,
-        title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            tooltip: 'Create a new note',
-            icon: const Icon(
-              Icons.add_circle,
-            ),
+        versionConfig: const SolidVersionConfig(
+          changelogUrl: appChangeLog,
+          showDate: true,
+          // tooltip: 'Custom version tooltip',
+        ),
+        actions: [
+          // New Note
+          SolidAppBarAction(
+            icon: Icons.add_circle,
+            tooltip: 'Navigate to $newNoteTitle',
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const NewNote(),
+              scaffoldController.navigateToSubpage(
+                NewNote(
+                  scaffoldController: scaffoldController,
+                ),
               );
             },
           ),
-          const SizedBox(width: 10),
-          IconButton(
+          // My Notes (Owner's Notes)
+          SolidAppBarAction(
+            icon: Icons.view_list,
             tooltip: 'Go to $myNotesTitle',
-            icon: const Icon(
-              Icons.view_list,
-            ),
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const ListNotesScreen(),
+              scaffoldController.navigateToSubpage(
+                ListNotesScreen(
+                  scaffoldController: scaffoldController,
+                ),
               );
             },
           ),
-          const SizedBox(width: 10),
-          IconButton(
+          // External Notes (Shared Notes)
+          SolidAppBarAction(
+            icon: Icons.groups,
             tooltip: 'Go to $sharedNotesTitle',
-            icon: const Icon(
-              // Also tried (20250718 gjw)
-              // Icons.people,
-              // Icons.share,
-              // Icons.group,
-              // Icons.supervisor_account,
-              // Icons.share_rounded,
-              Icons.groups,
-            ),
             onPressed: () {
-              navToChildPage(
-                context: context,
-                childPage: const ListExternalNotesScreen(),
+              scaffoldController.navigateToSubpage(
+                ListExternalNotesScreen(
+                  scaffoldController: scaffoldController,
+                ),
               );
             },
           ),
-          const SizedBox(width: 10),
+          // Login/logout
+          SolidAppBarAction(
+            icon: _webId != null ? Icons.logout : Icons.login,
+            tooltip: _webId != null ? 'Logout' : 'Login',
+            onPressed: _logout,
+          ),
         ],
       ),
-      drawer: NavDrawer(
-        webId: _webId ?? '',
-        appVersion: _appVersion,
+      menu: [
+        // My Notes
+        SolidMenuItem(
+          title: myNotesTitle,
+          icon: Icons.view_list,
+          child: ListNotesScreen(scaffoldController: scaffoldController),
+          tooltip: 'Navigate to $myNotesTitle',
+        ),
+        // Shared Notes
+        SolidMenuItem(
+          title: sharedNotesTitle,
+          icon: Icons.groups,
+          child: ListExternalNotesScreen(
+            scaffoldController: scaffoldController,
+          ),
+          tooltip: 'Navigate to $sharedNotesTitle',
+        ),
+        // New Note
+        SolidMenuItem(
+          title: newNoteTitle,
+          icon: Icons.add_circle,
+          child: NewNote(
+            scaffoldController: scaffoldController,
+          ),
+          tooltip: 'Navigate to $newNoteTitle',
+        ),
+      ],
+      statusBar: SolidStatusBarConfig(
+        serverInfo: SolidServerInfo(
+          serverUri: _webId!,
+        ),
+        securityKeyStatus: const SolidSecurityKeyStatus(
+          tooltip: 'Manage security keys',
+        ),
+        loginStatus: SolidLoginStatus(
+          webId: _webId,
+          onTap: _logout,
+          loggedInText: 'Logged In',
+          loggedOutText: 'Not Logged In',
+          loggedInTooltip: 'Click to log out',
+          loggedOutTooltip: 'Click to log in',
+        ),
+        showOnNarrowScreens: true,
+      ),
+      themeToggle: const SolidThemeToggleConfig(
+        enabled: true,
+      ),
+      aboutConfig: const SolidAboutConfig(
+        applicationName: longTitle,
+        applicationIcon: Icon(Icons.apps, size: 64),
+        applicationLegalese: appOwner,
+        text: aboutText,
       ),
       body: widget.childPage,
     );
@@ -144,7 +201,7 @@ class AppHomePageState extends State<AppHomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _webId = snapshot.data?.webId;
-          return _build(context);
+          return _build(context, _scaffoldController);
         } else {
           return const Scaffold(body: CircularProgressIndicator());
         }

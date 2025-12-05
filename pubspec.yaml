@@ -30,9 +30,6 @@ dependencies:
   rdflib: ^0.2.12
   solidpod: 0.8.5
   solidui: 0.0.12
-    # git:
-    #   url: https://github.com/anusii/solidui.git
-    #   ref: tony/507_readpod
   universal_io: ^2.2.2
   url_launcher: ^6.2.1
   version_widget: ^1.0.6

@@ -28,22 +28,28 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/external_note.dart';
-import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
 /// A [stateful] widget for sharing an externally owned note shared to the user, to share the note with another user.
 ///
 /// Arguments:
 /// - [note] - The externally owned note shared to the user.
+/// - [scaffoldController] - Controller for the Solid scaffold.
+/// - [backPage] - The widget used by Back button.
 
 class ShareExternalNote extends StatefulWidget {
   final ExternalNote note;
+  final Widget backPage;
+  final SolidScaffoldController scaffoldController;
 
   const ShareExternalNote({
     super.key,
     required this.note,
+    required this.backPage,
+    required this.scaffoldController,
   });
 
   @override
@@ -54,6 +60,9 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
+
   /// Note
   late final ExternalNote _note;
 
@@ -62,6 +71,7 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
     super.initState();
     _scrollController = ScrollController();
     _note = widget.note;
+    _scaffoldController = widget.scaffoldController;
   }
 
   @override
@@ -85,8 +95,12 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10),
-                  const NoteBackButton(
-                    childPage: ListExternalNotesScreen(),
+                  NoteBackButton(
+                    childPage: widget.backPage,
+                    // childPage: ListExternalNotesScreen(
+                    //   scaffoldController: _scaffoldController,
+                    // ),
+                    scaffoldController: _scaffoldController,
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
@@ -96,7 +110,11 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                       resourceName: _note.noteUrl,
                       isExternalRes: true,
                       externalWebId: _note.noteOwner,
-                      child: ShareExternalNote(note: _note),
+                      child: ShareExternalNote(
+                        note: _note,
+                        backPage: widget.backPage,
+                        scaffoldController: _scaffoldController,
+                      ),
                     ),
                   ),
                 ],

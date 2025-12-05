@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/app.dart';
@@ -42,9 +43,8 @@ import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
-import 'package:notepod/widgets/loading_animation.dart';
+import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// Helper class for note file operations.
 
@@ -227,7 +227,8 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// - [context] - The build context.
   /// - [textController] - Text controller of the note text content editor.
-  /// - [formKey] - Key of the form to edit note metadata
+  /// - [formKey] - Key of the form to edit note metadata.
+  ///   [scaffoldController] - Controller for the Solid scaffold.
   /// - [prevExternalNote] - Optional existing external note data object. Required
   /// for saving existing externally owned notes. (Default: null).
   /// - [prevOwnNote] - Optional existing user's note data object. Required
@@ -241,6 +242,7 @@ class NoteFileHelper with PodOperationsMixin {
     required BuildContext context,
     required TextEditingController textController,
     required GlobalKey<FormBuilderState> formKey,
+    required SolidScaffoldController scaffoldController,
     FoundExternalNote? prevExternalNote,
     FoundOwnNote? prevOwnNote,
     bool isExternal = false,
@@ -281,7 +283,7 @@ class NoteFileHelper with PodOperationsMixin {
           showErrDialog(context, ErrMsg.noChanges);
         } else {
           // Loading animation
-          showAnimationDialog(
+          loading.showAnimationDialog(
             context,
             Msg.savingNote,
             false,
@@ -323,7 +325,9 @@ class NoteFileHelper with PodOperationsMixin {
                 data: updatedContent,
                 childPage: ViewSharedNote(
                   note: updatedExternalNote,
+                  scaffoldController: scaffoldController,
                 ),
+                scaffoldController: scaffoldController,
                 isExternal: isExternal,
               );
             } on Exception catch (e) {
@@ -358,7 +362,9 @@ class NoteFileHelper with PodOperationsMixin {
                 data: updatedContent,
                 childPage: ViewNote(
                   note: updatedOwnNote,
+                  scaffoldController: scaffoldController,
                 ),
+                scaffoldController: scaffoldController,
               );
             } on Exception catch (e) {
               debugPrint('Exception (saving existing my note):\n $e');
@@ -372,7 +378,7 @@ class NoteFileHelper with PodOperationsMixin {
         if (noteText.trim() != '') {
           try {
             // Loading animation
-            showAnimationDialog(
+            loading.showAnimationDialog(
               context,
               Msg.savingNote,
               false,
@@ -394,7 +400,10 @@ class NoteFileHelper with PodOperationsMixin {
               // Create filename
               noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
               data: newContent,
-              childPage: const ListNotesScreen(),
+              childPage: ListNotesScreen(
+                scaffoldController: scaffoldController,
+              ),
+              scaffoldController: scaffoldController,
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');
@@ -416,15 +425,16 @@ class NoteFileHelper with PodOperationsMixin {
   /// if write to Pod failed to return a successful SolidCallFunctionStatus.
   ///
   /// Examples:
-  /// - `await saveNoteToPod(context: context, data: updatedContent, noteFileName: noteFileName, childPage: ListNotesScreen())` - to
+  /// - `await saveNoteToPod(context: context, data: updatedContent, noteFileName: noteFileName, childPage: ListNotesScreen(), scaffoldController: scaffoldController)` - to
   /// save a note owned by the user.
   /// - `await saveNoteToPod(context: context, data: updatedContent,
   /// childPage: ListNotesScreen(), noteUrl: noteUrl, noteOwner: noteOwner,
-  /// isExternal: true)` - to save an externally owned note.
+  /// isExternal: true, scaffoldController: scaffoldController)` - to save an externally owned note.
   ///
   /// - [context] - The build context.
   /// - [data] - The note content data to be encrypted and written to Pod.
   /// - [childPage] - The destination widget to navigate to after note is saved.
+  ///   [scaffoldController] - Controller for the Solid scaffold.
   /// - [noteFileName] - Optional filename. Required for saving user's own notes.
   /// - [noteUrl] - Optional note file url. Required for saving notes
   /// that are externally owned.
@@ -436,6 +446,7 @@ class NoteFileHelper with PodOperationsMixin {
     required BuildContext context,
     required NoteContent data,
     required Widget childPage,
+    required SolidScaffoldController scaffoldController,
     String noteFileName = '',
     String noteUrl = '',
     String noteOwner = '',
@@ -490,7 +501,7 @@ class NoteFileHelper with PodOperationsMixin {
         Navigator.of(context, rootNavigator: true)
             .pop(); // Dismiss the saving note dialog
 
-        navToChildPage(context: context, childPage: childPage);
+        scaffoldController.navigateToSubpage(childPage);
       } else {
         // Show SolidFunctionCallStatus after writePod() if not success
         debugPrint(

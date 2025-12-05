@@ -27,8 +27,9 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/utils/nav_to_child.dart';
 
 /// Elevated button widget with text label for using in note views.
 ///
@@ -36,6 +37,7 @@ import 'package:notepod/utils/nav_to_child.dart';
 /// - [label] - text label to show on button.
 /// - [icon] - icon to show on button.
 /// - [childPage] - child page to navigate to.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 /// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
 
 class FullSizeActionButton extends StatelessWidget {
@@ -48,6 +50,8 @@ class FullSizeActionButton extends StatelessWidget {
   /// Childpage
   final Widget childPage;
 
+  final SolidScaffoldController scaffoldController;
+
   /// Button background color
   final Color backgroundColor;
 
@@ -56,6 +60,7 @@ class FullSizeActionButton extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.childPage,
+    required this.scaffoldController,
     this.backgroundColor = ButtonBackgroundColor.def,
   });
 
@@ -67,7 +72,7 @@ class FullSizeActionButton extends StatelessWidget {
       icon: icon,
       onPressed: () async {
         // Redirect.
-        navToChildPage(context: context, childPage: childPage);
+        scaffoldController.navigateToSubpage(childPage);
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),

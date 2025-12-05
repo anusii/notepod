@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/own_note.dart';
@@ -43,12 +45,15 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 /// provided to edit and share the note, or go back to the note list.
 /// Parameters:
 ///   [note] comprises the data object for the selected note.
+///   [scaffoldController] - Controller for the Solid scaffold.
 class ViewNote extends StatefulWidget {
   final FoundOwnNote note;
+  final SolidScaffoldController scaffoldController;
 
   const ViewNote({
     super.key,
     required this.note,
+    required this.scaffoldController,
   });
 
   @override
@@ -58,6 +63,9 @@ class ViewNote extends StatefulWidget {
 class _ViewNoteState extends State<ViewNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
@@ -69,6 +77,7 @@ class _ViewNoteState extends State<ViewNote> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
     _note = widget.note;
   }
 
@@ -146,8 +155,11 @@ class _ViewNoteState extends State<ViewNote> {
                           note: _note,
                           backPage: ViewNote(
                             note: _note,
+                            scaffoldController: _scaffoldController,
                           ),
+                          scaffoldController: _scaffoldController,
                         ),
+                        scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
 
@@ -158,7 +170,9 @@ class _ViewNoteState extends State<ViewNote> {
                         backgroundColor: ButtonBackgroundColor.edit,
                         childPage: EditNote(
                           note: _note,
+                          scaffoldController: _scaffoldController,
                         ),
+                        scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
 
@@ -167,14 +181,20 @@ class _ViewNoteState extends State<ViewNote> {
                         filename: _note.noteFileName,
                         isExternal: false,
                         isNarrow: isNarrow,
-                        childPage: const ListNotesScreen(),
+                        childPage: ListNotesScreen(
+                          scaffoldController: _scaffoldController,
+                        ),
+                        scaffoldController: _scaffoldController,
                       ),
                       // Back button
                       NoteActionButton(
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: const ListNotesScreen(),
+                        childPage: ListNotesScreen(
+                          scaffoldController: _scaffoldController,
+                        ),
+                        scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
                       // Add space

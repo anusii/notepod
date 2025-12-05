@@ -26,23 +26,6 @@ library;
 
 import 'package:intl/intl.dart';
 
-String capitalize(String word) =>
-    '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
-
-// Get the profile name from the webId
-String getNameFromWebId(String webId) {
-  String name = webId.split('/').reversed.elementAt(2);
-  List nameList = name.split('-');
-
-  List capNameList = [];
-  for (final subName in nameList) {
-    String capName = capitalize(subName);
-    capNameList.add(capName);
-  }
-
-  return capNameList.join(' ');
-}
-
 // Date format type for displaying date and time.
 
 enum DateFormatType {

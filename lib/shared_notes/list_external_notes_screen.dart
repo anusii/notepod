@@ -23,19 +23,28 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart';
+
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/shared_notes/list_external_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/loading_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
+/// A [stateful] widget to fetch data for the page showing list externally
+/// owned notes shared to the user.
+///
+/// Arguments:
+/// - [scaffoldController] - Controller for the Solid scaffold.
 class ListExternalNotesScreen extends StatefulWidget {
+  final SolidScaffoldController scaffoldController;
+
   const ListExternalNotesScreen({
     super.key,
+    required this.scaffoldController,
   });
 
   @override
@@ -48,13 +57,24 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
 
   static Future? _asyncDataFetch;
 
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
+
   @override
   void initState() {
+    super.initState();
+    _scaffoldController = widget.scaffoldController;
     _asyncDataFetch = getExternalNoteList(
       context: context,
-      childPage: const ListExternalNotesScreen(),
+      childPage: ListExternalNotesScreen(
+        scaffoldController: _scaffoldController,
+      ),
     );
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   /// Load external notes if notes found. If any records of
@@ -75,18 +95,29 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
-        childPage: ListExternalNotes(notes: notes),
+        childPage: ListExternalNotes(
+          notes: notes,
+          scaffoldController: _scaffoldController,
+        ),
+        scaffoldController: _scaffoldController,
         isExternal: true,
       );
     } else if (nonExistentNotes.isNotEmpty) {
       return NotesRevokeDialog(
         nonExistentNotes: nonExistentNotes,
-        childPage: ListExternalNotes(notes: notes),
+        childPage: ListExternalNotes(
+          notes: notes,
+          scaffoldController: _scaffoldController,
+        ),
+        scaffoldController: _scaffoldController,
       );
     } else if (notes.isEmpty) {
       return _noExternalNotes();
     } else {
-      return ListExternalNotes(notes: notes);
+      return ListExternalNotes(
+        notes: notes,
+        scaffoldController: _scaffoldController,
+      );
     }
   }
 

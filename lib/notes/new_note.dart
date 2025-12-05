@@ -29,17 +29,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
 ///
-/// Parameters: none
+/// Parameters:
+///   [scaffoldController] - Controller for the Solid scaffold.
 
 class NewNote extends StatefulWidget {
+  final SolidScaffoldController scaffoldController;
+
   const NewNote({
     super.key,
+    required this.scaffoldController,
   });
 
   @override
@@ -53,6 +58,9 @@ class NewNoteState extends State<NewNote> {
 
   /// Scroll controller for single child scroll view.
   late final ScrollController _scrollController;
+
+  /// Scaffold controller
+  late final SolidScaffoldController _scaffoldController;
 
   /// Focus node for note title text field.
   late final FocusNode _focusTitle;
@@ -68,6 +76,7 @@ class NewNoteState extends State<NewNote> {
     super.initState();
     _textController = TextEditingController();
     _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
 
     // Start listening to changes.
     _textController!.addListener(_renderMarkdown);
@@ -129,9 +138,12 @@ class NewNoteState extends State<NewNote> {
       formKey: formKey,
       textController: _textController,
       scrollController: _scrollController,
+      scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: const ListNotesScreen(),
+      childPage: ListNotesScreen(
+        scaffoldController: _scaffoldController,
+      ),
       data: data,
     );
   }

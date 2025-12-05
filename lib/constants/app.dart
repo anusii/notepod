@@ -28,14 +28,25 @@ library;
 import 'package:flutter/material.dart';
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
-const String siiUrl = 'https://sii.anu.edu.au';
-const String topBarTitle = 'NotePod';
+const String appChangeLog =
+    'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
+const String defWebID = 'https://pods.solidcommunity.au';
+const String topBarTitle = 'Note Pod';
+const String shortTitle = 'Note Taker';
+const String longTitle = 'NotePod\nPrivate and Shareable Notes';
 
-const String authors =
-    'Authors: Anushka Vidanage, Graham Williams, Jess Moore.';
+const String appOwner = '''© 2025 Software Innovation Institute''';
+
+const String aboutText =
+    '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
+
+const String appDir = 'notepod';
+
+const AssetImage backgroundImg =
+    AssetImage('assets/images/notepod-background.jpg');
+const AssetImage logoImg = AssetImage('assets/images/notepod.png');
 
 //const kDefaultPadding = 20.0;
-const double normalLoadingScreenHeight = 200.0;
 //const double buttonBorderRadius = 5;
 //const double standardSpace = 20.0;
 const double badListItemHeight = 68.0;
@@ -75,6 +86,7 @@ const adviceStyle = TextStyle(
 );
 
 // Titles for nav widgets to pages
+const String newNoteTitle = 'New Note';
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
 
