@@ -503,9 +503,9 @@ jobs:
         run: |
           codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
 
-      - name: Note .app signing and notarizing status
-        run: |
-          spctl -a -v "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
+      # - name: Note .app signing and notarizing status
+      #   run: |
+      #     spctl -a -v "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
