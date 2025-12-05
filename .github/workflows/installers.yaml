@@ -492,7 +492,7 @@ jobs:
 
       - name: Build Flutter macOS app
       # By default, app is codesigned, unless --no-codesign is used.
-        run: flutter build macos --release
+        run: flutter build macos --release --flavor dev
 
       - name: Note the build location
         run: |
