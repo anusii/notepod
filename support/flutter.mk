@@ -480,9 +480,15 @@ dmg-dev::
 
 # Build macos app signed with app store distribution for testing
 # on Testflight or publishing
-dmg-staging:
+dmg-staging::
 	flutter clean
 	flutter build macos --release --flavor staging
+
+# Make SKU (stock keeping unit used in app registration on Apple App Store)
+# Created from bundle id
+sku::
+	echo "com.togaware.notepod" | md5
+# 	bash create_sku.sh
 
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
