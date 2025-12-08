@@ -36,19 +36,18 @@ on:
     branches:
       - dev
       - build
-      - jess/ios_installer
+      - jess/314_xcodegen_macos
 
 env:
   APP: notepod
   RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
-  FLUTTER_VERSION: '3.38.4'
+  FLUTTER_VERSION: "3.38.4"
   MACOS_APP_RELEASE_UNSIGNED_PATH: build/macos/Build/Products/Release-unsigned
   MACOS_APP_RELEASE_STAGING_PATH: build/macos/Build/Products/Release-staging
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
 
 jobs:
-
   ########################################################################
   # LINUX
   #
@@ -70,7 +69,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build linux')
     runs-on: ubuntu-latest
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -115,7 +113,7 @@ jobs:
       - name: Zip Bundle
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           filename: ${{ env.APP }}-${{ env.RELEASE }}-linux.zip
           directory: build/linux/x64/release/bundle
 
@@ -124,7 +122,6 @@ jobs:
         with:
           name: ${{ env.APP }}-linux-zip
           path: build/linux/x64/release/bundle/${{ env.APP }}-${{ env.RELEASE }}-linux.zip
-
 
   package-linux-snap:
     if: |
@@ -136,7 +133,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Clone Repository
         uses: actions/checkout@v4
 
@@ -176,7 +172,6 @@ jobs:
   #         snap: '*.snap'
   #         release: stable
 
-
   ########################################################################
   # MACOS - UNSIGNED
 
@@ -185,6 +180,9 @@ jobs:
   # Note: build without signing prevents build with keychain access capability
   # This means the app fails to use secure local storage and the use needs to
   # press login and security key submit buttons x2.
+  # Set unsigned config flavor in macos/project.yml
+  # CODE_SIGN_IDENTITY: ""
+  # PROVISIONING_PROFILE_SPECIFIER: ""
 
   package-macos-dmg-zip-unsigned:
     if: |
@@ -192,7 +190,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos unsigned')
     runs-on: macos-latest
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -200,7 +197,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -211,6 +208,18 @@ jobs:
 
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
+
+      # Configure project build configuration files
+      - name: Generate project build configuration files
+        run: |
+          brew install xcodegen
+          cd macos
+          xcodegen generate
+
+      - name: Install iOS Pods
+        run: |
+          cd macos
+          pod install --repo-update
 
       # Build an unsigned app
 
@@ -253,7 +262,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           directory: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}
           path: ${{ env.APP }}.app
           filename: ${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
@@ -267,12 +276,15 @@ jobs:
           name: ${{ env.APP }}-macos-unsigned-zip
           path: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
-
   ########################################################################
   # MACOS - DISTRIBUTION CERTIFICATE SIGNED FOR APP STORE
 
   # Uses Mac App Distrtibution cert and associated profile
   # for app store distribution
+  # Set staging config flavor in macos/project.yml
+  # CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
+  # PROVISIONING_PROFILE_SPECIFIER: "NotePod_Mac_Distribution_Mac_Appstore_Connect"
+  # ie.
   # Certificate name: Togaware Pty Ltd
   # Certificate type: Mac App Distrtibution
   # Profile name: NotePod_Mac_Distribution_Mac_Appstore_Connect
@@ -288,7 +300,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos appstore')
     runs-on: macos-latest
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -296,7 +307,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -307,6 +318,18 @@ jobs:
 
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
+
+      # Configure project build configuration files
+      - name: Generate project build configuration files
+        run: |
+          brew install xcodegen
+          cd macos
+          xcodegen generate
+
+      - name: Install iOS Pods
+        run: |
+          cd macos
+          pod install --repo-update
 
       # Install certificate and MACOS provisioning profile for app signing
 
@@ -391,7 +414,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           directory: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}
           path: ${{ env.APP }}.app
           filename: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
@@ -428,7 +451,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos dev')
     runs-on: macos-latest
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -436,7 +458,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -447,6 +469,18 @@ jobs:
 
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
+
+      # Configure project build configuration files
+      - name: Generate project build configuration files
+        run: |
+          brew install xcodegen
+          cd macos
+          xcodegen generate
+
+      - name: Install iOS Pods
+        run: |
+          cd macos
+          pod install --repo-update
 
       # Install certificate and provisioning profile for app signing.
 
@@ -493,7 +527,7 @@ jobs:
       # Provisioning profile name (xcode var PROVISIONING_PROFILE_SPECIFIER)
 
       - name: Build Flutter macOS app
-      # By default, app is codesigned, unless --no-codesign is used.
+        # By default, app is codesigned, unless --no-codesign is used.
         run: flutter build macos --release --flavor dev
 
       - name: Note the build location
@@ -543,7 +577,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           directory: ${{ env.MACOS_APP_RELEASE_DEV_PATH }}
           path: ${{ env.APP }}.app
           filename: ${{ env.APP }}-${{env.RELEASE}}-macos-dev.zip
@@ -568,7 +602,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build ios')
     runs-on: macos-latest
-
     env:
       IOS_APP_RELEASE_PATH: build/ios/ipa
       IOS_ARCHIVE_RELEASE_PATH: build/ios/archive
@@ -580,7 +613,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -598,7 +631,6 @@ jobs:
       # so uses a provisioning profile for iOS.
       # The provisioning profile links the signing certificate, Apple
       # developer account and entitlements for the app build.
-
 
       - name: Install Apple certificate and IOS provisioning profile
         env:
@@ -634,7 +666,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Display temporary keychain
-        run:  |
+        run: |
 
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           security list-keychain -d user -s $KEYCHAIN_PATH
@@ -645,10 +677,10 @@ jobs:
       # Build and sign the app
 
       - name: Build Flutter iOS app archive
-      # By default `ipa` produces a release mode .ipa archived version of
-      # .app bundle, with settings tailored for Apple App Store
-      # distribution. Use --export-method
-      # By default, app is codesigned, unless --no-codesign is used.
+        # By default `ipa` produces a release mode .ipa archived version of
+        # .app bundle, with settings tailored for Apple App Store
+        # distribution. Use --export-method
+        # By default, app is codesigned, unless --no-codesign is used.
         # run: flutter build ipa
         # Option for manual signing
         # Use --verbose to debug build and signing issues
@@ -662,7 +694,7 @@ jobs:
         run: |
           ls -lh ${{ env.IOS_APP_RELEASE_PATH }}
 
-      - name:  Extract IPA
+      - name: Extract IPA
         run: |
           mkdir "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
           unzip "${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa" -d "${{ env.IOS_APP_RELEASE_PATH }}/extracted_ipa"
@@ -730,7 +762,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build windows')
     runs-on: windows-latest # randomly not working (choco fails) with inno 1.2.7
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -738,7 +769,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           architecture: x64
           flutter-version: ${{env.FLUTTER_VERSION}}
 
@@ -759,7 +790,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           filename: ${{ env.APP }}-${{env.RELEASE}}-windows.zip
           directory: build/windows/x64/runner/Release
 
