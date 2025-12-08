@@ -215,13 +215,11 @@ jobs:
           brew install xcodegen
           cd macos
           xcodegen generate
-          # cd ..
 
       - name: Install iOS Pods
         run: |
           cd macos
           pod install --repo-update
-          # cd ..
 
       # Build an unsigned app
 
@@ -327,13 +325,11 @@ jobs:
           brew install xcodegen
           cd macos
           xcodegen generate
-          # cd ..
 
       - name: Install iOS Pods
         run: |
           cd macos
           pod install --repo-update
-          # cd ..
 
       # Install certificate and MACOS provisioning profile for app signing
 
@@ -473,6 +469,18 @@ jobs:
 
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
+
+      # Configure project build configuration files
+      - name: Generate project build configuration files
+        run: |
+          brew install xcodegen
+          cd macos
+          xcodegen generate
+
+      - name: Install iOS Pods
+        run: |
+          cd macos
+          pod install --repo-update
 
       # Install certificate and provisioning profile for app signing.
 

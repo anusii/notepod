@@ -12,7 +12,7 @@
 # PROVISIONING_PROFILE_SPECIFIER to provisioning profile name
 # And ensure that developer team and entitlements are set, and
 # that entitlements file includes developer team
-# CODE_SIGN_ENTITLEMENTS: set to correct Runner/*.entitlemnts file
+# CODE_SIGN_ENTITLEMENTS: set to correct Runner/*.entitlements file
 # DEVELOPMENT_TEAM: [developer_team on Apple Developer account]
 # Note: On macos, keychain access entitlement is needed to use local
 # secure storage and requires app code signing. Local secure storage
@@ -34,24 +34,30 @@ options:
 configs:
   Debug: Debug
   Debug-unsigned: Debug-unsigned
+  Debug-dev: Debug-dev
   Debug-staging: Debug-staging
   Profile: Profile
   Profile-unsigned: Profile-unsigned
+  Profile-dev: Profile-dev
   Profile-staging: Profile-staging
   Release: Release
   Release-unsigned: Release-unsigned
+  Release-dev: Release-dev
   Release-staging: Release-staging
 
 # Config files for config
 configFiles:
   Debug: Flutter/Flutter-Debug.xcconfig
   Debug-unsigned: Flutter/Flutter-Debug.xcconfig
+  Debug-dev: Flutter/Flutter-Debug.xcconfig
   Debug-staging: Flutter/Flutter-Debug.xcconfig
   Profile: Flutter/Flutter-Release.xcconfig
   Profile-unsigned: Flutter/Flutter-Release.xcconfig
+  Profile-dev: Flutter/Flutter-Release.xcconfig
   Profile-staging: Flutter/Flutter-Release.xcconfig
   Release: Flutter/Flutter-Release.xcconfig
   Release-unsigned: Flutter/Flutter-Release.xcconfig
+  Release-dev: Flutter/Flutter-Release.xcconfig
   Release-staging: Flutter/Flutter-Release.xcconfig
 
 settings:
@@ -197,6 +203,25 @@ targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
 
+        Debug-dev:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "Apple Development: Jessica Moore (N5ML45W92P)"
+          # As this is a signed app
+          # Use entitlement file with keychain-access-groups
+          # value set to dev team+bundle id
+          CODE_SIGN_ENTITLEMENTS: "Runner/Release.entitlements" # "Runner/RunnerDebug.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: "Wildcard_Development_Mac_App_Development"
+
+          DEBUG_INFORMATION_FORMAT: "dwarf"
+          ENABLE_TESTABILITY: "YES"
+          GCC_DYNAMIC_NO_PIC: "NO"
+          GCC_OPTIMIZATION_LEVEL: "0"
+          GCC_PREPROCESSOR_DEFINITIONS: ["DEBUG=1", "$(inherited)"]
+          MTL_ENABLE_DEBUG_INFO: "YES"
+          ONLY_ACTIVE_ARCH: "YES"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+
         Debug-staging:
           CODE_SIGN_STYLE: "Manual"
           CODE_SIGN_IDENTITY: "-"
@@ -242,6 +267,22 @@ targets:
           SWIFT_COMPILATION_MODE: "wholemodule"
           SWIFT_OPTIMIZATION_LEVEL: "-O"
 
+        Release-dev:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "Apple Development: Jessica Moore (N5ML45W92P)"
+          # For Release
+          # Use entitlement file with keychain-access-groups
+          # set with DEV Team and Bundle id to match
+          # those values in signing certificates
+          CODE_SIGN_ENTITLEMENTS: "Runner/Release.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: "Wildcard_Development_Mac_App_Development"
+
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          ENABLE_NS_ASSERTIONS: "NO"
+          MTL_ENABLE_DEBUG_INFO: "NO"
+          SWIFT_COMPILATION_MODE: "wholemodule"
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
         Release-staging:
           CODE_SIGN_STYLE: "Manual"
           CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
@@ -278,6 +319,22 @@ targets:
           # Unsigned only builds with empty or no keychain-access-groups in entitlements
           CODE_SIGN_ENTITLEMENTS: "Runner/RunnerDebug.entitlements"
           PROVISIONING_PROFILE_SPECIFIER: ""
+
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          ENABLE_NS_ASSERTIONS: "NO"
+          MTL_ENABLE_DEBUG_INFO: "NO"
+          SWIFT_COMPILATION_MODE: "wholemodule"
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+        Profile-dev:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "Apple Development: Jessica Moore (N5ML45W92P)"
+          # For Profile
+          # Use entitlement file with keychain-access-groups
+          # set with DEV Team and Bundle id to match
+          # those values in signing certificates
+          CODE_SIGN_ENTITLEMENTS: "Runner/Release.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: "Wildcard_Development_Mac_App_Development"
 
           DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
           ENABLE_NS_ASSERTIONS: "NO"
@@ -343,7 +400,7 @@ targets:
 
       #   Profile:
 
-# TODO: add flavor setup here
+# Default build mode for flutter commands of each flavor
 schemes:
   Runner:
     build:
@@ -373,6 +430,20 @@ schemes:
       config: Debug-unsigned
     archive:
       config: Release-unsigned
+  dev:
+    build:
+      targets:
+        Runner: all
+    run:
+      config: Debug-dev
+    test:
+      config: Debug-dev
+    profile:
+      config: Profile-dev
+    analyze:
+      config: Debug-dev
+    archive:
+      config: Release-dev
   staging:
     build:
       targets:
