@@ -228,9 +228,8 @@ android/app/.cxx/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
-ios/Flutter/
-ios/Runner.xcodeproj/
-ios/Runner.xcworkspace/
+# ios/Runner.xcodeproj/
+# ios/Runner.xcworkspace/
 
 
 #-----------------------------------------------------------------------
