@@ -36,7 +36,7 @@ on:
     branches:
       - dev
       - build
-      - jess/ios_installer
+      - jess/314_xcodegen_macos
 
 env:
   APP: notepod
