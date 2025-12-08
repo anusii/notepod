@@ -244,6 +244,14 @@ ios/RunnerTests/
 **/macos/Flutter/ephemeral
 **/xcuserdata/
 
+# ios/macos generated project files
+macos/Runner.xcodeproj/
+macos/Runner.xcworkspace/
+
+# Backups of ios/macos project config yml and Podfile
+macos/Podfile-*
+macos/project-*.yml
+
 #-----------------------------------------------------------------------
 # Windows
 #-----------------------------------------------------------------------
