@@ -484,6 +484,12 @@ dmg-staging:
 	bash update_project.sh
 	flutter build macos --release --flavor staging
 
+# Make SKU (stock keeping unit used in app registration on Apple App Store)
+# Created from app bundle id set in Apple Developer account and used
+# in build
+sku::
+	yq '.targets.Runner.settings.base.PRODUCT_BUNDLE_IDENTIFIER' macos/project.yml | md5
+
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
 # flutter.mk). This is only undertaken through `make push` rather than
