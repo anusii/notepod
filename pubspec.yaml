@@ -26,13 +26,10 @@ dependencies:
   new_loading_indicator: ^1.0.2
   markdown_toolbar: ^0.5.0
   markdown_widget: ^2.3.2+8
-  package_info_plus: ^9.0.0
   rdflib: ^0.2.12
   solidpod: ^0.8.6
   solidui: ^0.0.13
   universal_io: ^2.2.2
-  url_launcher: ^6.2.1
-  version_widget: ^1.0.6
   window_manager: ^0.5.1
 
 dev_dependencies:
