@@ -231,8 +231,7 @@ android/app/.cxx/
 ios/Flutter/
 ios/Runner.xcodeproj/
 ios/Runner.xcworkspace/
-ios/Runner/
-ios/RunnerTests/
+
 
 #-----------------------------------------------------------------------
 # macOS
