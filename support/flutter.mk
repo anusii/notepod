@@ -469,19 +469,19 @@ realclean::
 # [20251029 jesscmoore] TODO: add converting to dmg
 # Build unsigned macos app
 dmg-unsigned::
-	flutter clean
+	bash update_project.sh
 	flutter build macos --release --flavor unsigned
 
 # Build macos app signed with development certificate for testing
 # by App Developer Program togaware registered devices
 dmg-dev::
-	flutter clean
+	bash update_project.sh
 	flutter build macos --release --flavor dev
 
 # Build macos app signed with app store distribution for testing
 # on Testflight or publishing
 dmg-staging:
-	flutter clean
+	bash update_project.sh
 	flutter build macos --release --flavor staging
 
 # For the `dev` branch only, update the version sequence number prior
