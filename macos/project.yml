@@ -30,23 +30,29 @@ options:
     macOS: "15.1"
   createIntermediateGroups: true
 
-# TODO: add flavor setup here
+# Configs (ie. [build mode]-[build flavor])
 configs:
   Debug: Debug
   Debug-unsigned: Debug-unsigned
+  Debug-staging: Debug-staging
   Profile: Profile
   Profile-unsigned: Profile-unsigned
+  Profile-staging: Profile-staging
   Release: Release
   Release-unsigned: Release-unsigned
+  Release-staging: Release-staging
 
-# TODO: add flavor setup here
+# Config files for config
 configFiles:
   Debug: Flutter/Flutter-Debug.xcconfig
   Debug-unsigned: Flutter/Flutter-Debug.xcconfig
+  Debug-staging: Flutter/Flutter-Debug.xcconfig
   Profile: Flutter/Flutter-Release.xcconfig
   Profile-unsigned: Flutter/Flutter-Release.xcconfig
+  Profile-staging: Flutter/Flutter-Release.xcconfig
   Release: Flutter/Flutter-Release.xcconfig
   Release-unsigned: Flutter/Flutter-Release.xcconfig
+  Release-staging: Flutter/Flutter-Release.xcconfig
 
 settings:
   base:
@@ -191,6 +197,25 @@ targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
 
+        Debug-staging:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "-"
+          # For debug
+          # Use entitlement file with empty keychain-access-groups
+          # Unsigned only builds with empty or no keychain-access-groups in entitlements
+          CODE_SIGN_ENTITLEMENTS: "Runner/RunnerDebug.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: ""
+
+          DEBUG_INFORMATION_FORMAT: "dwarf"
+          ENABLE_TESTABILITY: "YES"
+          GCC_DYNAMIC_NO_PIC: "NO"
+          GCC_OPTIMIZATION_LEVEL: "0"
+          GCC_PREPROCESSOR_DEFINITIONS: ["DEBUG=1", "$(inherited)"]
+          MTL_ENABLE_DEBUG_INFO: "YES"
+          ONLY_ACTIVE_ARCH: "YES"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+
         Release:
           CODE_SIGN_STYLE: "Automatic"
           CODE_SIGN_IDENTITY: "-"
@@ -217,6 +242,22 @@ targets:
           SWIFT_COMPILATION_MODE: "wholemodule"
           SWIFT_OPTIMIZATION_LEVEL: "-O"
 
+        Release-staging:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
+          # For Release
+          # Use entitlement file with keychain-access-groups
+          # set with DEV Team and Bundle id to match
+          # those values in signing certificates
+          CODE_SIGN_ENTITLEMENTS: "Runner/Release.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: "NotePod_Mac_Distribution_Mac_Appstore_Connect"
+
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          ENABLE_NS_ASSERTIONS: "NO"
+          MTL_ENABLE_DEBUG_INFO: "NO"
+          SWIFT_COMPILATION_MODE: "wholemodule"
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
         Profile:
           CODE_SIGN_STYLE: "Automatic"
           CODE_SIGN_IDENTITY: "-"
@@ -232,6 +273,22 @@ targets:
         Profile-unsigned:
           CODE_SIGN_STYLE: "Manual"
           CODE_SIGN_IDENTITY: "-"
+          # For profile
+          # Use entitlement file with empty keychain-access-groups
+          # Unsigned only builds with empty or no keychain-access-groups in entitlements
+          CODE_SIGN_ENTITLEMENTS: "Runner/RunnerDebug.entitlements"
+          PROVISIONING_PROFILE_SPECIFIER: ""
+
+          DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+          ENABLE_NS_ASSERTIONS: "NO"
+          MTL_ENABLE_DEBUG_INFO: "NO"
+          SWIFT_COMPILATION_MODE: "wholemodule"
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+        Profile-staging:
+          CODE_SIGN_STYLE: "Manual"
+          CODE_SIGN_IDENTITY: "-"
+          # For profile
           # Use entitlement file with empty keychain-access-groups
           # Unsigned only builds with empty or no keychain-access-groups in entitlements
           CODE_SIGN_ENTITLEMENTS: "Runner/RunnerDebug.entitlements"
@@ -316,3 +373,17 @@ schemes:
       config: Debug-unsigned
     archive:
       config: Release-unsigned
+  staging:
+    build:
+      targets:
+        Runner: all
+    run:
+      config: Debug-staging
+    test:
+      config: Debug-staging
+    profile:
+      config: Profile-staging
+    analyze:
+      config: Debug-staging
+    archive:
+      config: Release-staging

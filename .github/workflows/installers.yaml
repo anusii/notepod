@@ -180,6 +180,9 @@ jobs:
   # Note: build without signing prevents build with keychain access capability
   # This means the app fails to use secure local storage and the use needs to
   # press login and security key submit buttons x2.
+  # Set unsigned config flavor in macos/project.yml
+  # CODE_SIGN_IDENTITY: ""
+  # PROVISIONING_PROFILE_SPECIFIER: ""
 
   package-macos-dmg-zip-unsigned:
     if: |
@@ -280,6 +283,10 @@ jobs:
 
   # Uses Mac App Distrtibution cert and associated profile
   # for app store distribution
+  # Set staging config flavor in macos/project.yml
+  # CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
+  # PROVISIONING_PROFILE_SPECIFIER: "NotePod_Mac_Distribution_Mac_Appstore_Connect"
+  # ie.
   # Certificate name: Togaware Pty Ltd
   # Certificate type: Mac App Distrtibution
   # Profile name: NotePod_Mac_Distribution_Mac_Appstore_Connect
@@ -313,6 +320,20 @@ jobs:
 
       - name: Enable macOS desktop
         run: flutter config --enable-macos-desktop
+
+      # Configure project build configuration files
+      - name: Generate project build configuration files
+        run: |
+          brew install xcodegen
+          cd macos
+          xcodegen generate
+          # cd ..
+
+      - name: Install iOS Pods
+        run: |
+          cd macos
+          pod install --repo-update
+          # cd ..
 
       # Install certificate and MACOS provisioning profile for app signing
 
