@@ -228,11 +228,9 @@ android/app/.cxx/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
-ios/Flutter/
-ios/Runner.xcodeproj/
-ios/Runner.xcworkspace/
-ios/Runner/
-ios/RunnerTests/
+# ios/Runner.xcodeproj/
+# ios/Runner.xcworkspace/
+
 
 #-----------------------------------------------------------------------
 # macOS
@@ -243,6 +241,14 @@ ios/RunnerTests/
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
 **/xcuserdata/
+
+# ios/macos generated project files
+macos/Runner.xcodeproj/
+macos/Runner.xcworkspace/
+
+# Backups of ios/macos project config yml and Podfile
+macos/Podfile-*
+macos/project-*.yml
 
 #-----------------------------------------------------------------------
 # Windows

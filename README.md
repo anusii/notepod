@@ -171,70 +171,23 @@ When you have completed the setup of your platform, you are ready for
 the [NotePod Getting Started](exercises/README.md) exercises where
 you can create a Pod, make and share notes.
 
-### Extra setup for MacOS
+### Extra setup for MacOS/iOS
 
-Building and signing the app on MacOS requires, additional
-configuration in Xcode. Open the project macos folder in Xcode with
+This project uses a human readable `project.yml` in macos and ios folders, where
+ Xcode build configuration files are generated automatically with
+ `xcodegen generate`. To alter the build configuration for macos or ios, edit
+ `project.yml` in macos/ios folder, re-run xcodegen to generate updated build
+ configuration and update native pods with `pod install`, before building or
+ running the flutter app. The script `update_project.sh` performs these steps
+ and aligns Podfile with Xcode build config, so after a build config change, do:
 
-```shell
-cd notepod/macos
-xed .
+```bash
+bash update_project.sh [macos/ios]
+flutter run [--debug -d macos]
 ```
 
-Select `Signing & Capabilities`. In `Team`, choose `Add an Account`
-and sign in with your Apple ID account. In `Network`, select `Incoming
-Connections (Server)` and `Outgoing Connections (Client)`. The latter
-is needed to login to your Pod. Keychain access capability is also
-required to save authorisation and encryption key credentials to
-secure storage. Macos app builds must use be signed with a valid developer
-certificate in order to add the keychain access capability required for
-local secure key storage.
-
-Edit `macos/Runner/DebugRunner.entitlements` to add:
-
-```xml
- <key>keychain-access-groups</key>
-    <array/>
-```
-
-Edit `macos/Runner/DebugProfile.entitlements` and
-`macos/Runner/Release.entitlements` to add:
-
-```xml
- <array>
-        <string>$(AppIdentifierPrefix)PRODUCT_BUNDLE_IDENTIFIER</string>
-    </array>
-```
-
-where `PRODUCT_BUNDLE_IDENTIFIER` found in
-`macos/Runner/Configs/AppInfo.xcconfig`, e.g. `$(AppIdentifierPrefix)com.mycompany.myapp`.
-
-### Extra setup for iOS
-
-For iOS, you will also need to set the deployment platform to match
-the iOS version on your simulator.
-
-Open the Simulator app, select your simulated device with `File` ->
-`Open Simulator` -> pick a device.
-
-```shell
-open -a Simulator
-```
-
-Then in the simulated device check the iOS version number by clicking
-on the `Settings`app and going to `General` -> `About` to look up the
-iOS.
-
-Open the project iOS folder in Xcode and add the iOS version used by
-your simulator.
-
-```shell
-cd notepod/ios
-xed .
-```
-
-Select `General`. In `iOS`, change it to match the Simulator iOS
-version, e.g. `v17.0`.
+For iOS, the deployment target in iOS project.yml will need to support the iOS
+verison of your physical or simulated iOS device.
 
 ## Useful resources
 
