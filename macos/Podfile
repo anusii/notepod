@@ -1,62 +1,43 @@
-DEPLOYMENT_TARGET='10.15'
-platform :osx, DEPLOYMENT_TARGET # '10.15'
-
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-# [20251029 jesscmoore] Updated to match new dev and staging schemes
-# added in Xcode for building with flutter flavours.
-project 'Runner', {
-  'Debug' => :debug,
-  'Debug-dev' => :debug,
-  'Debug-staging' => :debug,
-  'Debug-unsigned' => :debug,
-  'Profile' => :release,
-  'Profile-dev' => :release,
-  'Profile-staging' => :release,
-  'Profile-unsigned' => :release,
-  'Release' => :release,
-  'Release-dev' => :release,
-  'Release-staging' => :release,
-  'Release-unsigned' => :release,
-}
+DEPLOYMENT_TARGET = 15.1
+# Uncomment the next line to define a global platform for your project
+platform :osx, DEPLOYMENT_TARGET
 
 def flutter_root
   generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'ephemeral', 'Flutter-Generated.xcconfig'), __FILE__)
   unless File.exist?(generated_xcode_build_settings_path)
-    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure \"flutter pub get\" is executed first"
+    raise "#{generated_xcode_build_settings_path} must exist. If you are running pod install manually, make sure 'flutter pub get' is executed first"
   end
 
   File.foreach(generated_xcode_build_settings_path) do |line|
-    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    matches = line.match(/FLUTTER_ROOT=(.*)/)
     return matches[1].strip if matches
   end
-  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Flutter-Generated.xcconfig, then run \"flutter pub get\""
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Flutter-Generated.xcconfig, then run 'flutter pub get'"
 end
 
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 flutter_macos_podfile_setup
 
+
 target 'Runner' do
+  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   use_modular_headers!
 
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
+
+  # Pods for Runner
+
   target 'RunnerTests' do
     inherit! :search_paths
+    # Pods for testing
   end
+
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_macos_build_settings(target)
-
-    # Added post install hook to update MACOSX_DEPLOYMENT_TARGET
-    # in the installed macos/Pods/Pods.xcodeproj/project.codeproj
-    # that applies to imported pods for native packages
-    target.build_configurations.each do |config|
-      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = DEPLOYMENT_TARGET
-    end
   end
 end
