@@ -134,6 +134,8 @@ targets:
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
         CFBundleVersion: "$(FLUTTER_BUILD_NUMBER)"
         CFBundleShortVersionString: "$(FLUTTER_BUILD_NAME)"
+        # Specify encryption use
+        ITSAppUsesNonExemptEncryption: "false"
 
     settings:
       base:
