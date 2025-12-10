@@ -44,18 +44,15 @@ import 'package:notepod/notes/list_notes_screen.dart';
 class NotePod extends StatelessWidget {
   NotePod({super.key});
 
-  final ThemeMode _themeMode = ThemeMode.light;
-
   final scaffoldController = SolidScaffoldController();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return SolidThemeApp(
       title: shortTitle,
       debugShowCheckedModeBanner: false,
-      theme: lightThemeData(context),
-      darkTheme: darkThemeData(context),
-      themeMode: _themeMode,
+      theme: lightThemeData(),
+      darkTheme: darkThemeData(),
       home: SolidLogin(
         title: longTitle,
         appDirectory: appDir,
