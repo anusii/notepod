@@ -428,6 +428,31 @@ jobs:
           name: ${{ env.APP }}-macos-staging-zip
           path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
 
+      # Create PKG for App Store
+      - name: Create PKG for App Store upload
+        run: |
+          xcrun productbuild --component "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.app" /Applications/ "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg"
+
+      - name: Note the unsigned PKG created
+        run: |
+          ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg
+
+      # Sign PKG with Mac Distribution Installer Certificate
+      # 20251210 jesscmoore TODO: add Mac Installer Cert
+      - name: Sign PKG with Installer Certificate
+        run: |
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg"
+
+      - name: Note the signed PKG ready for upload
+        run: |
+          ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg
+
+      - name: Upload Artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP }}-macos-pkg
+          path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg
+
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
   ########################################################################
