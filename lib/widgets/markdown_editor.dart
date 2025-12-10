@@ -39,11 +39,13 @@ Container markdownEditor(
   return Container(
     padding: const EdgeInsets.all(10),
     child: Row(
+      spacing: 20,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            spacing: 10,
             children: [
               TextField(
                 // autofocus: true,
@@ -56,7 +58,6 @@ Container markdownEditor(
                   labelText: 'Note Content',
                 ),
               ),
-              const SizedBox(height: 10),
               MarkdownToolbar(
                 useIncludedTextField:
                     false, // Because we want to use our own, set useIncludedTextField to false
@@ -66,7 +67,6 @@ Container markdownEditor(
             ],
           ),
         ),
-        const SizedBox(width: 20),
         Expanded(
           child: MarkdownBlock(data: markdownData),
         ),
