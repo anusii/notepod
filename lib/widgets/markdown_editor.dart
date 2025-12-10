@@ -30,28 +30,24 @@ import 'package:flutter/material.dart';
 import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
-import 'package:notepod/constants/app.dart';
-
 Container markdownEditor(
   BuildContext context,
   TextEditingController textController,
   FocusNode focusContent,
   String markdownData,
 ) {
-  final cardWidth = (screenWidth(context) / 2) - 20;
-
   return Container(
     padding: const EdgeInsets.all(10),
     child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 20,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          spacing: 10.0,
-          children: [
-            SizedBox(
-              width: cardWidth,
-              child: TextField(
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 10,
+            children: [
+              TextField(
                 // autofocus: true,
                 controller: textController,
                 focusNode: focusContent,
@@ -62,26 +58,17 @@ Container markdownEditor(
                   labelText: 'Note Content',
                 ),
               ),
-            ),
-            SizedBox(
-              width: cardWidth,
-              child: MarkdownToolbar(
+              MarkdownToolbar(
                 useIncludedTextField:
                     false, // Because we want to use our own, set useIncludedTextField to false
                 controller: textController, // Add the _controller
                 focusNode: focusContent, // Add the _focusContent
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: cardWidth,
-              child: MarkdownBlock(data: markdownData),
-            ),
-          ],
+        Expanded(
+          child: MarkdownBlock(data: markdownData),
         ),
       ],
     ),

@@ -103,7 +103,7 @@ class ButtonBackgroundColor {
 // 20250529 JM: Additional settings commented below as options
 
 // Light theme
-ThemeData lightThemeData(BuildContext context) {
+ThemeData lightThemeData() {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -170,7 +170,7 @@ ThemeData lightThemeData(BuildContext context) {
 }
 
 // Dark theme
-ThemeData darkThemeData(BuildContext context) {
+ThemeData darkThemeData() {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,

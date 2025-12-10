@@ -36,7 +36,7 @@ on:
     branches:
       - dev
       - build
-      - jess/314_xcodegen_macos
+      - jess/macos_installer
 
 env:
   APP: notepod
@@ -215,11 +215,13 @@ jobs:
           brew install xcodegen
           cd macos
           xcodegen generate
+          cd ..
 
       - name: Install iOS Pods
         run: |
           cd macos
           pod install --repo-update
+          cd ..
 
       # Build an unsigned app
 
@@ -563,10 +565,6 @@ jobs:
       - name: Check macOS app code signature
         run: |
           codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
-
-      # - name: Note .app signing and notarizing status
-      #   run: |
-      #     spctl -a -v "${{ env.MACOS_APP_RELEASE_DEV_PATH }}/${{ env.APP }}.app"
 
       # Package as DMG
 
