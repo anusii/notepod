@@ -250,6 +250,9 @@ macos/Runner.xcworkspace/
 macos/Podfile-*
 macos/project-*.yml
 
+# Macos generated packaged builds
+**/*.pkg
+
 #-----------------------------------------------------------------------
 # Windows
 #-----------------------------------------------------------------------
