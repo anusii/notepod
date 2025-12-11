@@ -217,7 +217,7 @@ jobs:
           xcodegen generate
           cd ..
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
@@ -338,7 +338,7 @@ jobs:
           cd macos
           xcodegen generate
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
@@ -524,7 +524,7 @@ jobs:
           cd macos
           xcodegen generate
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
