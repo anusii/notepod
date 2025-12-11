@@ -305,6 +305,8 @@ jobs:
   # Profile creation date: 29/10/2025
 
   package-macos-pkg-appstore:
+    env:
+      MACOS_INSTALL_CERTIFICATE_NAME: "3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)"
     if: |
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
@@ -458,7 +460,7 @@ jobs:
       # Sign PKG with Mac Distribution Installer Certificate
       - name: Sign PKG with Installer Certificate
         run: |
-          xcrun productsign --sign "$MACOS_INSTALL_CERTIFICATE" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg"
+          xcrun productsign --sign ${{ env.MACOS_INSTALL_CERTIFICATE_NAME }} "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg"
 
       - name: Note the installed signed PKG ready for upload
         run: |
