@@ -1,6 +1,9 @@
 # External group app testing
 
-# What to Test text
+<!-- markdownlint-disable MD013 -->
+<!-- markdownlint-disable MD034 -->
+
+## What to Test text
 
 - Notify testers - false
 

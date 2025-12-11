@@ -2,6 +2,7 @@
 
 <!-- markdownlint-disable MD013 -->
 <!-- markdownlint-disable MD034 -->
+<!-- markdownlint-disable MD036 -->
 
 Note: every build must have a unique build version - bump version between uploaded builds.
 
@@ -53,38 +54,6 @@ https://solidcommunity.au/#contact
 
 https://solidcommunity.au/
 
-## Encryption Compliance
-
-*Part of General > App Information page*
-
-### App Encryption Document Questions
-
-Question 1: App Purpose
-
-Notepod is an app built with the Solid (Social Linked Data) specification. Using Notepod you can read, write, and share encrypted notes stored on your personal data vault (also called a Personal Online Datastore or Pod) hosted on a Solid Server.
-
-Question 2: Type of Encryption
-
-Select which encryption algorithms does your app implement:
-
-- [ ] Encryption algorithms that are proprietary or not accepted as standard by international standard bodies (IEEE, IETF, ITU etc.) OR
-
-- [x] Standard encryption algorithms instead of, or in addition to, using or accessing the encryption within Apple's operating system
-
-Question 3: will we be releasing in France
-
-*If yes, requires 'Declaration and application for authorization of operations relating to a means of cryptography' form submitted to and approved by French Govt to be uploaded to App Store.
-
-- No (for now).
-
-Notes:
-
-- notepod:
-  - encryptVal/decryptVal - uses AES, defined in FIPS PUB 197: Advanced Encryption Standard and the ISO/IEC 18033-3: Block ciphers standard (Source: Wikipedia).
-- solidpod:
-  - decryptData/encryptData/encryptPrivateKey/decryptPrivateKey - AESMode.sic, AESMode.cbc (keys)
-  - fast_rsa: RSA key pair generation
-  - jwt_decoder: JwtDecoder.decode() - decoding of base64 encoding
 
 ## Imagery
 
