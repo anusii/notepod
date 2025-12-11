@@ -54,7 +54,6 @@ https://solidcommunity.au/#contact
 
 https://solidcommunity.au/
 
-
 ## Imagery
 
 *Up to 3 app previews and 10 screenshots here. (Requires a 16:10 aspect ratio and one of 1280 × 800px, 1440 × 900px, 2560 × 1600px or 2880 × 1800px).*
