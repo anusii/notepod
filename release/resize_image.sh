@@ -9,7 +9,7 @@
 function usage() {
     echo "Usage: resize_image.sh type width height"
     echo ""
-    echo "Description: Resize image dimensions using Imagemagick 'convert'."
+    echo "Description: Resize image dimensions using Imagemagick 'convert'. Note: required dimensions of screenshots for MacOS App Store are 1400 x 900"
     echo ""
     echo "Arguments:"
     echo "  type:    Type of app (macos/iphone/ipad)"
