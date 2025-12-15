@@ -1,4 +1,4 @@
-DEPLOYMENT_TARGET = 15.1
+DEPLOYMENT_TARGET = 10.15
 # Uncomment the next line to define a global platform for your project
 platform :osx, DEPLOYMENT_TARGET
 
