@@ -20,8 +20,11 @@ installers/*.tar.gz
 installers/*-linux.zip
 installers/*-macos.zip
 installers/*-windows.zip
+installers/*.pkg
+*.pkg
 
 .Rhistory
+.python-version
 
 # Puppeteer browser cache used in testing solidui apps
 
