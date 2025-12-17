@@ -87,9 +87,10 @@ class AppHomePageState extends State<AppHomePage> {
       appBar: SolidAppBarConfig(
         title: topBarTitle,
         backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
-        versionConfig: const SolidVersionConfig(
+        versionConfig: SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
+          userTextStyle: TextStyle(color: theme.colorScheme.onSurface),
           // tooltip: 'Custom version tooltip',
         ),
         actions: [

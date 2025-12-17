@@ -27,7 +27,7 @@ name: Runner
 
 options:
   deploymentTarget:
-    macOS: "15.1"
+    macOS: "10.15" # Minimum supported by Flutter 3.38.5 (default 15.1)
   createIntermediateGroups: true
 
 # Configs (ie. [build mode]-[build flavor])
