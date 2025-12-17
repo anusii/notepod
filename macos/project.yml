@@ -122,6 +122,21 @@ targets:
         basedOnDependencyAnalysis: false
         script: "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n"
 
+    info:
+      path: Runner/Info.plist
+      properties:
+        LSApplicationCategoryType: "public.app-category.productivity"
+        CFBundleDisplayName: "$(APP_DISPLAY_NAME)"
+        CFBundleIconFile: ""
+        NSHumanReadableCopyright: "$(PRODUCT_COPYRIGHT)"
+        NSMainNibFile: "MainMenu"
+        NSPrincipalClass: "NSApplication"
+        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+        CFBundleVersion: "$(FLUTTER_BUILD_NUMBER)"
+        CFBundleShortVersionString: "$(FLUTTER_BUILD_NAME)"
+        # Specify encryption use
+        ITSAppUsesNonExemptEncryption: "false"
+
     settings:
       base:
         # TODO: set app bundle ID
@@ -162,7 +177,6 @@ targets:
         GCC_WARN_UNINITIALIZED_AUTOS: "YES_AGGRESSIVE"
         GCC_WARN_UNUSED_FUNCTION: "YES"
         GCC_WARN_UNUSED_VARIABLE: "YES"
-        INFOPLIST_FILE: "Runner/Info.plist"
         LD_RUNPATH_SEARCH_PATHS:
           ["$(inherited)", "@executable_path/../Frameworks"]
         SDKROOT: "macosx"

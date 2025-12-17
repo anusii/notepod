@@ -36,7 +36,7 @@ on:
     branches:
       - dev
       - build
-      - jess/macos_installer
+      - jess/253_macos_release_details
 
 env:
   APP: notepod
@@ -217,7 +217,7 @@ jobs:
           xcodegen generate
           cd ..
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
@@ -279,24 +279,34 @@ jobs:
           path: ${{ env.MACOS_APP_RELEASE_UNSIGNED_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-unsigned.zip
 
   ########################################################################
-  # MACOS - DISTRIBUTION CERTIFICATE SIGNED FOR APP STORE
+  # MACOS - DISTRIBUTION CERTIFICATE SIGNED FOR UPLOAD AND ACCESS FROM APP STORE/APP STORE TESTFLIGHT
 
+  # The created notepod.pkg can be uploaded to app store manually with
+  # macos Transporter app, or with codemagic-cli-tools app-store-connect with an app store API key.
   # Uses Mac App Distrtibution cert and associated profile
-  # for app store distribution
+  # for app store distribution to sign the .app,
+  # packages as .pkg and signs with Mac App Installer cert as
+  # required to upload to App Store. Only installable from App Store
+  # or via App Store Testflight.
   # Set staging config flavor in macos/project.yml
   # CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
   # PROVISIONING_PROFILE_SPECIFIER: "NotePod_Mac_Distribution_Mac_Appstore_Connect"
   # ie.
-  # Certificate name: Togaware Pty Ltd
-  # Certificate type: Mac App Distrtibution
+  # Build Certificate name: Togaware Pty Ltd
+  # Build Certificate type: Mac App Distrtibution
+  # Install Certificate name: Togaware Pty Ltd
+  # Install Certificate type: 3rd Party Mac Developer Installer
   # Profile name: NotePod_Mac_Distribution_Mac_Appstore_Connect
   # Profile type: Mac Appstore Connect (distribution profile)
   # Profile linked apps: com.togaware.notepod
   # Profile linked certificate: Togaware Pty Ltd
-  # Certificate creation date: 29/10/2025
+  # Build Certificate creation date: 29/10/2025
+  # Install Certificate creation date: 10/12/2025
   # Profile creation date: 29/10/2025
 
-  package-macos-dmg-zip-appstore:
+  package-macos-pkg-appstore:
+    env:
+      MACOS_INSTALL_CERTIFICATE_NAME: "3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)"
     if: |
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
@@ -328,7 +338,7 @@ jobs:
           cd macos
           xcodegen generate
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
@@ -337,19 +347,27 @@ jobs:
 
       - name: Install Apple certificate and MACOS provisioning profile
         env:
+          # Used to build code signed .app with entitlements
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          # Provisioning profile of app
           MACOS_PROVISION_PROFILE: ${{ secrets.MACOS_PROVISION_PROFILE }}
+          # Used to code sign .pkg for upload to App Store Connect
+          MACOS_INSTALL_CERTIFICATE: ${{ secrets.MACOS_INSTALL_CERTIFICATE }}
+          MACOS_INSTALL_CERTIFICATE_PWD: ${{ secrets.MACOS_INSTALL_CERTIFICATE_PWD}}
+          # Used to secure keychain
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PWD }}
         run: |
 
           echo "Create variables for filepaths for certificate, provisioning profile, and keychain"
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          BUILD_CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          INSTALL_CERTIFICATE_PATH=$RUNNER_TEMP/install_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          echo "Import certificate and provisioning profile from secrets"
-          echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          echo "Import builld and install certificates, and provisioning profile from secrets"
+          echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $BUILD_CERTIFICATE_PATH
+          echo -n "$MACOS_INSTALL_CERTIFICATE" | base64 --decode -o $INSTALL_CERTIFICATE_PATH
           echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
 
           echo "Create temporary keychain"
@@ -357,8 +375,11 @@ jobs:
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
 
-          echo "Import certificate to keychain"
-          security import $CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          echo "Import build certificate to keychain"
+          security import $BUILD_CERTIFICATE_PATH -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          echo "Import install certificate to keychain"
+          security import $INSTALL_CERTIFICATE_PATH -P "$MACOS_INSTALL_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
 
           echo "Add to partition list to allow access to keychain"
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -371,11 +392,8 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build and sign the app
-      # Uses a scheme 'staging' created in Xcode to have a separate
-      # build configuration to specify the cert and profile used for
-      # dev build. Then specify scheme name as flavour in flutter CLI.
-      # Certificate type (xcode var CODE_SIGN_IDENTITY)
-      # Provisioning profile name (xcode var PROVISIONING_PROFILE_SPECIFIER)
+      # Uses a scheme 'staging' which build and code signs app
+      # with App Store distribution certificate
 
       - name: Build Flutter macOS app
         run: flutter build macos --release --flavor staging
@@ -389,46 +407,73 @@ jobs:
         run: |
           codesign --display --verbose=2 "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.app"
 
-      # Package as DMG
+      # # Package as DMG
 
-      - name: Create DMG
+      # - name: Create DMG
+      #   run: |
+      #     mkdir -p dmg_temp
+      #     cp -R "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.app" dmg_temp/
+      #     ln -s /Applications dmg_temp/Applications
+      #     hdiutil create -volname "${{ env.APP }}" \
+      #       -srcfolder dmg_temp \
+      #       -ov -format UDZO \
+      #       "${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg"
+
+      # - name: Note the DMG created
+      #   run: |
+      #     ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
+
+      # - name: Upload Artefact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.APP }}-macos-staging-dmg
+      #     path: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
+
+      # # Package as ZIP
+
+      # - name: Create ZIP
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     type: "zip"
+      #     directory: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}
+      #     path: ${{ env.APP }}.app
+      #     filename: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
+
+      # - name: Review ZIP exists
+      #   run: ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
+
+      # - name: Upload Artefact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.APP }}-macos-staging-zip
+      #     path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
+
+      # Create PKG for App Store
+      - name: Create PKG for App Store upload
         run: |
-          mkdir -p dmg_temp
-          cp -R "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.app" dmg_temp/
-          ln -s /Applications dmg_temp/Applications
-          hdiutil create -volname "${{ env.APP }}" \
-            -srcfolder dmg_temp \
-            -ov -format UDZO \
-            "${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg"
+          xcrun productbuild --component "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.app" /Applications/ "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg"
 
-      - name: Note the DMG created
+      - name: Note the not installer-signed PKG created
         run: |
-          ls -lh ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
+          ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg
 
-      - name: Upload Artefact
+      # Sign PKG with Mac Distribution Installer Certificate
+      - name: Sign PKG with Installer Certificate
+        run: |
+          xcrun productsign --sign "${{ env.MACOS_INSTALL_CERTIFICATE_NAME }}" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-unsigned.pkg" "${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg"
+
+      - name: Note the installed signed PKG ready for upload
+        run: |
+          ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg
+
+      - name: Upload pkg artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP }}-macos-staging-dmg
-          path: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.dmg
+          name: ${{ env.APP }}-macos-pkg
+          path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}.pkg
 
-      # Package as ZIP
-
-      - name: Create ZIP
-        uses: thedoctor0/zip-release@master
-        with:
-          type: "zip"
-          directory: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}
-          path: ${{ env.APP }}.app
-          filename: ${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
-
-      - name: Review ZIP exists
-        run: ls -lh ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
-
-      - name: Upload Artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.APP }}-macos-staging-zip
-          path: ${{ env.MACOS_APP_RELEASE_STAGING_PATH }}/${{ env.APP }}-${{env.RELEASE}}-macos-staging.zip
+      # 20251211 jesscmoore TODO: add upload to app store step. Reqs
+      # Appstore Connect API key
 
       # Ref: https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
@@ -436,7 +481,7 @@ jobs:
   # MACOS - DEVELOPMENT CERTIFICATE SIGNED FOR DEV TESTING
 
   # Uses Development cert and associated profile
-  # for testing by developers on registered devices
+  # for testing by developers using devices registered on Apple Developer account
   # Certificate name: Jessica Moore
   # Certificate type: Development
   # Profile name: Wildcard_Development_Mac_App_Development
@@ -479,7 +524,7 @@ jobs:
           cd macos
           xcodegen generate
 
-      - name: Install iOS Pods
+      - name: Install macOS Pods
         run: |
           cd macos
           pod install --repo-update
@@ -562,13 +607,6 @@ jobs:
         with:
           name: ${{ env.APP }}-macos-dev-dmg
           path: ${{ env.APP }}-${{env.RELEASE}}-macos-dev.dmg
-
-      # 20251018 jesscmoore:
-      # App needs testing on other desktops, not linked to our
-      # Apple Developer Program account. It may still need to be
-      # notarised to avoid being blocked by macOS Gatekeeper on
-      # other user's macOS desktops. Same for the iOS IPA.
-      # https://help.apple.com/xcode/mac/current/#/dev033e997ca
 
       # Package as ZIP
 
