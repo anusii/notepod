@@ -78,6 +78,8 @@ class NoteListRevokeButton extends StatelessWidget {
                 // The "Yes" button
                 TextButton(
                   onPressed: () async {
+                    Navigator.of(context, rootNavigator: true).pop();
+
                     loading.showAnimationDialog(
                       context,
                       Msg.revokingNote,
@@ -104,7 +106,7 @@ class NoteListRevokeButton extends StatelessWidget {
 
                     if (context.mounted) {
                       Navigator.of(context, rootNavigator: true)
-                          .pop(); // Dismiss the revoking note dialog
+                          .pop(); // Dismiss the loading animation dialog
                       scaffoldController.navigateToSubpage(childPage);
                     }
                   },
