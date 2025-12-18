@@ -84,6 +84,9 @@ class NoteListDelButton extends StatelessWidget {
                       // The "Yes" button
                       TextButton(
                         onPressed: () async {
+                          Navigator.of(context, rootNavigator: true)
+                              .pop(); // Dismiss the deleting note dialog
+
                           loading.showAnimationDialog(
                             context,
                             Msg.deletingNote,
@@ -102,14 +105,15 @@ class NoteListDelButton extends StatelessWidget {
                               await deleteFile(noteFilePath);
                             } else {
                               debugPrint(
-                                '[NoteListDelButton] delete external files not yet supported',
+                                '[NoteListDelButton] delete external files not '
+                                'yet supported',
                               );
                             }
                           }
 
                           if (context.mounted) {
                             Navigator.of(context, rootNavigator: true)
-                                .pop(); // Dismiss the deleting note dialog
+                                .pop(); // Dismiss the loading animation dialog
 
                             scaffoldController.navigateToSubpage(childPage);
                           }

@@ -89,6 +89,9 @@ class NoteDelButton extends StatelessWidget {
             // The "Yes" button
             TextButton(
               onPressed: () async {
+                Navigator.of(context, rootNavigator: true)
+                    .pop(); // Dismiss the deleting note dialog
+
                 loading.showAnimationDialog(
                   context,
                   Msg.deletingNote,
@@ -105,7 +108,7 @@ class NoteDelButton extends StatelessWidget {
 
                 if (context.mounted) {
                   Navigator.of(context, rootNavigator: true)
-                      .pop(); // Dismiss the deleting note dialog
+                      .pop(); // Dismiss the loading animation dialog
                   scaffoldController.navigateToSubpage(childPage);
                 }
               },
