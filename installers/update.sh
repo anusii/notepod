@@ -85,10 +85,10 @@ if [[ "${status}" == "completed" ]]; then # && "${conclusion}" == "success" ]]; 
     # TODO 20251003 gjw Only continue if a snap artefact was found
     echo "artifact id: $artifactId"
     gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
-    unzip -oq artifact.zip
+    unzip artifact.zip
     rm -f artifact.zip
 
-    scp -q ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
+    rsync -avzh ${APP}_${version%%+*}_amd64.snap ${DEST}/${APP}_amd64.snap
     mv -f ${APP}_${version%%+*}_amd64.snap ARCHIVE/${APP}_${version%%+*}_amd64.snap
     ssh ${HOST} "cd ${FLDR}; chmod a+r ${APP}_amd64.snap"
 
