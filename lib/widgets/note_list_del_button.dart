@@ -84,7 +84,8 @@ class NoteListDelButton extends StatelessWidget {
                       // The "Yes" button
                       TextButton(
                         onPressed: () async {
-                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context, rootNavigator: true)
+                              .pop(); // Dismiss the deleting note dialog
 
                           loading.showAnimationDialog(
                             context,
