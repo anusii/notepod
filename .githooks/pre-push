@@ -7,6 +7,12 @@
 #
 # If this script exits with a non-zero status nothing will be pushed.
 
+
+if [ -d snap ]; then
+    printf "\e[33;1m%s\e[0m\n" 'Update snap version.'
+    perl -pi -e 's|^version:.*|version: 0.3.1|' snap/snapcraft.yaml;
+fi
+
 # Flutter Analyze
 
 printf "\e[33;1m%s\e[0m\n" 'Running flutter analyze.'
