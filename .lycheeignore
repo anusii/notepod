@@ -5,6 +5,10 @@
 
 http://localhost:44007/
 
+#
+
+http://localhost:8000/
+
 # POD OAuth endpoints that require authentication parameters
 
 https://pods.dev.solidcommunity.au/.oidc/auth
@@ -26,6 +30,13 @@ https://sii.anu.edu.au/
 
 https://nominatim.openstreetmap.org/reverse
 https://tile.openstreetmap.org/
+
+# Map Tile Providers (Regex patterns) from geopod
+
+https://tiles\.stadiamaps\.com/.*
+https://server\.arcgisonline\.com/.*
+https://.*\.basemaps\.cartocdn\.com/.*
+https://.*\.tile-cyclosm\.openstreetmap\.fr/.*
 
 # Ignore the template index file.
 
