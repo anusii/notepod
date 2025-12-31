@@ -5,8 +5,6 @@
 
 http://localhost:44007/
 
-#
-
 http://localhost:8000/
 
 # POD OAuth endpoints that require authentication parameters
@@ -41,3 +39,14 @@ https://.*\.tile-cyclosm\.openstreetmap\.fr/.*
 # Ignore the template index file.
 
 web/**
+
+# Licenses. Note that gnu.org is throttled so do not check it.
+
+https://www.gnu.org/licenses/
+https://opensource.org/license/gpl-3-0
+
+# Ontology definitions
+
+http://xmlns.com/foaf/0.1/
+http://purl.org/dc/terms/
+https://solidcommunity.au/predicates/*

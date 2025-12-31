@@ -469,26 +469,20 @@ realclean::
 # [20251029 jesscmoore] TODO: add converting to dmg
 # Build unsigned macos app
 dmg-unsigned::
-	bash update_project.sh
+	flutter clean
 	flutter build macos --release --flavor unsigned
 
 # Build macos app signed with development certificate for testing
 # by App Developer Program togaware registered devices
 dmg-dev::
-	bash update_project.sh
+	flutter clean
 	flutter build macos --release --flavor dev
 
 # Build macos app signed with app store distribution for testing
 # on Testflight or publishing
 dmg-staging:
-	bash update_project.sh
+	flutter clean
 	flutter build macos --release --flavor staging
-
-# Make SKU (stock keeping unit used in app registration on Apple App Store)
-# Created from app bundle id set in Apple Developer account and used
-# in build
-sku::
-	yq '.targets.Runner.settings.base.PRODUCT_BUNDLE_IDENTIFIER' macos/project.yml | md5
 
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
