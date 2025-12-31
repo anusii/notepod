@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "NotePod"
-#define MyAppVersion "dev-windows-inno"
-#define MyAppPublisher "ANU Software Innovation Institute"
+#define MyAppVersion "windows-inno"
+#define MyAppPublisher "Software Innovation Institute ANU"
 #define MyAppURL "https://github.com/anusii/notepod
 #define MyAppExeName "notepod.exe"
 
