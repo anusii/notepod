@@ -323,9 +323,14 @@ jobs:
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos basic')
+
     runs-on: macos-latest
 
     steps:
+      - name: Display OS Information
+        run: |
+          system_profiler SPSoftwareDataType
+
       - name: Clone Repository
         uses: actions/checkout@v4
 
@@ -342,7 +347,7 @@ jobs:
         run: flutter pub get
 
       - name: Enable macOS desktop
-        run: flutter config --enable-macos-desktop
+        run: flutter create --platforms=macos .
 
       - name: Build Flutter macOS app
         run: flutter build macos --release
@@ -530,7 +535,7 @@ jobs:
     env:
       MACOS_INSTALL_CERTIFICATE_NAME: "3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)"
     if: |
-      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'bump version x') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos appstore')
     runs-on: macos-latest
@@ -587,7 +592,7 @@ jobs:
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          echo "Import builld and install certificates, and provisioning profile from secrets"
+          echo "Import build and install certificates, and provisioning profile from secrets"
           echo -n "$MACOS_CERTIFICATE" | base64 --decode -o $BUILD_CERTIFICATE_PATH
           echo -n "$MACOS_INSTALL_CERTIFICATE" | base64 --decode -o $INSTALL_CERTIFICATE_PATH
           echo -n "$MACOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
@@ -716,7 +721,7 @@ jobs:
 
   package-macos-dmg-zip-dev:
     if: |
-      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'bump version x') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos dev')
     runs-on: macos-latest
