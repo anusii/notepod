@@ -349,6 +349,10 @@ jobs:
       - name: Enable macOS desktop
         run: flutter create --platforms=macos .
 
+      - name: Remove Podfile and project.yaml
+        # These cause the default basic to fail for some reason.
+        run: rm -f macos/Podfile and macos/project.yaml
+
       - name: Build Flutter macOS app
         run: flutter build macos --release
 
