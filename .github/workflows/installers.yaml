@@ -317,6 +317,11 @@ jobs:
   # 'bump version' but do get build with 'bump version x' (all get
   # built) or 'build installers' (all get built) or a specific 'build
   # mac os unsigned' etc included in the commit message.
+  #
+  # 20260101 gjw This original one no longer works for the updated
+  # version by @jesscmoore which utilises flavours. But that then
+  # needs extra setup that I've not yet done for my template in geopod
+  # and bookoflife, which needs to be done.
 
   package-macos-dmg-zip-basic:
     if: |
