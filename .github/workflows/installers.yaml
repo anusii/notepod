@@ -352,7 +352,7 @@ jobs:
       - name: Remove Podfile and project.yaml
         # These cause the default basic build to fail for some reason.
         run: |
-          rm macos/Podfile and macos/project.yaml
+          rm macos/Podfile macos/project.yml
           ls -lh macos
 
       - name: Build Flutter macOS app
