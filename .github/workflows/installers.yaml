@@ -326,7 +326,7 @@ jobs:
   package-macos-dmg-zip-basic:
     if: |
       contains(github.event.head_commit.message, 'bump version x') ||
-      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build installers x') ||
       contains(github.event.head_commit.message, 'build macos basic')
 
     runs-on: macos-latest
@@ -547,7 +547,7 @@ jobs:
       MACOS_INSTALL_CERTIFICATE_NAME: "3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)"
     if: |
       contains(github.event.head_commit.message, 'bump version x') ||
-      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build installers x') ||
       contains(github.event.head_commit.message, 'build macos appstore')
     runs-on: macos-latest
     steps:
@@ -733,7 +733,7 @@ jobs:
   package-macos-dmg-zip-dev:
     if: |
       contains(github.event.head_commit.message, 'bump version x') ||
-      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build installers x') ||
       contains(github.event.head_commit.message, 'build macos dev')
     runs-on: macos-latest
     steps:
@@ -873,7 +873,7 @@ jobs:
   package-ios-ipa:
     if: |
       contains(github.event.head_commit.message, 'bump version x') ||
-      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build installers x') ||
       contains(github.event.head_commit.message, 'build ios')
     runs-on: macos-latest
     env:
