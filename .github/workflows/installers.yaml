@@ -320,7 +320,7 @@ jobs:
 
   package-macos-dmg-zip-basic:
     if: |
-      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'bump version x') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos basic')
 
@@ -419,7 +419,7 @@ jobs:
 
   package-macos-dmg-zip-unsigned:
     if: |
-      contains(github.event.head_commit.message, 'bump version x') ||
+      contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos unsigned')
     runs-on: macos-latest
