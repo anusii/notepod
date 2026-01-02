@@ -309,7 +309,7 @@ jobs:
   #         release: stable
 
   ########################################################################
-  # MACOS - ORIGINAL
+  # MACOS - ORIGINAL - DEPRECATED
 
   # 20251223 gjw This is the original script for building the macOS
   # dmg and zip files for Rattle. While the macOS and iOS installer
@@ -321,7 +321,8 @@ jobs:
   # 20260101 gjw This original one no longer works for the updated
   # version by @jesscmoore which utilises flavours. But that then
   # needs extra setup that I've not yet done for my template in geopod
-  # and bookoflife, which needs to be done.
+  # and bookoflife, which needs to be done. Once that is done and the
+  # steps have a template, this ORIGINAL build can be removed.
 
   package-macos-dmg-zip-original:
     if: |
@@ -413,12 +414,16 @@ jobs:
   ########################################################################
   # MACOS - UNSIGNED
 
-  # Build without signing certificate
-  # for testing by developers
-  # Note: build without signing prevents build with keychain access capability
-  # This means the app fails to use secure local storage and the use needs to
-  # press login and security key submit buttons x2.
-  # Set unsigned config flavor in macos/project.yml
+  # This is a build without signing using a certificate, and is meant
+  # for testing by developers.
+  #
+  # This build prevents keychain access capability and so the app
+  # fails to use secure local storage and the user needs to press
+  # login and the security key submit buttons twice to override the
+  # app install warnings
+  #
+  # Set the unsigned config flavor in macos/project.yml
+  #
   # CODE_SIGN_IDENTITY: ""
   # PROVISIONING_PROFILE_SPECIFIER: ""
 
