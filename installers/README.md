@@ -17,14 +17,14 @@ Run the app online: [**web**](https://notepod.solidcommunity.au).
 Download the latest version:
 **GNU/Linux**
 [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
-[zip](https://solidcommunity.au/installers/notepod-dev-linux.zip);
+[zip](https://solidcommunity.au/installers/notepod-linux.zip);
 **Android**
 [apk](https://solidcommunity.au/installers/notepod.apk);
 **macOS**
-[dmg](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.dmg);
+[dmg](https://solidcommunity.au/installers/notepod-macos-unsigned.dmg);
 **Windows**
-[zip](https://solidcommunity.au/installers/notepod-dev-windows.zip) or
-[inno](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe).
+[zip](https://solidcommunity.au/installers/notepod-windows.zip) or
+[inno](https://solidcommunity.au/installers/notepod-windows-inno.exe).
 
 ## Prerequisite
 
@@ -53,13 +53,13 @@ sudo dpkg --install notepod_amd64.deb
 
 ### Zip Install
 
-Download [notepod-dev-linux.zip](https://solidcommunity.au/installers/notepod-dev-linux.zip)
+Download [notepod-linux.zip](https://solidcommunity.au/installers/notepod-linux.zip)
 
 To try it out:
 
 ```bash
-wget https://solidcommunity.au/installers/notepod-dev-linux.zip -O notepod-dev-linux.zip
-unzip notepod-dev-linux.zip -d notepod
+wget https://solidcommunity.au/installers/notepod-linux.zip -O notepod-linux.zip
+unzip notepod-linux.zip -d notepod
 ./notepod/notepod
 ```
 
@@ -68,7 +68,7 @@ with a desktop icon for their desktop, begin by downloading the **zip** and
 installing that into a local folder:
 
 ```bash
-unzip notepod-dev-linux.zip -d ${HOME}/.local/share/notepod
+unzip notepod-linux.zip -d ${HOME}/.local/share/notepod
 ```
 
 Then set up your local installation (only required once):
@@ -84,7 +84,7 @@ wget https://github.com/anusii/notepod/raw/dev/installers/app.png -O ${HOME}/.lo
 To install for any user on the computer:
 
 ```bash
-sudo unzip notepod-dev-linux.zip -d /opt/notepod
+sudo unzip notepod-linux.zip -d /opt/notepod
 sudo ln -s /opt/notepod/notepod /usr/local/bin/
 wget https://raw.githubusercontent.com/anusii/notepod/dev/installers/app.desktop -O ${HOME}/usr/local/share/applications/notepod.desktop
 wget https://github.com/anusii/notepod/raw/dev/installers/app.png -O ${HOME}/use/local/share/icons/notepod.png
@@ -96,7 +96,7 @@ Alt-F2 and type `notepod` then Enter.
 ## MacOS
 
 The zip file
-[notepod-dev-macos-unsigned.zip](https://solidcommunity.au/installers/notepod-dev-macos-unsigned.zip)
+[notepod-macos-unsigned.zip](https://solidcommunity.au/installers/notepod-macos-unsigned.zip)
 can be installed on MacOS. Download the file and open it on your
 Mac. Then, holding the Control key click on the app icon to display a
 menu. Choose `Open`. Then accept the warning to then run the app. The
@@ -115,5 +115,5 @@ the web-based app directly.
 ## Windows Installer
 
 Download and run the self extracting archive
-[notepod-dev-windows-inno.exe](https://solidcommunity.au/installers/notepod-dev-windows-inno.exe)
+[notepod-windows-inno.exe](https://solidcommunity.au/installers/notepod-windows-inno.exe)
 to self install the app on Windows.
