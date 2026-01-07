@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Fixed typo in linux build routine [0.3.1 20260107 jesscmoore]
 + Fixed delete dialog not closing [0.3.1 20251218 tonypioneer]
 + Match version string to theming [0.3.0 20251218 jesscmoore]
 + Added light/dark themes [0.3.0 20251211 tonypioneer]
