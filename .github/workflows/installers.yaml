@@ -40,6 +40,7 @@ on:
       - dev
       - build
       - jess/macos_installer
+      - jess/version_typo
 
 env:
   APP: notepod
