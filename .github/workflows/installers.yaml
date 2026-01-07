@@ -51,7 +51,6 @@ env:
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
 
 jobs:
-
   ########################################################################
   # LINUX
   #
@@ -84,7 +83,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Clone Repository
         uses: actions/checkout@v4
 
@@ -192,7 +190,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.APP}}-linux-deb
-          path: build/${{env.APP}}_${{env.VERSION}}_amd64.deb
+          path: build/${{env.APP}}_${VERSION}_amd64.deb
 
   package-linux-zip:
     if: |
@@ -203,7 +201,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Clone Repository
         uses: actions/checkout@v4
 
@@ -268,7 +265,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Clone Repository
         uses: actions/checkout@v4
 
@@ -343,7 +339,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -368,7 +364,6 @@ jobs:
         run: |
           pwd
           ls -lh build/macos/Build/Products/Release
-
 
       # Package as DMG
 
@@ -397,7 +392,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           directory: build/macos/Build/Products/Release
           path: ${{env.APP}}.app
           filename: ${{env.APP}}-macos.zip
@@ -1041,7 +1036,6 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build windows')
     runs-on: windows-latest # randomly not working (choco fails) with inno 1.2.7
-
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -1049,7 +1043,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           architecture: x64
           flutter-version: ${{env.FLUTTER_VERSION}}
 
@@ -1070,7 +1064,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          type: 'zip'
+          type: "zip"
           filename: ${{env.APP}}-windows.zip
           directory: build/windows/x64/runner/Release
 
