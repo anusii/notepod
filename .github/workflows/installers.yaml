@@ -192,7 +192,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.APP}}-linux-deb
-          path: build/${{env.APP}}_${{env.VERSION}}_amd64.deb
+          path: build/${{env.APP}}_${{VERSION}}_amd64.deb
 
   package-linux-zip:
     if: |
