@@ -43,6 +43,7 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 /// - [unparseableNotes] - list of unparseable notes.
 /// - [childPage] - child widget to return to.
 /// - [scaffoldController] - Controller for the Solid scaffold.
+/// - [isSelectionMode] - flag denoting whether notes were selected
 /// - [isExternal] - flag denoting whether note is an external
 /// note shared to the user.
 
@@ -50,6 +51,7 @@ class NoteListDelButton extends StatelessWidget {
   final List<UnparseableNote> unparseableNotes;
   final Widget childPage;
   final SolidScaffoldController scaffoldController;
+  final bool isSelectionMode;
   final bool isExternal;
 
   const NoteListDelButton({
@@ -57,90 +59,104 @@ class NoteListDelButton extends StatelessWidget {
     required this.unparseableNotes,
     required this.childPage,
     required this.scaffoldController,
+    this.isSelectionMode = false,
     this.isExternal = false,
   });
+
+  Future<dynamic> deleteListDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text(Msg.plsConfirm),
+          content: Text(
+            unparseableNotes.length > 1
+                ? Msg.confirmDeleteMultiple
+                : Msg.confirmDelete,
+          ),
+          actions: [
+            // The "Yes" button
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true)
+                    .pop(); // Dismiss the deleting note dialog
+
+                loading.showAnimationDialog(
+                  context,
+                  Msg.deletingNote,
+                  false,
+                );
+
+                // Delete file
+                for (final UnparseableNote note in unparseableNotes) {
+                  // Create note file path
+                  String noteFilePath = '$basePath/${note.noteFileName}';
+                  debugPrint('Deleting $noteFilePath...');
+
+                  // Call solid delete file function
+                  if (!isExternal) {
+                    await deleteFile(noteFilePath);
+                  } else {
+                    debugPrint(
+                      '[NoteListDelButton] delete external files not '
+                      'yet supported',
+                    );
+                  }
+                }
+
+                if (context.mounted) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop(); // Dismiss the loading animation dialog
+                  debugPrint('Navigating to subpage...');
+                  scaffoldController.navigateToSubpage(childPage);
+                }
+              },
+              child: const Text(ButtonLabel.yes),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                    .pop(); // Dismiss the deleting note dialog
+              },
+              child: const Text(ButtonLabel.no),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return (!isExternal)
-        ? ElevatedButton.icon(
-            // Uses Theme elevatedButtonTheme for all properties
-            // except background color
-            icon: const Icon(
-              Icons.delete,
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext ctx) {
-                  return AlertDialog(
-                    title: const Text(Msg.plsConfirm),
-                    content: Text(
-                      unparseableNotes.length > 1
-                          ? Msg.confirmDeleteMultiple
-                          : Msg.confirmDelete,
-                    ),
-                    actions: [
-                      // The "Yes" button
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.of(context, rootNavigator: true)
-                              .pop(); // Dismiss the deleting note dialog
-
-                          loading.showAnimationDialog(
-                            context,
-                            Msg.deletingNote,
-                            false,
-                          );
-
-                          // Delete file
-                          for (final UnparseableNote note in unparseableNotes) {
-                            // Create note file path
-                            String noteFilePath =
-                                '$basePath/${note.noteFileName}';
-                            debugPrint('Deleting $noteFilePath...');
-
-                            // Call solid delete file function
-                            if (!isExternal) {
-                              await deleteFile(noteFilePath);
-                            } else {
-                              debugPrint(
-                                '[NoteListDelButton] delete external files not '
-                                'yet supported',
-                              );
-                            }
-                          }
-
-                          if (context.mounted) {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(); // Dismiss the loading animation dialog
-
-                            scaffoldController.navigateToSubpage(childPage);
-                          }
-                        },
-                        child: const Text(ButtonLabel.yes),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true)
-                              .pop(); // Dismiss the deleting note dialog
-                        },
-                        child: const Text(ButtonLabel.no),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    ButtonBackgroundColor.delete,
-                  ),
+        ? (isSelectionMode)
+            ? TextButton.icon(
+                icon: const Icon(
+                  Icons.delete,
                 ),
-            label: const Text(
-              ButtonLabel.delete,
-            ),
-          )
+                label: const Text('Delete'),
+                onPressed: () {
+                  deleteListDialog(context);
+                },
+              )
+            : ElevatedButton.icon(
+                // Uses Theme elevatedButtonTheme for all properties
+                // except background color
+                icon: const Icon(
+                  Icons.delete,
+                ),
+                onPressed: () {
+                  deleteListDialog(context);
+                },
+                style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                        ButtonBackgroundColor.delete,
+                      ),
+                    ),
+                label: const Text(
+                  ButtonLabel.delete,
+                ),
+              )
         : errCard(
             context,
             'Deleting external files is not yet supported',

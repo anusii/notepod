@@ -29,10 +29,13 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/unparseable_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/note_list_del_button.dart';
+// import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
@@ -60,13 +63,22 @@ class _ListNotesState extends State<ListNotes> {
   /// Searched/sorted notes
   List<FoundOwnNote> _foundNotes = [];
 
-  // Sort order
-  // true: ascending (A-Z), false: descending (Z-A)
-  // Initial sort will sort alphabetically
+  /// Selected notes
+  final List<UnparseableNote> selectedNotes = [];
+
+  /// Sort title order
+  /// true: ascending (A-Z), false: descending (Z-A)
+  /// Initial sort will sort alphabetically
   bool _sortTitleAscending = true;
-  // true: ascending (oldest modified note), false: descending (last modified note)
-  // First button press will change to sort by last modified first
+
+  /// Sort last modified date order
+  /// true: ascending (oldest modified note), false: descending (last modified note)
+  /// First button press will change to sort by last modified first
   bool _sortModDateAscending = true;
+
+  /// Note selection mode
+  /// true: when one or more notes have been selected, false by defaultl
+  bool _isSelectionMode = false;
 
   /// Current note sort method
   /// Initialised to sort by title
@@ -91,17 +103,36 @@ class _ListNotesState extends State<ListNotes> {
   /// Boolean describing whether note is external
   final bool isExternal = false;
 
-  /// Update selected status and count of selected
+  /// Update selected status and count of selected and add/remove note from
+  /// selected notes list
   void updateSelected(int index) {
     setState(() {
-      // Increment/decrement selected count
       if (_foundNotes[index].isSelected) {
+        // Decrement selected count
         selectedCount--;
+        // Remove note from selected notes list
+        selectedNotes.removeWhere(
+          (item) => item.noteFileName == _foundNotes[index].noteFileName,
+        );
       } else {
+        // Increment
         selectedCount++;
+        // Add note to selected notes list
+        selectedNotes.add(
+          UnparseableNote(
+            noteFileName: _foundNotes[index].noteFileName,
+            noteUrl: _foundNotes[index].noteUrl,
+            noteOwner: _foundNotes[index].noteOwner,
+          ),
+        );
       }
       // Swap selected status of file
       _foundNotes[index].isSelected = !_foundNotes[index].isSelected;
+
+      debugPrint('Selected notes:');
+      for (final UnparseableNote selectedNote in selectedNotes) {
+        debugPrint(selectedNote.noteFileName);
+      }
     });
   }
 
@@ -199,6 +230,24 @@ class _ListNotesState extends State<ListNotes> {
     }
   }
 
+  /// Update multiple note selection mode
+  void updateSelectionMode(bool selectionMode, int index) {
+    setState(() {
+      debugPrint(
+        '_isSelectionMode before: $selectionMode, selectedCount: ${selectedCount.toString()}, isSelected: ${_foundNotes[index].isSelected}',
+      );
+
+      // Turn off selection mode if deselected only selected note
+      // else turn on selection mode
+      if (_foundNotes[index].isSelected && selectedCount == 1) {
+        _isSelectionMode = false;
+      } else {
+        _isSelectionMode = true;
+      }
+      debugPrint('_isSelectionMode after: $_isSelectionMode');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Reduce calls to of(context).
@@ -265,6 +314,24 @@ class _ListNotesState extends State<ListNotes> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           spacing: 5.0,
                           children: [
+                            // Multiple note delete button
+                            // Only display multi note delete
+                            // button when notes are selected causing
+                            // isSelectionMode=true
+                            if (_isSelectionMode) ...[
+                              // Multi note delete button
+                              NoteListDelButton(
+                                unparseableNotes: selectedNotes,
+                                // Reload MyNotes list after note deletion
+                                // [20260108: currently not reloading after delete]
+                                childPage: ListNotesScreen(
+                                  scaffoldController: _scaffoldController,
+                                ),
+                                scaffoldController: _scaffoldController,
+                                isSelectionMode: _isSelectionMode,
+                                isExternal: false,
+                              ),
+                            ],
                             // Title Sort Label and Button
                             TextButton.icon(
                               onPressed: () {
@@ -353,6 +420,10 @@ class _ListNotesState extends State<ListNotes> {
                                         ? const Icon(Icons.done)
                                         : const Icon(Icons.edit_document),
                                     onPressed: () {
+                                      updateSelectionMode(
+                                        _isSelectionMode,
+                                        index,
+                                      );
                                       updateSelected(index);
                                     },
                                   ),
