@@ -30,7 +30,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 
@@ -44,7 +44,7 @@ import 'package:notepod/widgets/note_list_del_button.dart';
 /// - [isExternal] - flag describing whether files are externally owned.
 
 class NotesDelDialog extends StatefulWidget {
-  final List<UnparseableNote> unparseableNotes;
+  final List<SelectedNote> unparseableNotes;
 
   /// Childpage to navigate to after delete dialog
   final Widget childPage;
@@ -193,7 +193,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
                   children: [
                     /// Note list delete button
                     NoteListDelButton(
-                      unparseableNotes: widget.unparseableNotes,
+                      selectedNotes: widget.unparseableNotes,
                       childPage: widget.childPage,
                       scaffoldController: _scaffoldController,
                       isExternal: widget.isExternal,

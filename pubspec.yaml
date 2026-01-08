@@ -1,10 +1,10 @@
 name: notepod
-description: "Privacy preserving note taking app using PODs."
-publish_to: "none"
+description: 'Privacy preserving note taking app using PODs.'
+publish_to: 'none'
 version: 0.3.1+6
 
 environment:
-  sdk: ">=3.2.3 <4.0.0"
+  sdk: '>=3.2.3 <4.0.0'
 
 # To automatically upgrade package dependencies to the latest versions:
 #
@@ -28,8 +28,7 @@ dependencies:
   markdown_widget: ^2.3.2+8
   rdflib: ^0.2.12
   solidpod: ^0.8.6
-  # 20260101 gjw pin to v18 due to non-constant IconData
-  solidui: 0.0.18
+  solidui: ^0.0.21
   # solidui:
   #   git:
   #     url: https://github.com/anusii/solidui.git
@@ -56,18 +55,18 @@ flutter:
 # (gjw 20250429)
 
 flutter_launcher_icons:
-  image_path: "assets/images/app_icon.png"
+  image_path: 'assets/images/app_icon.png'
   android: true
   min_sdk_android: 21 # android min sdk min:16, default 21
   ios: true
   remove_alpha_ios: true
-  background_color_ios: "#ffffff"
+  background_color_ios: '#ffffff'
   macos:
     generate: true
   web:
     generate: true
-    background_color: "#ffffff"
-    theme_color: "#ffffff"
+    background_color: '#ffffff'
+    theme_color: '#ffffff'
   windows:
     generate: true
     icon_size: 48 # min:48, max:256, default: 48

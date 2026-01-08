@@ -26,13 +26,13 @@
 library;
 
 import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/selected_note.dart';
 
 /// Data model for result of get notes list future call
 
 class OwnNotesCallResult {
   final List<OwnNote>? notes;
-  final List<UnparseableNote>? unparseableNotes;
+  final List<SelectedNote>? unparseableNotes;
 
   const OwnNotesCallResult({
     this.notes = const [],
