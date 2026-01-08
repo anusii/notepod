@@ -186,13 +186,13 @@ jobs:
 
           # Build the debian package.
 
-          dpkg-deb --build build/${{env.APP}}_${{env.VERSION}}_amd64
+          dpkg-deb --build build/${{env.APP}}_${VERSION}_amd64
 
       - name: Upload deb artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.APP}}-linux-deb
-          path: build/${{env.APP}}_${VERSION}_amd64.deb
+          path: build/${{env.APP}}_${{env.VERSION}}_amd64.deb
 
   package-linux-zip:
     if: |
