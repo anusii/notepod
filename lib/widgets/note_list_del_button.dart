@@ -33,14 +33,14 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// A delete button widget for deleting a list of notes.
 ///
 /// Arguments:
-/// - [unparseableNotes] - list of unparseable notes.
+/// - [selectedNotes] - list of selected notes.
 /// - [childPage] - child widget to return to.
 /// - [scaffoldController] - Controller for the Solid scaffold.
 /// - [isSelectionMode] - flag denoting whether notes were selected
@@ -48,7 +48,7 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 /// note shared to the user.
 
 class NoteListDelButton extends StatelessWidget {
-  final List<UnparseableNote> unparseableNotes;
+  final List<SelectedNote> selectedNotes;
   final Widget childPage;
   final SolidScaffoldController scaffoldController;
   final bool isSelectionMode;
@@ -56,7 +56,7 @@ class NoteListDelButton extends StatelessWidget {
 
   const NoteListDelButton({
     super.key,
-    required this.unparseableNotes,
+    required this.selectedNotes,
     required this.childPage,
     required this.scaffoldController,
     this.isSelectionMode = false,
@@ -70,7 +70,7 @@ class NoteListDelButton extends StatelessWidget {
         return AlertDialog(
           title: const Text(Msg.plsConfirm),
           content: Text(
-            unparseableNotes.length > 1
+            selectedNotes.length > 1
                 ? Msg.confirmDeleteMultiple
                 : Msg.confirmDelete,
           ),
@@ -88,7 +88,7 @@ class NoteListDelButton extends StatelessWidget {
                 );
 
                 // Delete file
-                for (final UnparseableNote note in unparseableNotes) {
+                for (final SelectedNote note in selectedNotes) {
                   // Create note file path
                   String noteFilePath = '$basePath/${note.noteFileName}';
                   debugPrint('Deleting $noteFilePath...');

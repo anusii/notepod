@@ -37,7 +37,7 @@ import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/own_note.dart';
 import 'package:notepod/models/own_notes_call_result.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
 /// Get the list of user's note objects.
@@ -52,7 +52,7 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 ///
 /// Returns: [OwnNotesCallResult] object comprising:
 /// - [notes] - list of [OwnNote] note objects.
-/// - [unparseableNotes] - list of [UnparseableNote] objects of
+/// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
 
 Future<OwnNotesCallResult> getOwnNoteList({
@@ -66,7 +66,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
 
     final List<String> fileList;
     final List<OwnNote> notes = [];
-    final List<UnparseableNote> unparseableNotes = [];
+    final List<SelectedNote> unparseableNotes = [];
 
     // Get note owner
     final String noteOwner = await getWebId() ?? '';
@@ -121,7 +121,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
             // Found unparseable file content
             // Add note that failed parsing to bad notes list
             unparseableNotes.add(
-              UnparseableNote(
+              SelectedNote(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
@@ -136,7 +136,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
       } else {
         // If empty, add to unparseable file object list
         unparseableNotes.add(
-          UnparseableNote(
+          SelectedNote(
             noteFileName: fileList[i],
             noteUrl: fileUrls[i],
             noteOwner: noteOwner,
@@ -200,7 +200,7 @@ Future<OwnNotesCallResult> getOwnNoteList({
 ///
 /// Returns: [ExternalNotesCallResult] object comprising:
 /// - [notes] - list of [ExternalNote] note objects.
-/// - [unparseableNotes] - list of [UnparseableNote] objects of
+/// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
 /// - [nonExistentNotes] - list of non-existent [ExternalNote] note
 /// objects, if external files were deleted by their owner without
@@ -280,7 +280,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   try {
     final List<ExternalNote> fullNotes = [];
     final List<ExternalNote> nonExistentNotes = [];
-    final List<UnparseableNote> unparseableNotes = [];
+    final List<SelectedNote> unparseableNotes = [];
     final ExternalNotesCallResult results;
 
     if (notes.isNotEmpty) {
@@ -305,7 +305,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
       for (int i = 0; i < notes.length; i++) {
         if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
           unparseableNotes.add(
-            UnparseableNote(
+            SelectedNote(
               noteFileName: notes[i].noteFileName,
               noteUrl: notes[i].noteUrl,
               noteOwner: notes[i].noteOwner,

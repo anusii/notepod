@@ -29,7 +29,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/unparseable_note.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
@@ -64,7 +64,7 @@ class _ListNotesState extends State<ListNotes> {
   List<FoundOwnNote> _foundNotes = [];
 
   /// Selected notes
-  final List<UnparseableNote> selectedNotes = [];
+  final List<SelectedNote> selectedNotes = [];
 
   /// Sort title order
   /// true: ascending (A-Z), false: descending (Z-A)
@@ -119,7 +119,7 @@ class _ListNotesState extends State<ListNotes> {
         selectedCount++;
         // Add note to selected notes list
         selectedNotes.add(
-          UnparseableNote(
+          SelectedNote(
             noteFileName: _foundNotes[index].noteFileName,
             noteUrl: _foundNotes[index].noteUrl,
             noteOwner: _foundNotes[index].noteOwner,
@@ -130,7 +130,7 @@ class _ListNotesState extends State<ListNotes> {
       _foundNotes[index].isSelected = !_foundNotes[index].isSelected;
 
       debugPrint('Selected notes:');
-      for (final UnparseableNote selectedNote in selectedNotes) {
+      for (final SelectedNote selectedNote in selectedNotes) {
         debugPrint(selectedNote.noteFileName);
       }
     });
@@ -321,7 +321,7 @@ class _ListNotesState extends State<ListNotes> {
                             if (_isSelectionMode) ...[
                               // Multi note delete button
                               NoteListDelButton(
-                                unparseableNotes: selectedNotes,
+                                selectedNotes: selectedNotes,
                                 // Reload MyNotes list after note deletion
                                 // [20260108: currently not reloading after delete]
                                 childPage: ListNotesScreen(

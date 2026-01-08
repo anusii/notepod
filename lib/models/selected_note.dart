@@ -27,12 +27,12 @@ library;
 
 /// Data model for unparseable note
 
-class UnparseableNote {
+class SelectedNote {
   final String noteFileName;
   final String noteUrl;
   final String noteOwner;
 
-  const UnparseableNote({
+  const SelectedNote({
     required this.noteFileName,
     required this.noteUrl,
     required this.noteOwner,
