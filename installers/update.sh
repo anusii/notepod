@@ -20,7 +20,12 @@ ssh ${HOST} 'if [ ! -d ${FLDR} ]; then mkdir ${FLDR}; chown gjw:gjw ${FLDR}; fi'
 # we want to download the artefacts.
 
 bumpId=$(gh run list --limit 100 --json databaseId,displayTitle,workflowName \
-	     | jq -r '.[] | select(.workflowName | startswith("Build Installers")) | select(.displayTitle | startswith("Bump version")) | .databaseId' \
+	     | jq -r '.[] | \
+	       select(.workflowName | startswith("Build Installers")) | \
+	       select(.displayTitle | \
+	           startswith("Bump version") or \
+		   startswith("Build installers")) | \
+	       .databaseId' \
 	     | head -n 1)
 
 echo "Found github action id: $bumpId"
