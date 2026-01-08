@@ -20,20 +20,21 @@ ssh ${HOST} 'if [ ! -d ${FLDR} ]; then mkdir ${FLDR}; chown gjw:gjw ${FLDR}; fi'
 # we want to download the artefacts.
 
 bumpId=$(gh run list --limit 100 --json databaseId,displayTitle,workflowName \
-	     | jq -r '.[] | \
-	       select(.workflowName | startswith("Build Installers")) | \
-	       select(.displayTitle | \
-	           startswith("Bump version") or \
-		   startswith("Build installers")) | \
-	       .databaseId' \
+	     | jq -r '.[] | select(.workflowName | startswith("Build Installers")) | select(.displayTitle | startswith("Bump version") or startswith("Build installers")) | .databaseId' \
 	     | head -n 1)
 
-echo "Found github action id: $bumpId"
+echo "Github action id: $bumpId"
 
 if [[ -z "${bumpId}" ]]; then
     echo "No workflow found."
     exit 1
 fi
+
+commitMsg=$(gh run list --limit 100 --json databaseId,displayTitle,workflowName \
+	     | jq -r '.[] | select(.workflowName | startswith("Build Installers")) | select(.displayTitle | startswith("Bump version") or startswith("Build installers")) | .displayTitle' \
+	     | head -n 1)
+
+echo "Commit: \"$commitMsg\""
 
 status=$(gh run view ${bumpId} --json status --jq '.status')
 conclusion=$(gh run view ${bumpId} --json conclusion --jq '.conclusion')
@@ -67,8 +68,9 @@ version=$(grep version ../pubspec.yaml | head -1 | cut -d ':' -f 2 | sed 's/ //g
 
 if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
 
-    echo "Uploading ${APP} version ${version}"
-    echo "Uploads are going to ${DEST}."
+    echo "App name: ${APP}"
+    echo "App version: ${version}"
+    echo "Repository: ${DEST}."
     echo
 
     echo '******************** UPLOAD LINUX DEB'
