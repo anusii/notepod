@@ -46,7 +46,7 @@ env:
   APP: notepod
   RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
-  FLUTTER_VERSION: "3.38.5"
+  FLUTTER_VERSION: '3.38.5'
   MACOS_APP_RELEASE_UNSIGNED_PATH: build/macos/Build/Products/Release-unsigned
   MACOS_APP_RELEASE_STAGING_PATH: build/macos/Build/Products/Release-staging
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
@@ -246,7 +246,7 @@ jobs:
       - name: Zip Bundle
         uses: thedoctor0/zip-release@master
         with:
-          type: "zip"
+          type: 'zip'
           filename: ${{env.APP}}-linux.zip
           directory: build/linux/x64/release/bundle
 
@@ -340,7 +340,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -393,7 +393,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: "zip"
+          type: 'zip'
           directory: build/macos/Build/Products/Release
           path: ${{env.APP}}.app
           filename: ${{env.APP}}-macos.zip
@@ -436,7 +436,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -503,7 +503,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: "zip"
+          type: 'zip'
           directory: ${{env.MACOS_APP_RELEASE_UNSIGNED_PATH}}
           path: ${{env.APP}}.app
           filename: ${{env.APP}}-macos-unsigned.zip
@@ -545,7 +545,7 @@ jobs:
 
   package-macos-pkg-appstore:
     env:
-      MACOS_INSTALL_CERTIFICATE_NAME: "3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)"
+      MACOS_INSTALL_CERTIFICATE_NAME: '3rd Party Mac Developer Installer: Togaware Pty Ltd (G7843T3SD3)'
     if: |
       contains(github.event.head_commit.message, 'bump version x') ||
       contains(github.event.head_commit.message, 'build installers x') ||
@@ -558,7 +558,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -744,7 +744,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -852,7 +852,7 @@ jobs:
       - name: Create ZIP
         uses: thedoctor0/zip-release@master
         with:
-          type: "zip"
+          type: 'zip'
           directory: ${{ env.MACOS_APP_RELEASE_DEV_PATH }}
           path: ${{ env.APP }}.app
           filename: ${{ env.APP }}-macos-dev.zip
@@ -888,7 +888,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           flutter-version: ${{env.FLUTTER_VERSION}}
 
       - name: Confirm Flutter Version
@@ -1044,7 +1044,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: 'stable'
           architecture: x64
           flutter-version: ${{env.FLUTTER_VERSION}}
 
@@ -1065,7 +1065,7 @@ jobs:
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
-          type: "zip"
+          type: 'zip'
           filename: ${{env.APP}}-windows.zip
           directory: build/windows/x64/runner/Release
 
