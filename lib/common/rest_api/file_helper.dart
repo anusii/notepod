@@ -452,10 +452,6 @@ class NoteFileHelper with PodOperationsMixin {
     String noteOwner = '',
     bool isExternal = false,
   }) async {
-    /// Status of the Solid function call to write
-    /// data to Pod
-    final SolidFunctionCallStatus createNoteStatus;
-
     try {
       // Encrypt note text using created time as the key
       // av: 20250519 - We need to encrypt the note text because
@@ -478,46 +474,26 @@ class NoteFileHelper with PodOperationsMixin {
         debugPrint('noteUrl: $noteUrl');
         debugPrint('noteOwner: $noteOwner');
 
-        createNoteStatus = await writeExternalPod(
+        // createNoteStatus = await writeExternalPod(
+        await writeExternalPod(
           noteUrl,
           noteTTLStr,
           noteOwner,
-          context,
-          childPage,
         );
       } else {
         // Write note to POD
-        createNoteStatus = await writePod(
+        await writePod(
           noteFileName,
           noteTTLStr,
-          context,
-          childPage,
         );
       }
 
-      if (createNoteStatus == SolidFunctionCallStatus.success) {
-        if (!context.mounted) return;
+      if (!context.mounted) return;
 
-        Navigator.of(context, rootNavigator: true)
-            .pop(); // Dismiss the saving note dialog
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Dismiss the saving note dialog
 
-        scaffoldController.navigateToSubpage(childPage);
-      } else {
-        // Show SolidFunctionCallStatus after writePod() if not success
-        debugPrint(
-          'SolidFunctionCallStatus: ${createNoteStatus.toString()}',
-        );
-
-        if (!context.mounted) return;
-
-        Navigator.of(context, rootNavigator: true)
-            .pop(); // Dismiss the saving note dialog
-
-        showErrDialog(
-          context,
-          ErrMsg.saveFailed,
-        );
-      }
+      scaffoldController.navigateToSubpage(childPage);
 
       if (!context.mounted) {
         throw Exception('Context not found');
