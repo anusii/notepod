@@ -361,8 +361,9 @@ Future<dynamic> getExternalNoteContent({
 }) async {
   try {
     // Get decrypted note content from external file
-    final noteContentResult =
-        await readExternalPod(note.noteUrl, context, childPage);
+    final noteContentResult = await readExternalPod(
+      note.noteUrl,
+    );
 
     if (noteContentResult == SolidFunctionCallStatus.fileNotExists) {
       return FileCallStatus.fileNotExists;

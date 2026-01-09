@@ -32,7 +32,7 @@ import 'package:solidpod/solidpod.dart' show turtleToTripleMap;
 class TurtleParsingUtils {
   /// Safely parses TTL content to triple map.
 
-  static Map<String, Map<String, List<dynamic>>>? safeParseTtlToTriple(
+  static Map<String, Map<String, dynamic>>? safeParseTtlToTriple(
     String ttlContent,
   ) {
     try {

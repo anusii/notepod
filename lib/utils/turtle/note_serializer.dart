@@ -55,20 +55,16 @@ class TurtleSerializer {
         final predicates = triples[subject]!;
 
         for (final predicate in predicates.keys) {
-          final values = predicates[predicate]!;
+          final value = predicates[predicate]!;
 
-          if (values.isNotEmpty) {
-            final value = values.first.toString();
-
-            if (predicate.contains(noteTitlePred)) {
-              noteTitle = value;
-            } else if (predicate.contains(createdDateTimePred)) {
-              createdDateTime = value;
-            } else if (predicate.contains(modifiedDateTimePred)) {
-              modifiedDateTime = value;
-            } else if (predicate.contains(noteContentPred)) {
-              noteContent = decryptVal(value, createdDateTime!);
-            }
+          if (predicate.contains(noteTitlePred)) {
+            noteTitle = value;
+          } else if (predicate.contains(createdDateTimePred)) {
+            createdDateTime = value;
+          } else if (predicate.contains(modifiedDateTimePred)) {
+            modifiedDateTime = value;
+          } else if (predicate.contains(noteContentPred)) {
+            noteContent = decryptVal(value, createdDateTime!);
           }
         }
       }

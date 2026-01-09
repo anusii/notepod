@@ -27,8 +27,8 @@ dependencies:
   markdown_toolbar: ^0.5.0
   markdown_widget: ^2.3.2+8
   rdflib: ^0.2.12
-  solidpod: ^0.8.6
-  solidui: ^0.0.21
+  solidpod: ^0.9.0
+  solidui: ^0.0.22
   # solidui:
   #   git:
   #     url: https://github.com/anusii/solidui.git
