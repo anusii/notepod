@@ -161,7 +161,6 @@ Future<OwnNotesCallResult> getOwnNoteList({
       final List<String> fileList =
           notes.map((note) => note.noteFileName).toList();
 
-      // TODO: inspect shown permission maps from ACLs of owner's notes
       final Map<dynamic, dynamic> permissionMaps = await readPermissionFileList(
         fileList: fileList,
       );
@@ -223,23 +222,18 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   final Map<dynamic, dynamic> externalNotesLog;
 
   if (!context.mounted) return const ExternalNotesCallResult();
-  // TODO: inspect permission log of recipient (including granter recipient)
+
   externalNotesLog = await NoteFileHelper()
       .scanPermLogFile(context: context, childPage: childPage);
-  // debugPrint('[getExternalNoteList] ${externalNotesLog.toString()}');
 
   // final List<ExternalNote> notes = [];
   List<String> unparseableLogRecords = [];
 
   if (externalNotesLog.isNotEmpty) {
-    debugPrint(
-      '[getExternalNoteList] show user\'s permission records for each externally owned file in their permission log:',
-    );
     for (final fileUrl in externalNotesLog.keys) {
       // Each log record of an external file
       final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
           externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
-      debugPrint('$fileUrl: ${logRecordOfFile.toString()}');
 
       // Ignore log records of files where access has been
       // revoked
