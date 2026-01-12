@@ -87,7 +87,9 @@ class NoteFileHelper with PodOperationsMixin {
   }) async {
     try {
       // SharedResources() parses log ttl to map
-      debugPrint('');
+      debugPrint(
+        'Runs sharedResources() to retrieve user\'s permission log after filtering out files where recipient!=user (ie to only contain resources shared to the user)',
+      );
       final latestLogMap = await sharedResources(context, childPage);
       // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
 
