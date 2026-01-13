@@ -109,7 +109,8 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                       showAppBar: false,
                       resourceName: _note.noteUrl,
                       isExternalRes: true,
-                      externalWebId: _note.noteOwner,
+                      ownerWebId: _note.noteOwner,
+                      granterWebId: _note.permissionGranter,
                       child: ShareExternalNote(
                         note: _note,
                         backPage: widget.backPage,
