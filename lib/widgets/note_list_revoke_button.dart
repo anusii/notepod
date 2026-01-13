@@ -98,7 +98,8 @@ class NoteListRevokeButton extends StatelessWidget {
                         isFileEncrypted: true,
                         permissionList:
                             note.permissionList.split(',') as List<dynamic>,
-                        removerWebId: note.permissionRecepient, // ie. the user
+                        recipientWebId:
+                            note.permissionRecepient, // ie. the user
                         ownerWebId: note.noteOwner,
                         granterWebId: note.permissionGranter,
                         isFileUrl: true,
