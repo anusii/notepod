@@ -88,7 +88,7 @@ class NoteFileHelper with PodOperationsMixin {
     try {
       // SharedResources() parses log ttl to map
       debugPrint('');
-      final latestLogMap = await sharedResources(context, childPage);
+      final latestLogMap = await sharedResources();
       // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
 
       if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
