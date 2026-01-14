@@ -87,17 +87,14 @@ class NoteFileHelper with PodOperationsMixin {
   }) async {
     try {
       // SharedResources() parses log ttl to map
-      debugPrint('');
+
       final latestLogMap = await sharedResources();
-      // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
 
       if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
         // Return empty map if sharedResources() failed login
         return {};
       }
 
-      // debugPrint('latestLogMap != SolidFuctionCallStatus');
-      // debugPrint('[scanPermLog] ${latestLogMap.toString()}');
       return latestLogMap;
     } catch (e) {
       if (!isFileNotFoundError(e) && !isPermissionError(e)) {

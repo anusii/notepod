@@ -222,6 +222,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   final Map<dynamic, dynamic> externalNotesLog;
 
   if (!context.mounted) return const ExternalNotesCallResult();
+
   externalNotesLog = await NoteFileHelper()
       .scanPermLogFile(context: context, childPage: childPage);
 
