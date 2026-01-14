@@ -89,7 +89,6 @@ class NoteFileHelper with PodOperationsMixin {
       // SharedResources() parses log ttl to map
 
       final latestLogMap = await sharedResources();
-      // await sharedResources(context, childPage);
 
       if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
         // Return empty map if sharedResources() failed login
@@ -358,6 +357,7 @@ class NoteFileHelper with PodOperationsMixin {
                 // Use existing filename
                 noteFileName: prevOwnNote.noteFileName,
                 data: updatedContent,
+                overwrite: true,
                 childPage: ViewNote(
                   note: updatedOwnNote,
                   scaffoldController: scaffoldController,
@@ -438,7 +438,8 @@ class NoteFileHelper with PodOperationsMixin {
   /// that are externally owned.
   /// - [noteOwner] - Optional note owner webId. Required for saving notes
   /// that are externally owned.
-  /// - [isExternal] - Optional boolean defining whether updating an existing external note. (Default: false).
+  /// - [overwrite] - Optional boolean defining whether updating an existing owner's note.
+  /// - [isExternal] - Optional boolean defining whether writing an external note.
 
   Future<void> saveNoteToPod({
     required BuildContext context,
@@ -448,6 +449,7 @@ class NoteFileHelper with PodOperationsMixin {
     String noteFileName = '',
     String noteUrl = '',
     String noteOwner = '',
+    bool overwrite = false,
     bool isExternal = false,
   }) async {
     try {
@@ -483,6 +485,7 @@ class NoteFileHelper with PodOperationsMixin {
         await writePod(
           noteFileName,
           noteTTLStr,
+          overwrite: overwrite,
         );
       }
 
