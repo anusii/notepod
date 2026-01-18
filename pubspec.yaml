@@ -27,7 +27,7 @@ dependencies:
   markdown_toolbar: ^0.5.0
   markdown_widget: ^2.3.2+8
   rdflib: ^0.2.12
-  solidpod: ^0.9.0
+  solidpod: ^0.9.8
   solidui: ^0.0.22
   universal_io: ^2.2.2
   window_manager: ^0.5.1
