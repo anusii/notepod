@@ -366,29 +366,29 @@ Future<dynamic> getExternalNoteContent({
       note.noteUrl,
     );
 
-    if (noteContentResult == SolidFunctionCallStatus.fileNotExists) {
-      return FileCallStatus.fileNotExists;
-    } else {
-      // Extract external note ttl data to noteContent
-      try {
-        // Deserialize note context
-        final NoteContent? content;
-        content = TurtleSerializer.noteFromTurtle(noteContentResult);
+    // Extract external note ttl data to noteContent
+    try {
+      // Deserialize note context
+      final NoteContent? content;
+      content = TurtleSerializer.noteFromTurtle(noteContentResult);
 
-        if (content != null) {
-          // Add note content data to external notes object
-          note.content = content;
-          return note;
-        } else {
-          // Found external note file with unparseable note content
-          return FileCallStatus.parsingFail;
-        }
-      } catch (e) {
-        // Error deserializing note
-        debugPrint(e.toString());
+      if (content != null) {
+        // Add note content data to external notes object
+        note.content = content;
+        return note;
+      } else {
+        // Found external note file with unparseable note content
         return FileCallStatus.parsingFail;
       }
+    } catch (e) {
+      // Error deserializing note
+      debugPrint(e.toString());
+      return FileCallStatus.parsingFail;
     }
+  } on ResourceNotExistException catch (e) {
+    // File does not exist on the POD
+    debugPrint('Resource not found: $e');
+    return FileCallStatus.fileNotExists;
   } on Object catch (e) {
     debugPrint('Exception details: $e');
     rethrow;
