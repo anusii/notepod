@@ -130,12 +130,6 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // Login/logout
-          SolidAppBarAction(
-            icon: _webId != null ? Icons.logout : Icons.login,
-            tooltip: _webId != null ? 'Logout' : 'Login',
-            onPressed: _logout,
-          ),
         ],
       ),
       menu: [
