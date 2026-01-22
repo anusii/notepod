@@ -153,7 +153,12 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
                 return loadingScreen(normalLoadingScreenHeight);
               case ConnectionState.done:
                 if (snapshot.hasError) {
-                  // Future failed with error
+                  // Future failed with error. 20260123 gjw In the one place I
+                  // have seen this "Error" it is not an error but due to the
+                  // fact we are not logged in. The message needs to be more
+                  // informative. But eventually NotePod will not have CONTINUE
+                  // enabled so this becomes a mute point and so not worth
+                  // fixing it for this scenario now.
                   debugPrint('Error: ${snapshot.error.toString()}');
                   return errCard(
                     context,
