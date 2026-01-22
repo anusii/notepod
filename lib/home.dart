@@ -166,8 +166,10 @@ class AppHomePageState extends State<AppHomePage> {
         ),
       ],
       statusBar: SolidStatusBarConfig(
+        // Use defWebID as fallback when user is not logged in to prevent
+        // null check operator error.
         serverInfo: SolidServerInfo(
-          serverUri: _webId!,
+          serverUri: _webId ?? defWebID,
         ),
         securityKeyStatus: const SolidSecurityKeyStatus(
           tooltip: 'Manage security keys',
