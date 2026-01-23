@@ -30,7 +30,6 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/notepod.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
@@ -63,14 +62,6 @@ class AppHomePageState extends State<AppHomePage> {
   void dispose() {
     _scaffoldController.dispose(); // Dispose the scaffoldController
     super.dispose();
-  }
-
-  /// Logout
-  void _logout() async {
-    setState(() {
-      _webId = _webId == null ? defWebID : null;
-    });
-    await logoutPopup(context, NotePod());
   }
 
   Future<({String name, String? webId})> _getInfo() async =>
@@ -130,12 +121,6 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // Login/logout
-          SolidAppBarAction(
-            icon: _webId != null ? Icons.logout : Icons.login,
-            tooltip: _webId != null ? 'Logout' : 'Login',
-            onPressed: _logout,
-          ),
         ],
       ),
       menu: [
@@ -174,7 +159,6 @@ class AppHomePageState extends State<AppHomePage> {
         ),
         loginStatus: SolidLoginStatus(
           webId: _webId,
-          onTap: _logout,
           loggedInText: 'Logged In',
           loggedOutText: 'Not Logged In',
           loggedInTooltip: 'Click to log out',
