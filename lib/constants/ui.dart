@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidui/solidui.dart';
+import 'package:solidui/solidui.dart' show WindowSize;
 
 /// Approximate size for grid items used for
 /// displaying text of user's notes.
