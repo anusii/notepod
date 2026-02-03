@@ -27,31 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-/// Thresholds for window size
-class WindowSize {
-  /// Small width threshold
-  static const double smallWidthLimit = 600;
-
-  /// Small height threshold
-  static const double smallHeightLimit = 600;
-
-  /// Boolean describing whether the parent widget
-  /// is narrow. Derived from the box constraints
-  /// found by LayoutBuilder().
-  ///
-  /// Arguments:
-  /// - [constraints] - The box constraints of the parent widget where LayoutBuilder() called.
-  bool isNarrowWindow(BoxConstraints constraints) {
-    final bool isNarrow;
-    if (constraints.maxWidth < WindowSize.smallWidthLimit) {
-      isNarrow = true;
-    } else {
-      isNarrow = false;
-    }
-
-    return isNarrow;
-  }
-}
+import 'package:solidui/solidui.dart';
 
 /// Approximate size for grid items used for
 /// displaying text of user's notes.
