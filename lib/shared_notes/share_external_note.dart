@@ -97,9 +97,6 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                   const SizedBox(height: 10),
                   NoteBackButton(
                     childPage: widget.backPage,
-                    // childPage: ListExternalNotesScreen(
-                    //   scaffoldController: _scaffoldController,
-                    // ),
                     scaffoldController: _scaffoldController,
                   ),
                   const SizedBox(height: 10),
@@ -110,7 +107,6 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                       resourceName: _note.noteUrl,
                       isExternalRes: true,
                       ownerWebId: _note.noteOwner,
-                      granterWebId: _note.permissionGranter,
                       child: ShareExternalNote(
                         note: _note,
                         backPage: widget.backPage,
