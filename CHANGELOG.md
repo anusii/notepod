@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Corrects granterWebId in sharing process [0.3.8 20260205 jesscmoore]
 + Remove redundant logout button [0.3.7 20260123 tonypioneer]
 + Bug fix: CONTINUE when not logged in [0.3.6 20260123 tonypioneer]
 + Dependency cleanup and update [0.3.5 20260119 gjw]
