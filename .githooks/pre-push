@@ -7,13 +7,6 @@
 #
 # If this script exits with a non-zero status nothing will be pushed.
 
-PVER=$(egrep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
-
-if [ -d snap ]; then
-    printf "\e[33;1m%s\e[0m\n" 'Update snap version.'
-    perl -pi -e "s|^version:.*|version: ${PVER}|" snap/snapcraft.yaml;
-fi
-
 # Flutter Analyze
 
 printf "\e[33;1m%s\e[0m\n" 'Running flutter analyze.'
