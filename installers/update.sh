@@ -66,7 +66,13 @@ version=$(grep version ../pubspec.yaml | head -1 | cut -d ':' -f 2 | sed 's/ //g
 # to current date/time in my timezone for consistency as the release
 # time, using `touch`.
 
-if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
+if [[ "${status}" == "completed" ]]; then
+
+    # 20260122 gjw Even if we failed there may be some installer
+    # builds that succeeded, so let's continue once the builds have
+    # completed. This requires handling missing artefacts below.
+    #
+    # && "${conclusion}" == "success" ]]; then
 
     echo "App name: ${APP}"
     echo "App version: ${version}"
@@ -76,6 +82,10 @@ if [[ "${status}" == "completed" && "${conclusion}" == "success" ]]; then
     echo '******************** UPLOAD LINUX DEB'
 
     TARGET="${APP}_amd64.deb"
+
+    # 20260123 gjw Note that this obtains the latest available
+    # linxu-deb artifact, which is not necessarily the one from the
+    # latest bumpId if it failed to be build for the latest bumpId.
 
     artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
 		    --jq '.artifacts[] | select(.name | endswith("-linux-deb")) | .id' | head -n 1)

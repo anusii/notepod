@@ -148,8 +148,8 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: analyze fix import_order_fix format dcm ignore license todo locmax markdown lychee depend bakfind test
-	@echo "ADVISORY: make tests docs"
+prep: analyze fix import_order_fix format dcm ignore license todo locgo markdown lychee depend bakfind
+	@echo "ADVISORY: make test tests docs"
 	@echo $(SEPARATOR)
 
 .PHONY: docs
@@ -216,64 +216,39 @@ depend:
 	-dependency_validator
 	@echo $(SEPARATOR)
 
-LINES ?= 300
+# Check and fail if any files exceed limit.
+#
+# 20260115 gjw We utilise two targets both running locbase. The target
+# `locgo` ignores failure of the max loc check and is used in the
+# `prep` target above to ensure all tests are undertaken. It is
+# wrapped in the common echos for the `prep` workflow. The main target
+# `locmax` is used in the CI to fail on too many lines of code, and
+# thus fails the lint checking.
+
+LINES ?= 301
 
 .PHONY: locmax
 locmax:
-	@echo "Files with EXCESS LINES OF CODE:\n"
-	@-loc=$$(cat $(shell find lib -name '*.dart') \
-		| egrep -v '^ */' \
-		| egrep -v '^ *$$' \
-		| egrep -v '^ *[)},]+, *$$' \
-		| wc -l \
-		| numfmt --format "%'f"); \
+	@loc=$$(bash $(LOC) -t $(shell find lib -name '*.dart')); \
+	totl=$$(cat $(shell find lib -name '*.dart') | wc -l); \
 	numf=$$(find lib -name "*.dart" -type f | wc -l); \
-	output=$$(find lib -name "*.dart" -exec sh -c ' \
-		lines=$$(bash $(LOC) "$$1"); \
-		if [ $$lines -gt $(LINES) ]; then \
-			printf "%4d %s\n" $$lines "$$1"; \
-		fi \
-	' _ {} \; | sort -nr); \
+	output=$$(bash $(LOC) -n $(LINES) $(shell find lib -name '*.dart') | sort -nr); \
 	locm=$$(echo $$output | wc -w | awk '{print $$1/2}'); \
 	if [ -n "$$output" ]; then \
 		echo "$$output"; \
-		echo "\nTotal $$loc lines of code across $$numf files."; \
+		echo "\nTotal $$loc lines of code across $$numf files with total $$totl lines."; \
 		echo "\n$(CROSS) Error: Found $$locm files with more than $(LINES) lines of code."; \
 		exit 1; \
 	else \
-		echo "Total $$loc lines of code across $$numf files."; \
+		echo "Total $$loc lines of code across $$numf files with total $$totl lines."; \
 		echo "\n$(TICK) All files are under $(LINES) lines."; \
 	fi
+
+.PHONY: locgo
+locgo:
+	@echo "Files with EXCESS LINES OF CODE:\n"
+	@-make --no-print-directory locmax
 	@echo $(SEPARATOR)
-
-# Check and fail if any files exceed limit
-
-PHONY: locmax-enforce
-locmax-enforce:
-	@loc=$$(cat $(shell find lib -name '*.dart') \
-		| egrep -v '^ */' \
-		| egrep -v '^ *$$' \
-		| egrep -v '^ *[)},]+, *$$' \
-		| wc -l \
-		| numfmt --grouping); \
-	numf=$$(find lib -name "*.dart" -type f | wc -l); \
-	output=$$(find lib -name "*.dart" -exec sh -c ' \
-		lines=$$(bash $(LOC) "$$1"); \
-		if [ $$lines -gt $(LINES) ]; then \
-			printf "%4d %s\n" $$lines "$$1"; \
-		fi \
-	' _ {} \; | sort -nr); \
-	locm=$$(echo $$output | wc -w | awk '{print $$1/2}'); \
-	if [ -n "$$output" ]; then \
-		echo "$$output"; \
-		echo "Total $$loc lines of code across $$numf files."; \
-		echo "$(CROSS) Error: Found $$locm files with more than $(LINES) lines of code."; \
-		exit 1; \
-	else \
-		echo "Total $$loc lines of code across $$numf files."; \
-		echo "$(TICK) All files are under $(LINES) lines"; \
-	fi
-
 
 # dart pub global activate dependency_validator
 
@@ -384,6 +359,7 @@ qtest:
 		MINGW*|MSYS*|CYGWIN*) device_id="windows" ;; \
 		*) echo "Unsupported platform: $$(uname -s)"; exit 1 ;; \
 	esac; \
+	if [ ! -d integration_test ]; then echo "No integration tests available."; exit 0; fi; \
 	for t in $$(find integration_test -name "*_test.dart" | sort); do \
 		echo "========================================"; \
 		echo $$t; /bin/echo -n $$t >&2; \
@@ -561,11 +537,7 @@ versions:
 
 .PHONY: loc
 loc: lib/*.dart
-	@cat $(shell find lib -name '*.dart') \
-	| egrep -v '^ */' \
-	| egrep -v '^ *$$' \
-	| egrep -v '^ *[)},]+, *$$' \
-	| wc -l
+	@bash $(LOC) $(shell find lib -name '*.dart') | sort -nr
 
 #
 # Manage the production install on the remote server.

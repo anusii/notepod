@@ -20,11 +20,8 @@ installers/*.tar.gz
 installers/*-linux.zip
 installers/*-macos.zip
 installers/*-windows.zip
-installers/*.pkg
-*.pkg
 
 .Rhistory
-.python-version
 
 # Puppeteer browser cache used in testing solidui apps
 
@@ -255,14 +252,10 @@ ios/project-*.yml
 # ios/macos generated project files
 macos/Runner.xcodeproj/
 macos/Runner.xcworkspace/
-macos/Runner/Info.plist
 
 # Backups of ios/macos project config yml and Podfile
 macos/Podfile-*
 macos/project-*.yml
-
-# Macos generated packaged builds
-**/*.pkg
 
 #-----------------------------------------------------------------------
 # Windows
@@ -292,12 +285,6 @@ coverage/
 #-----------------------------------------------------------------------
 
 app.*.symbols
-
-#-----------------------------------------------------------------------
-# Python (codemagic-cli-tools)
-#-----------------------------------------------------------------------
-
-.python-version
 
 #-----------------------------------------------------------------------
 # Exceptions to above rules.
