@@ -95,7 +95,7 @@ class NoteListDelButton extends StatelessWidget {
 
                   // Call solid delete file function
                   if (!isExternal) {
-                    await deleteFile(noteFilePath);
+                    await deleteFile(fileUrl: noteFilePath);
                   } else {
                     debugPrint(
                       '[NoteListDelButton] delete external files not '

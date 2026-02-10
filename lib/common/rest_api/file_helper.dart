@@ -204,7 +204,7 @@ class NoteFileHelper with PodOperationsMixin {
     } else {
       try {
         // Call solid delete file function
-        await deleteFile('$basePath/$filename');
+        await deleteFile(fileUrl: '$basePath/$filename');
       } catch (e) {
         // Error deleting external file
         debugPrint('Error deleting user\' note: $e');
