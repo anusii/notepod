@@ -98,18 +98,28 @@ class NoteDelButton extends StatelessWidget {
                   false,
                 );
 
-                // Delete file
-                await NoteFileHelper().deleteNote(
-                  context: context,
-                  filename: filename,
-                  isExternal: isExternal,
-                  child: childPage,
-                );
+                try {
+                  // Delete file
+                  await NoteFileHelper().deleteNote(
+                    context: context,
+                    filename: filename,
+                    isExternal: isExternal,
+                    child: childPage,
+                  );
 
-                if (context.mounted) {
-                  Navigator.of(context, rootNavigator: true)
-                      .pop(); // Dismiss the loading animation dialog
-                  scaffoldController.navigateToSubpage(childPage);
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true)
+                        .pop(); // Dismiss the loading animation
+                    scaffoldController.navigateToSubpage(childPage);
+                  }
+                } catch (e) {
+                  // Dismiss the loading animation on error to prevent
+                  // the UI from getting stuck.
+
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  }
+                  debugPrint('Delete note failed: $e');
                 }
               },
               child: const Text(ButtonLabel.yes),
