@@ -203,11 +203,13 @@ class NoteFileHelper with PodOperationsMixin {
       }
     } else {
       try {
-        // Call solid delete file function
-        await deleteFile(fileUrl: '$basePath/$filename');
+        // Resolve the relative path to a full POD URL before calling
+        // deleteFile, which expects an absolute URL.
+
+        final fileUrl = await getFileUrl('$basePath/$filename');
+        await deleteFile(fileUrl: fileUrl);
       } catch (e) {
-        // Error deleting external file
-        debugPrint('Error deleting user\' note: $e');
+        debugPrint('Error deleting user\'s note: $e');
         rethrow;
       }
     }
