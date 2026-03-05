@@ -39,13 +39,13 @@ on:
     branches:
       - dev
       - build
-      - jess/macos_installer
+      - installers
 
 env:
   APP: notepod
   RELEASE: dev
   LINUX_PKGS: libsecret-1-dev
-  FLUTTER_VERSION: "3.38.9"
+  FLUTTER_VERSION: "3.41.4"
   MACOS_APP_RELEASE_UNSIGNED_PATH: build/macos/Build/Products/Release-unsigned
   MACOS_APP_RELEASE_STAGING_PATH: build/macos/Build/Products/Release-staging
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
