@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Graham Williams 20250910
+#
+# Count the number of lines of code in a file
+#
+# Check if exactly one argument is provided.
 
 IGNORE=false # Return an error if any files have more than N loc.
 MAX=300 # Value of N loc.
@@ -23,15 +29,18 @@ show_help() {
 # Function to cleanse lines.
 
 cleanse_lines() {
-    # Remove:
-    #   empty lines
-    #   comment only lines
-    #   import/library/@override
-    #   lines that start with }, ) or ]
-    #   lines that consist of '? [' or  ': ['
-    #   begins a parameter list, like `   names: [`
-    #
-    awk 'NF && !/^\s*\/\/|^\s*(import|library|@override)|^\s*[})\]]|^\s*(\?|:) \[|\s*\w*: \[/' "$1"
+    sed '1d' "$1" |
+	grep -v '^$' | # Remove empty lines
+	grep -v '^[[:space:]]*//' | # Remove comment only lines
+	grep -v '^\(import\|library\)' | # Remove library and import statements
+	grep -v '^\s*@' | # Remove directives
+	grep -v '^\s*[\}\)]' | # Remove linest that start with a bracket
+	grep -v '^\s*\]' | # Needed this as special case
+	grep -v '^\s*(\?|:) \[' | # Remove lines that consist of '? [' or  ': ['
+	grep -v '\s*\w*: \[' | # Remove  parameter list lines like `   names: [`
+	grep -v "^\s*['][^']*[']" | # Remove lines that are only a string.
+	grep -v "^\s*\w*:\s*$" | # Remove lines that are only a parameter name.
+	cat
 }
 
 wc_cleanse_lines() {
