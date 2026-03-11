@@ -252,6 +252,7 @@ ios/project-*.yml
 # ios/macos generated project files
 macos/Runner.xcodeproj/
 macos/Runner.xcworkspace/
+macos/Runner/Info.plist
 
 # Backups of ios/macos project config yml and Podfile
 macos/Podfile-*
@@ -272,7 +273,14 @@ macos/project-*.yml
 **/linux/flutter/generated_plugin_registrant.cc
 **/linux/flutter/generated_plugin_registrant.h
 **/linux/flutter/generated_plugins.cmake
-**/linux/runner
+
+# 20260224 gjw Should we ignore the linux/runner? It is needed when
+# building a linux binary. It can be automatically created with
+# `flutter create --platform=linux --org=com.togaware .` So perhaps
+# check it in for now to avoid having to run that extra flutter
+# command.
+#
+# **/linux/runner
 
 #-----------------------------------------------------------------------
 # Coverage

@@ -68,6 +68,8 @@ flutter:
 
   publish   Publish a package to pub.dev
 
+  scripts   Synchronise scripts
+
 Also supported:
 
   *.itest
@@ -132,7 +134,7 @@ macos: $(BUILD_RUNNER) upgrade
 
 .PHONY: android
 android: $(BUILD_RUNNER) upgrade
-	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ')
+	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ') --release
 
 .PHONY: emu
 emu:
@@ -148,7 +150,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: analyze fix import_order_fix format dcm ignore license todo locgo markdown lychee depend bakfind
+prep: versions analyze fix import_order_fix format dcm ignore license todo locgo markdown lychee depend bakfind
 	@echo "ADVISORY: make test tests docs"
 	@echo $(SEPARATOR)
 
@@ -203,6 +205,7 @@ tests:: test qtest
 
 .PHONY: analyze
 analyze:
+	@echo $(SEPARATOR)
 	@echo "Futter ANALYZE"
 	-flutter analyze
 #	dart run custom_lint
@@ -225,7 +228,7 @@ depend:
 # `locmax` is used in the CI to fail on too many lines of code, and
 # thus fails the lint checking.
 
-LINES ?= 301
+LINES ?= 300
 
 .PHONY: locmax
 locmax:
@@ -306,6 +309,13 @@ runner:
 .PHONY: desktops
 desktops:
 	flutter create --platforms=windows,macos,linux --project-name $(shell grep 'name: ' pubspec.yaml | awk '{print $$2}') .
+
+########################################################################
+# MAINTAIN SCRIPTS
+
+.PHONY: scripts
+scripts:
+	@bash support/update.sh
 
 ########################################################################
 # INTEGRATION TESTING
