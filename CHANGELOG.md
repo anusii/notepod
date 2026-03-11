@@ -1,4 +1,4 @@
-# NotePod Changelog
+# NotePod Change Log
 
 Noted here are the high level changes for the NotePod app.
 
@@ -57,7 +57,7 @@ a Pull Request. Thanks.
 + Move to using CORS fixed version widget [0.2.49 20251027 gjw]
 + Updated for new solidpod/solidui. Lint fixes. [0.2.48 20251024 gjw]
 + Fixed rendering error on titles of external notes [0.2.47 20251019 jesscmoore]
-+ Fixed initialisaiton error on unreadable note [0.2.46 20251019 jesscmoore]
++ Fixed initialisation error on unreadable note [0.2.46 20251019 jesscmoore]
 + Fixed rendering error on unreadable note [0.2.45 20251016 jesscmoore]
 + Update snap/android config for secure storage [0.2.44 20251010 gjw]
 + Fixed save to secure storage bug on macos [0.2.43 20251010 jesscmoore]
