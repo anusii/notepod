@@ -106,11 +106,6 @@ class ShareExternalNoteState extends State<ShareExternalNote> {
                       resourceName: _note.noteUrl,
                       isExternalRes: true,
                       ownerWebId: _note.noteOwner,
-                      child: ShareExternalNote(
-                        note: _note,
-                        backPage: widget.backPage,
-                        scaffoldController: _scaffoldController,
-                      ),
                     ),
                   ),
                 ],
