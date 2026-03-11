@@ -104,11 +104,6 @@ class ShareNoteState extends State<ShareNote> {
                     child: GrantPermissionUi(
                       showAppBar: false,
                       resourceName: _note.noteFileName,
-                      child: ShareNote(
-                        note: _note,
-                        backPage: widget.backPage,
-                        scaffoldController: _scaffoldController,
-                      ),
                     ),
                   ),
                 ],
