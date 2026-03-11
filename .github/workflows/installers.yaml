@@ -276,39 +276,10 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get upgrade -y
-          #
-          # 20260121 gjw These don't seem to be required?
-          #
-          #printf '#%.0s' {1..72}; printf '\nninja-build\n'
-          #sudo apt-get install -y ninja-build
-          #printf '#%.0s' {1..72}; printf '\nlibgtk-3-dev\n'
-          #sudo apt-get install -y libgtk-3-dev
-          #printf '#%.0s' {1..72}; printf '\nclang cmake\n'
-          #sudo apt-get install -y clang cmake
-          #
-          # 20260121 gjw Seems like a flutter 3.38.7 bug. I've tried
-          # setting FLUTTER_VERSION above to 3.38.5 but it does not
-          # take in the snap build. Tried adding flutter-version to
-          # the snapcraft file but failed. Give up for now until
-          # flutter fix the bug!
-          #
-          # https://github.com/simolus3/sqlite3.dart/issues/332
-          # https://github.com/flutter/flutter/issues/178659
-          # https://github.com/flutter/flutter/commit/4589b0528f4572828f94ae7f37c2c0f32ae09732
-          #
-          # I've tried the following and variations without success.
-          #
-          # The error seems to be:
-          #
-          # Target dart_build failed: Error: Failed to find any of
-          # [ld.lld, ld] in LocalDirectory: '/usr/lib/llvm-14/bin'
-          #
-          printf '#%.0s' {1..72}; printf '\nllvm lld FLUTTER 3.38.7 BUG\n'
-          sudo apt-get install -y llvm lld
-          #sudo cp /usr/lib/llvm-14/bin/lld /usr/lib/llvm-14/bin/ld
-          #sudo rm /usr/lib/llvm-14/bin/ld.lld
-          #sudo cp /usr/lib/llvm-14/bin/lld /usr/lib/llvm-14/bin/ld.lld
-          #ls -lr /usr/lib/llvm-14/bin
+
+      # 20260311 gjw be sure to add dependencies into the snapcraft
+      # file rather than here, including llvm, lld, libsecret-1-dev,
+      # libjsoncpp-dev, for flutter_secure_storage
 
       - name: Install extra Linux packages
         if: env.LINUX_PKGS != ''
