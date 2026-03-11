@@ -81,10 +81,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// Returns:
   /// - map of external files with filename as key and details of permissions.
 
-  Future<Map<dynamic, dynamic>> scanPermLogFile({
-    required BuildContext context,
-    required Widget childPage,
-  }) async {
+  Future<Map<dynamic, dynamic>> scanPermLogFile() async {
     try {
       // SharedResources() parses log ttl to map
 
