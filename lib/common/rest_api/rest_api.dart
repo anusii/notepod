@@ -42,12 +42,8 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// Get the list of user's note objects.
 ///
 /// Example:
-/// - `_asyncDataFetch = getOwnNoteList(context: context, childPage: ListNotesScreen())`
+/// - `_asyncDataFetch = getOwnNoteList()`
 /// - used to define async function in future call to get user's notes.
-///
-/// Arguments:
-/// - [context] - the build context.
-/// - [childPage] - is the child widget to return to.
 ///
 /// Returns: [OwnNotesCallResult] object comprising:
 /// - [notes] - list of [OwnNote] note objects.
@@ -182,8 +178,6 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 /// Get data object of externally owned notes shared with the user.
 ///
 /// Arguments:
-/// - [context] - The build context.
-/// - [childPage] - The child widget to return to.
 /// - [hasCurrentAccess] - Flag describing whether user has current
 /// access (ie. not revoked) to external file. If false, all files
 /// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
@@ -324,8 +318,6 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// Get the content of an externally owned note shared with the user.
 ///
 /// Arguments:
-/// - [context] - The build context.
-/// - [childPage] - The widget return page.
 /// - [note] - The externally owned note data object including metadata.
 ///
 /// Returns: [FileCallStatus] object comprising one of:
