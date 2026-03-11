@@ -84,8 +84,9 @@ parts:
       - liblzma-dev
       - libsecret-1-dev
       - libssl-dev
+      - lld
+      - llvm
       - ninja-build
-      - pkg-config
     stage-packages:
       - libgtk-3-0
       - libjsoncpp-dev
