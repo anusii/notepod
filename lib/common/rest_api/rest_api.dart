@@ -32,6 +32,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/models/call_status.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/models/note_content.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';

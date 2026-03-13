@@ -37,6 +37,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/models/note_content.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
