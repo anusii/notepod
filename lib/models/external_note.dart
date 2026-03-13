@@ -107,31 +107,6 @@ class ExternalNote {
   }
 }
 
-/// Class to operate on list of notes
-
-extension ListExternalNoteExtension on List<ExternalNote> {
-  /// Assign list of external notes to list of found external notes
-  /// usign default values.
-
-  List<FoundExternalNote> toListFoundExternalNote() {
-    List<FoundExternalNote> listFoundNotes = map((item) {
-      return FoundExternalNote(
-        content: item.content,
-        sharedTime: item.sharedTime,
-        noteUrl: item.noteUrl,
-        noteFileName: item.noteFileName,
-        noteOwner: item.noteOwner,
-        permissionGranter: item.permissionGranter,
-        permissionRecepient: item.permissionRecepient,
-        permissionType: item.permissionType,
-        permissionList: item.permissionList,
-      );
-    }).toList();
-
-    return listFoundNotes;
-  }
-}
-
 /// Extension of own notes class for found notes,
 /// including the selection status of the note.
 
