@@ -32,7 +32,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 /// A revoke button widget for updating the log record for a list
@@ -44,7 +44,7 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class NoteListRevokeButton extends StatelessWidget {
-  final List<ExternalNote> nonExistentNotes;
+  final List<Note> nonExistentNotes;
   final Widget childPage;
   final SolidScaffoldController scaffoldController;
 
@@ -88,7 +88,7 @@ class NoteListRevokeButton extends StatelessWidget {
                     );
 
                     // Update log with revoke record for each file
-                    for (ExternalNote note in nonExistentNotes) {
+                    for (Note note in nonExistentNotes) {
                       // Call Solidpod function to update user
                       // permission log with a revoke record for
                       // this non-existent file
@@ -97,11 +97,11 @@ class NoteListRevokeButton extends StatelessWidget {
                         fileName: note.noteUrl,
                         isFileEncrypted: true,
                         permissionList:
-                            note.permissionList.split(',') as List<dynamic>,
+                            note.permissionList!.split(',') as List<dynamic>,
                         recipientWebId:
-                            note.permissionRecepient, // ie. the user
+                            note.permissionRecepient!, // ie. the user
                         ownerWebId: note.noteOwner,
-                        granterWebId: note.permissionGranter,
+                        granterWebId: note.permissionGranter!,
                         isFileUrl: true,
                       );
                     }

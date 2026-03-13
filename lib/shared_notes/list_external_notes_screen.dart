@@ -27,7 +27,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/external_notes_call_result.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/shared_notes/list_external_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
@@ -77,12 +77,12 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
   /// a dialog to revoke access to these notes.
   ///
   /// Arguments:
-  ///   [results] - [ExternalNotesCallResult] class containing notes
+  ///   [results] - [NotesCallResult] class containing notes
   /// of files shared to the user, and unparseableNotes list of
   /// any unparseable files, and non-existentNotes list of any notes
   /// that were externally deleted before access was revoked to the user.
 
-  Widget _loadedExternalNotesScreen(ExternalNotesCallResult results) {
+  Widget _loadedExternalNotesScreen(NotesCallResult results) {
     final notes = results.notes!;
     final unparseableNotes = results.unparseableNotes!;
     final nonExistentNotes = results.nonExistentNotes!;
@@ -162,7 +162,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
                 } else if (snapshot.hasData && snapshot.data != null) {
                   // Notes found
                   return _loadedExternalNotesScreen(
-                    snapshot.data as ExternalNotesCallResult,
+                    snapshot.data as NotesCallResult,
                   );
                 } else if (snapshot.data == null ||
                     snapshot.data.toString() == 'null' ||

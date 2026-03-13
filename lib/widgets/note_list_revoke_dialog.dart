@@ -30,7 +30,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_list_revoke_button.dart';
@@ -45,7 +45,7 @@ import 'package:notepod/widgets/note_list_revoke_button.dart';
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class NotesRevokeDialog extends StatefulWidget {
-  final List<ExternalNote> nonExistentNotes;
+  final List<Note> nonExistentNotes;
   final Widget childPage;
 
   /// Scaffold controller
@@ -190,7 +190,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           subtitle: Text(
-                            'Owner: ${getId(widget.nonExistentNotes[index].noteOwner)} \nShared by: ${getId(widget.nonExistentNotes[index].permissionGranter)} \nPermissions: ${widget.nonExistentNotes[index].permissionList}',
+                            'Owner: ${getId(widget.nonExistentNotes[index].noteOwner)} \nShared by: ${getId(widget.nonExistentNotes[index].permissionGranter!)} \nPermissions: ${widget.nonExistentNotes[index].permissionList}',
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),

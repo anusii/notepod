@@ -32,7 +32,6 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/widgets/save_dialog.dart';
 
@@ -69,7 +68,7 @@ class NoteBackButton extends StatelessWidget {
   final SolidScaffoldController scaffoldController;
   final TextEditingController? textController;
   final GlobalKey<FormBuilderState>? formKey;
-  final FoundExternalNote? prevExternalNote;
+  final Note? prevExternalNote;
   final Note? prevOwnNote;
   final bool isExternal;
   final bool isExisting;

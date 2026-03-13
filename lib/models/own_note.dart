@@ -38,10 +38,10 @@ class OwnNote {
   final String noteFileName;
   final String noteUrl;
   final String noteOwner;
-  final NoteContent? content;
+  NoteContent? content;
   final Map<dynamic, dynamic>? authUserList;
 
-  const OwnNote({
+  OwnNote({
     required this.noteFileName,
     required this.noteUrl,
     required this.noteOwner,
