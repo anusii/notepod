@@ -34,8 +34,9 @@ import 'package:notepod/models/call_status.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/models/note.dart';
-import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/own_notes_call_result.dart';
+import 'package:notepod/models/notes_call_result.dart';
+// import 'package:notepod/models/own_note.dart';
+// import 'package:notepod/models/own_notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
@@ -45,17 +46,18 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// - `_asyncDataFetch = getOwnNoteList()`
 /// - used to define async function in future call to get user's notes.
 ///
-/// Returns: [OwnNotesCallResult] object comprising:
-/// - [notes] - list of [OwnNote] note objects.
+/// Returns: [NotesCallResult] object comprising:
+/// - [notes] - list of [Note] note objects.
 /// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
 
-Future<OwnNotesCallResult> getOwnNoteList() async {
+Future<NotesCallResult> getOwnNoteList() async {
   try {
     final startTime = DateTime.now();
 
     final List<String> fileList;
-    final List<OwnNote> notes = [];
+    // final List<OwnNote> notes = [];
+    final List<Note> notes = [];
     final List<SelectedNote> unparseableNotes = [];
 
     // Get note owner
@@ -98,7 +100,8 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
           if (content != null) {
             // Add note content data to note objects list
             notes.add(
-              OwnNote(
+              // OwnNote(
+              Note(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
@@ -142,8 +145,9 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 
     // Fetch permission lists of who each note is shared with
     try {
-      final List<OwnNote> fullNotes;
-      final OwnNotesCallResult results;
+      // final List<OwnNote> fullNotes;
+      final List<Note> fullNotes;
+      final NotesCallResult results;
 
       final List<String> fileList =
           notes.map((note) => note.noteFileName).toList();
@@ -154,7 +158,7 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 
       fullNotes = notes.addAuthUserLists(permissionMaps: permissionMaps);
 
-      results = OwnNotesCallResult(
+      results = NotesCallResult(
         notes: fullNotes,
         unparseableNotes: unparseableNotes,
       );
