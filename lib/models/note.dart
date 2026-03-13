@@ -28,66 +28,8 @@ library;
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/note_content.dart';
 import 'package:notepod/models/own_note.dart';
-
-/// Base data model for the nested note within a note object
-
-class NoteContent {
-  final String noteTitle;
-  final String createdDateTime;
-  final String modifiedDateTime;
-  final String noteContent;
-  final List<String> authUsers;
-
-  const NoteContent({
-    required this.noteTitle,
-    required this.createdDateTime,
-    required this.modifiedDateTime,
-    required this.noteContent,
-    this.authUsers = const [],
-  });
-
-  /// Method to create NoteContent object from json data map
-
-  factory NoteContent.fromJson(Map<String, dynamic> json) {
-    return NoteContent(
-      noteTitle: json[noteTitlePred] as String,
-      createdDateTime: json[createdDateTimePred] as String,
-      modifiedDateTime: json[modifiedDateTimePred] as String,
-      noteContent: json[noteContentPred] as String,
-      authUsers: (json[authUserPred] as Map).keys.toList().cast<String>(),
-    );
-  }
-
-  /// Method to export NoteContent object to json data map
-
-  Map<String, dynamic> toJson() => {
-        noteTitlePred: noteTitle,
-        createdDateTimePred: createdDateTime,
-        modifiedDateTimePred: modifiedDateTime,
-        noteContentPred: noteContent,
-        authUserPred: authUsers,
-      };
-
-  /// Copy method for creating a new instance that is an
-  /// updated copy of another instance
-
-  NoteContent copyWith({
-    String? noteTitle,
-    String? createdDateTime,
-    String? modifiedDateTime,
-    String? noteContent,
-    List<String>? authUsers,
-  }) {
-    return NoteContent(
-      noteTitle: noteTitle ?? this.noteTitle,
-      createdDateTime: createdDateTime ?? this.createdDateTime,
-      modifiedDateTime: modifiedDateTime ?? this.modifiedDateTime,
-      noteContent: noteContent ?? this.noteContent,
-      authUsers: authUsers ?? this.authUsers,
-    );
-  }
-}
 
 /// Data model for any note
 
