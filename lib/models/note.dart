@@ -28,6 +28,7 @@ library;
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/own_note.dart';
 
 /// Base data model for the nested note within a note object
 
@@ -81,5 +82,86 @@ class NoteContent {
       noteContent: noteContent ?? this.noteContent,
       authUsers: authUsers ?? this.authUsers,
     );
+  }
+}
+
+/// Data model for any note
+
+class Note extends OwnNote {
+  final String? sharedTime;
+  final String? permissionGranter;
+  final String? permissionRecepient;
+  final String? permissionType;
+  final String? permissionList;
+  bool isSelected;
+
+  Note({
+    super.content,
+    super.authUserList,
+    required super.noteUrl,
+    required super.noteFileName,
+    required super.noteOwner,
+    this.sharedTime,
+    this.permissionGranter,
+    this.permissionRecepient,
+    this.permissionType,
+    this.permissionList,
+    this.isSelected = false,
+  });
+
+  /// Copy method for creating a new instance that is an
+  /// updated copy of another instance
+
+  @override
+  Note copyWith({
+    NoteContent? content,
+    Map<dynamic, dynamic>? authUserList,
+    String? noteUrl,
+    String? noteFileName,
+    String? noteOwner,
+    String? sharedTime,
+    String? permissionGranter,
+    String? permissionRecepient,
+    String? permissionType,
+    String? permissionList,
+    bool? isSelected,
+  }) {
+    return Note(
+      content: content ?? this.content,
+      authUserList: authUserList ?? this.authUserList,
+      noteUrl: noteUrl ?? this.noteUrl,
+      noteFileName: noteFileName ?? this.noteFileName,
+      noteOwner: noteOwner ?? this.noteOwner,
+      sharedTime: sharedTime ?? this.sharedTime,
+      permissionGranter: permissionGranter ?? this.permissionGranter,
+      permissionRecepient: permissionRecepient ?? this.permissionRecepient,
+      permissionType: permissionType ?? this.permissionType,
+      permissionList: permissionList ?? this.permissionList,
+      isSelected: isSelected ?? this.isSelected,
+    );
+  }
+}
+
+/// Class for operations on list of notes
+
+extension ListNoteExtension on List<Note> {
+  /// Method to add authorised user list map to each file in
+  /// list of notes
+  ///
+  /// Arguments:
+  /// - [permissionMaps] - map of permission maps, with the
+  /// filename as key and the permission map obtained by
+  /// readPermissions() as value.
+
+  List<Note> addAuthUserLists({required Map permissionMaps}) {
+    List<Note> updatedNotes = [];
+
+    for (var note in this) {
+      final Note updatedNote = note.copyWith(
+        authUserList: permissionMaps[note.noteFileName][authUserPred],
+      );
+      updatedNotes.add(updatedNote);
+    }
+    return updatedNotes;
   }
 }
