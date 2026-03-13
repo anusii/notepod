@@ -33,9 +33,11 @@ import 'package:notepod/models/selected_note.dart';
 class NotesCallResult {
   final List<Note>? notes;
   final List<SelectedNote>? unparseableNotes;
+  final List<Note>? nonExistentNotes;
 
   const NotesCallResult({
     this.notes = const [],
     this.unparseableNotes = const [],
+    this.nonExistentNotes = const [],
   });
 }
