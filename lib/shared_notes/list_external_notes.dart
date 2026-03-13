@@ -401,33 +401,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   }
 }
 
-// class TitleExternalNote extends StatelessWidget {
-//   final FoundExternalNote _note;
-
-//   const TitleExternalNote({
-//     super.key,
-//     required note,
-//   }) : _note = note;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List accessList = _note.permissionList.split(',');
-
-//     return Wrap(
-//       children: [
-//         if (accessList.contains('read')) ...[
-//           TitleExternalNoteScreen(
-//             note: _note,
-//           ),
-//         ] else ...[
-//           // Display nothing as no read permission
-//           const Text(''),
-//         ],
-//       ],
-//     );
-//   }
-// }
-
 class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({
     super.key,
