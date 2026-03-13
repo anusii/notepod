@@ -47,6 +47,8 @@ class NoteContent {
     this.authUsers = const [],
   });
 
+  /// Method to create NoteContent object from json data map
+
   factory NoteContent.fromJson(Map<String, dynamic> json) {
     return NoteContent(
       noteTitle: json[noteTitlePred] as String,
@@ -56,6 +58,8 @@ class NoteContent {
       authUsers: (json[authUserPred] as Map).keys.toList().cast<String>(),
     );
   }
+
+  /// Method to export NoteContent object to json data map
 
   Map<String, dynamic> toJson() => {
         noteTitlePred: noteTitle,
@@ -108,6 +112,41 @@ class Note extends OwnNote {
     this.permissionList,
     this.isSelected = false,
   });
+
+  /// Method to create Note object from json data map
+
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      noteUrl: json[noteUrlPred] as String,
+      noteFileName: json[noteFileNamePred] as String,
+      noteOwner: json[noteOwnerPred] as String,
+      sharedTime: json[sharedTimePred] as String,
+      permissionGranter: json[permissionGranterPred] as String,
+      permissionRecepient: json[permissionRecepientPred] as String,
+      permissionType: json[permissionTypePred] as String,
+      permissionList: json[permissionListPred] as String,
+      isSelected: json[isSelectedPred] as bool,
+      content: json[contentPred] as NoteContent,
+      authUserList: json[authUserPred] as Map<dynamic, dynamic>,
+    );
+  }
+
+  /// Method to export Note object to json data map
+
+  @override
+  Map<String, dynamic> toJson() => {
+        noteUrlPred: noteUrl,
+        noteFileNamePred: noteFileName,
+        noteOwnerPred: noteOwner,
+        sharedTimePred: sharedTime,
+        permissionGranterPred: permissionGranter,
+        permissionRecepientPred: permissionRecepient,
+        permissionTypePred: permissionType,
+        permissionListPred: permissionList,
+        isSelectedPred: isSelected,
+        contentPred: content,
+        authUserPred: authUserList,
+      };
 
   /// Copy method for creating a new instance that is an
   /// updated copy of another instance
