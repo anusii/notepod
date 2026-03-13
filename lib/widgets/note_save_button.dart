@@ -33,7 +33,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/models/external_note.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 
 /// A stylised save button widget which on click saves the note content
 /// Pod. External notes are written to the note owner's Pod. Notes created
@@ -60,7 +60,7 @@ class NoteSaveButton extends StatelessWidget {
   final GlobalKey<FormBuilderState> formKey;
   final SolidScaffoldController scaffoldController;
   final FoundExternalNote? prevExternalNote;
-  final FoundOwnNote? prevOwnNote;
+  final Note? prevOwnNote;
   final bool isExisting;
   final bool isExternal;
 

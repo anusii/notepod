@@ -27,7 +27,9 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/own_notes_call_result.dart';
+import 'package:notepod/models/note.dart';
+import 'package:notepod/models/notes_call_result.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
@@ -84,16 +86,16 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// notes.
   ///
   /// Arguments:
-  ///   [results] - [OwnNotesCallResult] class containing [notes] of
+  ///   [results] - [NotesCallResult] class containing [notes] of
   /// files found in user's app data folder, and [unparseableNotes]
   /// list of any unparseable files.
 
   Widget _loadedNotesScreen(
-    OwnNotesCallResult results,
+    NotesCallResult results,
     SolidScaffoldController scaffoldController,
   ) {
-    final notes = results.notes!;
-    final unparseableNotes = results.unparseableNotes!;
+    final List<Note> notes = results.notes!;
+    final List<SelectedNote> unparseableNotes = results.unparseableNotes!;
 
     if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
@@ -165,9 +167,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                     'Error: data loading failed',
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {
-                  // Successfully returned OwnNotesCallResult
+                  // Successfully returned NotesCallResult
                   return _loadedNotesScreen(
-                    snapshot.data as OwnNotesCallResult,
+                    snapshot.data as NotesCallResult,
                     _scaffoldController,
                   );
                 } else if (snapshot.data == null ||

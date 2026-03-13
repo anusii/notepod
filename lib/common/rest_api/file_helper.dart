@@ -38,7 +38,6 @@ import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
-import 'package:notepod/models/own_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -240,7 +239,7 @@ class NoteFileHelper with PodOperationsMixin {
     required GlobalKey<FormBuilderState> formKey,
     required SolidScaffoldController scaffoldController,
     FoundExternalNote? prevExternalNote,
-    FoundOwnNote? prevOwnNote,
+    Note? prevOwnNote,
     bool isExternal = false,
     bool isExisting = false,
   }) async {
@@ -253,7 +252,7 @@ class NoteFileHelper with PodOperationsMixin {
       final String prevNoteTitle;
       final String prevNoteContent;
       final FoundExternalNote updatedExternalNote;
-      final FoundOwnNote updatedOwnNote;
+      final Note updatedOwnNote;
       final NoteContent updatedContent;
 
       // Note title need to be spaceless as we are using that name

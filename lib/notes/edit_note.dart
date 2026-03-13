@@ -31,7 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
@@ -43,7 +43,7 @@ import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 class EditNote extends StatefulWidget {
   /// Data object for the selected note.
-  final FoundOwnNote note;
+  final Note note;
   final SolidScaffoldController scaffoldController;
 
   const EditNote({
@@ -74,7 +74,7 @@ class EditNoteState extends State<EditNote> {
   late final FocusNode _focusContent;
 
   /// Note
-  late final FoundOwnNote _note;
+  late final Note _note;
 
   /// Note text content
   String data = '';
