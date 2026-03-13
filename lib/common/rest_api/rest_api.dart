@@ -31,7 +31,6 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/models/call_status.dart';
-import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
@@ -53,7 +52,6 @@ Future<NotesCallResult> getOwnNoteList() async {
     final startTime = DateTime.now();
 
     final List<String> fileList;
-    // final List<OwnNote> notes = [];
     final List<Note> notes = [];
     final List<SelectedNote> unparseableNotes = [];
 
@@ -97,7 +95,6 @@ Future<NotesCallResult> getOwnNoteList() async {
           if (content != null) {
             // Add note content data to note objects list
             notes.add(
-              // OwnNote(
               Note(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
@@ -142,7 +139,6 @@ Future<NotesCallResult> getOwnNoteList() async {
 
     // Fetch permission lists of who each note is shared with
     try {
-      // final List<OwnNote> fullNotes;
       final List<Note> fullNotes;
       final NotesCallResult results;
 
@@ -321,7 +317,7 @@ Future<NotesCallResult> getExternalNoteList({
 /// - [note] - The externally owned note data object including metadata.
 ///
 /// Returns: [FileCallStatus] object comprising one of:
-/// - [note] - [ExternalNote] note object containing note content.
+/// - [note] - [Note] note object containing note content.
 /// - [FileCallStatus] - where [FileCallStatus] captures read failures
 /// including [FileCallStatus.fileNotExists] and
 /// [FileCallStatus.parsingFail].
