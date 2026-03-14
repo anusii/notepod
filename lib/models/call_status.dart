@@ -38,6 +38,9 @@ enum FileCallStatus {
   /// Function call fails (unknown or any type of fail)
   fail('fail'),
 
+  /// When file access forbidden
+  fileAccessForbidden('fileAccessForbidden'),
+
   /// When file not exists
   fileNotExists('fileNotExists'),
 
