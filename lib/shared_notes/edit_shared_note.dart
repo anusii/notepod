@@ -31,7 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
@@ -43,7 +43,7 @@ import 'package:notepod/widgets/note_edit_scroll_view.dart';
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class EditSharedNote extends StatefulWidget {
-  final FoundExternalNote note;
+  final Note note;
   final SolidScaffoldController scaffoldController;
 
   const EditSharedNote({
@@ -77,7 +77,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
   String data = '';
 
   /// Note
-  late final FoundExternalNote _note;
+  late final Note _note;
 
   @override
   void initState() {

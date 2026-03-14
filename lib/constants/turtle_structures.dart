@@ -51,11 +51,15 @@ String mePred = ':me';
 // 20251006 jess Keep meKey as ref, even though mePred is shorthand
 // String meKey = '#me';
 
-// Shared notes details
-String sharedTimePred = 'sharedTime';
+// All notes details
 String noteUrlPred = 'noteUrl';
 String noteFileNamePred = 'noteFileName';
 String noteOwnerPred = 'noteOwner';
+String contentPred = 'content';
+String isSelectedPred = 'isSelected';
+
+// Shared notes details
+String sharedTimePred = 'sharedTime';
 String permissionGranterPred = 'permissionGranter';
 String permissionRecepientPred = 'permissionRecepient';
 String permissionTypePred = 'permissionType';

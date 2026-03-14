@@ -28,14 +28,13 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
-// import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [StatefulWidget] to list notes owned by the user.
@@ -46,7 +45,7 @@ import 'package:notepod/widgets/simple_action_button.dart';
 ///                sharing with suggestion list of recipient WebIds).
 ///   [scaffoldController] - Controller for the Solid scaffold.
 class ListNotes extends StatefulWidget {
-  final List<OwnNote> notes;
+  final List<Note> notes;
   final SolidScaffoldController scaffoldController;
 
   const ListNotes({
@@ -61,7 +60,7 @@ class ListNotes extends StatefulWidget {
 
 class _ListNotesState extends State<ListNotes> {
   /// Searched/sorted notes
-  List<FoundOwnNote> _foundNotes = [];
+  List<Note> _foundNotes = [];
 
   /// Selected notes
   final List<SelectedNote> selectedNotes = [];
@@ -141,7 +140,7 @@ class _ListNotesState extends State<ListNotes> {
     super.initState();
 
     // By default _foundNotes is the full list of notes
-    _foundNotes = widget.notes.toListFoundOwnNote();
+    _foundNotes = widget.notes;
 
     // Initial sort by title alphabetically
     _sortByTitle(_sortTitleAscending);
@@ -200,13 +199,13 @@ class _ListNotesState extends State<ListNotes> {
 
   // Search notes
   void _searchNotes(String enteredKeyword) {
-    List<FoundOwnNote> results = [];
+    List<Note> results = [];
     if (enteredKeyword.isEmpty) {
       // Display all notes if no search string
-      results = widget.notes.toListFoundOwnNote();
+      results = widget.notes;
     } else {
       // Display notes with title or contents containing search string
-      results = widget.notes.toListFoundOwnNote().where((note) {
+      results = widget.notes.where((note) {
         return note.content!.noteTitle
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
@@ -478,12 +477,12 @@ class _ListNotesState extends State<ListNotes> {
 class TrailingButtons extends StatelessWidget {
   const TrailingButtons({
     super.key,
-    required FoundOwnNote note,
+    required Note note,
     required SolidScaffoldController scaffoldController,
   })  : _note = note,
         _scaffoldController = scaffoldController;
 
-  final FoundOwnNote _note;
+  final Note _note;
   final SolidScaffoldController _scaffoldController;
 
   @override

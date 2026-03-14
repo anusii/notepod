@@ -32,7 +32,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/msg_card.dart';
@@ -46,7 +46,7 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 /// - [note] - The externally owned note shared to the user.
 
 class NonReadableNote extends StatefulWidget {
-  final ExternalNote note;
+  final Note note;
   final SolidScaffoldController scaffoldController;
 
   const NonReadableNote({
@@ -70,7 +70,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
   late bool isNarrow;
 
   /// Note
-  late final ExternalNote _note;
+  late final Note _note;
 
   @override
   void initState() {
@@ -98,8 +98,8 @@ class _NonReadableNoteState extends State<NonReadableNote> {
             // Display note metadata - show sharing and path info but not dates (as requires noteContent)
             DisplayNoteMetadata(
               noteOwner: _note.noteOwner,
-              permissionGranter: _note.permissionGranter,
-              permissionList: _note.permissionList,
+              permissionGranter: _note.permissionGranter!,
+              permissionList: _note.permissionList!,
               noteFileName: _note.noteFileName,
               noteUrl: _note.noteUrl,
               showFileName: true,
@@ -125,7 +125,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                     spacing: 5.0,
                     children: [
                       // Share button
-                      if (_note.permissionList.contains('control')) ...[
+                      if (_note.permissionList!.contains('control')) ...[
                         NoteActionButton(
                           label: ButtonLabel.share,
                           icon: const Icon(Icons.share),

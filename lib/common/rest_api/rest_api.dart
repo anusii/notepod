@@ -31,11 +31,9 @@ import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/models/call_status.dart';
-import 'package:notepod/models/external_note.dart';
-import 'package:notepod/models/external_notes_call_result.dart';
 import 'package:notepod/models/note.dart';
-import 'package:notepod/models/own_note.dart';
-import 'package:notepod/models/own_notes_call_result.dart';
+import 'package:notepod/models/note_content.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
 
@@ -45,17 +43,17 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// - `_asyncDataFetch = getOwnNoteList()`
 /// - used to define async function in future call to get user's notes.
 ///
-/// Returns: [OwnNotesCallResult] object comprising:
-/// - [notes] - list of [OwnNote] note objects.
+/// Returns: [NotesCallResult] object comprising:
+/// - [notes] - list of [Note] note objects.
 /// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
 
-Future<OwnNotesCallResult> getOwnNoteList() async {
+Future<NotesCallResult> getOwnNoteList() async {
   try {
     final startTime = DateTime.now();
 
     final List<String> fileList;
-    final List<OwnNote> notes = [];
+    final List<Note> notes = [];
     final List<SelectedNote> unparseableNotes = [];
 
     // Get note owner
@@ -98,7 +96,7 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
           if (content != null) {
             // Add note content data to note objects list
             notes.add(
-              OwnNote(
+              Note(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
@@ -142,8 +140,8 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 
     // Fetch permission lists of who each note is shared with
     try {
-      final List<OwnNote> fullNotes;
-      final OwnNotesCallResult results;
+      final List<Note> fullNotes;
+      final NotesCallResult results;
 
       final List<String> fileList =
           notes.map((note) => note.noteFileName).toList();
@@ -154,7 +152,7 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 
       fullNotes = notes.addAuthUserLists(permissionMaps: permissionMaps);
 
-      results = OwnNotesCallResult(
+      results = NotesCallResult(
         notes: fullNotes,
         unparseableNotes: unparseableNotes,
       );
@@ -183,27 +181,26 @@ Future<OwnNotesCallResult> getOwnNoteList() async {
 /// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
 /// that user has current access to.
 ///
-/// Returns: [ExternalNotesCallResult] object comprising:
-/// - [notes] - list of [ExternalNote] note objects.
+/// Returns: [NotesCallResult] object comprising:
+/// - [notes] - list of [Note] note objects.
 /// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
-/// - [nonExistentNotes] - list of non-existent [ExternalNote] note
+/// - [nonExistentNotes] - list of non-existent [Note] note
 /// objects, if external files were deleted by their owner without
 /// first revoking access to the user (and other recipients).
 
-Future<ExternalNotesCallResult> getExternalNoteList({
+Future<NotesCallResult> getExternalNoteList({
   bool hasCurrentAccess = true,
 }) async {
   final startTime = DateTime.now();
 
-  final List<ExternalNote> notes = [];
+  final List<Note> notes = [];
   // Build list of external notes shared to user
 
   final Map<dynamic, dynamic> externalNotesLog;
 
   externalNotesLog = await NoteFileHelper().scanPermLogFile();
 
-  // final List<ExternalNote> notes = [];
   List<String> unparseableLogRecords = [];
 
   if (externalNotesLog.isNotEmpty) {
@@ -221,7 +218,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 
       // Deserialise external note log record
       try {
-        final ExternalNote? note;
+        final Note? note;
 
         // Extract log record of each external note
         // where user currently has access
@@ -256,10 +253,10 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   // Fetch and deserialize external note content
   // or count bad files according to error type
   try {
-    final List<ExternalNote> fullNotes = [];
-    final List<ExternalNote> nonExistentNotes = [];
+    final List<Note> fullNotes = [];
+    final List<Note> nonExistentNotes = [];
     final List<SelectedNote> unparseableNotes = [];
-    final ExternalNotesCallResult results;
+    final NotesCallResult results;
 
     if (notes.isNotEmpty) {
       // Create a list of future functions for reading external Pods
@@ -295,7 +292,7 @@ Future<ExternalNotesCallResult> getExternalNoteList({
       }
     }
 
-    results = ExternalNotesCallResult(
+    results = NotesCallResult(
       notes: fullNotes,
       nonExistentNotes: nonExistentNotes,
       unparseableNotes: unparseableNotes,
@@ -321,13 +318,13 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// - [note] - The externally owned note data object including metadata.
 ///
 /// Returns: [FileCallStatus] object comprising one of:
-/// - [note] - [ExternalNote] note object containing note content.
+/// - [note] - [Note] note object containing note content.
 /// - [FileCallStatus] - where [FileCallStatus] captures read failures
 /// including [FileCallStatus.fileNotExists] and
 /// [FileCallStatus.parsingFail].
 
 Future<dynamic> getExternalNoteContent({
-  required ExternalNote note,
+  required Note note,
 }) async {
   try {
     // Get decrypted note content from external file

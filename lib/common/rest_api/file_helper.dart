@@ -36,9 +36,8 @@ import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/external_note.dart';
 import 'package:notepod/models/note.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note_content.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
@@ -112,7 +111,7 @@ class NoteFileHelper with PodOperationsMixin {
   ///
   /// Returns: parsed map of details of external note file.
 
-  static ExternalNote? extFileDetailsFromLog({
+  static Note? extFileDetailsFromLog({
     required Map logRecordOfFile,
     required String fileUrl,
   }) {
@@ -159,11 +158,11 @@ class NoteFileHelper with PodOperationsMixin {
 
       // Create the external note details object
 
-      return ExternalNote(
-        sharedTime: sharedTime!,
+      return Note(
         noteUrl: noteUrl!,
         noteFileName: noteFileName,
         noteOwner: noteOwner!,
+        sharedTime: sharedTime!,
         permissionGranter: permissionGranter!,
         permissionRecepient: permissionRecepient!,
         permissionType: permissionType!,
@@ -239,8 +238,8 @@ class NoteFileHelper with PodOperationsMixin {
     required TextEditingController textController,
     required GlobalKey<FormBuilderState> formKey,
     required SolidScaffoldController scaffoldController,
-    FoundExternalNote? prevExternalNote,
-    FoundOwnNote? prevOwnNote,
+    Note? prevExternalNote,
+    Note? prevOwnNote,
     bool isExternal = false,
     bool isExisting = false,
   }) async {
@@ -252,8 +251,8 @@ class NoteFileHelper with PodOperationsMixin {
       String noteText = textController.text;
       final String prevNoteTitle;
       final String prevNoteContent;
-      final FoundExternalNote updatedExternalNote;
-      final FoundOwnNote updatedOwnNote;
+      final Note updatedExternalNote;
+      final Note updatedOwnNote;
       final NoteContent updatedContent;
 
       // Note title need to be spaceless as we are using that name

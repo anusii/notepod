@@ -32,8 +32,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/external_note.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 
 /// A save note options dialog providing the user with the options to
 /// save or don't save the note, or cancel their back action.
@@ -55,8 +54,8 @@ class SaveDialog extends StatelessWidget {
   final TextEditingController textController;
   final SolidScaffoldController scaffoldController;
   final GlobalKey<FormBuilderState> formKey;
-  final FoundExternalNote? prevExternalNote;
-  final FoundOwnNote? prevOwnNote;
+  final Note? prevExternalNote;
+  final Note? prevOwnNote;
   final bool isExternal;
 
   /// Only called for existing notes
