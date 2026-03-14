@@ -29,8 +29,9 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
+import 'package:notepod/notes/share_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
-import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
@@ -450,10 +451,11 @@ class SharedTrailingButtons extends StatelessWidget {
         if (accessList.contains('control')) ...[
           SimpleActionButton(
             icon: const Icon(Icons.share),
-            childPage: ShareExternalNote(
-              note: _note,
-              backPage: ViewSharedNote(
-                note: _note,
+            childPage: ShareNote(
+              noteUrl: _note.noteUrl,
+              noteOwner: _note.noteOwner,
+              isExternalRes: true,
+              backPage: ListExternalNotesScreen(
                 scaffoldController: _scaffoldController,
               ),
               scaffoldController: _scaffoldController,

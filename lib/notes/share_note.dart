@@ -29,26 +29,31 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 
 /// A [StatefulWidget] for sharing a note owned by the user.
 ///
 /// Arguments:
-/// - [note] - is the data of the selected note to be shared.
-/// - [scaffoldController] - Controller for the Solid scaffold.
+/// - [noteUrl] - is the name of the note to be shared.
+/// - [noteOwner] - is the webId of the note owner.
 /// - [backPage] - The widget used by Back button.
+/// - [isExternalRes] - Whether the note is externally owned.
+/// - [scaffoldController] - Controller for the Solid scaffold.
 
 class ShareNote extends StatefulWidget {
-  final FoundOwnNote note;
+  final String noteUrl;
+  final String noteOwner;
   final Widget backPage;
+  final bool isExternalRes;
   final SolidScaffoldController scaffoldController;
 
   const ShareNote({
     super.key,
-    required this.note,
+    required this.noteUrl,
+    required this.noteOwner,
     required this.backPage,
     required this.scaffoldController,
+    this.isExternalRes = false,
   });
 
   @override
@@ -62,14 +67,10 @@ class ShareNoteState extends State<ShareNote> {
   /// Scaffold controller
   late final SolidScaffoldController _scaffoldController;
 
-  /// Note
-  late final FoundOwnNote _note;
-
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _note = widget.note;
     _scaffoldController = widget.scaffoldController;
   }
 
@@ -103,7 +104,9 @@ class ShareNoteState extends State<ShareNote> {
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: GrantPermissionUi(
                       showAppBar: false,
-                      resourceName: _note.noteFileName,
+                      resourceName: widget.noteUrl,
+                      ownerWebId: widget.noteOwner,
+                      isExternalRes: widget.isExternalRes,
                     ),
                   ),
                 ],
