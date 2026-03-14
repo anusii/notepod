@@ -265,6 +265,8 @@ Future<NotesCallResult> getExternalNoteList({
       // Create a list of future functions for reading external Pods
       List<Future<dynamic>> futuresExtNoteContentResult = [];
       for (final note in notes) {
+        debugPrint('Fetching content for note: ${note.noteFileName}');
+        debugPrint('note url: ${note.noteUrl}');
         futuresExtNoteContentResult.add(
           getExternalNoteContent(
             note: note,
@@ -272,11 +274,19 @@ Future<NotesCallResult> getExternalNoteList({
         );
       }
 
+      debugPrint('Completed getExternalNoteContent()');
+
       List<dynamic> extNoteWithContentResults =
           await Future.wait(futuresExtNoteContentResult);
 
       // Retrieve note data
       for (int i = 0; i < notes.length; i++) {
+        debugPrint(
+          'Content result: ${extNoteWithContentResults[i].toString()}',
+        );
+
+        // FIXME: continue if access forbidden
+
         if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
           unparseableNotes.add(
             SelectedNote(
@@ -330,6 +340,8 @@ Future<dynamic> getExternalNoteContent({
   required Note note,
 }) async {
   try {
+    // FIXME: if permision not include read, return FileCallStatus.accessForbidden
+
     // Get decrypted note content from external file
     final noteContentResult = await readExternalPod(
       note.noteUrl,
