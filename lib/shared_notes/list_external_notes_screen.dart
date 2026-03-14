@@ -64,12 +64,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-    _asyncDataFetch = getExternalNoteList(
-      context: context,
-      childPage: ListExternalNotesScreen(
-        scaffoldController: _scaffoldController,
-      ),
-    );
+    _asyncDataFetch = getExternalNoteList();
   }
 
   @override
