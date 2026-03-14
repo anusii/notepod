@@ -40,7 +40,6 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/shared_notes/view_shared_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
@@ -167,6 +166,7 @@ class NoteFileHelper with PodOperationsMixin {
         permissionRecepient: permissionRecepient!,
         permissionType: permissionType!,
         permissionList: permissionList!,
+        isExternalRes: true,
       );
     } catch (e) {
       debugPrint('Error: $e');
@@ -318,7 +318,7 @@ class NoteFileHelper with PodOperationsMixin {
                 noteUrl: prevExternalNote.noteUrl,
                 noteOwner: prevExternalNote.noteOwner,
                 data: updatedContent,
-                childPage: ViewSharedNote(
+                childPage: ViewNote(
                   note: updatedExternalNote,
                   scaffoldController: scaffoldController,
                 ),
