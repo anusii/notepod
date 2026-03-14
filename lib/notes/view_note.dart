@@ -48,21 +48,21 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 /// - [note] - The note to view.
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
-class ViewSharedNote extends StatefulWidget {
+class ViewNote extends StatefulWidget {
   final Note note;
   final SolidScaffoldController scaffoldController;
 
-  const ViewSharedNote({
+  const ViewNote({
     super.key,
     required this.note,
     required this.scaffoldController,
   });
 
   @override
-  State<ViewSharedNote> createState() => _ViewSharedNoteState();
+  State<ViewNote> createState() => _ViewNoteState();
 }
 
-class _ViewSharedNoteState extends State<ViewSharedNote> {
+class _ViewNoteState extends State<ViewNote> {
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -170,7 +170,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                             noteUrl: _note.noteUrl,
                             noteOwner: _note.noteOwner,
                             isExternalRes: true,
-                            backPage: ViewSharedNote(
+                            backPage: ViewNote(
                               note: _note,
                               scaffoldController: _scaffoldController,
                             ),
