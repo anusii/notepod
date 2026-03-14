@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Use common share widget [0.3.7 20260314 jesscmoore]
 + Simplify function parameters [0.3.7 20260314 jesscmoore]
 + Updates delete file calls to comply with solidpod change [0.3.7 20260311 tonypioneer]
 + Corrects granterWebId in sharing process [0.3.7 20260205 jesscmoore]
