@@ -32,7 +32,7 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/shared_notes/view_shared_note.dart';
+import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
@@ -453,7 +453,7 @@ class _ListNotesState extends State<ListNotes> {
                             ),
                             onTap: () {
                               _scaffoldController.navigateToSubpage(
-                                ViewSharedNote(
+                                ViewNote(
                                   note: _foundNotes[index],
                                   scaffoldController: _scaffoldController,
                                 ),
