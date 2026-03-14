@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Use common edit widget [0.3.7 20260314 jesscmoore]
 + Use common view widget [0.3.7 20260314 jesscmoore]
 + Adopt a generalised note data model [0.3.7 20260314 jesscmoore]
 + Use common share widget [0.3.7 20260314 jesscmoore]
