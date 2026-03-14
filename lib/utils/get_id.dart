@@ -31,6 +31,8 @@ library;
 /// - [webId] - webId from which to extract the id.
 
 String getId(String webId) {
+  if (!Uri.parse(webId).hasScheme) return 'N/A';
+
   final Uri uri = Uri.parse(webId);
   final String id = uri.pathSegments.first;
 
