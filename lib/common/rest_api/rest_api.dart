@@ -102,7 +102,7 @@ Future<NotesCallResult> getOwnNoteList() async {
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
                 content: content,
-                permissionList: 'read,write,control',
+                permissionList: 'append,read,write,control',
               ),
             );
           } else {
