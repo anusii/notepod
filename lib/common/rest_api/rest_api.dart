@@ -28,7 +28,6 @@ library;
 import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
-import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/models/call_status.dart';
@@ -43,26 +42,17 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// Get the list of user's note objects.
 ///
 /// Example:
-/// - `_asyncDataFetch = getOwnNoteList(context: context, childPage: ListNotesScreen())`
+/// - `_asyncDataFetch = getOwnNoteList()`
 /// - used to define async function in future call to get user's notes.
-///
-/// Arguments:
-/// - [context] - the build context.
-/// - [childPage] - is the child widget to return to.
 ///
 /// Returns: [OwnNotesCallResult] object comprising:
 /// - [notes] - list of [OwnNote] note objects.
 /// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
 
-Future<OwnNotesCallResult> getOwnNoteList({
-  required BuildContext context,
-  required Widget childPage,
-}) async {
+Future<OwnNotesCallResult> getOwnNoteList() async {
   try {
     final startTime = DateTime.now();
-    // Get security key if required
-    await getKeyFromUserIfRequired(context, childPage);
 
     final List<String> fileList;
     final List<OwnNote> notes = [];
@@ -84,11 +74,9 @@ Future<OwnNotesCallResult> getOwnNoteList({
           fileName: fileName,
         ),
       );
-      if (context.mounted) {
-        futuresNoteContentResult.add(
-          readPod(fileName),
-        );
-      }
+      futuresNoteContentResult.add(
+        readPod(fileName),
+      );
     }
 
     // Read note file content and fetch file Urls
@@ -142,9 +130,8 @@ Future<OwnNotesCallResult> getOwnNoteList({
             noteOwner: noteOwner,
           ),
         );
-        debugPrint('Found empty file: ${fileList[i]}'); //
+        debugPrint('Found empty file: ${fileList[i]}');
       }
-      // }
     }
 
     if (unparseableNotes.isNotEmpty) {
@@ -191,8 +178,6 @@ Future<OwnNotesCallResult> getOwnNoteList({
 /// Get data object of externally owned notes shared with the user.
 ///
 /// Arguments:
-/// - [context] - The build context.
-/// - [childPage] - The child widget to return to.
 /// - [hasCurrentAccess] - Flag describing whether user has current
 /// access (ie. not revoked) to external file. If false, all files
 /// which the user has or has previously been granted access will be returned. (Default: true, ie. only returns list of external notes
@@ -207,8 +192,6 @@ Future<OwnNotesCallResult> getOwnNoteList({
 /// first revoking access to the user (and other recipients).
 
 Future<ExternalNotesCallResult> getExternalNoteList({
-  required BuildContext context,
-  required Widget childPage,
   bool hasCurrentAccess = true,
 }) async {
   final startTime = DateTime.now();
@@ -216,15 +199,9 @@ Future<ExternalNotesCallResult> getExternalNoteList({
   final List<ExternalNote> notes = [];
   // Build list of external notes shared to user
 
-  // Get security key if required
-  await getKeyFromUserIfRequired(context, childPage);
-
   final Map<dynamic, dynamic> externalNotesLog;
 
-  if (!context.mounted) return const ExternalNotesCallResult();
-
-  externalNotesLog = await NoteFileHelper()
-      .scanPermLogFile(context: context, childPage: childPage);
+  externalNotesLog = await NoteFileHelper().scanPermLogFile();
 
   // final List<ExternalNote> notes = [];
   List<String> unparseableLogRecords = [];
@@ -288,15 +265,11 @@ Future<ExternalNotesCallResult> getExternalNoteList({
       // Create a list of future functions for reading external Pods
       List<Future<dynamic>> futuresExtNoteContentResult = [];
       for (final note in notes) {
-        if (context.mounted) {
-          futuresExtNoteContentResult.add(
-            getExternalNoteContent(
-              context: context,
-              childPage: childPage,
-              note: note,
-            ),
-          );
-        }
+        futuresExtNoteContentResult.add(
+          getExternalNoteContent(
+            note: note,
+          ),
+        );
       }
 
       List<dynamic> extNoteWithContentResults =
@@ -345,8 +318,6 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// Get the content of an externally owned note shared with the user.
 ///
 /// Arguments:
-/// - [context] - The build context.
-/// - [childPage] - The widget return page.
 /// - [note] - The externally owned note data object including metadata.
 ///
 /// Returns: [FileCallStatus] object comprising one of:
@@ -356,8 +327,6 @@ Future<ExternalNotesCallResult> getExternalNoteList({
 /// [FileCallStatus.parsingFail].
 
 Future<dynamic> getExternalNoteContent({
-  required BuildContext context,
-  required Widget childPage,
   required ExternalNote note,
 }) async {
   try {
@@ -368,7 +337,7 @@ Future<dynamic> getExternalNoteContent({
 
     // Extract external note ttl data to noteContent
     try {
-      // Deserialize note context
+      // Deserialize note content
       final NoteContent? content;
       content = TurtleSerializer.noteFromTurtle(noteContentResult);
 

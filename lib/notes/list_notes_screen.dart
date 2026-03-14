@@ -69,12 +69,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-    _asyncDataFetch = getOwnNoteList(
-      context: context,
-      childPage: ListNotesScreen(
-        scaffoldController: _scaffoldController,
-      ),
-    );
+    _asyncDataFetch = getOwnNoteList();
     _scrollController = ScrollController();
   }
 
