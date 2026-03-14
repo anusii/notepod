@@ -29,10 +29,10 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/shared_notes/non_readable_note.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
@@ -367,9 +367,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
                           onTap: () {
                             // Open note if read in permissions
-                            // String access =
-                            //     _foundNotes[sharedNotesUrlList[index]]
-                            //         [permissionListPred];
                             String access = _foundNotes[index].permissionList!;
                             if (access.contains('read')) {
                               _scaffoldController.navigateToSubpage(
@@ -427,7 +424,7 @@ class SharedTrailingButtons extends StatelessWidget {
             childPage: ShareNote(
               noteUrl: _note.noteUrl,
               noteOwner: _note.noteOwner,
-              isExternalRes: true,
+              isExternal: _note.isExternalRes,
               backPage: ListExternalNotesScreen(
                 scaffoldController: _scaffoldController,
               ),

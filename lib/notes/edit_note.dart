@@ -156,9 +156,10 @@ class EditNoteState extends State<EditNote> {
         scaffoldController: _scaffoldController,
       ),
       data: data,
-      prevOwnNote: _note,
+      prevNote: _note,
       noteTitle: _note.content!.noteTitle,
       isExisting: true,
+      isExternal: _note.isExternalRes,
     );
   }
 }
