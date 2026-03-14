@@ -42,10 +42,7 @@ import 'package:notepod/models/note.dart';
 /// - [textController] - text controller holding text of the note body.
 ///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [formKey] - form key holding text of the note title.
-/// - [prevExternalNote] - Optional existing external note data object. Required
-/// for saving existing externally owned notes. (Default: null).
-/// - [prevOwnNote] - Optional existing user's note data object. Required
-/// for saving existing notes owned by the user. (Default: null).
+/// - [prevNote] - Optional existing note data object. Required for saving existing note. (Default: null).
 /// - [isExternal] - Optional boolean denoting whether note is externally
 /// owned. (Default: false).
 
@@ -54,8 +51,7 @@ class SaveDialog extends StatelessWidget {
   final TextEditingController textController;
   final SolidScaffoldController scaffoldController;
   final GlobalKey<FormBuilderState> formKey;
-  final Note? prevExternalNote;
-  final Note? prevOwnNote;
+  final Note? prevNote;
   final bool isExternal;
 
   /// Only called for existing notes
@@ -67,8 +63,7 @@ class SaveDialog extends StatelessWidget {
     required this.textController,
     required this.scaffoldController,
     required this.formKey,
-    this.prevExternalNote,
-    this.prevOwnNote,
+    this.prevNote,
     this.isExternal = false,
   });
 
@@ -93,24 +88,15 @@ class SaveDialog extends StatelessWidget {
           child: const Text('Save'),
           onPressed: () async {
             // Save note
-            (isExternal)
-                ? await NoteFileHelper().saveNote(
-                    context: context,
-                    textController: textController,
-                    scaffoldController: scaffoldController,
-                    formKey: formKey,
-                    prevExternalNote: prevExternalNote,
-                    isExisting: isExisting,
-                    isExternal: isExternal,
-                  )
-                : await NoteFileHelper().saveNote(
-                    context: context,
-                    textController: textController,
-                    scaffoldController: scaffoldController,
-                    formKey: formKey,
-                    prevOwnNote: prevOwnNote,
-                    isExisting: isExisting,
-                  );
+            await NoteFileHelper().saveNote(
+              context: context,
+              textController: textController,
+              scaffoldController: scaffoldController,
+              formKey: formKey,
+              prevNote: prevNote,
+              isExisting: isExisting,
+              isExternal: isExternal,
+            );
           },
         ),
         // Don't save button

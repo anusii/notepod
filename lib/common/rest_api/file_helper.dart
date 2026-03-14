@@ -224,10 +224,7 @@ class NoteFileHelper with PodOperationsMixin {
   /// - [textController] - Text controller of the note text content editor.
   /// - [formKey] - Key of the form to edit note metadata.
   ///   [scaffoldController] - Controller for the Solid scaffold.
-  /// - [prevExternalNote] - Optional existing external note data object. Required
-  /// for saving existing externally owned notes. (Default: null).
-  /// - [prevOwnNote] - Optional existing user's note data object. Required
-  /// for saving existing notes owned by the user. (Default: null).
+  /// - [prevNote] - Optional existing note data object. Required if isExisting is true.
   /// - [isExternal] - Optional boolean denoting whether note is externally
   /// owned. (Default: false).
   /// - [isExisting] - Optional boolean denoting whether note already
@@ -238,8 +235,7 @@ class NoteFileHelper with PodOperationsMixin {
     required TextEditingController textController,
     required GlobalKey<FormBuilderState> formKey,
     required SolidScaffoldController scaffoldController,
-    Note? prevExternalNote,
-    Note? prevOwnNote,
+    Note? prevNote,
     bool isExternal = false,
     bool isExisting = false,
   }) async {
@@ -251,8 +247,7 @@ class NoteFileHelper with PodOperationsMixin {
       String noteText = textController.text;
       final String prevNoteTitle;
       final String prevNoteContent;
-      final Note updatedExternalNote;
-      final Note updatedOwnNote;
+      final Note updatedNote;
       final NoteContent updatedContent;
 
       // Note title need to be spaceless as we are using that name
@@ -265,13 +260,8 @@ class NoteFileHelper with PodOperationsMixin {
 
       if (isExisting) {
         // Retrieve existing note title and content for comparison
-        if (isExternal) {
-          prevNoteTitle = prevExternalNote!.content!.noteTitle;
-          prevNoteContent = prevExternalNote.content!.noteContent;
-        } else {
-          prevNoteTitle = prevOwnNote!.content!.noteTitle;
-          prevNoteContent = prevOwnNote.content!.noteContent;
-        }
+        prevNoteTitle = prevNote!.content!.noteTitle;
+        prevNoteContent = prevNote.content!.noteContent;
         // Compare updated title and content to existing
         // title and content
         if (noteTitle == prevNoteTitle && noteText == prevNoteContent) {
@@ -284,42 +274,41 @@ class NoteFileHelper with PodOperationsMixin {
             false,
           );
 
-          if (isExternal) {
-            // Update content of External note
-            try {
-              updatedContent = prevExternalNote!.content!.copyWith(
-                modifiedDateTime: modifiedDateTimeStr,
-                noteTitle: noteTitle,
-                noteContent: noteText,
-              );
-              updatedExternalNote =
-                  prevExternalNote.copyWith(content: updatedContent);
-            } on Exception catch (e) {
-              debugPrint(
-                'Exception (formatting update to existing note):\n $e',
-              );
-              rethrow;
-            }
+          // Update content of note
+          try {
+            updatedContent = prevNote.content!.copyWith(
+              modifiedDateTime: modifiedDateTimeStr,
+              noteTitle: noteTitle,
+              noteContent: noteText,
+            );
+            updatedNote = prevNote.copyWith(content: updatedContent);
+          } on Exception catch (e) {
+            debugPrint(
+              'Exception (formatting update to existing note):\n $e',
+            );
+            rethrow;
+          }
 
+          if (isExternal) {
             // Save external note
             try {
               if (!context.mounted) return;
 
               debugPrint('save external note:');
-              debugPrint('noteUrl: ${prevExternalNote.noteUrl}');
-              debugPrint('noteFileName: ${prevExternalNote.noteFileName}');
-              debugPrint('noteOwner: ${prevExternalNote.noteOwner}');
+              debugPrint('noteUrl: ${prevNote.noteUrl}');
+              debugPrint('noteFileName: ${prevNote.noteFileName}');
+              debugPrint('noteOwner: ${prevNote.noteOwner}');
 
               // External note
               // Encrypt note, create TTL, update file in POD
               await saveNoteToPod(
                 context: context,
                 // Use existing file url
-                noteUrl: prevExternalNote.noteUrl,
-                noteOwner: prevExternalNote.noteOwner,
+                noteUrl: prevNote.noteUrl,
+                noteOwner: prevNote.noteOwner,
                 data: updatedContent,
                 childPage: ViewNote(
-                  note: updatedExternalNote,
+                  note: updatedNote,
                   scaffoldController: scaffoldController,
                 ),
                 scaffoldController: scaffoldController,
@@ -329,21 +318,6 @@ class NoteFileHelper with PodOperationsMixin {
               debugPrint('Exception (saving existing external note):\n $e');
             }
           } else {
-            // Update content of Own note
-            try {
-              updatedContent = prevOwnNote!.content!.copyWith(
-                modifiedDateTime: modifiedDateTimeStr,
-                noteTitle: noteTitle,
-                noteContent: noteText,
-              );
-              updatedOwnNote = prevOwnNote.copyWith(content: updatedContent);
-            } on Exception catch (e) {
-              debugPrint(
-                'Exception (formatting update to existing note):\n $e',
-              );
-              rethrow;
-            }
-
             // Save own note
             try {
               if (!context.mounted) return;
@@ -353,11 +327,11 @@ class NoteFileHelper with PodOperationsMixin {
               await saveNoteToPod(
                 context: context,
                 // Use existing filename
-                noteFileName: prevOwnNote.noteFileName,
+                noteFileName: prevNote.noteFileName,
                 data: updatedContent,
                 overwrite: true,
                 childPage: ViewNote(
-                  note: updatedOwnNote,
+                  note: updatedNote,
                   scaffoldController: scaffoldController,
                 ),
                 scaffoldController: scaffoldController,
