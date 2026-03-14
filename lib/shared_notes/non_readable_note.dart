@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Anushka Vidanage, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -33,8 +33,8 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/external_note.dart';
+import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/shared_notes/share_external_note.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
@@ -130,8 +130,10 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                           label: ButtonLabel.share,
                           icon: const Icon(Icons.share),
                           backgroundColor: ButtonBackgroundColor.share,
-                          childPage: ShareExternalNote(
-                            note: _note,
+                          childPage: ShareNote(
+                            noteUrl: _note.noteUrl,
+                            noteOwner: _note.noteOwner,
+                            isExternalRes: true,
                             backPage: ListExternalNotesScreen(
                               scaffoldController: _scaffoldController,
                             ),

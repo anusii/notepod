@@ -152,7 +152,8 @@ class _ViewNoteState extends State<ViewNote> {
                         icon: const Icon(Icons.share),
                         backgroundColor: ButtonBackgroundColor.share,
                         childPage: ShareNote(
-                          note: _note,
+                          noteUrl: _note.noteUrl,
+                          noteOwner: _note.noteOwner,
                           backPage: ViewNote(
                             note: _note,
                             scaffoldController: _scaffoldController,

@@ -495,7 +495,8 @@ class TrailingButtons extends StatelessWidget {
         SimpleActionButton(
           icon: const Icon(Icons.share),
           childPage: ShareNote(
-            note: _note,
+            noteUrl: _note.noteUrl,
+            noteOwner: _note.noteOwner,
             backPage: ListNotesScreen(
               scaffoldController: _scaffoldController,
             ),
