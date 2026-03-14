@@ -168,7 +168,7 @@ class _ViewNoteState extends State<ViewNote> {
                           childPage: ShareNote(
                             noteUrl: _note.noteUrl,
                             noteOwner: _note.noteOwner,
-                            isExternalRes: _note.isExternalRes,
+                            isExternal: _note.isExternalRes,
                             backPage: ViewNote(
                               note: _note,
                               scaffoldController: _scaffoldController,
