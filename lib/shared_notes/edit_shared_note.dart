@@ -156,7 +156,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
         scaffoldController: _scaffoldController,
       ),
       data: data,
-      prevExternalNote: _note,
+      prevNote: _note,
       noteTitle: _note.content!.noteTitle,
       isExternal: true,
       isExisting: true,

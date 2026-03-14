@@ -54,8 +54,7 @@ class NoteEditScrollView extends StatelessWidget {
     required FocusNode focusContent,
     required this.childPage,
     required this.data,
-    this.prevExternalNote,
-    this.prevOwnNote,
+    this.prevNote,
     this.isExternal = false,
     this.isExisting = false,
     this.noteTitle,
@@ -86,8 +85,7 @@ class NoteEditScrollView extends StatelessWidget {
   final String data;
 
   /// Existing note data is note already exists
-  final Note? prevExternalNote;
-  final Note? prevOwnNote;
+  final Note? prevNote;
 
   /// Boolean describing whether note is shared to pod owner from an
   /// external source.
@@ -120,48 +118,30 @@ class NoteEditScrollView extends StatelessWidget {
                   textController: _textController!,
                   formKey: formKey,
                   scaffoldController: _scaffoldController,
-                  // notesMap: notesMap,
                 ),
               ]
             : [
                 // Edit Note: save and back buttons
                 // Save button
-                (isExternal)
-                    ? NoteSaveButton(
-                        textController: _textController!,
-                        formKey: formKey,
-                        scaffoldController: _scaffoldController,
-                        prevExternalNote: prevExternalNote,
-                        isExisting: true,
-                        isExternal: isExternal,
-                      )
-                    : NoteSaveButton(
-                        textController: _textController!,
-                        formKey: formKey,
-                        scaffoldController: _scaffoldController,
-                        prevOwnNote: prevOwnNote,
-                        isExisting: true,
-                      ),
+                NoteSaveButton(
+                  textController: _textController!,
+                  formKey: formKey,
+                  scaffoldController: _scaffoldController,
+                  prevNote: prevNote,
+                  isExisting: true,
+                  isExternal: isExternal,
+                ),
                 // Back button
                 // Nav to view note or view isExternal note
-                (isExternal)
-                    ? NoteBackButton(
-                        childPage: childPage,
-                        textController: _textController,
-                        formKey: formKey,
-                        scaffoldController: _scaffoldController,
-                        prevExternalNote: prevExternalNote,
-                        isExisting: isExisting,
-                        isExternal: isExternal,
-                      )
-                    : NoteBackButton(
-                        childPage: childPage,
-                        textController: _textController,
-                        formKey: formKey,
-                        scaffoldController: _scaffoldController,
-                        prevOwnNote: prevOwnNote,
-                        isExisting: isExisting,
-                      ),
+                NoteBackButton(
+                  childPage: childPage,
+                  textController: _textController,
+                  formKey: formKey,
+                  scaffoldController: _scaffoldController,
+                  prevNote: prevNote,
+                  isExisting: isExisting,
+                  isExternal: isExternal,
+                ),
               ],
       );
     }
