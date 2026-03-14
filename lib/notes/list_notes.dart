@@ -363,13 +363,7 @@ class _ListNotesState extends State<ListNotes> {
                                     : Icons.arrow_drop_up,
                               ),
                               label: Text(
-                                _sortModDateAscending
-                                    ? !isNarrow
-                                        ? 'Date First Modified'
-                                        : 'Date'
-                                    : !isNarrow
-                                        ? 'Date Last Modified'
-                                        : 'Date',
+                                !isNarrow ? 'Date Last Modified' : 'Date',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
