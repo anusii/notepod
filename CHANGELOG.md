@@ -32,8 +32,12 @@ a Pull Request. Thanks.
 
 ## 0.4
 
-+ Updates delete file calls to comply with solidpod change [0.3.9 20260311 tonypioneer]
-+ Corrects granterWebId in sharing process [0.3.8 20260205 jesscmoore]
++ Use common view widget [0.3.7 20260314 jesscmoore]
++ Adopt a generalised note data model [0.3.7 20260314 jesscmoore]
++ Use common share widget [0.3.7 20260314 jesscmoore]
++ Simplify function parameters [0.3.7 20260314 jesscmoore]
++ Updates delete file calls to comply with solidpod change [0.3.7 20260311 tonypioneer]
++ Corrects granterWebId in sharing process [0.3.7 20260205 jesscmoore]
 + Remove redundant logout button [0.3.7 20260123 tonypioneer]
 + Bug fix: CONTINUE when not logged in [0.3.6 20260123 tonypioneer]
 + Dependency cleanup and update [0.3.5 20260119 gjw]
