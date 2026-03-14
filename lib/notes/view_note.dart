@@ -81,9 +81,7 @@ class _ViewNoteState extends State<ViewNote> {
   void initState() {
     super.initState();
     _note = widget.note;
-    _note.isExternalRes == true
-        ? _accessList = _note.permissionList!.split(',')
-        : _accessList = ['read', 'write', 'control'];
+    _accessList = _note.permissionList!.split(',');
     _scrollController = ScrollController();
     _scaffoldController = widget.scaffoldController;
   }
@@ -128,16 +126,14 @@ class _ViewNoteState extends State<ViewNote> {
                     createdDateTime: _note.content!.createdDateTime,
                     modifiedDateTime: _note.content!.modifiedDateTime,
                     noteOwner: _note.noteOwner,
-                    permissionGranter:
-                        _note.isExternalRes ? _note.permissionGranter : null,
-                    permissionList:
-                        _note.isExternalRes ? _note.permissionList : null,
+                    permissionGranter: _note.permissionGranter ?? 'N/A',
+                    permissionList: _note.permissionList,
                     noteFileName: _note.noteFileName,
                     noteUrl: _note.noteUrl,
                     showDates: true,
                     showFileName: true,
-                    showSharing: _note.isExternalRes == true ? true : false,
-                    showPathInfo: _note.isExternalRes == true ? true : false,
+                    showSharing: true,
+                    showPathInfo: true,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(_note.content!.noteContent),
