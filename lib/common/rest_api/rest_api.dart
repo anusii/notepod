@@ -222,6 +222,7 @@ Future<NotesCallResult> getExternalNoteList({
 
         // Extract log record of each external note
         // where user currently has access
+        // Applies isExternalRes == true to loaded notes
         note = NoteFileHelper.extFileDetailsFromLog(
           logRecordOfFile: logRecordOfFile,
           fileUrl: fileUrl,
