@@ -33,6 +33,7 @@ import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/utils/misc.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
@@ -61,6 +62,16 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Filtered map of notes.
   List<Note> _foundNotes = [];
 
+  /// Sort title order
+  /// true: ascending (A-Z), false: descending (Z-A)
+  /// Initial sort will sort alphabetically
+  bool _sortTitleAscending = true;
+
+  /// Sort last modified date order
+  /// true: ascending (oldest modified note), false: descending (last modified note)
+  /// First button press will change to sort by last modified first
+  bool _sortModDateAscending = true;
+
   /// Initial sort by note filename order.
   bool _sortFilenameAscending = true;
 
@@ -84,7 +95,12 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   late bool isNarrow;
 
   /// Boolean describing whether note is external
+  // FIXME: remove this soon to be non constant
   final bool isExternal = true;
+
+  /// Current note sort method
+  /// Initialised to sort by title
+  String currSortMethod = '';
 
   @override
   void initState() {
@@ -97,12 +113,59 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
     // Initial sort by filename alphabetically
     _sortByFilename(_sortFilenameAscending);
+
+    // Initialise sorting method
+    currSortMethod = 'sortByFilename'; //'sortByTitle';
   }
 
   @override
   void dispose() {
     _scrollController.dispose(); // Dispose the ScrollController
     super.dispose();
+  }
+
+  // Sort alphanumerically on note title field, with null values last
+  void _sortByTitle(bool ascending) {
+    setState(() {
+      _sortTitleAscending = ascending;
+      _foundNotes.sort((a, b) {
+        if (a.content == null && b.content == null) return 0;
+        if (a.content == null) return 1;
+        if (b.content == null) return -1;
+        return _sortTitleAscending
+            ? a.content!.noteTitle
+                .toLowerCase()
+                .compareTo(b.content!.noteTitle.toLowerCase())
+            : b.content!.noteTitle
+                .toLowerCase()
+                .compareTo(a.content!.noteTitle.toLowerCase());
+      });
+
+      // Update current sort method
+      currSortMethod = 'sortByTitle';
+    });
+  }
+
+  // Sort numerically on note modified date field, with null values last
+  void _sortByModDate(bool ascending) {
+    setState(() {
+      _sortModDateAscending = ascending;
+      _foundNotes.sort((a, b) {
+        if (a.content == null && b.content == null) return 0;
+        if (a.content == null) return 1;
+        if (b.content == null) return -1;
+        return _sortModDateAscending
+            ? a.content!.modifiedDateTime
+                .toLowerCase()
+                .compareTo(b.content!.modifiedDateTime.toLowerCase())
+            : b.content!.modifiedDateTime
+                .toLowerCase()
+                .compareTo(a.content!.modifiedDateTime.toLowerCase());
+      });
+
+      // Update current sort method
+      currSortMethod = 'sortByModDate';
+    });
   }
 
   /// Sort alphanumerically on note filename
@@ -118,6 +181,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                 .toLowerCase()
                 .compareTo(a.noteFileName.toLowerCase()),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByFilename';
     });
   }
 
@@ -131,6 +197,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
             ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
             : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByOwner';
     });
   }
 
@@ -148,6 +217,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                 .toLowerCase()
                 .compareTo(a.permissionList!.toLowerCase()),
       );
+
+      // Update current sort method
+      currSortMethod = 'sortByPermission';
     });
   }
 
@@ -179,9 +251,23 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
     setState(() {
       _foundNotes = results;
 
-      // Sort results by filename
-      _sortByFilename(_sortFilenameAscending);
+      // // Sort results by filename
+      // _sortByFilename(_sortFilenameAscending);
     });
+
+    // Sort by current sort method and polarity
+    switch (currSortMethod) {
+      case 'sortByTitle':
+        _sortByTitle(_sortTitleAscending);
+      case 'sortByModDate':
+        _sortByModDate(_sortModDateAscending);
+      case 'sortByFilename':
+        _sortByFilename(_sortFilenameAscending);
+      case 'sortByOwner':
+        _sortByOwner(_sortOwnerAscending);
+      case 'sortByPermission':
+        _sortByPermission(_sortPermissionAscending);
+    }
   }
 
   @override
@@ -245,6 +331,42 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           spacing: 15.0,
                           children: [
+                            // Title Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByTitle(!_sortTitleAscending);
+                              },
+                              icon: Icon(
+                                _sortTitleAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                              ),
+                              label: Text(
+                                _sortTitleAscending
+                                    ? !isNarrow
+                                        ? 'Title A to Z'
+                                        : 'Title'
+                                    : !isNarrow
+                                        ? 'Title Z to A'
+                                        : 'Title',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
+                            // Date Sort Label and Button
+                            TextButton.icon(
+                              onPressed: () {
+                                _sortByModDate(!_sortModDateAscending);
+                              },
+                              icon: Icon(
+                                _sortModDateAscending
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                              ),
+                              label: Text(
+                                !isNarrow ? 'Date Last Modified' : 'Date',
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            ),
                             // Filename Sort Label and Button
                             TextButton.icon(
                               onPressed: () {
@@ -345,15 +467,31 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                   .contains('read'))
                               ? Text(
                                   _foundNotes[index].content!.noteTitle,
-                                  maxLines: 1,
+                                  maxLines: 1, // Limit lines
                                   overflow: TextOverflow.ellipsis,
                                 )
                               : const Text(''),
-                          subtitle: Text(
-                            'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter!)} \nPermissions: ${_foundNotes[index].permissionList}',
-                            maxLines: 4, // Limit to 4 lines
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          subtitle: (_foundNotes[index]
+                                  .permissionList!
+                                  .contains('read'))
+                              ? Text(
+                                  'Filename: ${_foundNotes[index].noteFileName} \n'
+                                  'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                  'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                  'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                  'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                  'Permissions: ${_foundNotes[index].permissionList}',
+                                  maxLines: 6, // Limit lines
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Text(
+                                  'Filename: ${_foundNotes[index].noteFileName} \n'
+                                  'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                  'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                  'Permissions: ${_foundNotes[index].permissionList}',
+                                  maxLines: 4, // Limit lines
+                                  overflow: TextOverflow.ellipsis,
+                                ),
 
                           // Define width to avoid consuming full width
                           trailing: SizedBox(
