@@ -42,10 +42,8 @@ import 'package:notepod/widgets/save_dialog.dart';
 ///   [scaffoldController] - Controller for the Solid scaffold.
 /// - [textController] - Optional text controller if back is being called from note editor.
 /// - [formKey] - Key of the form to edit note metadata
-/// - [prevExternalNote] - Optional existing external note data object. Required
-/// for saving existing externally owned notes. (Default: null).
-/// - [prevOwnNote] - Optional existing user's note data object. Required
-/// for saving existing notes owned by the user. (Default: null).
+/// - [prevNote] - Optional existing user's note data object. Required
+/// for saving existing notes. (Default: null).
 /// - [isExternal] - Optional boolean denoting whether note is externally
 /// owned. (Default: false).
 /// - [isExisting] - Optional boolean denoting whether note already
@@ -58,8 +56,7 @@ class NoteBackButton extends StatelessWidget {
     required this.scaffoldController,
     this.textController,
     this.formKey,
-    this.prevExternalNote,
-    this.prevOwnNote,
+    this.prevNote,
     this.isExternal = false,
     this.isExisting = false,
   });
@@ -68,8 +65,7 @@ class NoteBackButton extends StatelessWidget {
   final SolidScaffoldController scaffoldController;
   final TextEditingController? textController;
   final GlobalKey<FormBuilderState>? formKey;
-  final Note? prevExternalNote;
-  final Note? prevOwnNote;
+  final Note? prevNote;
   final bool isExternal;
   final bool isExisting;
 
@@ -92,13 +88,8 @@ class NoteBackButton extends StatelessWidget {
 
             if (isExisting) {
               // Get previous title and content
-              if (isExternal) {
-                prevNoteTitle = prevExternalNote!.content!.noteTitle;
-                prevNoteContent = prevExternalNote!.content!.noteContent;
-              } else {
-                prevNoteTitle = prevOwnNote!.content!.noteTitle;
-                prevNoteContent = prevOwnNote!.content!.noteContent;
-              }
+              prevNoteTitle = prevNote!.content!.noteTitle;
+              prevNoteContent = prevNote!.content!.noteContent;
               // Check if title or content changed
               if (noteTitle != prevNoteTitle || noteText != prevNoteContent) {
                 showDialog<void>(
@@ -106,22 +97,14 @@ class NoteBackButton extends StatelessWidget {
                   barrierDismissible: false, // user must tap button!
                   builder: (BuildContext context) {
                     // Call save/don't save/cancel dialog
-                    return (isExternal)
-                        ? SaveDialog(
-                            childPage: childPage,
-                            scaffoldController: scaffoldController,
-                            textController: textController!,
-                            formKey: formKey!,
-                            prevExternalNote: prevExternalNote,
-                            isExternal: isExternal,
-                          )
-                        : SaveDialog(
-                            childPage: childPage,
-                            scaffoldController: scaffoldController,
-                            textController: textController!,
-                            formKey: formKey!,
-                            prevOwnNote: prevOwnNote,
-                          );
+                    return SaveDialog(
+                      childPage: childPage,
+                      scaffoldController: scaffoldController,
+                      textController: textController!,
+                      formKey: formKey!,
+                      prevNote: prevNote,
+                      isExternal: isExternal,
+                    );
                   },
                 );
               } else {

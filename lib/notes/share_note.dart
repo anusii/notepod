@@ -44,7 +44,7 @@ class ShareNote extends StatefulWidget {
   final String noteUrl;
   final String noteOwner;
   final Widget backPage;
-  final bool isExternalRes;
+  final bool isExternal;
   final SolidScaffoldController scaffoldController;
 
   const ShareNote({
@@ -53,7 +53,7 @@ class ShareNote extends StatefulWidget {
     required this.noteOwner,
     required this.backPage,
     required this.scaffoldController,
-    this.isExternalRes = false,
+    this.isExternal = false,
   });
 
   @override
@@ -106,7 +106,7 @@ class ShareNoteState extends State<ShareNote> {
                       showAppBar: false,
                       resourceName: widget.noteUrl,
                       ownerWebId: widget.noteOwner,
-                      isExternalRes: widget.isExternalRes,
+                      isExternalRes: widget.isExternal,
                     ),
                   ),
                 ],

@@ -35,7 +35,6 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/shared_notes/edit_shared_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
@@ -169,7 +168,7 @@ class _ViewNoteState extends State<ViewNote> {
                           childPage: ShareNote(
                             noteUrl: _note.noteUrl,
                             noteOwner: _note.noteOwner,
-                            isExternalRes: true,
+                            isExternal: _note.isExternalRes,
                             backPage: ViewNote(
                               note: _note,
                               scaffoldController: _scaffoldController,
@@ -186,15 +185,10 @@ class _ViewNoteState extends State<ViewNote> {
                           label: ButtonLabel.edit,
                           icon: const Icon(Icons.edit),
                           backgroundColor: ButtonBackgroundColor.edit,
-                          childPage: _note.isExternalRes == true
-                              ? EditSharedNote(
-                                  note: _note,
-                                  scaffoldController: _scaffoldController,
-                                )
-                              : EditNote(
-                                  note: _note,
-                                  scaffoldController: _scaffoldController,
-                                ),
+                          childPage: EditNote(
+                            note: _note,
+                            scaffoldController: _scaffoldController,
+                          ),
                           scaffoldController: _scaffoldController,
                           isNarrow: isNarrow,
                         ),

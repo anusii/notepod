@@ -64,7 +64,7 @@ class DisplayNoteMetadata extends StatelessWidget {
   final String noteFileName;
   final String noteUrl;
 
-  final bool isExternalRes;
+  final bool isExternal;
   final bool showDates;
   final bool showFileName;
   final bool showSharing;
@@ -79,7 +79,7 @@ class DisplayNoteMetadata extends StatelessWidget {
     this.permissionList,
     this.noteFileName = '',
     this.noteUrl = '',
-    this.isExternalRes = false,
+    this.isExternal = false,
     this.showDates = false,
     this.showFileName = false,
     this.showSharing = false,
@@ -106,7 +106,7 @@ class DisplayNoteMetadata extends StatelessWidget {
               modifiedDateTime: modifiedDateTime,
             ),
           // Show sharing info (owner, provider, access list)
-          if (isExternalRes &&
+          if (isExternal &&
               showSharing &&
               noteOwner != '' &&
               permissionGranter != null &&
