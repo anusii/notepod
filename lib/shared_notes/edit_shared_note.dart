@@ -32,7 +32,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/note.dart';
-import 'package:notepod/shared_notes/view_shared_note.dart';
+import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [StatefulWidget] to edit externally owned notes shared to
@@ -151,7 +151,7 @@ class EditSharedNoteState extends State<EditSharedNote> {
       scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: ViewSharedNote(
+      childPage: ViewNote(
         note: _note,
         scaffoldController: _scaffoldController,
       ),

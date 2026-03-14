@@ -1,6 +1,6 @@
-/// A widget to view the content of a note.
+/// A stateful widget to view an externally owned note.
 ///
-// Time-stamp: <Tuesday 2025-10-21 08:44:50 +1100 Graham Williams>
+// Time-stamp: <Wednesday 2025-07-16 10:18:07 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025 Software Innovation Institute, ANU
 ///
@@ -21,7 +21,7 @@
 // You should have received a copy of the GNU General Public License along with
 // this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
-/// Authors: Anushka Vidanage, Jess Moore, Graham Williams
+/// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
 library;
 
@@ -35,17 +35,19 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
+import 'package:notepod/shared_notes/edit_shared_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
 
-/// A [StatefulWidget] to display the text and selected metadata
-/// from the [note] of the selected note. Action buttons are
-/// provided to edit and share the note, or go back to the note list.
-/// Parameters:
-///   [note] comprises the data object for the selected note.
-///   [scaffoldController] - Controller for the Solid scaffold.
+/// A [stateful] widget for viewing an externally owned note.
+///
+/// Arguments:
+/// - [note] - The note to view.
+/// - [scaffoldController] - Controller for the Solid scaffold.
+
 class ViewNote extends StatefulWidget {
   final Note note;
   final SolidScaffoldController scaffoldController;
@@ -70,15 +72,21 @@ class _ViewNoteState extends State<ViewNote> {
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
-  /// Note
+  /// Note data
   late final Note _note;
+
+  /// List of user's permissions
+  late final List<String> _accessList;
 
   @override
   void initState() {
     super.initState();
+    _note = widget.note;
+    _note.isExternalRes == true
+        ? _accessList = _note.permissionList!.split(',')
+        : _accessList = ['read', 'write', 'control'];
     _scrollController = ScrollController();
     _scaffoldController = widget.scaffoldController;
-    _note = widget.note;
   }
 
   @override
@@ -90,7 +98,7 @@ class _ViewNoteState extends State<ViewNote> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         Expanded(
           child: Scrollbar(
             thumbVisibility: true,
@@ -116,18 +124,24 @@ class _ViewNoteState extends State<ViewNote> {
                       ),
                     ],
                   ),
-                  // Display note metadata
+                  // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note page)
                   DisplayNoteMetadata(
                     createdDateTime: _note.content!.createdDateTime,
                     modifiedDateTime: _note.content!.modifiedDateTime,
+                    noteOwner: _note.noteOwner,
+                    permissionGranter:
+                        _note.isExternalRes ? _note.permissionGranter : null,
+                    permissionList:
+                        _note.isExternalRes ? _note.permissionList : null,
                     noteFileName: _note.noteFileName,
+                    noteUrl: _note.noteUrl,
                     showDates: true,
                     showFileName: true,
+                    showSharing: _note.isExternalRes == true ? true : false,
+                    showPathInfo: _note.isExternalRes == true ? true : false,
                   ),
                   // Display markdown note content
-                  noteDisplayMarkdown(
-                    _note.content!.noteContent,
-                  ),
+                  noteDisplayMarkdown(_note.content!.noteContent),
                 ],
               ),
             ),
@@ -146,55 +160,70 @@ class _ViewNoteState extends State<ViewNote> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     spacing: 5.0,
                     children: [
-                      // Share button
-                      NoteActionButton(
-                        label: ButtonLabel.share,
-                        icon: const Icon(Icons.share),
-                        backgroundColor: ButtonBackgroundColor.share,
-                        childPage: ShareNote(
-                          noteUrl: _note.noteUrl,
-                          noteOwner: _note.noteOwner,
-                          backPage: ViewNote(
-                            note: _note,
+                      // Share button if control access
+                      if (_accessList.contains('control')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.share,
+                          icon: const Icon(Icons.share),
+                          backgroundColor: ButtonBackgroundColor.share,
+                          childPage: ShareNote(
+                            noteUrl: _note.noteUrl,
+                            noteOwner: _note.noteOwner,
+                            isExternalRes: true,
+                            backPage: ViewNote(
+                              note: _note,
+                              scaffoldController: _scaffoldController,
+                            ),
+                            scaffoldController: _scaffoldController,
+                          ),
+                          scaffoldController: _scaffoldController,
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+                      // Edit button if write access
+                      if (_accessList.contains('write')) ...[
+                        NoteActionButton(
+                          label: ButtonLabel.edit,
+                          icon: const Icon(Icons.edit),
+                          backgroundColor: ButtonBackgroundColor.edit,
+                          childPage: _note.isExternalRes == true
+                              ? EditSharedNote(
+                                  note: _note,
+                                  scaffoldController: _scaffoldController,
+                                )
+                              : EditNote(
+                                  note: _note,
+                                  scaffoldController: _scaffoldController,
+                                ),
+                          scaffoldController: _scaffoldController,
+                          isNarrow: isNarrow,
+                        ),
+                      ],
+
+                      /// Delete button
+                      if (!_note.isExternalRes) ...[
+                        NoteDelButton(
+                          filename: _note.noteFileName,
+                          isExternal: false,
+                          isNarrow: isNarrow,
+                          childPage: ListNotesScreen(
                             scaffoldController: _scaffoldController,
                           ),
                           scaffoldController: _scaffoldController,
                         ),
-                        scaffoldController: _scaffoldController,
-                        isNarrow: isNarrow,
-                      ),
-
-                      // Edit button
-                      NoteActionButton(
-                        label: ButtonLabel.edit,
-                        icon: const Icon(Icons.edit),
-                        backgroundColor: ButtonBackgroundColor.edit,
-                        childPage: EditNote(
-                          note: _note,
-                          scaffoldController: _scaffoldController,
-                        ),
-                        scaffoldController: _scaffoldController,
-                        isNarrow: isNarrow,
-                      ),
-
-                      /// Delete button
-                      NoteDelButton(
-                        filename: _note.noteFileName,
-                        isExternal: false,
-                        isNarrow: isNarrow,
-                        childPage: ListNotesScreen(
-                          scaffoldController: _scaffoldController,
-                        ),
-                        scaffoldController: _scaffoldController,
-                      ),
+                      ],
                       // Back button
                       NoteActionButton(
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: ListNotesScreen(
-                          scaffoldController: _scaffoldController,
-                        ),
+                        childPage: _note.isExternalRes == true
+                            ? ListExternalNotesScreen(
+                                scaffoldController: _scaffoldController,
+                              )
+                            : ListNotesScreen(
+                                scaffoldController: _scaffoldController,
+                              ),
                         scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),

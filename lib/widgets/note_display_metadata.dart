@@ -59,11 +59,12 @@ class DisplayNoteMetadata extends StatelessWidget {
   final String createdDateTime;
   final String modifiedDateTime;
   final String noteOwner;
-  final String permissionGranter;
-  final String permissionList;
+  final String? permissionGranter;
+  final String? permissionList;
   final String noteFileName;
   final String noteUrl;
 
+  final bool isExternalRes;
   final bool showDates;
   final bool showFileName;
   final bool showSharing;
@@ -74,10 +75,11 @@ class DisplayNoteMetadata extends StatelessWidget {
     this.createdDateTime = '',
     this.modifiedDateTime = '',
     this.noteOwner = '',
-    this.permissionGranter = '',
-    this.permissionList = '',
+    this.permissionGranter,
+    this.permissionList,
     this.noteFileName = '',
     this.noteUrl = '',
+    this.isExternalRes = false,
     this.showDates = false,
     this.showFileName = false,
     this.showSharing = false,
@@ -104,14 +106,15 @@ class DisplayNoteMetadata extends StatelessWidget {
               modifiedDateTime: modifiedDateTime,
             ),
           // Show sharing info (owner, provider, access list)
-          if (showSharing &&
+          if (isExternalRes &&
+              showSharing &&
               noteOwner != '' &&
-              permissionGranter != '' &&
-              permissionList != '')
+              permissionGranter != null &&
+              permissionList != null)
             ShowAccessMetadata(
               noteOwner: noteOwner,
-              permissionGranter: permissionGranter,
-              permissionList: permissionList,
+              permissionGranter: permissionGranter!,
+              permissionList: permissionList!,
             ),
           // Show path info (filename and path)
           if (showPathInfo && noteUrl != '') ShowPathMetadata(fileUrl: noteUrl),
