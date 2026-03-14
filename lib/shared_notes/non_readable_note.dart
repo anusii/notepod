@@ -133,7 +133,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                           childPage: ShareNote(
                             noteUrl: _note.noteUrl,
                             noteOwner: _note.noteOwner,
-                            isExternalRes: _note.isExternalRes,
+                            isExternal: _note.isExternalRes,
                             backPage: ListExternalNotesScreen(
                               scaffoldController: _scaffoldController,
                             ),
