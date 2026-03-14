@@ -427,7 +427,7 @@ class SharedTrailingButtons extends StatelessWidget {
             childPage: ShareNote(
               noteUrl: _note.noteUrl,
               noteOwner: _note.noteOwner,
-              isExternalRes: true,
+              isExternalRes: _note.isExternalRes,
               backPage: ListExternalNotesScreen(
                 scaffoldController: _scaffoldController,
               ),
