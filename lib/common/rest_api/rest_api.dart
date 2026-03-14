@@ -275,7 +275,11 @@ Future<NotesCallResult> getExternalNoteList({
 
       // Retrieve note data
       for (int i = 0; i < notes.length; i++) {
-        if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
+        if (extNoteWithContentResults[i] ==
+            FileCallStatus.fileAccessForbidden) {
+          // Files with access forbidden have note with default null content
+          fullNotes.add(notes[i]);
+        } else if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
           unparseableNotes.add(
             SelectedNote(
               noteFileName: notes[i].noteFileName,
@@ -328,6 +332,11 @@ Future<dynamic> getExternalNoteContent({
   required Note note,
 }) async {
   try {
+    // Check permissions include read
+    if (!note.permissionList!.contains('read')) {
+      return FileCallStatus.fileAccessForbidden;
+    }
+
     // Get decrypted note content from external file
     final noteContentResult = await readExternalPod(
       note.noteUrl,
