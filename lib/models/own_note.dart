@@ -28,9 +28,7 @@ library;
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note.dart';
-
-final String contentPred = 'content';
+import 'package:notepod/models/note_content.dart';
 
 /// Data model for user's note
 
@@ -38,10 +36,10 @@ class OwnNote {
   final String noteFileName;
   final String noteUrl;
   final String noteOwner;
-  final NoteContent? content;
+  NoteContent? content;
   final Map<dynamic, dynamic>? authUserList;
 
-  const OwnNote({
+  OwnNote({
     required this.noteFileName,
     required this.noteUrl,
     required this.noteOwner,
@@ -84,84 +82,5 @@ class OwnNote {
       content: content ?? this.content,
       authUserList: authUserList ?? this.authUserList,
     );
-  }
-}
-
-/// Extension of own notes class for found notes,
-/// including the selection status of the note.
-
-class FoundOwnNote extends OwnNote {
-  bool isSelected;
-
-  FoundOwnNote({
-    required super.noteFileName,
-    required super.noteUrl,
-    required super.noteOwner,
-    required super.content,
-    required super.authUserList,
-    this.isSelected = false,
-  });
-
-  /// Copy method for creating a new instance that is an
-  /// updated copy of another instance
-
-  @override
-  FoundOwnNote copyWith({
-    String? noteFileName,
-    String? noteUrl,
-    String? noteOwner,
-    NoteContent? content,
-    Map<dynamic, dynamic>? authUserList,
-    bool? isSelected,
-  }) {
-    return FoundOwnNote(
-      noteFileName: noteFileName ?? this.noteFileName,
-      noteUrl: noteUrl ?? this.noteUrl,
-      noteOwner: noteOwner ?? this.noteOwner,
-      content: content ?? this.content,
-      authUserList: authUserList ?? this.authUserList,
-      isSelected: isSelected ?? this.isSelected,
-    );
-  }
-}
-
-/// Class for operations on list of own notes
-
-extension ListOwnNoteExtension on List<OwnNote> {
-  /// Method to add authorised user list map to each file in
-  /// list of own notes
-  ///
-  /// Arguments:
-  /// - [permissionMaps] - map of permission maps, with the
-  /// filename as key and the permission map obtained by
-  /// readPermissions() as value.
-
-  List<OwnNote> addAuthUserLists({required Map permissionMaps}) {
-    List<OwnNote> updatedNotes = [];
-
-    for (var note in this) {
-      final OwnNote updatedNote = note.copyWith(
-        authUserList: permissionMaps[note.noteFileName][authUserPred],
-      );
-      updatedNotes.add(updatedNote);
-    }
-    return updatedNotes;
-  }
-
-  /// Assign list of own notes to list of found own notes
-  /// using default for isSelected values.
-
-  List<FoundOwnNote> toListFoundOwnNote() {
-    List<FoundOwnNote> listFoundNotes = map((item) {
-      return FoundOwnNote(
-        noteFileName: item.noteFileName,
-        noteUrl: item.noteUrl,
-        noteOwner: item.noteOwner,
-        content: item.content,
-        authUserList: item.authUserList,
-      );
-    }).toList();
-
-    return listFoundNotes;
   }
 }

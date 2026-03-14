@@ -31,7 +31,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
@@ -47,7 +47,7 @@ import 'package:notepod/widgets/note_display_metadata.dart';
 ///   [note] comprises the data object for the selected note.
 ///   [scaffoldController] - Controller for the Solid scaffold.
 class ViewNote extends StatefulWidget {
-  final FoundOwnNote note;
+  final Note note;
   final SolidScaffoldController scaffoldController;
 
   const ViewNote({
@@ -71,7 +71,7 @@ class _ViewNoteState extends State<ViewNote> {
   late bool isNarrow;
 
   /// Note
-  late final FoundOwnNote _note;
+  late final Note _note;
 
   @override
   void initState() {

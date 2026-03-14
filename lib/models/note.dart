@@ -28,58 +28,121 @@ library;
 import 'package:solidpod/solidpod.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
+import 'package:notepod/models/note_content.dart';
+import 'package:notepod/models/own_note.dart';
 
-/// Base data model for the nested note within a note object
+/// Data model for any note
 
-class NoteContent {
-  final String noteTitle;
-  final String createdDateTime;
-  final String modifiedDateTime;
-  final String noteContent;
-  final List<String> authUsers;
+class Note extends OwnNote {
+  final String? sharedTime;
+  final String? permissionGranter;
+  final String? permissionRecepient;
+  final String? permissionType;
+  final String? permissionList;
+  bool isSelected;
 
-  const NoteContent({
-    required this.noteTitle,
-    required this.createdDateTime,
-    required this.modifiedDateTime,
-    required this.noteContent,
-    this.authUsers = const [],
+  Note({
+    super.content,
+    super.authUserList,
+    required super.noteUrl,
+    required super.noteFileName,
+    required super.noteOwner,
+    this.sharedTime,
+    this.permissionGranter,
+    this.permissionRecepient,
+    this.permissionType,
+    this.permissionList,
+    this.isSelected = false,
   });
 
-  factory NoteContent.fromJson(Map<String, dynamic> json) {
-    return NoteContent(
-      noteTitle: json[noteTitlePred] as String,
-      createdDateTime: json[createdDateTimePred] as String,
-      modifiedDateTime: json[modifiedDateTimePred] as String,
-      noteContent: json[noteContentPred] as String,
-      authUsers: (json[authUserPred] as Map).keys.toList().cast<String>(),
+  /// Method to create Note object from json data map
+
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      noteUrl: json[noteUrlPred] as String,
+      noteFileName: json[noteFileNamePred] as String,
+      noteOwner: json[noteOwnerPred] as String,
+      sharedTime: json[sharedTimePred] as String,
+      permissionGranter: json[permissionGranterPred] as String,
+      permissionRecepient: json[permissionRecepientPred] as String,
+      permissionType: json[permissionTypePred] as String,
+      permissionList: json[permissionListPred] as String,
+      isSelected: json[isSelectedPred] as bool,
+      content: json[contentPred] as NoteContent,
+      authUserList: json[authUserPred] as Map<dynamic, dynamic>,
     );
   }
 
+  /// Method to export Note object to json data map
+
+  @override
   Map<String, dynamic> toJson() => {
-        noteTitlePred: noteTitle,
-        createdDateTimePred: createdDateTime,
-        modifiedDateTimePred: modifiedDateTime,
-        noteContentPred: noteContent,
-        authUserPred: authUsers,
+        noteUrlPred: noteUrl,
+        noteFileNamePred: noteFileName,
+        noteOwnerPred: noteOwner,
+        sharedTimePred: sharedTime,
+        permissionGranterPred: permissionGranter,
+        permissionRecepientPred: permissionRecepient,
+        permissionTypePred: permissionType,
+        permissionListPred: permissionList,
+        isSelectedPred: isSelected,
+        contentPred: content,
+        authUserPred: authUserList,
       };
 
   /// Copy method for creating a new instance that is an
   /// updated copy of another instance
 
-  NoteContent copyWith({
-    String? noteTitle,
-    String? createdDateTime,
-    String? modifiedDateTime,
-    String? noteContent,
-    List<String>? authUsers,
+  @override
+  Note copyWith({
+    NoteContent? content,
+    Map<dynamic, dynamic>? authUserList,
+    String? noteUrl,
+    String? noteFileName,
+    String? noteOwner,
+    String? sharedTime,
+    String? permissionGranter,
+    String? permissionRecepient,
+    String? permissionType,
+    String? permissionList,
+    bool? isSelected,
   }) {
-    return NoteContent(
-      noteTitle: noteTitle ?? this.noteTitle,
-      createdDateTime: createdDateTime ?? this.createdDateTime,
-      modifiedDateTime: modifiedDateTime ?? this.modifiedDateTime,
-      noteContent: noteContent ?? this.noteContent,
-      authUsers: authUsers ?? this.authUsers,
+    return Note(
+      content: content ?? this.content,
+      authUserList: authUserList ?? this.authUserList,
+      noteUrl: noteUrl ?? this.noteUrl,
+      noteFileName: noteFileName ?? this.noteFileName,
+      noteOwner: noteOwner ?? this.noteOwner,
+      sharedTime: sharedTime ?? this.sharedTime,
+      permissionGranter: permissionGranter ?? this.permissionGranter,
+      permissionRecepient: permissionRecepient ?? this.permissionRecepient,
+      permissionType: permissionType ?? this.permissionType,
+      permissionList: permissionList ?? this.permissionList,
+      isSelected: isSelected ?? this.isSelected,
     );
+  }
+}
+
+/// Class for operations on list of notes
+
+extension ListNoteExtension on List<Note> {
+  /// Method to add authorised user list map to each file in
+  /// list of notes
+  ///
+  /// Arguments:
+  /// - [permissionMaps] - map of permission maps, with the
+  /// filename as key and the permission map obtained by
+  /// readPermissions() as value.
+
+  List<Note> addAuthUserLists({required Map permissionMaps}) {
+    List<Note> updatedNotes = [];
+
+    for (var note in this) {
+      final Note updatedNote = note.copyWith(
+        authUserList: permissionMaps[note.noteFileName][authUserPred],
+      );
+      updatedNotes.add(updatedNote);
+    }
+    return updatedNotes;
   }
 }

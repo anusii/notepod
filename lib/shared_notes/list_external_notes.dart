@@ -28,7 +28,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/shared_notes/non_readable_note.dart';
@@ -44,7 +44,7 @@ import 'package:notepod/widgets/simple_action_button.dart';
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class ListExternalNotes extends StatefulWidget {
-  final List<ExternalNote> notes;
+  final List<Note> notes;
   final SolidScaffoldController scaffoldController;
 
   const ListExternalNotes({
@@ -59,7 +59,7 @@ class ListExternalNotes extends StatefulWidget {
 
 class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Filtered map of notes.
-  List<FoundExternalNote> _foundNotes = [];
+  List<Note> _foundNotes = [];
 
   /// Initial sort by note filename order.
   bool _sortFilenameAscending = true;
@@ -93,7 +93,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
     _scaffoldController = widget.scaffoldController;
 
     // By default _foundNotes is the full list of notes
-    _foundNotes = widget.notes.toListFoundExternalNote();
+    _foundNotes = widget.notes;
 
     // Initial sort by filename alphabetically
     _sortByFilename(_sortFilenameAscending);
@@ -141,35 +141,35 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
       _foundNotes.sort(
         (a, b) => _sortPermissionAscending
-            ? a.permissionList
+            ? a.permissionList!
                 .toLowerCase()
-                .compareTo(b.permissionList.toLowerCase())
-            : b.permissionList
+                .compareTo(b.permissionList!.toLowerCase())
+            : b.permissionList!
                 .toLowerCase()
-                .compareTo(a.permissionList.toLowerCase()),
+                .compareTo(a.permissionList!.toLowerCase()),
       );
     });
   }
 
   /// Search notes
   void _searchNotes(String enteredKeyword) {
-    List<FoundExternalNote> results = [];
+    List<Note> results = [];
     if (enteredKeyword.isEmpty) {
       // Display all notes if no search string
-      results = widget.notes.toListFoundExternalNote();
+      results = widget.notes;
     } else {
       // Search for matches in filename, owner, permission granter or permission list
-      results = widget.notes.toListFoundExternalNote().where((note) {
+      results = widget.notes.where((note) {
         return note.noteFileName
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
             note.noteOwner
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            note.permissionGranter
+            note.permissionGranter!
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            note.permissionList
+            note.permissionList!
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase());
       }).toList();
@@ -341,7 +341,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                           ),
                           // Note info
                           title: (_foundNotes[index]
-                                  .permissionList
+                                  .permissionList!
                                   .contains('read'))
                               ? Text(
                                   _foundNotes[index].content!.noteTitle,
@@ -350,7 +350,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                 )
                               : const Text(''),
                           subtitle: Text(
-                            'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter)} \nPermissions: ${_foundNotes[index].permissionList}',
+                            'Filename: ${_foundNotes[index].noteFileName} \nOwner: ${getId(_foundNotes[index].noteOwner)} \nShared by: ${getId(_foundNotes[index].permissionGranter!)} \nPermissions: ${_foundNotes[index].permissionList}',
                             maxLines: 4, // Limit to 4 lines
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -370,7 +370,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             // String access =
                             //     _foundNotes[sharedNotesUrlList[index]]
                             //         [permissionListPred];
-                            String access = _foundNotes[index].permissionList;
+                            String access = _foundNotes[index].permissionList!;
                             if (access.contains('read')) {
                               _scaffoldController.navigateToSubpage(
                                 ViewSharedNote(
@@ -401,47 +401,20 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   }
 }
 
-// class TitleExternalNote extends StatelessWidget {
-//   final FoundExternalNote _note;
-
-//   const TitleExternalNote({
-//     super.key,
-//     required note,
-//   }) : _note = note;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List accessList = _note.permissionList.split(',');
-
-//     return Wrap(
-//       children: [
-//         if (accessList.contains('read')) ...[
-//           TitleExternalNoteScreen(
-//             note: _note,
-//           ),
-//         ] else ...[
-//           // Display nothing as no read permission
-//           const Text(''),
-//         ],
-//       ],
-//     );
-//   }
-// }
-
 class SharedTrailingButtons extends StatelessWidget {
   const SharedTrailingButtons({
     super.key,
-    required FoundExternalNote note,
+    required Note note,
     required SolidScaffoldController scaffoldController,
   })  : _note = note,
         _scaffoldController = scaffoldController;
 
-  final FoundExternalNote _note;
+  final Note _note;
   final SolidScaffoldController _scaffoldController;
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _note.permissionList.split(',');
+    List accessList = _note.permissionList!.split(',');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

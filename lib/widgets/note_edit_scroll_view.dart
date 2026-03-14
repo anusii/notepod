@@ -34,8 +34,7 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/external_note.dart';
-import 'package:notepod/models/own_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
@@ -87,8 +86,8 @@ class NoteEditScrollView extends StatelessWidget {
   final String data;
 
   /// Existing note data is note already exists
-  final FoundExternalNote? prevExternalNote;
-  final FoundOwnNote? prevOwnNote;
+  final Note? prevExternalNote;
+  final Note? prevOwnNote;
 
   /// Boolean describing whether note is shared to pod owner from an
   /// external source.

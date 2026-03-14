@@ -1,4 +1,4 @@
-/// Data models for result of get external notes future call.
+/// Data models for result of get notes future call.
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
@@ -6,7 +6,7 @@
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //
-// Time-stamp: <Sunday 2025-11-02 13:12:01 +1100 Graham Williams>
+// Time-stamp: <Monday 2025-10-06 14:42:01 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,17 +25,17 @@
 
 library;
 
-import 'package:notepod/models/external_note.dart';
+import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
 
-/// Data model for result of get external notes list future call
+/// Data model for result of get notes list future call
 
-class ExternalNotesCallResult {
-  final List<ExternalNote>? notes;
+class NotesCallResult {
+  final List<Note>? notes;
   final List<SelectedNote>? unparseableNotes;
-  final List<ExternalNote>? nonExistentNotes;
+  final List<Note>? nonExistentNotes;
 
-  const ExternalNotesCallResult({
+  const NotesCallResult({
     this.notes = const [],
     this.unparseableNotes = const [],
     this.nonExistentNotes = const [],
