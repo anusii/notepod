@@ -367,9 +367,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
                           onTap: () {
                             // Open note if read in permissions
-                            // String access =
-                            //     _foundNotes[sharedNotesUrlList[index]]
-                            //         [permissionListPred];
                             String access = _foundNotes[index].permissionList!;
                             if (access.contains('read')) {
                               _scaffoldController.navigateToSubpage(
