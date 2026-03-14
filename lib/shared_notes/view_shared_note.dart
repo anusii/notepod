@@ -32,10 +32,13 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/shared_notes/edit_shared_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/widgets/note_action_button.dart';
+import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
 import 'package:notepod/widgets/note_display_metadata.dart';
 
@@ -79,7 +82,9 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
   void initState() {
     super.initState();
     _note = widget.note;
-    _accessList = _note.permissionList!.split(',');
+    _note.isExternalRes == true
+        ? _accessList = _note.permissionList!.split(',')
+        : _accessList = ['read', 'write', 'control'];
     _scrollController = ScrollController();
     _scaffoldController = widget.scaffoldController;
   }
@@ -119,19 +124,21 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                       ),
                     ],
                   ),
-                  // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note pag)
+                  // Display note metadata - show dates and sharing info, but not path info (as only shown on non readable note page)
                   DisplayNoteMetadata(
                     createdDateTime: _note.content!.createdDateTime,
                     modifiedDateTime: _note.content!.modifiedDateTime,
                     noteOwner: _note.noteOwner,
-                    permissionGranter: _note.permissionGranter!,
-                    permissionList: _note.permissionList!,
+                    permissionGranter:
+                        _note.isExternalRes ? _note.permissionGranter : null,
+                    permissionList:
+                        _note.isExternalRes ? _note.permissionList : null,
                     noteFileName: _note.noteFileName,
                     noteUrl: _note.noteUrl,
                     showDates: true,
                     showFileName: true,
-                    showSharing: true,
-                    showPathInfo: true,
+                    showSharing: _note.isExternalRes == true ? true : false,
+                    showPathInfo: _note.isExternalRes == true ? true : false,
                   ),
                   // Display markdown note content
                   noteDisplayMarkdown(_note.content!.noteContent),
@@ -153,7 +160,7 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     spacing: 5.0,
                     children: [
-                      // Share if control access
+                      // Share button if control access
                       if (_accessList.contains('control')) ...[
                         NoteActionButton(
                           label: ButtonLabel.share,
@@ -173,28 +180,50 @@ class _ViewSharedNoteState extends State<ViewSharedNote> {
                           isNarrow: isNarrow,
                         ),
                       ],
-                      // Edit if write access
+                      // Edit button if write access
                       if (_accessList.contains('write')) ...[
                         NoteActionButton(
                           label: ButtonLabel.edit,
                           icon: const Icon(Icons.edit),
                           backgroundColor: ButtonBackgroundColor.edit,
-                          childPage: EditSharedNote(
-                            note: _note,
-                            scaffoldController: _scaffoldController,
-                          ),
+                          childPage: _note.isExternalRes == true
+                              ? EditSharedNote(
+                                  note: _note,
+                                  scaffoldController: _scaffoldController,
+                                )
+                              : EditNote(
+                                  note: _note,
+                                  scaffoldController: _scaffoldController,
+                                ),
                           scaffoldController: _scaffoldController,
                           isNarrow: isNarrow,
                         ),
                       ],
-                      // Back
+
+                      /// Delete button
+                      if (!_note.isExternalRes) ...[
+                        NoteDelButton(
+                          filename: _note.noteFileName,
+                          isExternal: false,
+                          isNarrow: isNarrow,
+                          childPage: ListNotesScreen(
+                            scaffoldController: _scaffoldController,
+                          ),
+                          scaffoldController: _scaffoldController,
+                        ),
+                      ],
+                      // Back button
                       NoteActionButton(
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: ListExternalNotesScreen(
-                          scaffoldController: _scaffoldController,
-                        ),
+                        childPage: _note.isExternalRes == true
+                            ? ListExternalNotesScreen(
+                                scaffoldController: _scaffoldController,
+                              )
+                            : ListNotesScreen(
+                                scaffoldController: _scaffoldController,
+                              ),
                         scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),
