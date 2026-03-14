@@ -95,12 +95,14 @@ Future<NotesCallResult> getOwnNoteList() async {
 
           if (content != null) {
             // Add note content data to note objects list
+            // where user = noteOwner
             notes.add(
               Note(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
                 content: content,
+                permissionList: 'read,write,control',
               ),
             );
           } else {
