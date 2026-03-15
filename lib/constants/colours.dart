@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 
 // const darkGold = Color(0xFFBE830E);
 const darkBlue = Color.fromARGB(255, 7, 87, 153);
+const midBlue = Color.fromARGB(255, 20, 115, 193);
 // const brickRed = Color(0xFFD89E7A);
 const lightGreen = Color.fromARGB(255, 120, 219, 137);
 const darkGreen = Color.fromARGB(255, 64, 163, 81);
@@ -52,11 +53,11 @@ const lighterGray = Color.fromARGB(255, 243, 243, 243);
 const lightRed = Color.fromARGB(255, 255, 88, 77);
 // const darkRed = Color.fromARGB(255, 139, 38, 30);
 
-//const confirmGreen = Colors.green;
+//const confirmGreen = Colors.blue;
 
 List<Color> defaultNotepodColors = const [
   darkBlue,
-  darkGreen,
+  darkBlue,
   darkCopper,
   titleAsh,
   lightBlue,
@@ -108,12 +109,12 @@ ThemeData lightThemeData() {
     useMaterial3: true,
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: darkGreen, // Colors.green,
+      seedColor: darkBlue, // Colors.blue,
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundWhite,
     appBarTheme: const AppBarTheme(
-      backgroundColor: darkGreen, // Colors.green[300],
+      backgroundColor: midBlue, // Colors.blue[300],
       //   foregroundColor: Colors.black,
       //   iconTheme: IconThemeData(
       //     color: Colors.black,
@@ -175,12 +176,12 @@ ThemeData darkThemeData() {
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.green,
+      seedColor: Colors.blue,
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: Colors.grey[900],
     appBarTheme: const AppBarTheme(
-      backgroundColor: darkGreen, // Colors.green[900],
+      backgroundColor: darkBlue, // Colors.blue[900],
       // foregroundColor: Colors.white,
       // iconTheme: IconThemeData(
       //   color: Colors.white,

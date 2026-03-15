@@ -1,7 +1,7 @@
 name: communitypod
 description: 'Privacy preserving news sharing app using PODs.'
 publish_to: 'none'
-version: 0.0.3+1
+version: 0.0.4+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
