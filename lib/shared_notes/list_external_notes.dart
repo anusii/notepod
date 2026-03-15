@@ -44,15 +44,18 @@ import 'package:notepod/widgets/simple_action_button.dart';
 ///
 /// Arguments:
 /// - [notes] - The externally owned notes shared to the user.
+/// - [title] - List title.
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class ListExternalNotes extends StatefulWidget {
   final List<Note> notes;
+  final String title;
   final SolidScaffoldController scaffoldController;
 
   const ListExternalNotes({
     super.key,
     required this.notes,
+    required this.title,
     required this.scaffoldController,
   });
 
@@ -360,8 +363,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '$sharedNotesTitle (created by other people)',
+                    Text(
+                      widget.title,
                       style: titleStyle,
                     ),
                     const SizedBox(height: 10),
@@ -411,6 +414,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                             // Only display multi note delete
                             // button when notes are selected causing
                             // isSelectionMode=true
+                            // Only notes owned by user are selectable
                             if (_isSelectionMode) ...[
                               // Multi note delete button
                               NoteListDelButton(
