@@ -32,6 +32,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/notes/list_external_notes_screen.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
+import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 
 class AppHomePage extends StatefulWidget {
@@ -97,9 +98,22 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // My Notes (Owner's Notes)
+          // All Accessible Notes
           SolidAppBarAction(
             icon: Icons.view_list,
+            tooltip: 'Go to $combinedNotesTitle',
+            onPressed: () {
+              scaffoldController.navigateToSubpage(
+                ListNotesScreen(
+                  scaffoldController: scaffoldController,
+                ),
+              );
+            },
+          ),
+          // My Notes (Owner's Notes)
+          SolidAppBarAction(
+            // More gender neutral icon
+            icon: Icons.person_3,
             tooltip: 'Go to $myNotesTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
@@ -111,7 +125,8 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           // External Notes (Shared Notes)
           SolidAppBarAction(
-            icon: Icons.groups,
+            // More gender neutral icon
+            icon: Icons.groups_3,
             tooltip: 'Go to $sharedNotesTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
@@ -124,17 +139,26 @@ class AppHomePageState extends State<AppHomePage> {
         ],
       ),
       menu: [
+        // All Accessible Notes
+        SolidMenuItem(
+          title: combinedNotesTitle,
+          icon: Icons.view_list,
+          child: ListNotesScreen(scaffoldController: scaffoldController),
+          tooltip: 'Navigate to $combinedNotesTitle',
+        ),
         // My Notes
         SolidMenuItem(
           title: myNotesTitle,
-          icon: Icons.view_list,
+          // More gender neutral icon
+          icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
           tooltip: 'Navigate to $myNotesTitle',
         ),
         // Shared Notes
         SolidMenuItem(
           title: sharedNotesTitle,
-          icon: Icons.groups,
+          // More gender neutral icon
+          icon: Icons.groups_3,
           child: ListExternalNotesScreen(
             scaffoldController: scaffoldController,
           ),
