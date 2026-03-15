@@ -232,13 +232,19 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
     } else {
       // Search for matches in filename, owner, permission granter or permission list
       results = widget.notes.where((note) {
-        return note.noteFileName
+        return (note.content?.noteTitle ?? 'unknown')
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            (note.content?.noteContent ?? 'unknown')
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.noteFileName
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
             note.noteOwner
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            (note.permissionGranter ?? 'N/A')
+            (note.permissionGranter ?? 'n/a')
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
             note.permissionList
