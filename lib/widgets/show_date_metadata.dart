@@ -26,8 +26,8 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/utils/misc.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/utils/misc.dart';
 
 /// Show date metadata of a note ie. the creation date time
 /// and the modified date time.

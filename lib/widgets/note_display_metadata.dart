@@ -26,10 +26,10 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/widgets/show_access_metadata.dart';
-import 'package:notepod/widgets/show_date_metadata.dart';
-import 'package:notepod/widgets/show_filename_metadata.dart';
-import 'package:notepod/widgets/show_path_metadata.dart';
+import 'package:communitypod/widgets/show_access_metadata.dart';
+import 'package:communitypod/widgets/show_date_metadata.dart';
+import 'package:communitypod/widgets/show_filename_metadata.dart';
+import 'package:communitypod/widgets/show_path_metadata.dart';
 
 /// Display the metadata of an externally owned note.
 /// showDates requires created and modified date time.

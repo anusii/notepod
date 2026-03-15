@@ -27,7 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/widgets/msg_card.dart';
+import 'package:communitypod/widgets/msg_card.dart';
 
 // Builds a stylised card for display of error messages,
 /// which works in light and dark themes

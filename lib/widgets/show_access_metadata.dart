@@ -26,7 +26,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
+import 'package:communitypod/constants/app.dart';
 
 /// Display sharing metadata of a note, ie. comprising
 /// owner, webId that shared the note to the user, and

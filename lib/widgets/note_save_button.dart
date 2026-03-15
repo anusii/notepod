@@ -30,9 +30,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/file_helper.dart';
-import 'package:notepod/constants/colours.dart';
-import 'package:notepod/models/note.dart';
+import 'package:communitypod/common/rest_api/file_helper.dart';
+import 'package:communitypod/constants/colours.dart';
+import 'package:communitypod/models/note.dart';
 
 /// A stylised save button widget which on click saves the note content
 /// Pod. External notes are written to the note owner's Pod. Notes created

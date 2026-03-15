@@ -1,5 +1,5 @@
-name: notepod
-description: 'Privacy preserving note taking app using PODs.'
+name: communitypod
+description: 'Privacy preserving news sharing app using PODs.'
 publish_to: 'none'
 version: 0.3.7+10
 

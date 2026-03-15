@@ -25,14 +25,14 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/notes_call_result.dart';
-import 'package:notepod/notes/list_notes.dart';
-import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/msg_card.dart';
-import 'package:notepod/widgets/note_list_del_dialog.dart';
-import 'package:notepod/widgets/note_list_revoke_dialog.dart';
+import 'package:communitypod/common/rest_api/rest_api.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/models/notes_call_result.dart';
+import 'package:communitypod/notes/list_notes.dart';
+import 'package:communitypod/widgets/err_card.dart';
+import 'package:communitypod/widgets/msg_card.dart';
+import 'package:communitypod/widgets/note_list_del_dialog.dart';
+import 'package:communitypod/widgets/note_list_revoke_dialog.dart';
 
 /// A [stateful] widget to fetch data for the page showing list externally
 /// owned notes shared to the user.
@@ -92,7 +92,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
         unparseableNotes: unparseableNotes,
         childPage: ListNotes(
           notes: notes,
-          title: '$sharedNotesTitle ($sharedNotesExplanation)',
+          title: '$sharedNewsTitle ($sharedNewsExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -103,7 +103,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
         nonExistentNotes: nonExistentNotes,
         childPage: ListNotes(
           notes: notes,
-          title: '$sharedNotesTitle ($sharedNotesExplanation)',
+          title: '$sharedNewsTitle ($sharedNewsExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -113,7 +113,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     } else {
       return ListNotes(
         notes: notes,
-        title: '$sharedNotesTitle ($sharedNotesExplanation)',
+        title: '$sharedNewsTitle ($sharedNewsExplanation)',
         scaffoldController: _scaffoldController,
       );
     }

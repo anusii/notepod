@@ -26,16 +26,16 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/models/selected_note.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
-import 'package:notepod/notes/non_readable_note.dart';
-import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/widgets/note_item_subtitle.dart';
-import 'package:notepod/widgets/note_item_trailing_buttons.dart';
-import 'package:notepod/widgets/note_list_del_button.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/constants/ui.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/models/selected_note.dart';
+import 'package:communitypod/notes/list_external_notes_screen.dart';
+import 'package:communitypod/notes/non_readable_note.dart';
+import 'package:communitypod/notes/view_note.dart';
+import 'package:communitypod/widgets/note_item_subtitle.dart';
+import 'package:communitypod/widgets/note_item_trailing_buttons.dart';
+import 'package:communitypod/widgets/note_list_del_button.dart';
 
 /// A [stateful] widget to list notes accessible to the
 /// user.

@@ -1,4 +1,4 @@
-/// NotePod - Define the main entry point for the app.
+/// CommunityPod - Define the main entry point for the app.
 ///
 // Time-stamp: <Tuesday 2025-10-21 08:43:32 +1100 Graham Williams>
 ///
@@ -29,8 +29,8 @@ import 'package:flutter/material.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:notepod/notepod.dart';
-import 'package:notepod/utils/is_desktop.dart';
+import 'package:communitypod/notepod.dart';
+import 'package:communitypod/utils/is_desktop.dart';
 
 /// Main entry point for the [NotePod] application.
 
@@ -66,7 +66,7 @@ void main() async {
 
       // alwaysOnTop: true,
 
-      title: 'NotePod - Private and Shareable Notes',
+      title: 'CommunityPod - Private and Shareable News',
     );
 
     // Once the window manager is ready we reconfigure it a little.

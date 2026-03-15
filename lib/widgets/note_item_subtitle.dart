@@ -24,9 +24,9 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/models/note.dart';
-import 'package:notepod/utils/get_id.dart';
-import 'package:notepod/utils/misc.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/utils/get_id.dart';
+import 'package:communitypod/utils/misc.dart';
 
 /// A [stateless] widget to show subtitle of a note list item.
 /// It shows the number of recipients that the note is shared
@@ -54,12 +54,13 @@ class NoteItemSubtitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       (!_note.isExternalRes)
-          ? 'Filename: ${_note.noteFileName} \n'
-              'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
-              'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
-              'Owner: ${getId(_note.noteOwner)} \n'
-              'Shared with: ${getRecipNbrStr(_note.authUserList!.keys.length)} \n'
-              'Permissions: ${_note.permissionList}'
+          ? '\n' '${_note.content!.noteContent}'
+          // ? 'Filename: ${_note.noteFileName} \n'
+          //     'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
+          //     'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
+          //     'Owner: ${getId(_note.noteOwner)} \n'
+          //     'Shared with: ${getRecipNbrStr(_note.authUserList!.keys.length)} \n'
+          //     'Permissions: ${_note.permissionList}'
           : (_note.permissionList.contains('read'))
               ? 'Filename: ${_note.noteFileName} \n'
                   'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'

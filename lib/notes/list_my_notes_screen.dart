@@ -25,16 +25,16 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/models/notes_call_result.dart';
-import 'package:notepod/models/selected_note.dart';
-import 'package:notepod/notes/list_notes.dart';
-import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/widgets/err_card.dart';
-import 'package:notepod/widgets/msg_card.dart';
-import 'package:notepod/widgets/note_list_del_dialog.dart';
+import 'package:communitypod/common/rest_api/rest_api.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/models/notes_call_result.dart';
+import 'package:communitypod/models/selected_note.dart';
+import 'package:communitypod/notes/list_notes.dart';
+import 'package:communitypod/notes/new_note.dart';
+import 'package:communitypod/widgets/err_card.dart';
+import 'package:communitypod/widgets/msg_card.dart';
+import 'package:communitypod/widgets/note_list_del_dialog.dart';
 
 /// A [StatefulWidget] that fetches the user's notes in their app data folder
 /// retrieving the note data map containing data and properties of each note
@@ -102,7 +102,7 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
         unparseableNotes: unparseableNotes,
         childPage: ListNotes(
           notes: notes,
-          title: '$myNotesTitle ($myNotesExplanation)',
+          title: '$myNewsTitle ($myNewsExplanation)',
           scaffoldController: scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -112,7 +112,7 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
     } else {
       return ListNotes(
         notes: notes,
-        title: '$myNotesTitle ($myNotesExplanation)',
+        title: '$myNewsTitle ($myNewsExplanation)',
         scaffoldController: scaffoldController,
       );
     }

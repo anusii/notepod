@@ -1,4 +1,4 @@
-/// NotePod - The application's home page.
+/// CommunityPod - The application's home page.
 ///
 // Time-stamp: <Friday 2025-08-15 09:14:37 +1000 Graham Williams>
 ///
@@ -29,11 +29,11 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
-import 'package:notepod/notes/list_my_notes_screen.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
-import 'package:notepod/notes/new_note.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/notes/list_external_notes_screen.dart';
+import 'package:communitypod/notes/list_my_notes_screen.dart';
+import 'package:communitypod/notes/list_notes_screen.dart';
+import 'package:communitypod/notes/new_note.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -89,7 +89,7 @@ class AppHomePageState extends State<AppHomePage> {
           // New Note
           SolidAppBarAction(
             icon: Icons.add_circle,
-            tooltip: 'Navigate to $newNoteTitle',
+            tooltip: 'Navigate to $newNewsPostTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 NewNote(
@@ -101,7 +101,7 @@ class AppHomePageState extends State<AppHomePage> {
           // All Accessible Notes
           SolidAppBarAction(
             icon: Icons.view_list,
-            tooltip: 'Go to $combinedNotesTitle',
+            tooltip: 'Go to $combinedNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListNotesScreen(
@@ -114,7 +114,7 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarAction(
             // More gender neutral icon
             icon: Icons.person_3,
-            tooltip: 'Go to $myNotesTitle',
+            tooltip: 'Go to $myNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListMyNotesScreen(
@@ -127,7 +127,7 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarAction(
             // More gender neutral icon
             icon: Icons.groups_3,
-            tooltip: 'Go to $sharedNotesTitle',
+            tooltip: 'Go to $sharedNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListExternalNotesScreen(
@@ -141,37 +141,37 @@ class AppHomePageState extends State<AppHomePage> {
       menu: [
         // All Accessible Notes
         SolidMenuItem(
-          title: combinedNotesTitle,
+          title: combinedNewsTitle,
           icon: Icons.view_list,
           child: ListNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $combinedNotesTitle',
+          tooltip: 'Navigate to $combinedNewsTitle',
         ),
         // My Notes
         SolidMenuItem(
-          title: myNotesTitle,
+          title: myNewsTitle,
           // More gender neutral icon
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $myNotesTitle',
+          tooltip: 'Navigate to $myNewsTitle',
         ),
         // Shared Notes
         SolidMenuItem(
-          title: sharedNotesTitle,
+          title: sharedNewsTitle,
           // More gender neutral icon
           icon: Icons.groups_3,
           child: ListExternalNotesScreen(
             scaffoldController: scaffoldController,
           ),
-          tooltip: 'Navigate to $sharedNotesTitle',
+          tooltip: 'Navigate to $sharedNewsTitle',
         ),
         // New Note
         SolidMenuItem(
-          title: newNoteTitle,
+          title: newNewsPostTitle,
           icon: Icons.add_circle,
           child: NewNote(
             scaffoldController: scaffoldController,
           ),
-          tooltip: 'Navigate to $newNoteTitle',
+          tooltip: 'Navigate to $newNewsPostTitle',
         ),
       ],
       statusBar: SolidStatusBarConfig(

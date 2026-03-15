@@ -32,12 +32,12 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/widgets/markdown_editor.dart';
-import 'package:notepod/widgets/note_back_button.dart';
-import 'package:notepod/widgets/note_save_button.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/constants/turtle_structures.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/widgets/markdown_editor.dart';
+import 'package:communitypod/widgets/note_back_button.dart';
+import 'package:communitypod/widgets/note_save_button.dart';
 
 /// A [StatelessWidget] widget setup for calling the
 /// SingleChildScrollView() to edit a note, whether a
