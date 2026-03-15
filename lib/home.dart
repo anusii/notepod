@@ -30,7 +30,6 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:communitypod/constants/app.dart';
-import 'package:communitypod/notes/list_external_notes_screen.dart';
 import 'package:communitypod/notes/list_my_notes_screen.dart';
 import 'package:communitypod/notes/list_notes_screen.dart';
 import 'package:communitypod/notes/new_note.dart';
@@ -86,18 +85,6 @@ class AppHomePageState extends State<AppHomePage> {
           // tooltip: 'Custom version tooltip',
         ),
         actions: [
-          // New Note
-          SolidAppBarAction(
-            icon: Icons.post_add_rounded,
-            tooltip: 'Navigate to $newNewsPostTitle',
-            onPressed: () {
-              scaffoldController.navigateToSubpage(
-                NewNote(
-                  scaffoldController: scaffoldController,
-                ),
-              );
-            },
-          ),
           // All Accessible Notes
           SolidAppBarAction(
             icon: Icons.newspaper,
@@ -123,14 +110,13 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // External Notes (Shared Notes)
+          // New Note
           SolidAppBarAction(
-            // More gender neutral icon
-            icon: Icons.groups_3,
-            tooltip: 'Go to $sharedNewsTitle',
+            icon: Icons.post_add_rounded,
+            tooltip: 'Write $newNewsPostTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
-                ListExternalNotesScreen(
+                NewNote(
                   scaffoldController: scaffoldController,
                 ),
               );
@@ -144,7 +130,7 @@ class AppHomePageState extends State<AppHomePage> {
           title: combinedNewsTitle,
           icon: Icons.newspaper,
           child: ListNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $combinedNewsTitle',
+          tooltip: 'Go to $combinedNewsTitle',
         ),
         // My Notes
         SolidMenuItem(
@@ -152,17 +138,7 @@ class AppHomePageState extends State<AppHomePage> {
           // More gender neutral icon
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $myNewsTitle',
-        ),
-        // Shared Notes
-        SolidMenuItem(
-          title: sharedNewsTitle,
-          // More gender neutral icon
-          icon: Icons.groups_3,
-          child: ListExternalNotesScreen(
-            scaffoldController: scaffoldController,
-          ),
-          tooltip: 'Navigate to $sharedNewsTitle',
+          tooltip: 'Go to $myNewsTitle',
         ),
         // New Note
         SolidMenuItem(
@@ -172,7 +148,7 @@ class AppHomePageState extends State<AppHomePage> {
           child: NewNote(
             scaffoldController: scaffoldController,
           ),
-          tooltip: 'Navigate to $newNewsPostTitle',
+          tooltip: 'Write $newNewsPostTitle',
         ),
       ],
       statusBar: SolidStatusBarConfig(
