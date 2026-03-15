@@ -34,8 +34,8 @@ import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/utils/misc.dart';
 import 'package:notepod/utils/get_id.dart';
+import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
