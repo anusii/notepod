@@ -111,11 +111,11 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
     // By default _foundNotes is the full list of notes
     _foundNotes = widget.notes;
 
-    // Initial sort by filename alphabetically
-    _sortByFilename(_sortFilenameAscending);
+    // Initial sort by title alphabetically
+    _sortByTitle(_sortTitleAscending);
 
     // Initialise sorting method
-    currSortMethod = 'sortByFilename'; //'sortByTitle';
+    currSortMethod = 'sortByTitle';
   }
 
   @override
