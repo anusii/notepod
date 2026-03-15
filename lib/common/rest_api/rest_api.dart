@@ -265,8 +265,6 @@ Future<NotesCallResult> getExternalNoteList({
       // Create a list of future functions for reading external Pods
       List<Future<dynamic>> futuresExtNoteContentResult = [];
       for (final note in notes) {
-        debugPrint('Fetching content for note: ${note.noteFileName}');
-        debugPrint('note url: ${note.noteUrl}');
         futuresExtNoteContentResult.add(
           getExternalNoteContent(
             note: note,
