@@ -32,7 +32,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
 import 'package:notepod/home.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/list_my_notes_screen.dart';
 
 /// The root widget for the [NotePod] app.
 ///
@@ -68,7 +68,7 @@ class NotePod extends StatelessWidget {
               'stored in your POD.',
         ),
         child: AppHomePage(
-          childPage: ListNotesScreen(
+          childPage: ListMyNotesScreen(
             scaffoldController: scaffoldController,
           ),
         ),
