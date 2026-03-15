@@ -366,9 +366,9 @@ class _ListNotesState extends State<ListNotes> {
                     TextField(
                       onChanged: (value) => _searchNotes(value),
                       decoration: const InputDecoration(
-                        labelText: 'Search notes',
+                        labelText: 'Search news',
                         hintText:
-                            'Enter text to match title, content, or properties of note files',
+                            'Enter text to match title, content, or properties of news post files',
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -383,20 +383,22 @@ class _ListNotesState extends State<ListNotes> {
                         // Match color scheme of sorting TextButtons
                         selectedCount > 0
                             ? Text(
-                                'Selected: $selectedCount notes',
+                                selectedCount > 1
+                                    ? 'Selected: $selectedCount news posts'
+                                    : 'Selected: $selectedCount news post',
                                 style: TextStyle(
                                   color: theme.colorScheme.primary,
                                 ),
                               )
                             : _foundNotes.length > 1 || _foundNotes.isEmpty
                                 ? Text(
-                                    'Found ${_foundNotes.length} notes',
+                                    'Found ${_foundNotes.length} news posts',
                                     style: TextStyle(
                                       color: theme.colorScheme.primary,
                                     ),
                                   )
                                 : Text(
-                                    'Found ${_foundNotes.length} note',
+                                    'Found ${_foundNotes.length} news post',
                                     style: TextStyle(
                                       color: theme.colorScheme.primary,
                                     ),
