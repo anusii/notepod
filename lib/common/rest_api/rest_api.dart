@@ -272,8 +272,6 @@ Future<NotesCallResult> getExternalNoteList({
         );
       }
 
-      debugPrint('Completed getExternalNoteContent()');
-
       List<dynamic> extNoteWithContentResults =
           await Future.wait(futuresExtNoteContentResult);
 
