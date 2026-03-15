@@ -26,12 +26,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
+import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/widgets/err_card.dart';
@@ -89,19 +88,16 @@ class NoteListDelButton extends StatelessWidget {
 
                 // Delete file
                 for (final SelectedNote note in selectedNotes) {
-                  // Create note file path
-                  String noteFilePath = '$basePath/${note.noteFileName}';
-                  debugPrint('Deleting $noteFilePath...');
+                  debugPrint('Deleting ${note.noteUrl}...');
 
                   // Call solid delete file function
-                  if (!isExternal) {
-                    await deleteFile(fileUrl: noteFilePath);
-                  } else {
-                    debugPrint(
-                      '[NoteListDelButton] delete external files not '
-                      'yet supported',
-                    );
-                  }
+                  // Delete file
+                  await NoteFileHelper().deleteNote(
+                    context: context,
+                    filename: note.noteFileName,
+                    isExternal: isExternal,
+                    child: childPage,
+                  );
                 }
 
                 if (context.mounted) {

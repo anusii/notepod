@@ -1,4 +1,4 @@
-/// List user's own notes.
+/// A stateful widget to list notes.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -30,27 +30,32 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
-/// A [StatefulWidget] to list notes owned by the user.
-/// Parameters:
-///   [notes] - is the file list map with data of all notes
-///                in the user's app data folder (required to
-///                display sharing information and support
-///                sharing with suggestion list of recipient WebIds).
-///   [scaffoldController] - Controller for the Solid scaffold.
+/// A [stateful] widget to list notes accessible to the
+/// user.
+///
+/// Arguments:
+/// - [notes] - The notes accessible to the user.
+/// - [title] - List title.
+/// - [scaffoldController] - Controller for the Solid scaffold.
+
 class ListNotes extends StatefulWidget {
   final List<Note> notes;
+  final String title;
   final SolidScaffoldController scaffoldController;
 
   const ListNotes({
     super.key,
     required this.notes,
+    required this.title,
     required this.scaffoldController,
   });
 
@@ -59,7 +64,7 @@ class ListNotes extends StatefulWidget {
 }
 
 class _ListNotesState extends State<ListNotes> {
-  /// Searched/sorted notes
+  /// Filtered map of notes.
   List<Note> _foundNotes = [];
 
   /// Selected notes
@@ -75,9 +80,21 @@ class _ListNotesState extends State<ListNotes> {
   /// First button press will change to sort by last modified first
   bool _sortModDateAscending = true;
 
+  /// Initial sort by note filename order.
+  bool _sortFilenameAscending = true;
+
+  // /// Initial sort by note owner order.
+  // bool _sortOwnerAscending = true;
+
+  // /// Initial sort by note owner order.
+  // bool _sortPermissionAscending = true;
+
   /// Note selection mode
   /// true: when one or more notes have been selected, false by defaultl
   bool _isSelectionMode = false;
+
+  /// Count of selected notes
+  int selectedCount = 0;
 
   /// Current note sort method
   /// Initialised to sort by title
@@ -89,9 +106,6 @@ class _ListNotesState extends State<ListNotes> {
   /// Scaffold controller
   late final SolidScaffoldController _scaffoldController;
 
-  /// Count of selected notes
-  int selectedCount = 0;
-
   /// Aspect ratio (width / height) for gridview
   /// cards to display note items
   late double cardAspectRatio = 2.0;
@@ -99,8 +113,181 @@ class _ListNotesState extends State<ListNotes> {
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
-  /// Boolean describing whether note is external
-  final bool isExternal = false;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scaffoldController = widget.scaffoldController;
+
+    // By default _foundNotes is the full list of notes
+    _foundNotes = widget.notes;
+
+    // Initial sort by title alphabetically
+    _sortByTitle(_sortTitleAscending);
+
+    // Initialise sorting method
+    currSortMethod = 'sortByTitle';
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Dispose the ScrollController
+    super.dispose();
+  }
+
+  // Sort alphanumerically on note title field, with null values last
+  void _sortByTitle(bool ascending) {
+    setState(() {
+      _sortTitleAscending = ascending;
+      _foundNotes.sort((a, b) {
+        if (a.content == null && b.content == null) return 0;
+        if (a.content == null) return 1;
+        if (b.content == null) return -1;
+        return _sortTitleAscending
+            ? a.content!.noteTitle
+                .toLowerCase()
+                .compareTo(b.content!.noteTitle.toLowerCase())
+            : b.content!.noteTitle
+                .toLowerCase()
+                .compareTo(a.content!.noteTitle.toLowerCase());
+      });
+
+      // Update current sort method
+      currSortMethod = 'sortByTitle';
+    });
+  }
+
+  // Sort numerically on note modified date field, with null values last
+  void _sortByModDate(bool ascending) {
+    setState(() {
+      _sortModDateAscending = ascending;
+      _foundNotes.sort((a, b) {
+        if (a.content == null && b.content == null) return 0;
+        if (a.content == null) return 1;
+        if (b.content == null) return -1;
+        return _sortModDateAscending
+            ? a.content!.modifiedDateTime
+                .toLowerCase()
+                .compareTo(b.content!.modifiedDateTime.toLowerCase())
+            : b.content!.modifiedDateTime
+                .toLowerCase()
+                .compareTo(a.content!.modifiedDateTime.toLowerCase());
+      });
+
+      // Update current sort method
+      currSortMethod = 'sortByModDate';
+    });
+  }
+
+  /// Sort alphanumerically on note filename
+  void _sortByFilename(bool ascending) {
+    setState(() {
+      _sortFilenameAscending = ascending;
+      _foundNotes.sort(
+        (a, b) => _sortFilenameAscending
+            ? a.noteFileName
+                .toLowerCase()
+                .compareTo(b.noteFileName.toLowerCase())
+            : b.noteFileName
+                .toLowerCase()
+                .compareTo(a.noteFileName.toLowerCase()),
+      );
+
+      // Update current sort method
+      currSortMethod = 'sortByFilename';
+    });
+  }
+
+  // TODO: allow owner sorting if isWide after isWide added to Solidui
+  // /// Sort alphanumerically on note owner
+  // void _sortByOwner(bool ascending) {
+  //   setState(() {
+  //     _sortOwnerAscending = ascending;
+
+  //     _foundNotes.sort(
+  //       (a, b) => _sortOwnerAscending
+  //           ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
+  //           : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
+  //     );
+
+  //     // Update current sort method
+  //     currSortMethod = 'sortByOwner';
+  //   });
+  // }
+
+  // TODO: allow permission sorting if isWide after isWide added to Solidui
+  // /// Sort alphanumerically on note permissions
+  // void _sortByPermission(bool ascending) {
+  //   setState(() {
+  //     _sortPermissionAscending = ascending;
+
+  //     _foundNotes.sort(
+  //       (a, b) => _sortPermissionAscending
+  //           ? a.permissionList
+  //               .toLowerCase()
+  //               .compareTo(b.permissionList.toLowerCase())
+  //           : b.permissionList
+  //               .toLowerCase()
+  //               .compareTo(a.permissionList.toLowerCase()),
+  //     );
+
+  //     // Update current sort method
+  //     currSortMethod = 'sortByPermission';
+  //   });
+  // }
+
+  /// Search notes
+  void _searchNotes(String enteredKeyword) {
+    List<Note> results = [];
+    if (enteredKeyword.isEmpty) {
+      // Display all notes if no search string
+      results = widget.notes;
+    } else {
+      // Search for matches in filename, owner, permission granter or permission list
+      results = widget.notes.where((note) {
+        return (note.content?.noteTitle ?? 'unknown')
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            (note.content?.noteContent ?? 'unknown')
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.noteFileName
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.noteOwner
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            (note.permissionGranter ?? 'n/a')
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase()) ||
+            note.permissionList
+                .toLowerCase()
+                .contains(enteredKeyword.toLowerCase());
+      }).toList();
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundNotes = results;
+
+      // // Sort results by filename
+      // _sortByFilename(_sortFilenameAscending);
+    });
+
+    // Sort by current sort method and polarity
+    switch (currSortMethod) {
+      case 'sortByTitle':
+        _sortByTitle(_sortTitleAscending);
+      case 'sortByModDate':
+        _sortByModDate(_sortModDateAscending);
+      case 'sortByFilename':
+        _sortByFilename(_sortFilenameAscending);
+      // case 'sortByOwner':
+      //   _sortByOwner(_sortOwnerAscending);
+      // case 'sortByPermission':
+      //   _sortByPermission(_sortPermissionAscending);
+    }
+  }
 
   /// Update selected status and count of selected and add/remove note from
   /// selected notes list
@@ -135,100 +322,6 @@ class _ListNotesState extends State<ListNotes> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    // By default _foundNotes is the full list of notes
-    _foundNotes = widget.notes;
-
-    // Initial sort by title alphabetically
-    _sortByTitle(_sortTitleAscending);
-
-    // Initialise sorting method
-    currSortMethod = 'sortByTitle';
-
-    _scrollController = ScrollController();
-
-    _scaffoldController = widget.scaffoldController;
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose(); // Dispose the ScrollController
-    super.dispose();
-  }
-
-  // Sort alphanumerically on note title field
-  void _sortByTitle(bool ascending) {
-    setState(() {
-      _sortTitleAscending = ascending;
-      _foundNotes.sort(
-        (a, b) => _sortTitleAscending
-            ? a.content!.noteTitle
-                .toLowerCase()
-                .compareTo(b.content!.noteTitle.toLowerCase())
-            : b.content!.noteTitle
-                .toLowerCase()
-                .compareTo(a.content!.noteTitle.toLowerCase()),
-      );
-
-      // Update current sort method
-      currSortMethod = 'sortByTitle';
-    });
-  }
-
-  // Sort numerically on note modified date field
-  void _sortByModDate(bool ascending) {
-    setState(() {
-      _sortModDateAscending = ascending;
-      _foundNotes.sort(
-        (a, b) => _sortModDateAscending
-            ? a.content!.modifiedDateTime
-                .toLowerCase()
-                .compareTo(b.content!.modifiedDateTime.toLowerCase())
-            : b.content!.modifiedDateTime
-                .toLowerCase()
-                .compareTo(a.content!.modifiedDateTime.toLowerCase()),
-      );
-
-      // Update current sort method
-      currSortMethod = 'sortByModDate';
-    });
-  }
-
-  // Search notes
-  void _searchNotes(String enteredKeyword) {
-    List<Note> results = [];
-    if (enteredKeyword.isEmpty) {
-      // Display all notes if no search string
-      results = widget.notes;
-    } else {
-      // Display notes with title or contents containing search string
-      results = widget.notes.where((note) {
-        return note.content!.noteTitle
-                .toLowerCase()
-                .contains(enteredKeyword.toLowerCase()) ||
-            note.content!.noteContent
-                .toLowerCase()
-                .contains(enteredKeyword.toLowerCase());
-      }).toList();
-    }
-
-    // Refresh the UI
-    setState(() {
-      _foundNotes = results;
-    });
-
-    // Sort by current sort method and polarity
-    switch (currSortMethod) {
-      case 'sortByTitle':
-        _sortByTitle(_sortTitleAscending);
-      case 'sortByModDate':
-        _sortByModDate(_sortModDateAscending);
-    }
-  }
-
   /// Update multiple note selection mode
   void updateSelectionMode(bool selectionMode, int index) {
     setState(() {
@@ -257,26 +350,27 @@ class _ListNotesState extends State<ListNotes> {
         // Derive whether window is narrow
         isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
-        cardAspectRatio =
-            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
+        cardAspectRatio = NoteItemSize().calculateCardAspectRatio(constraints);
         return SizedBox(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '$myNotesTitle (created by me)',
+                    Text(
+                      widget.title,
                       style: titleStyle,
                     ),
                     const SizedBox(height: 10),
                     TextField(
                       onChanged: (value) => _searchNotes(value),
                       decoration: const InputDecoration(
-                        labelText: 'Search title or text',
-                        hintText: 'Enter string to match note contents',
+                        labelText: 'Search notes',
+                        hintText:
+                            'Enter text to match title, content, or properties of note files',
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -311,19 +405,19 @@ class _ListNotesState extends State<ListNotes> {
                                   ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          spacing: 5.0,
+                          spacing: (!isNarrow) ? 3.0 : 0,
                           children: [
                             // Multiple note delete button
                             // Only display multi note delete
                             // button when notes are selected causing
                             // isSelectionMode=true
+                            // Only notes owned by user are selectable
                             if (_isSelectionMode) ...[
                               // Multi note delete button
                               NoteListDelButton(
                                 selectedNotes: selectedNotes,
-                                // Reload MyNotes list after note deletion
-                                // [20260108: currently not reloading after delete]
-                                childPage: ListNotesScreen(
+                                // Reload list after note deletion
+                                childPage: ListExternalNotesScreen(
                                   scaffoldController: _scaffoldController,
                                 ),
                                 scaffoldController: _scaffoldController,
@@ -341,14 +435,8 @@ class _ListNotesState extends State<ListNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: Text(
-                                _sortTitleAscending
-                                    ? !isNarrow
-                                        ? 'Title A to Z'
-                                        : 'Title'
-                                    : !isNarrow
-                                        ? 'Title Z to A'
-                                        : 'Title',
+                              label: const Text(
+                                'Title',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -363,16 +451,63 @@ class _ListNotesState extends State<ListNotes> {
                                     : Icons.arrow_drop_up,
                               ),
                               label: Text(
-                                _sortModDateAscending
-                                    ? !isNarrow
-                                        ? 'Date First Modified'
-                                        : 'Date'
-                                    : !isNarrow
-                                        ? 'Date Last Modified'
-                                        : 'Date',
+                                (!isNarrow) ? 'Date Modified' : 'Date',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
+                            // Filename Sort Label and Button
+                            // Only display filename sort
+                            // when window is not narrow
+                            if (!isNarrow) ...[
+                              TextButton.icon(
+                                onPressed: () {
+                                  _sortByFilename(!_sortFilenameAscending);
+                                },
+                                icon: Icon(
+                                  _sortFilenameAscending
+                                      ? Icons.arrow_drop_down
+                                      : Icons.arrow_drop_up,
+                                ),
+                                label: const Text(
+                                  'Filename',
+                                ),
+                                iconAlignment: IconAlignment.end,
+                              ),
+                            ],
+                            // // Owner Sort Label and Button
+                            // TextButton.icon(
+                            //   onPressed: () {
+                            //     _sortByOwner(!_sortOwnerAscending);
+                            //   },
+                            //   icon: Icon(
+                            //     _sortOwnerAscending
+                            //         ? Icons.arrow_drop_down
+                            //         : Icons.arrow_drop_up,
+                            //   ),
+                            //   label: const Text(
+                            //     'Owner',
+                            //   ),
+                            //   iconAlignment: IconAlignment.end,
+                            // ),
+                            // Only display permissions sort
+                            // when window is not narrow
+                            // if (!isNarrow) ...[
+                            //   // Permission Sort Label and Button
+                            //   TextButton.icon(
+                            //     onPressed: () {
+                            //       _sortByPermission(!_sortPermissionAscending);
+                            //     },
+                            //     icon: Icon(
+                            //       _sortPermissionAscending
+                            //           ? Icons.arrow_drop_down
+                            //           : Icons.arrow_drop_up,
+                            //     ),
+                            //     label: const Text(
+                            //       'Permission',
+                            //     ),
+                            //     iconAlignment: IconAlignment.end,
+                            //   ),
+                            // ],
                           ],
                         ),
                       ],
@@ -396,6 +531,7 @@ class _ListNotesState extends State<ListNotes> {
                     itemBuilder: (context, index) => Card(
                       child: Center(
                         child: Container(
+                          // Show color decoration when selected
                           decoration: _foundNotes[index].isSelected
                               ? BoxDecoration(
                                   color: theme.colorScheme.onInverseSurface,
@@ -408,56 +544,97 @@ class _ListNotesState extends State<ListNotes> {
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
                           child: ListTile(
-                            // Select note button
-                            leading: SizedBox(
-                              width: NoteIconSize.width,
-                              child: Center(
-                                child: Ink(
-                                  decoration: buttonShapeList,
-                                  child: IconButton(
-                                    icon: _foundNotes[index].isSelected
-                                        ? const Icon(Icons.done)
-                                        : const Icon(Icons.edit_document),
-                                    onPressed: () {
-                                      updateSelectionMode(
-                                        _isSelectionMode,
-                                        index,
-                                      );
-                                      updateSelected(index);
-                                    },
+                            // Note has selectable icon if owned by user
+                            leading: (_foundNotes[index].isExternalRes)
+                                ? const CircleAvatar(
+                                    radius: 26,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(Icons.edit_document),
+                                  )
+                                : SizedBox(
+                                    width: NoteIconSize.width,
+                                    child: Center(
+                                      child: Ink(
+                                        decoration: buttonShapeList,
+                                        child: IconButton(
+                                          icon: _foundNotes[index].isSelected
+                                              ? const Icon(Icons.done)
+                                              : const Icon(Icons.edit_document),
+                                          onPressed: () {
+                                            updateSelectionMode(
+                                              _isSelectionMode,
+                                              index,
+                                            );
+                                            updateSelected(index);
+                                          },
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              _foundNotes[index].content!.noteTitle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            // Note info
+                            title: (_foundNotes[index]
+                                    .permissionList
+                                    .contains('read'))
+                                ? Text(
+                                    _foundNotes[index].content!.noteTitle,
+                                    maxLines:
+                                        (!isNarrow) ? 1 : 3, // Limit lines
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : const Text(''),
+                            // Subtitle that number shared with if note owned by user, or entity that share it if owned by another, and does not show encrypted content if read access denied
                             subtitle: Text(
-                              'Filename: ${_foundNotes[index].noteFileName} \n'
-                              'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                              'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                              'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)}',
-                              maxLines: 4, // Limit to 4 lines
+                              (!_foundNotes[index].isExternalRes)
+                                  ? 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                      'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                      'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                      'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                      'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)} \n'
+                                      'Permissions: ${_foundNotes[index].permissionList}'
+                                  : (_foundNotes[index]
+                                          .permissionList
+                                          .contains('read'))
+                                      ? 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                          'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                          'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                          'Permissions: ${_foundNotes[index].permissionList}'
+                                      : 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                          'Permissions: ${_foundNotes[index].permissionList}',
+                              maxLines: (!isNarrow) ? 6 : 12, // Limit lines
                               overflow: TextOverflow.ellipsis,
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
-                              height: NoteIconSize.height,
-                              width: NoteIconSize.twoIconWidth,
-                              child: TrailingButtons(
+                              height: 60,
+                              width: 120,
+                              child: SharedTrailingButtons(
                                 note: _foundNotes[index],
                                 scaffoldController: _scaffoldController,
                               ),
                             ),
+
                             onTap: () {
-                              _scaffoldController.navigateToSubpage(
-                                ViewNote(
-                                  note: _foundNotes[index],
-                                  scaffoldController: _scaffoldController,
-                                ),
-                              );
+                              // Open note if read in permissions
+                              String access = _foundNotes[index].permissionList;
+                              if (access.contains('read')) {
+                                _scaffoldController.navigateToSubpage(
+                                  ViewNote(
+                                    note: _foundNotes[index],
+                                    scaffoldController: _scaffoldController,
+                                  ),
+                                );
+                              } else {
+                                _scaffoldController.navigateToSubpage(
+                                  NonReadableNote(
+                                    note: _foundNotes[index],
+                                    scaffoldController: _scaffoldController,
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ),
@@ -474,8 +651,8 @@ class _ListNotesState extends State<ListNotes> {
   }
 }
 
-class TrailingButtons extends StatelessWidget {
-  const TrailingButtons({
+class SharedTrailingButtons extends StatelessWidget {
+  const SharedTrailingButtons({
     super.key,
     required Note note,
     required SolidScaffoldController scaffoldController,
@@ -487,26 +664,30 @@ class TrailingButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List accessList = _note.permissionList.split(',');
+
     return Row(
-      spacing: 15,
+      mainAxisAlignment: MainAxisAlignment.end,
+      spacing: 5.0,
       children: [
-        // Share button
-        SimpleActionButton(
-          icon: const Icon(Icons.share),
-          childPage: ShareNote(
-            noteUrl: _note.noteUrl,
-            noteOwner: _note.noteOwner,
-            backPage: ListNotesScreen(
+        // Share button if control in permissions
+        if (accessList.contains('control')) ...[
+          SimpleActionButton(
+            icon: const Icon(Icons.share),
+            childPage: ShareNote(
+              noteUrl: _note.noteUrl,
+              noteOwner: _note.noteOwner,
+              isExternal: _note.isExternalRes,
+              backPage: ListExternalNotesScreen(
+                scaffoldController: _scaffoldController,
+              ),
               scaffoldController: _scaffoldController,
             ),
             scaffoldController: _scaffoldController,
           ),
-          scaffoldController: _scaffoldController,
-        ),
+        ],
         // Open note icon
-        const Icon(
-          Icons.arrow_forward,
-        ),
+        const Icon(Icons.arrow_forward),
       ],
     );
   }
