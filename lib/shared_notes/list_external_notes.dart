@@ -368,9 +368,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                     TextField(
                       onChanged: (value) => _searchNotes(value),
                       decoration: const InputDecoration(
-                        labelText:
-                            'Search filename, owner, permission granter, permissions',
-                        hintText: 'Enter string to match note metadata',
+                        labelText: 'Search notes',
+                        hintText:
+                            'Enter text to match title, content, or properties of note files',
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
