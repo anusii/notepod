@@ -580,28 +580,31 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
-                            subtitle: (_foundNotes[index]
-                                    .permissionList
-                                    .contains('read'))
-                                ? Text(
-                                    'Filename: ${_foundNotes[index].noteFileName} \n'
-                                    'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                    'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                    'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                    'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                    'Permissions: ${_foundNotes[index].permissionList}',
-                                    maxLines: 6, // Limit lines
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : Text(
-                                    'Filename: ${_foundNotes[index].noteFileName} \n'
-                                    'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                    'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                    'Permissions: ${_foundNotes[index].permissionList}',
-                                    maxLines: 4, // Limit lines
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-
+                            // Subtitle that number shared with if note owned by user, or entity that share it if owned by another, and does not show encrypted content if read access denied
+                            subtitle: Text(
+                              (!_foundNotes[index].isExternalRes)
+                                  ? 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                      'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                      'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                      'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                      'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)} \n'
+                                      'Permissions: ${_foundNotes[index].permissionList}'
+                                  : (_foundNotes[index]
+                                          .permissionList
+                                          .contains('read'))
+                                      ? 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                          'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                          'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                          'Permissions: ${_foundNotes[index].permissionList}'
+                                      : 'Filename: ${_foundNotes[index].noteFileName} \n'
+                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                          'Permissions: ${_foundNotes[index].permissionList}',
+                              maxLines: 6, // Limit lines
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
                               height: 60,
