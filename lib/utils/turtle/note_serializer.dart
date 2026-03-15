@@ -27,10 +27,10 @@ library;
 
 import 'package:rdflib/rdflib.dart';
 
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note_content.dart';
-import 'package:notepod/utils/encryption.dart';
-import 'package:notepod/utils/turtle/parsing_utils.dart';
+import 'package:communitypod/constants/turtle_structures.dart';
+import 'package:communitypod/models/note_content.dart';
+import 'package:communitypod/utils/encryption.dart';
+import 'package:communitypod/utils/turtle/parsing_utils.dart';
 
 /// Handle Notepod to/from Turtle serialization operations.
 

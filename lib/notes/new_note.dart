@@ -31,8 +31,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/notes/list_my_notes_screen.dart';
-import 'package:notepod/widgets/note_edit_scroll_view.dart';
+import 'package:communitypod/notes/list_my_notes_screen.dart';
+import 'package:communitypod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
 ///

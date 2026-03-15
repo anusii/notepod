@@ -27,8 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/common/responsive.dart';
-import 'package:notepod/constants/colours.dart';
+import 'package:communitypod/common/responsive.dart';
+import 'package:communitypod/constants/colours.dart';
 
 /// Builds a stylised card for display of messages,
 /// which works in light and dark themes

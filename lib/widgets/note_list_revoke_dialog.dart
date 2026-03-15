@@ -28,12 +28,12 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/utils/get_id.dart';
-import 'package:notepod/widgets/note_back_button.dart';
-import 'package:notepod/widgets/note_list_revoke_button.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/constants/ui.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/utils/get_id.dart';
+import 'package:communitypod/widgets/note_back_button.dart';
+import 'package:communitypod/widgets/note_list_revoke_button.dart';
 
 /// A page listing external note file records which no longer
 /// exist with button to update permission log with 'revoke'

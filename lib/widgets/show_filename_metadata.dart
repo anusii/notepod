@@ -26,7 +26,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:notepod/constants/app.dart';
+import 'package:communitypod/constants/app.dart';
 
 /// Display filename metadata of a note ie. the filename.
 ///

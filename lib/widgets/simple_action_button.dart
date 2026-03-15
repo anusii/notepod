@@ -29,7 +29,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/colours.dart';
+import 'package:communitypod/constants/colours.dart';
 
 /// Simple action button widget with icon only for using in narrow
 /// windows or list items.

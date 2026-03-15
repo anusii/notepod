@@ -29,7 +29,7 @@ import 'package:flutter/material.dart';
 
 import 'package:new_loading_indicator/new_loading_indicator.dart';
 
-import 'package:notepod/constants/colours.dart';
+import 'package:communitypod/constants/colours.dart';
 
 Future<dynamic> showAnimationDialog(
   BuildContext context,

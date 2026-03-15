@@ -29,13 +29,13 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/common/rest_api/file_helper.dart';
-import 'package:notepod/models/call_status.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/models/note_content.dart';
-import 'package:notepod/models/notes_call_result.dart';
-import 'package:notepod/models/selected_note.dart';
-import 'package:notepod/utils/turtle/note_serializer.dart';
+import 'package:communitypod/common/rest_api/file_helper.dart';
+import 'package:communitypod/models/call_status.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/models/note_content.dart';
+import 'package:communitypod/models/notes_call_result.dart';
+import 'package:communitypod/models/selected_note.dart';
+import 'package:communitypod/utils/turtle/note_serializer.dart';
 
 /// Get the list of user's note objects.
 ///

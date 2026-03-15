@@ -65,7 +65,7 @@ settings:
   base:
     # TODO: Optionally set to NONE and use APP_NAME to set flavor specific product name
     # Eg. https://github.com/lllttt06/xcodegen_flutter_sample/blob/main/ios/project.yml
-    PRODUCT_NAME: 'notepod' # 'NONE'
+    PRODUCT_NAME: 'communitypod' # 'NONE'
     # TODO: Optionally use a different app icon for each
     # flavor in a different app icon subfolder in Runner/assets.xcassets/
     # Eg. https://github.com/lllttt06/xcodegen_flutter_sample/blob/main/ios/project.yml

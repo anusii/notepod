@@ -26,16 +26,16 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/constants/ui.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/models/selected_note.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
-import 'package:notepod/notes/non_readable_note.dart';
-import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/widgets/note_item_subtitle.dart';
-import 'package:notepod/widgets/note_item_trailing_buttons.dart';
-import 'package:notepod/widgets/note_list_del_button.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/constants/ui.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/models/selected_note.dart';
+import 'package:communitypod/notes/list_notes_screen.dart';
+import 'package:communitypod/notes/non_readable_note.dart';
+import 'package:communitypod/notes/view_note.dart';
+import 'package:communitypod/widgets/note_item_subtitle.dart';
+import 'package:communitypod/widgets/note_item_trailing_buttons.dart';
+import 'package:communitypod/widgets/note_list_del_button.dart';
 
 /// A [stateful] widget to list notes accessible to the
 /// user.
@@ -366,9 +366,9 @@ class _ListNotesState extends State<ListNotes> {
                     TextField(
                       onChanged: (value) => _searchNotes(value),
                       decoration: const InputDecoration(
-                        labelText: 'Search notes',
+                        labelText: 'Search news',
                         hintText:
-                            'Enter text to match title, content, or properties of note files',
+                            'Enter text to match title, content, or properties of news post files',
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -383,20 +383,22 @@ class _ListNotesState extends State<ListNotes> {
                         // Match color scheme of sorting TextButtons
                         selectedCount > 0
                             ? Text(
-                                'Selected: $selectedCount notes',
+                                selectedCount > 1
+                                    ? 'Selected: $selectedCount news posts'
+                                    : 'Selected: $selectedCount news post',
                                 style: TextStyle(
                                   color: theme.colorScheme.primary,
                                 ),
                               )
                             : _foundNotes.length > 1 || _foundNotes.isEmpty
                                 ? Text(
-                                    'Found ${_foundNotes.length} notes',
+                                    'Found ${_foundNotes.length} news posts',
                                     style: TextStyle(
                                       color: theme.colorScheme.primary,
                                     ),
                                   )
                                 : Text(
-                                    'Found ${_foundNotes.length} note',
+                                    'Found ${_foundNotes.length} news post',
                                     style: TextStyle(
                                       color: theme.colorScheme.primary,
                                     ),
@@ -415,7 +417,7 @@ class _ListNotesState extends State<ListNotes> {
                               NoteListDelButton(
                                 selectedNotes: selectedNotes,
                                 // Reload list after note deletion
-                                childPage: ListExternalNotesScreen(
+                                childPage: ListNotesScreen(
                                   scaffoldController: _scaffoldController,
                                 ),
                                 scaffoldController: _scaffoldController,

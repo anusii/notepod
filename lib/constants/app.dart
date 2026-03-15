@@ -27,18 +27,18 @@ library;
 
 import 'package:flutter/material.dart';
 
-const String applicationRepo = 'https://github.com/anusii/notepod';
+const String applicationRepo = 'https://github.com/jesscmoore/communitypod';
 const String appChangeLog =
-    'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
+    'https://github.com/jesscmoore/communitypod/blob/dev/CHANGELOG.md';
 const String defWebID = 'https://pods.solidcommunity.au';
-const String topBarTitle = 'Note Pod';
-const String shortTitle = 'Note Taker';
-const String longTitle = 'NotePod\nPrivate and Shareable Notes';
+const String topBarTitle = 'Community Pod';
+const String shortTitle = 'News';
+const String longTitle = 'CommunityPod\nPrivate and Shareable News';
 
-const String appOwner = '''© 2025 Software Innovation Institute''';
+const String appOwner = '''© 2026 Software Innovation Institute''';
 
 const String aboutText =
-    '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
+    '''The communitypod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted news stories stored on your personal online data store (Pod) hosted on a Solid Server.''';
 
 const String appDir = 'notepod';
 
@@ -86,13 +86,13 @@ const adviceStyle = TextStyle(
 );
 
 // Titles for nav widgets to pages
-const String newNoteTitle = 'New Note';
-const String myNotesTitle = 'My Notes';
-const String sharedNotesTitle = 'Shared Notes';
-const String myNotesExplanation = 'created by me';
-const String sharedNotesExplanation = 'created by other people';
-const String combinedNotesTitle = 'Notes';
-const String combinedNotesExplanation = 'accessible to me';
+const String newNewsPostTitle = 'New Post';
+const String myNewsTitle = 'My Posts';
+const String sharedNewsTitle = 'Shared News';
+const String myNewsExplanation = 'created by me';
+const String sharedNewsExplanation = 'created by other people';
+const String combinedNewsTitle = 'News';
+const String combinedNewsExplanation = 'accessible to me';
 
 /// Note list messages
 class NoteListMsg {

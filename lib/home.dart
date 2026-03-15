@@ -1,4 +1,4 @@
-/// NotePod - The application's home page.
+/// CommunityPod - The application's home page.
 ///
 // Time-stamp: <Friday 2025-08-15 09:14:37 +1000 Graham Williams>
 ///
@@ -29,11 +29,10 @@ import 'package:flutter/material.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/constants/app.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
-import 'package:notepod/notes/list_my_notes_screen.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
-import 'package:notepod/notes/new_note.dart';
+import 'package:communitypod/constants/app.dart';
+import 'package:communitypod/notes/list_my_notes_screen.dart';
+import 'package:communitypod/notes/list_notes_screen.dart';
+import 'package:communitypod/notes/new_note.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
@@ -86,22 +85,10 @@ class AppHomePageState extends State<AppHomePage> {
           // tooltip: 'Custom version tooltip',
         ),
         actions: [
-          // New Note
-          SolidAppBarAction(
-            icon: Icons.add_circle,
-            tooltip: 'Navigate to $newNoteTitle',
-            onPressed: () {
-              scaffoldController.navigateToSubpage(
-                NewNote(
-                  scaffoldController: scaffoldController,
-                ),
-              );
-            },
-          ),
           // All Accessible Notes
           SolidAppBarAction(
-            icon: Icons.view_list,
-            tooltip: 'Go to $combinedNotesTitle',
+            icon: Icons.newspaper,
+            tooltip: 'Go to $combinedNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListNotesScreen(
@@ -114,7 +101,7 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarAction(
             // More gender neutral icon
             icon: Icons.person_3,
-            tooltip: 'Go to $myNotesTitle',
+            tooltip: 'Go to $myNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListMyNotesScreen(
@@ -123,14 +110,13 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // External Notes (Shared Notes)
+          // New Note
           SolidAppBarAction(
-            // More gender neutral icon
-            icon: Icons.groups_3,
-            tooltip: 'Go to $sharedNotesTitle',
+            icon: Icons.post_add_rounded,
+            tooltip: 'Write $newNewsPostTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
-                ListExternalNotesScreen(
+                NewNote(
                   scaffoldController: scaffoldController,
                 ),
               );
@@ -141,37 +127,28 @@ class AppHomePageState extends State<AppHomePage> {
       menu: [
         // All Accessible Notes
         SolidMenuItem(
-          title: combinedNotesTitle,
-          icon: Icons.view_list,
+          title: combinedNewsTitle,
+          icon: Icons.newspaper,
           child: ListNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $combinedNotesTitle',
+          tooltip: 'Go to $combinedNewsTitle',
         ),
         // My Notes
         SolidMenuItem(
-          title: myNotesTitle,
+          title: myNewsTitle,
           // More gender neutral icon
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $myNotesTitle',
-        ),
-        // Shared Notes
-        SolidMenuItem(
-          title: sharedNotesTitle,
-          // More gender neutral icon
-          icon: Icons.groups_3,
-          child: ListExternalNotesScreen(
-            scaffoldController: scaffoldController,
-          ),
-          tooltip: 'Navigate to $sharedNotesTitle',
+          tooltip: 'Go to $myNewsTitle',
         ),
         // New Note
         SolidMenuItem(
-          title: newNoteTitle,
-          icon: Icons.add_circle,
+          title: newNewsPostTitle,
+          // Or Icons.add_circle
+          icon: Icons.post_add_rounded,
           child: NewNote(
             scaffoldController: scaffoldController,
           ),
-          tooltip: 'Navigate to $newNoteTitle',
+          tooltip: 'Write $newNewsPostTitle',
         ),
       ],
       statusBar: SolidStatusBarConfig(

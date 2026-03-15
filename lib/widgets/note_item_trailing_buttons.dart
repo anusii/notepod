@@ -26,10 +26,10 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/models/note.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
-import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/widgets/simple_action_button.dart';
+import 'package:communitypod/models/note.dart';
+import 'package:communitypod/notes/list_notes_screen.dart';
+import 'package:communitypod/notes/share_note.dart';
+import 'package:communitypod/widgets/simple_action_button.dart';
 
 /// A [stateless] widget to show trailing buttons in a note
 /// list item.
@@ -55,7 +55,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      spacing: 5.0,
+      spacing: 10.0,
       children: [
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
@@ -65,7 +65,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
               noteUrl: _note.noteUrl,
               noteOwner: _note.noteOwner,
               isExternal: _note.isExternalRes,
-              backPage: ListExternalNotesScreen(
+              backPage: ListNotesScreen(
                 scaffoldController: _scaffoldController,
               ),
               scaffoldController: _scaffoldController,
@@ -74,7 +74,9 @@ class NoteItemTrailingButtons extends StatelessWidget {
           ),
         ],
         // Open note icon
-        const Icon(Icons.arrow_forward),
+        // Launch icon to denote expanding to full size
+        // Alternative open_in_full_rounded
+        const Icon(Icons.launch_rounded),
       ],
     );
   }
