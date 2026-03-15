@@ -28,7 +28,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/notes_call_result.dart';
-import 'package:notepod/shared_notes/list_external_notes.dart';
+import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
@@ -90,8 +90,9 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
-        childPage: ListExternalNotes(
+        childPage: ListNotes(
           notes: notes,
+          title: '$sharedNotesTitle ($sharedNotesExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -100,8 +101,9 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     } else if (nonExistentNotes.isNotEmpty) {
       return NotesRevokeDialog(
         nonExistentNotes: nonExistentNotes,
-        childPage: ListExternalNotes(
+        childPage: ListNotes(
           notes: notes,
+          title: '$sharedNotesTitle ($sharedNotesExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -109,8 +111,9 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     } else if (notes.isEmpty) {
       return _noExternalNotes();
     } else {
-      return ListExternalNotes(
+      return ListNotes(
         notes: notes,
+        title: '$sharedNotesTitle ($sharedNotesExplanation)',
         scaffoldController: _scaffoldController,
       );
     }

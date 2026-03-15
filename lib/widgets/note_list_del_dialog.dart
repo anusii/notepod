@@ -102,8 +102,7 @@ class _NotesDelDialogState extends State<NotesDelDialog> {
         // Derive whether window is narrow
         isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
-        cardAspectRatio = NoteItemSize()
-            .calculateCardAspectRatio(constraints, widget.isExternal);
+        cardAspectRatio = NoteItemSize().calculateCardAspectRatio(constraints);
         return SizedBox(
           child: Column(
             children: [

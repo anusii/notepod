@@ -40,13 +40,13 @@ import 'package:notepod/constants/app.dart';
 
 class ShowAccessMetadata extends StatelessWidget {
   final String noteOwner;
-  final String permissionGranter;
+  final String? permissionGranter;
   final String permissionList;
 
   const ShowAccessMetadata({
     super.key,
     required this.noteOwner,
-    required this.permissionGranter,
+    this.permissionGranter,
     required this.permissionList,
   });
 
@@ -77,7 +77,7 @@ class ShowAccessMetadata extends StatelessWidget {
                 child: Container(
                   padding: metadataPadding,
                   child: Text(
-                    'Shared by: $permissionGranter',
+                    'Shared by: ${permissionGranter ?? 'N/A'}',
                     style: metadataTextStyle,
                   ),
                 ),

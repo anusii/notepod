@@ -106,11 +106,7 @@ class DisplayNoteMetadata extends StatelessWidget {
               modifiedDateTime: modifiedDateTime,
             ),
           // Show sharing info (owner, provider, access list)
-          if (isExternal &&
-              showSharing &&
-              noteOwner != '' &&
-              permissionGranter != null &&
-              permissionList != null)
+          if (showSharing)
             ShowAccessMetadata(
               noteOwner: noteOwner,
               permissionGranter: permissionGranter!,

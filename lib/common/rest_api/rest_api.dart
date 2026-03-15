@@ -95,12 +95,14 @@ Future<NotesCallResult> getOwnNoteList() async {
 
           if (content != null) {
             // Add note content data to note objects list
+            // where user = noteOwner
             notes.add(
               Note(
                 noteFileName: fileList[i],
                 noteUrl: fileUrls[i],
                 noteOwner: noteOwner,
                 content: content,
+                permissionList: 'append,read,write,control',
               ),
             );
           } else {
@@ -333,7 +335,7 @@ Future<dynamic> getExternalNoteContent({
 }) async {
   try {
     // Check permissions include read
-    if (!note.permissionList!.contains('read')) {
+    if (!note.permissionList.contains('read')) {
       return FileCallStatus.fileAccessForbidden;
     }
 

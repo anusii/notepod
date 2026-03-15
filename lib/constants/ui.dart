@@ -59,13 +59,14 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedExtItemHeight = 260; // (4 row subtitle)
+  // static const double compressedExtItemHeight = 260; // (4 row subtitle)
+  static const double compressedExtItemHeight = 390; // (6 row subtitle)
 
   /// Approximate height of uncompressed item
   /// in user's external notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedExtItemHeight = 138; // (4 row subtitle)
+  static const double uncompressedExtItemHeight = 207; // (6 row subtitle)
 
   /// Calculate card aspect ratio to use for
   /// gridview builder cards using the box
@@ -74,9 +75,7 @@ class NoteItemSize {
   /// Arguments:
   /// - [constraints] - The box constraints of the parent widget
   /// where LayoutBuilder() called.
-  /// - [isExternal] - Boolean describing whether its an external
-  /// note which has more rows of text.
-  double calculateCardAspectRatio(BoxConstraints constraints, bool isExternal) {
+  double calculateCardAspectRatio(BoxConstraints constraints) {
     /// Aspect ratio (width / height) for gridview
     /// cards to display note items
     final double cardAspectRatio;
@@ -88,13 +87,8 @@ class NoteItemSize {
     final double uncompressedItemHeight;
 
     // Use appropriate item heights
-    if (!isExternal) {
-      compressedItemHeight = compressedOwnItemHeight;
-      uncompressedItemHeight = uncompressedOwnItemHeight;
-    } else {
-      compressedItemHeight = compressedExtItemHeight;
-      uncompressedItemHeight = uncompressedExtItemHeight;
-    }
+    compressedItemHeight = compressedExtItemHeight;
+    uncompressedItemHeight = uncompressedExtItemHeight;
 
     // Derive card aspect ratio (width / height)
     if (constraints.maxWidth < WindowSize.smallWidthLimit) {

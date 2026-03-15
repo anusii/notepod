@@ -89,6 +89,8 @@ const adviceStyle = TextStyle(
 const String newNoteTitle = 'New Note';
 const String myNotesTitle = 'My Notes';
 const String sharedNotesTitle = 'Shared Notes';
+const String myNotesExplanation = 'created by me';
+const String sharedNotesExplanation = 'created by other people';
 
 /// Note list messages
 class NoteListMsg {
