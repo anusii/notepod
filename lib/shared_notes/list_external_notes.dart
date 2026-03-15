@@ -238,7 +238,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
             note.noteOwner
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            note.permissionGranter!
+            (note.permissionGranter ?? 'N/A')
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
             note.permissionList!
