@@ -32,7 +32,7 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/shared_notes/list_external_notes_screen.dart';
+import 'package:notepod/notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_item_subtitle.dart';
 import 'package:notepod/widgets/note_item_trailing_buttons.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
