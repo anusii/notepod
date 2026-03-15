@@ -31,5 +31,6 @@ a Pull Request. Thanks.
 
 ## 0.1 Initial release
 
++ Remove shared news only list [0.0.3 20260316 jesscmoore]
 + Adjust icons and labels [0.0.2 20260316 jesscmoore]
 + Fork from anusii/notepod [0.0.1 20260315 jesscmoore]
