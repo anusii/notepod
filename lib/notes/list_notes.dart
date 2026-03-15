@@ -83,11 +83,11 @@ class _ListNotesState extends State<ListNotes> {
   /// Initial sort by note filename order.
   bool _sortFilenameAscending = true;
 
-  /// Initial sort by note owner order.
-  bool _sortOwnerAscending = true;
+  // /// Initial sort by note owner order.
+  // bool _sortOwnerAscending = true;
 
-  /// Initial sort by note owner order.
-  bool _sortPermissionAscending = true;
+  // /// Initial sort by note owner order.
+  // bool _sortPermissionAscending = true;
 
   /// Note selection mode
   /// true: when one or more notes have been selected, false by defaultl
@@ -198,41 +198,43 @@ class _ListNotesState extends State<ListNotes> {
     });
   }
 
-  /// Sort alphanumerically on note owner
-  void _sortByOwner(bool ascending) {
-    setState(() {
-      _sortOwnerAscending = ascending;
+  // TODO: allow owner sorting if isWide after isWide added to Solidui
+  // /// Sort alphanumerically on note owner
+  // void _sortByOwner(bool ascending) {
+  //   setState(() {
+  //     _sortOwnerAscending = ascending;
 
-      _foundNotes.sort(
-        (a, b) => _sortOwnerAscending
-            ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
-            : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
-      );
+  //     _foundNotes.sort(
+  //       (a, b) => _sortOwnerAscending
+  //           ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
+  //           : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
+  //     );
 
-      // Update current sort method
-      currSortMethod = 'sortByOwner';
-    });
-  }
+  //     // Update current sort method
+  //     currSortMethod = 'sortByOwner';
+  //   });
+  // }
 
-  /// Sort alphanumerically on note permissions
-  void _sortByPermission(bool ascending) {
-    setState(() {
-      _sortPermissionAscending = ascending;
+  // TODO: allow permission sorting if isWide after isWide added to Solidui
+  // /// Sort alphanumerically on note permissions
+  // void _sortByPermission(bool ascending) {
+  //   setState(() {
+  //     _sortPermissionAscending = ascending;
 
-      _foundNotes.sort(
-        (a, b) => _sortPermissionAscending
-            ? a.permissionList
-                .toLowerCase()
-                .compareTo(b.permissionList.toLowerCase())
-            : b.permissionList
-                .toLowerCase()
-                .compareTo(a.permissionList.toLowerCase()),
-      );
+  //     _foundNotes.sort(
+  //       (a, b) => _sortPermissionAscending
+  //           ? a.permissionList
+  //               .toLowerCase()
+  //               .compareTo(b.permissionList.toLowerCase())
+  //           : b.permissionList
+  //               .toLowerCase()
+  //               .compareTo(a.permissionList.toLowerCase()),
+  //     );
 
-      // Update current sort method
-      currSortMethod = 'sortByPermission';
-    });
-  }
+  //     // Update current sort method
+  //     currSortMethod = 'sortByPermission';
+  //   });
+  // }
 
   /// Search notes
   void _searchNotes(String enteredKeyword) {
@@ -280,10 +282,10 @@ class _ListNotesState extends State<ListNotes> {
         _sortByModDate(_sortModDateAscending);
       case 'sortByFilename':
         _sortByFilename(_sortFilenameAscending);
-      case 'sortByOwner':
-        _sortByOwner(_sortOwnerAscending);
-      case 'sortByPermission':
-        _sortByPermission(_sortPermissionAscending);
+      // case 'sortByOwner':
+      //   _sortByOwner(_sortOwnerAscending);
+      // case 'sortByPermission':
+      //   _sortByPermission(_sortPermissionAscending);
     }
   }
 
@@ -403,7 +405,7 @@ class _ListNotesState extends State<ListNotes> {
                                   ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          spacing: 5.0, // 15.0,
+                          spacing: (!isNarrow) ? 3.0 : 0,
                           children: [
                             // Multiple note delete button
                             // Only display multi note delete
@@ -448,60 +450,64 @@ class _ListNotesState extends State<ListNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: const Text(
-                                'Date Modified',
+                              label: Text(
+                                (!isNarrow) ? 'Date Modified' : 'Date',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
                             // Filename Sort Label and Button
-                            TextButton.icon(
-                              onPressed: () {
-                                _sortByFilename(!_sortFilenameAscending);
-                              },
-                              icon: Icon(
-                                _sortFilenameAscending
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                              ),
-                              label: const Text(
-                                'Filename',
-                              ),
-                              iconAlignment: IconAlignment.end,
-                            ),
-                            // Owner Sort Label and Button
-                            TextButton.icon(
-                              onPressed: () {
-                                _sortByOwner(!_sortOwnerAscending);
-                              },
-                              icon: Icon(
-                                _sortOwnerAscending
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                              ),
-                              label: const Text(
-                                'Owner',
-                              ),
-                              iconAlignment: IconAlignment.end,
-                            ),
-                            // Only display permissions sort
+                            // Only display filename sort
                             // when window is not narrow
                             if (!isNarrow) ...[
-                              // Permission Sort Label and Button
                               TextButton.icon(
                                 onPressed: () {
-                                  _sortByPermission(!_sortPermissionAscending);
+                                  _sortByFilename(!_sortFilenameAscending);
                                 },
                                 icon: Icon(
-                                  _sortPermissionAscending
+                                  _sortFilenameAscending
                                       ? Icons.arrow_drop_down
                                       : Icons.arrow_drop_up,
                                 ),
                                 label: const Text(
-                                  'Permission',
+                                  'Filename',
                                 ),
                                 iconAlignment: IconAlignment.end,
                               ),
                             ],
+                            // // Owner Sort Label and Button
+                            // TextButton.icon(
+                            //   onPressed: () {
+                            //     _sortByOwner(!_sortOwnerAscending);
+                            //   },
+                            //   icon: Icon(
+                            //     _sortOwnerAscending
+                            //         ? Icons.arrow_drop_down
+                            //         : Icons.arrow_drop_up,
+                            //   ),
+                            //   label: const Text(
+                            //     'Owner',
+                            //   ),
+                            //   iconAlignment: IconAlignment.end,
+                            // ),
+                            // Only display permissions sort
+                            // when window is not narrow
+                            // if (!isNarrow) ...[
+                            //   // Permission Sort Label and Button
+                            //   TextButton.icon(
+                            //     onPressed: () {
+                            //       _sortByPermission(!_sortPermissionAscending);
+                            //     },
+                            //     icon: Icon(
+                            //       _sortPermissionAscending
+                            //           ? Icons.arrow_drop_down
+                            //           : Icons.arrow_drop_up,
+                            //     ),
+                            //     label: const Text(
+                            //       'Permission',
+                            //     ),
+                            //     iconAlignment: IconAlignment.end,
+                            //   ),
+                            // ],
                           ],
                         ),
                       ],
@@ -571,7 +577,8 @@ class _ListNotesState extends State<ListNotes> {
                                     .contains('read'))
                                 ? Text(
                                     _foundNotes[index].content!.noteTitle,
-                                    maxLines: 1, // Limit lines
+                                    maxLines:
+                                        (!isNarrow) ? 1 : 3, // Limit lines
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
@@ -597,7 +604,7 @@ class _ListNotesState extends State<ListNotes> {
                                           'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
                                           'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
                                           'Permissions: ${_foundNotes[index].permissionList}',
-                              maxLines: 6, // Limit lines
+                              maxLines: (!isNarrow) ? 6 : 12, // Limit lines
                               overflow: TextOverflow.ellipsis,
                             ),
                             // Define width to avoid consuming full width
