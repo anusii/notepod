@@ -43,19 +43,19 @@ import 'package:notepod/widgets/note_list_del_dialog.dart';
 /// Parameters:
 ///   [scaffoldController] - Controller for the Solid scaffold.
 
-class ListNotesScreen extends StatefulWidget {
+class ListMyNotesScreen extends StatefulWidget {
   final SolidScaffoldController scaffoldController;
 
-  const ListNotesScreen({
+  const ListMyNotesScreen({
     super.key,
     required this.scaffoldController,
   });
 
   @override
-  State<ListNotesScreen> createState() => _ListNotesScreenState();
+  State<ListMyNotesScreen> createState() => _ListMyNotesScreenState();
 }
 
-class _ListNotesScreenState extends State<ListNotesScreen> {
+class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Future function to retrieve user's notes list

@@ -30,7 +30,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 
@@ -103,7 +103,7 @@ class AppHomePageState extends State<AppHomePage> {
             tooltip: 'Go to $myNotesTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
-                ListNotesScreen(
+                ListMyNotesScreen(
                   scaffoldController: scaffoldController,
                 ),
               );
@@ -128,7 +128,7 @@ class AppHomePageState extends State<AppHomePage> {
         SolidMenuItem(
           title: myNotesTitle,
           icon: Icons.view_list,
-          child: ListNotesScreen(scaffoldController: scaffoldController),
+          child: ListMyNotesScreen(scaffoldController: scaffoldController),
           tooltip: 'Navigate to $myNotesTitle',
         ),
         // Shared Notes
