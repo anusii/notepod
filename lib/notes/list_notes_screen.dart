@@ -103,6 +103,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         unparseableNotes: unparseableNotes,
         childPage: ListExternalNotes(
           notes: notes,
+          title: '$myNotesTitle ($myNotesExplanation)',
           scaffoldController: scaffoldController,
         ),
         // childPage: ListNotes(
@@ -116,6 +117,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     } else {
       return ListExternalNotes(
         notes: notes,
+        title: '$myNotesTitle ($myNotesExplanation)',
         scaffoldController: scaffoldController,
       );
       // return ListNotes(

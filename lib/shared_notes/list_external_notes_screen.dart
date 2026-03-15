@@ -92,6 +92,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
         unparseableNotes: unparseableNotes,
         childPage: ListExternalNotes(
           notes: notes,
+          title: '$sharedNotesTitle ($sharedNotesExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -102,6 +103,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
         nonExistentNotes: nonExistentNotes,
         childPage: ListExternalNotes(
           notes: notes,
+          title: '$sharedNotesTitle ($sharedNotesExplanation)',
           scaffoldController: _scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -111,6 +113,7 @@ class _ListExternalNotesScreenState extends State<ListExternalNotesScreen> {
     } else {
       return ListExternalNotes(
         notes: notes,
+        title: '$sharedNotesTitle ($sharedNotesExplanation)',
         scaffoldController: _scaffoldController,
       );
     }

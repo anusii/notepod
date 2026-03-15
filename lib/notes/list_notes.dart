@@ -43,14 +43,17 @@ import 'package:notepod/widgets/simple_action_button.dart';
 ///                in the user's app data folder (required to
 ///                display sharing information and support
 ///                sharing with suggestion list of recipient WebIds).
+/// - [title] - List title.
 ///   [scaffoldController] - Controller for the Solid scaffold.
 class ListNotes extends StatefulWidget {
   final List<Note> notes;
+  final String title;
   final SolidScaffoldController scaffoldController;
 
   const ListNotes({
     super.key,
     required this.notes,
+    required this.title,
     required this.scaffoldController,
   });
 
@@ -267,8 +270,8 @@ class _ListNotesState extends State<ListNotes> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '$myNotesTitle (created by me)',
+                    Text(
+                      widget.title,
                       style: titleStyle,
                     ),
                     const SizedBox(height: 10),
