@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:communitypod/models/note.dart';
-import 'package:communitypod/notes/list_external_notes_screen.dart';
+import 'package:communitypod/notes/list_notes_screen.dart';
 import 'package:communitypod/notes/share_note.dart';
 import 'package:communitypod/widgets/simple_action_button.dart';
 
@@ -65,7 +65,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
               noteUrl: _note.noteUrl,
               noteOwner: _note.noteOwner,
               isExternal: _note.isExternalRes,
-              backPage: ListExternalNotesScreen(
+              backPage: ListNotesScreen(
                 scaffoldController: _scaffoldController,
               ),
               scaffoldController: _scaffoldController,
