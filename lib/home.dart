@@ -30,9 +30,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/notes/list_external_notes_screen.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
-import 'package:notepod/notes/list_external_notes_screen.dart';
 
 class AppHomePage extends StatefulWidget {
   /// Initialise widget variables.
