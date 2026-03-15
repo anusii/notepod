@@ -76,9 +76,6 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
   /// Boolean describing whether window is narrow
   late bool isNarrow;
 
-  /// Boolean describing whether note is external
-  final bool isExternal = true;
-
   @override
   void initState() {
     super.initState();
@@ -100,8 +97,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
         // Derive whether window is narrow
         isNarrow = WindowSize().isNarrowWindow(constraints);
         // Calculate the aspect radio for grid cards
-        cardAspectRatio =
-            NoteItemSize().calculateCardAspectRatio(constraints, isExternal);
+        cardAspectRatio = NoteItemSize().calculateCardAspectRatio(constraints);
         return SizedBox(
           child: Column(
             children: [
