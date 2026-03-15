@@ -81,7 +81,7 @@ class _ViewNoteState extends State<ViewNote> {
   void initState() {
     super.initState();
     _note = widget.note;
-    _accessList = _note.permissionList!.split(',');
+    _accessList = _note.permissionList.split(',');
     _scrollController = ScrollController();
     _scaffoldController = widget.scaffoldController;
   }

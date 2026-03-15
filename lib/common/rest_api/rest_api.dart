@@ -337,7 +337,7 @@ Future<dynamic> getExternalNoteContent({
 }) async {
   try {
     // Check permissions include read
-    if (!note.permissionList!.contains('read')) {
+    if (!note.permissionList.contains('read')) {
       return FileCallStatus.fileAccessForbidden;
     }
 

@@ -99,7 +99,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
             DisplayNoteMetadata(
               noteOwner: _note.noteOwner,
               permissionGranter: _note.permissionGranter!,
-              permissionList: _note.permissionList!,
+              permissionList: _note.permissionList,
               noteFileName: _note.noteFileName,
               noteUrl: _note.noteUrl,
               showFileName: true,
@@ -125,7 +125,7 @@ class _NonReadableNoteState extends State<NonReadableNote> {
                     spacing: 5.0,
                     children: [
                       // Share button
-                      if (_note.permissionList!.contains('control')) ...[
+                      if (_note.permissionList.contains('control')) ...[
                         NoteActionButton(
                           label: ButtonLabel.share,
                           icon: const Icon(Icons.share),

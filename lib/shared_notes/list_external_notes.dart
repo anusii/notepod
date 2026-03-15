@@ -210,12 +210,12 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
       _foundNotes.sort(
         (a, b) => _sortPermissionAscending
-            ? a.permissionList!
+            ? a.permissionList
                 .toLowerCase()
-                .compareTo(b.permissionList!.toLowerCase())
-            : b.permissionList!
+                .compareTo(b.permissionList.toLowerCase())
+            : b.permissionList
                 .toLowerCase()
-                .compareTo(a.permissionList!.toLowerCase()),
+                .compareTo(a.permissionList.toLowerCase()),
       );
 
       // Update current sort method
@@ -241,7 +241,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
             (note.permissionGranter ?? 'N/A')
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()) ||
-            note.permissionList!
+            note.permissionList
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase());
       }).toList();
@@ -463,7 +463,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                           ),
                           // Note info
                           title: (_foundNotes[index]
-                                  .permissionList!
+                                  .permissionList
                                   .contains('read'))
                               ? Text(
                                   _foundNotes[index].content!.noteTitle,
@@ -472,7 +472,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                 )
                               : const Text(''),
                           subtitle: (_foundNotes[index]
-                                  .permissionList!
+                                  .permissionList
                                   .contains('read'))
                               ? Text(
                                   'Filename: ${_foundNotes[index].noteFileName} \n'
@@ -505,7 +505,7 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
 
                           onTap: () {
                             // Open note if read in permissions
-                            String access = _foundNotes[index].permissionList!;
+                            String access = _foundNotes[index].permissionList;
                             if (access.contains('read')) {
                               _scaffoldController.navigateToSubpage(
                                 ViewNote(
@@ -549,7 +549,7 @@ class SharedTrailingButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List accessList = _note.permissionList!.split(',');
+    List accessList = _note.permissionList.split(',');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
