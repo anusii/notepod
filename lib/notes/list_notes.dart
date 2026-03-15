@@ -33,9 +33,8 @@ import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/utils/get_id.dart';
-import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/note_item_trailing_buttons.dart';
+import 'package:notepod/widgets/note_item_subtitle.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 
 /// A [stateful] widget to list notes accessible to the
@@ -581,30 +580,10 @@ class _ListNotesState extends State<ListNotes> {
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
-                            // Subtitle that number shared with if note owned by user, or entity that share it if owned by another, and does not show encrypted content if read access denied
-                            subtitle: Text(
-                              (!_foundNotes[index].isExternalRes)
-                                  ? 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                      'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                      'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                      'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                      'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)} \n'
-                                      'Permissions: ${_foundNotes[index].permissionList}'
-                                  : (_foundNotes[index]
-                                          .permissionList
-                                          .contains('read'))
-                                      ? 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                          'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                          'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                          'Permissions: ${_foundNotes[index].permissionList}'
-                                      : 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                          'Permissions: ${_foundNotes[index].permissionList}',
-                              maxLines: (!isNarrow) ? 6 : 12, // Limit lines
-                              overflow: TextOverflow.ellipsis,
+                            // Note item subtitle
+                            subtitle: NoteItemSubtitle(
+                              note: _foundNotes[index],
+                              isNarrow: isNarrow,
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
