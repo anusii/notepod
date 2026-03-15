@@ -38,7 +38,7 @@ import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/note_content.dart';
-import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
@@ -370,7 +370,7 @@ class NoteFileHelper with PodOperationsMixin {
               // Create filename
               noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
               data: newContent,
-              childPage: ListNotesScreen(
+              childPage: ListMyNotesScreen(
                 scaffoldController: scaffoldController,
               ),
               scaffoldController: scaffoldController,
@@ -395,10 +395,10 @@ class NoteFileHelper with PodOperationsMixin {
   /// if write to Pod failed to return a successful SolidCallFunctionStatus.
   ///
   /// Examples:
-  /// - `await saveNoteToPod(context: context, data: updatedContent, noteFileName: noteFileName, childPage: ListNotesScreen(), scaffoldController: scaffoldController)` - to
+  /// - `await saveNoteToPod(context: context, data: updatedContent, noteFileName: noteFileName, childPage: ListMyNotesScreen(), scaffoldController: scaffoldController)` - to
   /// save a note owned by the user.
   /// - `await saveNoteToPod(context: context, data: updatedContent,
-  /// childPage: ListNotesScreen(), noteUrl: noteUrl, noteOwner: noteOwner,
+  /// childPage: ListMyNotesScreen(), noteUrl: noteUrl, noteOwner: noteOwner,
   /// isExternal: true, scaffoldController: scaffoldController)` - to save an externally owned note.
   ///
   /// - [context] - The build context.

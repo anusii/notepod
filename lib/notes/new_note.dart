@@ -31,7 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
 /// A [Stateful] widget for creating a new note.
@@ -141,7 +141,7 @@ class NewNoteState extends State<NewNote> {
       scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
-      childPage: ListNotesScreen(
+      childPage: ListMyNotesScreen(
         scaffoldController: _scaffoldController,
       ),
       data: data,

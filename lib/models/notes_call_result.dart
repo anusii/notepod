@@ -31,13 +31,48 @@ import 'package:notepod/models/selected_note.dart';
 /// Data model for result of get notes list future call
 
 class NotesCallResult {
-  final List<Note>? notes;
-  final List<SelectedNote>? unparseableNotes;
-  final List<Note>? nonExistentNotes;
+  List<Note>? notes;
+  List<SelectedNote>? unparseableNotes;
+  List<Note>? nonExistentNotes;
 
-  const NotesCallResult({
+  NotesCallResult({
     this.notes = const [],
     this.unparseableNotes = const [],
     this.nonExistentNotes = const [],
   });
+}
+
+/// Extension class for NoteCallResult objects
+
+extension NotesCallResultExtension on NotesCallResult {
+  /// Method to add lists within two NoteCallResults objects.
+  ///
+  /// Arguments:
+  /// - [results] - Second notes call results object to add to the first notes call results object.
+
+  NotesCallResult addCallResults({required NotesCallResult results}) {
+    // Initialise combined results object as this first note call results object.
+    NotesCallResult combinedResults = NotesCallResult(
+      notes: notes,
+      unparseableNotes: unparseableNotes,
+      nonExistentNotes: nonExistentNotes,
+    );
+
+    // Add notes lists
+    if (results.notes!.isNotEmpty) {
+      combinedResults.notes!.addAll(results.notes!);
+    }
+
+    // Add unparseableNotes lists
+    if (results.unparseableNotes!.isNotEmpty) {
+      combinedResults.unparseableNotes!.addAll(results.unparseableNotes!);
+    }
+
+    // Add nonExistentNotes lists
+    if (results.nonExistentNotes!.isNotEmpty) {
+      combinedResults.nonExistentNotes!.addAll(results.nonExistentNotes!);
+    }
+
+    return combinedResults;
+  }
 }
