@@ -88,7 +88,7 @@ class AppHomePageState extends State<AppHomePage> {
         actions: [
           // New Note
           SolidAppBarAction(
-            icon: Icons.add_circle,
+            icon: Icons.post_add_rounded,
             tooltip: 'Navigate to $newNewsPostTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
@@ -100,7 +100,7 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           // All Accessible Notes
           SolidAppBarAction(
-            icon: Icons.view_list,
+            icon: Icons.newspaper,
             tooltip: 'Go to $combinedNewsTitle',
             onPressed: () {
               scaffoldController.navigateToSubpage(
@@ -142,7 +142,7 @@ class AppHomePageState extends State<AppHomePage> {
         // All Accessible Notes
         SolidMenuItem(
           title: combinedNewsTitle,
-          icon: Icons.view_list,
+          icon: Icons.newspaper,
           child: ListNotesScreen(scaffoldController: scaffoldController),
           tooltip: 'Navigate to $combinedNewsTitle',
         ),
@@ -167,7 +167,8 @@ class AppHomePageState extends State<AppHomePage> {
         // New Note
         SolidMenuItem(
           title: newNewsPostTitle,
-          icon: Icons.add_circle,
+          // Or Icons.add_circle
+          icon: Icons.post_add_rounded,
           child: NewNote(
             scaffoldController: scaffoldController,
           ),

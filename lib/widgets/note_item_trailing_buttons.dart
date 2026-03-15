@@ -55,7 +55,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      spacing: 5.0,
+      spacing: 10.0,
       children: [
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
@@ -74,7 +74,9 @@ class NoteItemTrailingButtons extends StatelessWidget {
           ),
         ],
         // Open note icon
-        const Icon(Icons.arrow_forward),
+        // Launch icon to denote expanding to full size
+        // Alternative open_in_full_rounded
+        const Icon(Icons.launch_rounded),
       ],
     );
   }
