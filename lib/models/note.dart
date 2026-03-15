@@ -38,7 +38,7 @@ class Note extends OwnNote {
   final String? permissionGranter;
   final String? permissionRecepient;
   final String? permissionType;
-  final String? permissionList;
+  final String permissionList;
   bool isExternalRes;
   bool isSelected;
 
@@ -52,7 +52,7 @@ class Note extends OwnNote {
     this.permissionGranter,
     this.permissionRecepient,
     this.permissionType,
-    this.permissionList,
+    required this.permissionList,
     this.isExternalRes = false,
     this.isSelected = false,
   });
