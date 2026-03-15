@@ -416,8 +416,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                               NoteListDelButton(
                                 selectedNotes: selectedNotes,
                                 // Reload list after note deletion
-                                // [20260108: currently not reloading after delete]
-                                // FIXME: check this
                                 childPage: ListExternalNotesScreen(
                                   scaffoldController: _scaffoldController,
                                 ),
