@@ -34,15 +34,15 @@ import 'package:communitypod/constants/colours.dart';
 import 'package:communitypod/home.dart';
 import 'package:communitypod/notes/list_my_notes_screen.dart';
 
-/// The root widget for the [NotePod] app.
+/// The root widget for the [CommunityPod] app.
 ///
 /// The widget essentially orchestrates the building of other
 /// widgets. Generically we set up to build a Home widget containing the
 /// App. For SolidPod we wrap the Home widget within [SolidLogin] to start with
 /// a login screen, though this is optional.
 
-class NotePod extends StatelessWidget {
-  NotePod({super.key});
+class CommunityPod extends StatelessWidget {
+  CommunityPod({super.key});
 
   final scaffoldController = SolidScaffoldController();
 
