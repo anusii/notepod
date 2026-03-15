@@ -29,12 +29,14 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/note.dart';
+import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/non_readable_note.dart';
 import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/utils/misc.dart';
 import 'package:notepod/utils/get_id.dart';
+import 'package:notepod/widgets/note_list_del_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [stateful] widget to list externally owned notes shared to the
@@ -62,6 +64,9 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Filtered map of notes.
   List<Note> _foundNotes = [];
 
+  /// Selected notes
+  final List<SelectedNote> selectedNotes = [];
+
   /// Sort title order
   /// true: ascending (A-Z), false: descending (Z-A)
   /// Initial sort will sort alphabetically
@@ -81,6 +86,17 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Initial sort by note owner order.
   bool _sortPermissionAscending = true;
 
+  /// Note selection mode
+  /// true: when one or more notes have been selected, false by defaultl
+  bool _isSelectionMode = false;
+
+  /// Count of selected notes
+  int selectedCount = 0;
+
+  /// Current note sort method
+  /// Initialised to sort by title
+  String currSortMethod = '';
+
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
 
@@ -97,10 +113,6 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
   /// Boolean describing whether note is external
   // FIXME: remove this soon to be non constant
   final bool isExternal = true;
-
-  /// Current note sort method
-  /// Initialised to sort by title
-  String currSortMethod = '';
 
   @override
   void initState() {
@@ -276,6 +288,57 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
     }
   }
 
+  /// Update selected status and count of selected and add/remove note from
+  /// selected notes list
+  void updateSelected(int index) {
+    setState(() {
+      if (_foundNotes[index].isSelected) {
+        // Decrement selected count
+        selectedCount--;
+        // Remove note from selected notes list
+        selectedNotes.removeWhere(
+          (item) => item.noteFileName == _foundNotes[index].noteFileName,
+        );
+      } else {
+        // Increment
+        selectedCount++;
+        // Add note to selected notes list
+        selectedNotes.add(
+          SelectedNote(
+            noteFileName: _foundNotes[index].noteFileName,
+            noteUrl: _foundNotes[index].noteUrl,
+            noteOwner: _foundNotes[index].noteOwner,
+          ),
+        );
+      }
+      // Swap selected status of file
+      _foundNotes[index].isSelected = !_foundNotes[index].isSelected;
+
+      debugPrint('Selected notes:');
+      for (final SelectedNote selectedNote in selectedNotes) {
+        debugPrint(selectedNote.noteFileName);
+      }
+    });
+  }
+
+  /// Update multiple note selection mode
+  void updateSelectionMode(bool selectionMode, int index) {
+    setState(() {
+      debugPrint(
+        '_isSelectionMode before: $selectionMode, selectedCount: ${selectedCount.toString()}, isSelected: ${_foundNotes[index].isSelected}',
+      );
+
+      // Turn off selection mode if deselected only selected note
+      // else turn on selection mode
+      if (_foundNotes[index].isSelected && selectedCount == 1) {
+        _isSelectionMode = false;
+      } else {
+        _isSelectionMode = true;
+      }
+      debugPrint('_isSelectionMode after: $_isSelectionMode');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Reduce calls to of(context).
@@ -320,23 +383,49 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                       children: [
                         // Count statement
                         // Match color scheme of sorting TextButtons
-                        _foundNotes.length > 1 || _foundNotes.isEmpty
+                        selectedCount > 0
                             ? Text(
-                                'Found ${_foundNotes.length} notes',
+                                'Selected: $selectedCount notes',
                                 style: TextStyle(
                                   color: theme.colorScheme.primary,
                                 ),
                               )
-                            : Text(
-                                'Found ${_foundNotes.length} note',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
+                            : _foundNotes.length > 1 || _foundNotes.isEmpty
+                                ? Text(
+                                    'Found ${_foundNotes.length} notes',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.primary,
+                                    ),
+                                  )
+                                : Text(
+                                    'Found ${_foundNotes.length} note',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.primary,
+                                    ),
+                                  ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          spacing: 15.0,
+                          spacing: 5.0, // 15.0,
                           children: [
+                            // Multiple note delete button
+                            // Only display multi note delete
+                            // button when notes are selected causing
+                            // isSelectionMode=true
+                            if (_isSelectionMode) ...[
+                              // Multi note delete button
+                              NoteListDelButton(
+                                selectedNotes: selectedNotes,
+                                // Reload list after note deletion
+                                // [20260108: currently not reloading after delete]
+                                // FIXME: check this
+                                childPage: ListExternalNotesScreen(
+                                  scaffoldController: _scaffoldController,
+                                ),
+                                scaffoldController: _scaffoldController,
+                                isSelectionMode: _isSelectionMode,
+                                isExternal: false,
+                              ),
+                            ],
                             // Title Sort Label and Button
                             TextButton.icon(
                               onPressed: () {
@@ -457,77 +546,110 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                     padding: const EdgeInsets.all(10),
                     itemCount: _foundNotes.length,
                     itemBuilder: (context, index) => Card(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
                       child: Center(
-                        child: ListTile(
-                          leading: const CircleAvatar(
-                            radius: 26,
-                            backgroundColor: Colors.grey,
-                            child: Icon(Icons.edit_document),
-                          ),
-                          // Note info
-                          title: (_foundNotes[index]
-                                  .permissionList
-                                  .contains('read'))
-                              ? Text(
-                                  _foundNotes[index].content!.noteTitle,
-                                  maxLines: 1, // Limit lines
-                                  overflow: TextOverflow.ellipsis,
+                        child: Container(
+                          // Show color decoration when selected
+                          decoration: _foundNotes[index].isSelected
+                              ? BoxDecoration(
+                                  color: theme.colorScheme.onInverseSurface,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
                                 )
-                              : const Text(''),
-                          subtitle: (_foundNotes[index]
-                                  .permissionList
-                                  .contains('read'))
-                              ? Text(
-                                  'Filename: ${_foundNotes[index].noteFileName} \n'
-                                  'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                  'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                  'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                  'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                  'Permissions: ${_foundNotes[index].permissionList}',
-                                  maxLines: 6, // Limit lines
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              : Text(
-                                  'Filename: ${_foundNotes[index].noteFileName} \n'
-                                  'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                  'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                  'Permissions: ${_foundNotes[index].permissionList}',
-                                  maxLines: 4, // Limit lines
-                                  overflow: TextOverflow.ellipsis,
+                              : const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                 ),
+                          child: ListTile(
+                            // Note has selectable icon if owned by user
+                            leading: (_foundNotes[index].isExternalRes)
+                                ? const CircleAvatar(
+                                    radius: 26,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(Icons.edit_document),
+                                  )
+                                : SizedBox(
+                                    width: NoteIconSize.width,
+                                    child: Center(
+                                      child: Ink(
+                                        decoration: buttonShapeList,
+                                        child: IconButton(
+                                          icon: _foundNotes[index].isSelected
+                                              ? const Icon(Icons.done)
+                                              : const Icon(Icons.edit_document),
+                                          onPressed: () {
+                                            updateSelectionMode(
+                                              _isSelectionMode,
+                                              index,
+                                            );
+                                            updateSelected(index);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            // Note info
+                            title: (_foundNotes[index]
+                                    .permissionList
+                                    .contains('read'))
+                                ? Text(
+                                    _foundNotes[index].content!.noteTitle,
+                                    maxLines: 1, // Limit lines
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : const Text(''),
+                            subtitle: (_foundNotes[index]
+                                    .permissionList
+                                    .contains('read'))
+                                ? Text(
+                                    'Filename: ${_foundNotes[index].noteFileName} \n'
+                                    'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
+                                    'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
+                                    'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                    'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                    'Permissions: ${_foundNotes[index].permissionList}',
+                                    maxLines: 6, // Limit lines
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : Text(
+                                    'Filename: ${_foundNotes[index].noteFileName} \n'
+                                    'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
+                                    'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
+                                    'Permissions: ${_foundNotes[index].permissionList}',
+                                    maxLines: 4, // Limit lines
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
 
-                          // Define width to avoid consuming full width
-                          trailing: SizedBox(
-                            height: 60,
-                            width: 120,
-                            child: SharedTrailingButtons(
-                              note: _foundNotes[index],
-                              scaffoldController: _scaffoldController,
+                            // Define width to avoid consuming full width
+                            trailing: SizedBox(
+                              height: 60,
+                              width: 120,
+                              child: SharedTrailingButtons(
+                                note: _foundNotes[index],
+                                scaffoldController: _scaffoldController,
+                              ),
                             ),
-                          ),
 
-                          onTap: () {
-                            // Open note if read in permissions
-                            String access = _foundNotes[index].permissionList;
-                            if (access.contains('read')) {
-                              _scaffoldController.navigateToSubpage(
-                                ViewNote(
-                                  note: _foundNotes[index],
-                                  scaffoldController: _scaffoldController,
-                                ),
-                              );
-                            } else {
-                              _scaffoldController.navigateToSubpage(
-                                NonReadableNote(
-                                  note: _foundNotes[index],
-                                  scaffoldController: _scaffoldController,
-                                ),
-                              );
-                            }
-                          },
+                            onTap: () {
+                              // Open note if read in permissions
+                              String access = _foundNotes[index].permissionList;
+                              if (access.contains('read')) {
+                                _scaffoldController.navigateToSubpage(
+                                  ViewNote(
+                                    note: _foundNotes[index],
+                                    scaffoldController: _scaffoldController,
+                                  ),
+                                );
+                              } else {
+                                _scaffoldController.navigateToSubpage(
+                                  NonReadableNote(
+                                    note: _foundNotes[index],
+                                    scaffoldController: _scaffoldController,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ),
                     ),
