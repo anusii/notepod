@@ -38,7 +38,7 @@ const String longTitle = 'CommunityPod\nPrivate and Shareable News';
 const String appOwner = '''© 2026 Software Innovation Institute''';
 
 const String aboutText =
-    '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
+    '''The communitypod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted news stories stored on your personal online data store (Pod) hosted on a Solid Server.''';
 
 const String appDir = 'notepod';
 
@@ -86,8 +86,8 @@ const adviceStyle = TextStyle(
 );
 
 // Titles for nav widgets to pages
-const String newNewsPostTitle = 'New News Post';
-const String myNewsTitle = 'My News';
+const String newNewsPostTitle = 'New Post';
+const String myNewsTitle = 'My Posts';
 const String sharedNewsTitle = 'Shared News';
 const String myNewsExplanation = 'created by me';
 const String sharedNewsExplanation = 'created by other people';
