@@ -54,23 +54,15 @@ class NoteItemSubtitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       (!_note.isExternalRes)
-          ? '\n' '${_note.content!.noteContent}'
-          // ? 'Filename: ${_note.noteFileName} \n'
-          //     'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
-          //     'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
-          //     'Owner: ${getId(_note.noteOwner)} \n'
-          //     'Shared with: ${getRecipNbrStr(_note.authUserList!.keys.length)} \n'
-          //     'Permissions: ${_note.permissionList}'
+          ? 'Owner: ${getId(_note.noteOwner)} \n'
+              'Created: ${getDateTimeStr(_note.content!.createdDateTime)}, Modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n\n'
+              '${_note.content!.noteContent}'
           : (_note.permissionList.contains('read'))
-              ? 'Filename: ${_note.noteFileName} \n'
-                  'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
-                  'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
-                  'Owner: ${getId(_note.noteOwner)} \n'
-                  'Shared by: ${getId(_note.permissionGranter ?? 'N/A')} \n'
-                  'Permissions: ${_note.permissionList}'
+              ? 'Owner: ${getId(_note.noteOwner)} \n'
+                  'Created: ${getDateTimeStr(_note.content!.createdDateTime)}, Modified: ${getDateTimeStr(_note.content!.modifiedDateTime)} \n\n'
+                  '${_note.content!.noteContent}'
               : 'Filename: ${_note.noteFileName} \n'
                   'Owner: ${getId(_note.noteOwner)} \n'
-                  'Shared by: ${getId(_note.permissionGranter ?? 'N/A')} \n'
                   'Permissions: ${_note.permissionList}',
       maxLines: (!_isNarrow) ? 6 : 12, // Limit lines
       overflow: TextOverflow.ellipsis,
