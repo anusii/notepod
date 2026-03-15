@@ -434,14 +434,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: Text(
-                                _sortTitleAscending
-                                    ? !isNarrow
-                                        ? 'Title A to Z'
-                                        : 'Title'
-                                    : !isNarrow
-                                        ? 'Title Z to A'
-                                        : 'Title',
+                              label: const Text(
+                                'Title',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -455,8 +449,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: Text(
-                                !isNarrow ? 'Date Last Modified' : 'Date',
+                              label: const Text(
+                                'Date Modified',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -470,14 +464,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: Text(
-                                _sortFilenameAscending
-                                    ? !isNarrow
-                                        ? 'Filename A to Z'
-                                        : 'Filename'
-                                    : !isNarrow
-                                        ? 'Filename Z to A'
-                                        : 'Filename',
+                              label: const Text(
+                                'Filename',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -491,14 +479,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                               ),
-                              label: Text(
-                                _sortOwnerAscending
-                                    ? !isNarrow
-                                        ? 'Owner A to Z'
-                                        : 'Owner'
-                                    : !isNarrow
-                                        ? 'Owner Z to A'
-                                        : 'Owner',
+                              label: const Text(
+                                'Owner',
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
@@ -515,10 +497,8 @@ class _ListExternalNotesState extends State<ListExternalNotes> {
                                       ? Icons.arrow_drop_down
                                       : Icons.arrow_drop_up,
                                 ),
-                                label: Text(
-                                  _sortPermissionAscending
-                                      ? 'Permission A to Z'
-                                      : 'Permission Z to A',
+                                label: const Text(
+                                  'Permission',
                                 ),
                                 iconAlignment: IconAlignment.end,
                               ),
