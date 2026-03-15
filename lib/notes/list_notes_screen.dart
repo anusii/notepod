@@ -30,8 +30,7 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
-// import 'package:notepod/notes/list_notes.dart';
-import 'package:notepod/shared_notes/list_external_notes.dart';
+import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
@@ -101,7 +100,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     if (unparseableNotes.isNotEmpty) {
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
-        childPage: ListExternalNotes(
+        childPage: ListNotes(
           notes: notes,
           title: '$myNotesTitle ($myNotesExplanation)',
           scaffoldController: scaffoldController,
@@ -111,7 +110,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     } else if (notes.isEmpty) {
       return _loadNewNote(scaffoldController);
     } else {
-      return ListExternalNotes(
+      return ListNotes(
         notes: notes,
         title: '$myNotesTitle ($myNotesExplanation)',
         scaffoldController: scaffoldController,
