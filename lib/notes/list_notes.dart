@@ -1,4 +1,4 @@
-/// A stateful widget to list external notes.
+/// A stateful widget to list notes.
 ///
 /// Copyright (C) 2023 Software Innovation Institute, Australian National University
 ///
@@ -39,20 +39,20 @@ import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
-/// A [stateful] widget to list externally owned notes shared to the
+/// A [stateful] widget to list notes accessible to the
 /// user.
 ///
 /// Arguments:
-/// - [notes] - The externally owned notes shared to the user.
+/// - [notes] - The notes accessible to the user.
 /// - [title] - List title.
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
-class ListExternalNotes extends StatefulWidget {
+class ListNotes extends StatefulWidget {
   final List<Note> notes;
   final String title;
   final SolidScaffoldController scaffoldController;
 
-  const ListExternalNotes({
+  const ListNotes({
     super.key,
     required this.notes,
     required this.title,
@@ -60,10 +60,10 @@ class ListExternalNotes extends StatefulWidget {
   });
 
   @override
-  State<ListExternalNotes> createState() => _ListExternalNotesState();
+  State<ListNotes> createState() => _ListNotesState();
 }
 
-class _ListExternalNotesState extends State<ListExternalNotes> {
+class _ListNotesState extends State<ListNotes> {
   /// Filtered map of notes.
   List<Note> _foundNotes = [];
 
