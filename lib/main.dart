@@ -29,10 +29,10 @@ import 'package:flutter/material.dart';
 
 import 'package:window_manager/window_manager.dart';
 
-import 'package:communitypod/notepod.dart';
+import 'package:communitypod/communitypod.dart';
 import 'package:communitypod/utils/is_desktop.dart';
 
-/// Main entry point for the [NotePod] application.
+/// Main entry point for the [CommunityPod] application.
 
 void main() async {
   // We require [async] because we asynchronously [await] the window manager
@@ -81,5 +81,5 @@ void main() async {
   // The runApp() function takes the given Widget and makes it the root of the
   // widget tree.
 
-  runApp(NotePod());
+  runApp(CommunityPod());
 }
