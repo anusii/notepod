@@ -106,10 +106,6 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
           title: '$myNotesTitle ($myNotesExplanation)',
           scaffoldController: scaffoldController,
         ),
-        // childPage: ListNotes(
-        //   notes: notes,
-        //   scaffoldController: scaffoldController,
-        // ),
         scaffoldController: _scaffoldController,
       );
     } else if (notes.isEmpty) {
@@ -120,10 +116,6 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         title: '$myNotesTitle ($myNotesExplanation)',
         scaffoldController: scaffoldController,
       );
-      // return ListNotes(
-      //   notes: notes,
-      //   scaffoldController: scaffoldController,
-      // );
     }
   }
 
