@@ -31,6 +31,7 @@ a Pull Request. Thanks.
 
 ## 0.1 Initial release
 
++ Provide sort by owner and permission on wider screens [0.0.6 20260316 jesscmoore]
 + Update logo [0.0.5 20260316 jesscmoore]
 + Set theme colour [0.0.4 20260316 jesscmoore]
 + Remove shared news only list [0.0.3 20260316 jesscmoore]
