@@ -27,7 +27,52 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidui/solidui.dart' show WindowSize;
+import 'package:solidui/solidui.dart' show WindowSize, NavigationConstants;
+
+/// Helper class for Solid Scaffold operations.
+
+class DisplayHelpers {
+  /// Determines if screen is medium width.
+
+  static bool isMedScreen(BuildContext context) {
+    final currWidth = MediaQuery.of(context).size.width;
+    final isMed = currWidth > NavigationConstants.narrowScreenThreshold &&
+        currWidth < DisplayConstants.wideScreenThreshold;
+    return isMed;
+  }
+
+  /// Determines if screen is wide width.
+
+  static bool isWideScreen(BuildContext context) {
+    final currWidth = MediaQuery.of(context).size.width;
+    final isWide = currWidth > DisplayConstants.wideScreenThreshold &&
+        currWidth < DisplayConstants.veryWideScreenThreshold;
+    return isWide;
+  }
+
+  /// Determines if screen is very wide width.
+
+  static bool isVeryWideScreen(BuildContext context) {
+    final currWidth = MediaQuery.of(context).size.width;
+    final isVeryWide = currWidth > DisplayConstants.veryWideScreenThreshold;
+    return isVeryWide;
+  }
+}
+
+/// Navigation constants used throughout the application.
+
+class DisplayConstants {
+  /// The width threshold for determining narrow/wide/very wide
+  /// screen layout.
+  ///
+  /// Lists on screens wider than this value will show the owner sort button
+
+  static const double wideScreenThreshold = 900.0;
+
+  /// Lists on screens wider than this value will show the permission sort button
+
+  static const double veryWideScreenThreshold = 1000.0;
+}
 
 /// Approximate size for grid items used for
 /// displaying text of user's notes.

@@ -81,11 +81,11 @@ class _ListNotesState extends State<ListNotes> {
   /// Initial sort by note filename order.
   bool _sortFilenameAscending = true;
 
-  // /// Initial sort by note owner order.
-  // bool _sortOwnerAscending = true;
+  /// Initial sort by note owner order.
+  bool _sortOwnerAscending = true;
 
-  // /// Initial sort by note owner order.
-  // bool _sortPermissionAscending = true;
+  /// Initial sort by note owner order.
+  bool _sortPermissionAscending = true;
 
   /// Note selection mode
   /// true: when one or more notes have been selected, false by defaultl
@@ -110,6 +110,12 @@ class _ListNotesState extends State<ListNotes> {
 
   /// Boolean describing whether window is narrow
   late bool isNarrow;
+
+  /// Boolean describing whether window is wide
+  late bool isWide;
+
+  /// Boolean describing whether window is very wide
+  late bool isVeryWide;
 
   @override
   void initState() {
@@ -196,43 +202,41 @@ class _ListNotesState extends State<ListNotes> {
     });
   }
 
-  // TODO: allow owner sorting if isWide after isWide added to Solidui
-  // /// Sort alphanumerically on note owner
-  // void _sortByOwner(bool ascending) {
-  //   setState(() {
-  //     _sortOwnerAscending = ascending;
+  /// Sort alphanumerically on note owner
+  void _sortByOwner(bool ascending) {
+    setState(() {
+      _sortOwnerAscending = ascending;
 
-  //     _foundNotes.sort(
-  //       (a, b) => _sortOwnerAscending
-  //           ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
-  //           : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
-  //     );
+      _foundNotes.sort(
+        (a, b) => _sortOwnerAscending
+            ? a.noteOwner.toLowerCase().compareTo(b.noteOwner.toLowerCase())
+            : b.noteOwner.toLowerCase().compareTo(a.noteOwner.toLowerCase()),
+      );
 
-  //     // Update current sort method
-  //     currSortMethod = 'sortByOwner';
-  //   });
-  // }
+      // Update current sort method
+      currSortMethod = 'sortByOwner';
+    });
+  }
 
-  // TODO: allow permission sorting if isWide after isWide added to Solidui
-  // /// Sort alphanumerically on note permissions
-  // void _sortByPermission(bool ascending) {
-  //   setState(() {
-  //     _sortPermissionAscending = ascending;
+  /// Sort alphanumerically on note permissions
+  void _sortByPermission(bool ascending) {
+    setState(() {
+      _sortPermissionAscending = ascending;
 
-  //     _foundNotes.sort(
-  //       (a, b) => _sortPermissionAscending
-  //           ? a.permissionList
-  //               .toLowerCase()
-  //               .compareTo(b.permissionList.toLowerCase())
-  //           : b.permissionList
-  //               .toLowerCase()
-  //               .compareTo(a.permissionList.toLowerCase()),
-  //     );
+      _foundNotes.sort(
+        (a, b) => _sortPermissionAscending
+            ? a.permissionList
+                .toLowerCase()
+                .compareTo(b.permissionList.toLowerCase())
+            : b.permissionList
+                .toLowerCase()
+                .compareTo(a.permissionList.toLowerCase()),
+      );
 
-  //     // Update current sort method
-  //     currSortMethod = 'sortByPermission';
-  //   });
-  // }
+      // Update current sort method
+      currSortMethod = 'sortByPermission';
+    });
+  }
 
   /// Search notes
   void _searchNotes(String enteredKeyword) {
@@ -280,10 +284,10 @@ class _ListNotesState extends State<ListNotes> {
         _sortByModDate(_sortModDateAscending);
       case 'sortByFilename':
         _sortByFilename(_sortFilenameAscending);
-      // case 'sortByOwner':
-      //   _sortByOwner(_sortOwnerAscending);
-      // case 'sortByPermission':
-      //   _sortByPermission(_sortPermissionAscending);
+      case 'sortByOwner':
+        _sortByOwner(_sortOwnerAscending);
+      case 'sortByPermission':
+        _sortByPermission(_sortPermissionAscending);
     }
   }
 
@@ -347,6 +351,15 @@ class _ListNotesState extends State<ListNotes> {
       builder: (context, constraints) {
         // Derive whether window is narrow
         isNarrow = WindowSize().isNarrowWindow(constraints);
+        // Derive whether window wide
+        isWide = DisplayHelpers.isWideScreen(
+          context,
+        );
+        // Derive whether window very wide
+        isVeryWide = DisplayHelpers.isVeryWideScreen(
+          context,
+        );
+        // Derive whether window is very wide
         // Calculate the aspect radio for grid cards
         cardAspectRatio = NoteItemSize().calculateCardAspectRatio(constraints);
         return SizedBox(
@@ -474,40 +487,42 @@ class _ListNotesState extends State<ListNotes> {
                                 iconAlignment: IconAlignment.end,
                               ),
                             ],
-                            // // Owner Sort Label and Button
-                            // TextButton.icon(
-                            //   onPressed: () {
-                            //     _sortByOwner(!_sortOwnerAscending);
-                            //   },
-                            //   icon: Icon(
-                            //     _sortOwnerAscending
-                            //         ? Icons.arrow_drop_down
-                            //         : Icons.arrow_drop_up,
-                            //   ),
-                            //   label: const Text(
-                            //     'Owner',
-                            //   ),
-                            //   iconAlignment: IconAlignment.end,
-                            // ),
+                            if (isWide || isVeryWide) ...[
+                              // Owner Sort Label and Button
+                              TextButton.icon(
+                                onPressed: () {
+                                  _sortByOwner(!_sortOwnerAscending);
+                                },
+                                icon: Icon(
+                                  _sortOwnerAscending
+                                      ? Icons.arrow_drop_down
+                                      : Icons.arrow_drop_up,
+                                ),
+                                label: const Text(
+                                  'Owner',
+                                ),
+                                iconAlignment: IconAlignment.end,
+                              ),
+                            ],
                             // Only display permissions sort
                             // when window is not narrow
-                            // if (!isNarrow) ...[
-                            //   // Permission Sort Label and Button
-                            //   TextButton.icon(
-                            //     onPressed: () {
-                            //       _sortByPermission(!_sortPermissionAscending);
-                            //     },
-                            //     icon: Icon(
-                            //       _sortPermissionAscending
-                            //           ? Icons.arrow_drop_down
-                            //           : Icons.arrow_drop_up,
-                            //     ),
-                            //     label: const Text(
-                            //       'Permission',
-                            //     ),
-                            //     iconAlignment: IconAlignment.end,
-                            //   ),
-                            // ],
+                            if (isVeryWide) ...[
+                              // Permission Sort Label and Button
+                              TextButton.icon(
+                                onPressed: () {
+                                  _sortByPermission(!_sortPermissionAscending);
+                                },
+                                icon: Icon(
+                                  _sortPermissionAscending
+                                      ? Icons.arrow_drop_down
+                                      : Icons.arrow_drop_up,
+                                ),
+                                label: const Text(
+                                  'Permission',
+                                ),
+                                iconAlignment: IconAlignment.end,
+                              ),
+                            ],
                           ],
                         ),
                       ],
