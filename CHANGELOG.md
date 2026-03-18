@@ -32,7 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
-+ Use common list widget [0.3.7 20260315 jesscmoore]
++ Use common list widget [0.3.8 20260315 jesscmoore]
 + Restore support for listing unreadable notes [0.3.7 20260315 jesscmoore]
 + Use common edit widget [0.3.7 20260314 jesscmoore]
 + Use common view widget [0.3.7 20260314 jesscmoore]
