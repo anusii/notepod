@@ -42,7 +42,9 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 /// - [selectedNotes] - list of selected notes.
 /// - [childPage] - child widget to return to.
 /// - [scaffoldController] - Controller for the Solid scaffold.
-/// - [isSelectionMode] - flag denoting whether notes were selected
+/// - [isSelectionMode] - flag denoting whether notes were selected.
+/// - [isExtFileSelected] - flag denoting whether an external note
+///  in selection.
 /// - [isExternal] - flag denoting whether note is an external
 /// note shared to the user.
 
@@ -51,6 +53,7 @@ class NoteListDelButton extends StatelessWidget {
   final Widget childPage;
   final SolidScaffoldController scaffoldController;
   final bool isSelectionMode;
+  final bool isExtFileSelected;
   final bool isExternal;
 
   const NoteListDelButton({
@@ -59,6 +62,7 @@ class NoteListDelButton extends StatelessWidget {
     required this.childPage,
     required this.scaffoldController,
     this.isSelectionMode = false,
+    this.isExtFileSelected = false,
     this.isExternal = false,
   });
 
@@ -131,9 +135,12 @@ class NoteListDelButton extends StatelessWidget {
                   Icons.delete,
                 ),
                 label: const Text('Delete'),
-                onPressed: () {
-                  deleteListDialog(context);
-                },
+                onPressed: isExtFileSelected
+                    ? null
+                    : () {
+                        // Show inactive button if external file in the selection
+                        deleteListDialog(context);
+                      },
               )
             : ElevatedButton.icon(
                 // Uses Theme elevatedButtonTheme for all properties
