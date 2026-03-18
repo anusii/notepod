@@ -568,33 +568,9 @@ class _ListNotesState extends State<ListNotes> {
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
                           child: ListTile(
-                            // Note has selectable icon if owned by user
-                            // leading: (_foundNotes[index].isExternalRes)
-                            //     ? const CircleAvatar(
-                            //         radius: 26,
-                            //         backgroundColor: Colors.grey,
-                            //         child: Icon(Icons.edit_document),
-                            //       )
-                            //     : SizedBox(
-                            //         width: NoteIconSize.width,
-                            //         child: Center(
-                            //           child: Ink(
-                            //             decoration: buttonShapeList,
-                            //             child: IconButton(
-                            //               icon: _foundNotes[index].isSelected
-                            //                   ? const Icon(Icons.done)
-                            //                   : const Icon(Icons.edit_document),
-                            //               onPressed: () {
-                            //                 updateSelectionMode(
-                            //                   _isSelectionMode,
-                            //                   index,
-                            //                 );
-                            //                 updateSelected(index);
-                            //               },
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
+                            // Make all notes have the same selectable icon
+                            // although also stores whether an externally
+                            // owned file is selected
                             leading: SizedBox(
                               width: NoteIconSize.width,
                               child: Center(
