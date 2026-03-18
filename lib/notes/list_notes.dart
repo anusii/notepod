@@ -30,14 +30,12 @@ import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/ui.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
+import 'package:notepod/notes/list_external_notes_screen.dart';
 import 'package:notepod/notes/non_readable_note.dart';
-import 'package:notepod/notes/share_note.dart';
 import 'package:notepod/notes/view_note.dart';
-import 'package:notepod/shared_notes/list_external_notes_screen.dart';
-import 'package:notepod/utils/get_id.dart';
-import 'package:notepod/utils/misc.dart';
+import 'package:notepod/widgets/note_item_subtitle.dart';
+import 'package:notepod/widgets/note_item_trailing_buttons.dart';
 import 'package:notepod/widgets/note_list_del_button.dart';
-import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [stateful] widget to list notes accessible to the
 /// user.
@@ -582,36 +580,16 @@ class _ListNotesState extends State<ListNotes> {
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
-                            // Subtitle that number shared with if note owned by user, or entity that share it if owned by another, and does not show encrypted content if read access denied
-                            subtitle: Text(
-                              (!_foundNotes[index].isExternalRes)
-                                  ? 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                      'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                      'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                      'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                      'Shared with: ${getRecipNbrStr(_foundNotes[index].authUserList!.keys.length)} \n'
-                                      'Permissions: ${_foundNotes[index].permissionList}'
-                                  : (_foundNotes[index]
-                                          .permissionList
-                                          .contains('read'))
-                                      ? 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                          'Created on: ${getDateTimeStr(_foundNotes[index].content!.createdDateTime)} \n'
-                                          'Last modified: ${getDateTimeStr(_foundNotes[index].content!.modifiedDateTime)}\n'
-                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                          'Permissions: ${_foundNotes[index].permissionList}'
-                                      : 'Filename: ${_foundNotes[index].noteFileName} \n'
-                                          'Owner: ${getId(_foundNotes[index].noteOwner)} \n'
-                                          'Shared by: ${getId(_foundNotes[index].permissionGranter ?? 'N/A')} \n'
-                                          'Permissions: ${_foundNotes[index].permissionList}',
-                              maxLines: (!isNarrow) ? 6 : 12, // Limit lines
-                              overflow: TextOverflow.ellipsis,
+                            // Note item subtitle
+                            subtitle: NoteItemSubtitle(
+                              note: _foundNotes[index],
+                              isNarrow: isNarrow,
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
                               height: 60,
                               width: 120,
-                              child: SharedTrailingButtons(
+                              child: NoteItemTrailingButtons(
                                 note: _foundNotes[index],
                                 scaffoldController: _scaffoldController,
                               ),
@@ -647,48 +625,6 @@ class _ListNotesState extends State<ListNotes> {
           ),
         );
       },
-    );
-  }
-}
-
-class SharedTrailingButtons extends StatelessWidget {
-  const SharedTrailingButtons({
-    super.key,
-    required Note note,
-    required SolidScaffoldController scaffoldController,
-  })  : _note = note,
-        _scaffoldController = scaffoldController;
-
-  final Note _note;
-  final SolidScaffoldController _scaffoldController;
-
-  @override
-  Widget build(BuildContext context) {
-    List accessList = _note.permissionList.split(',');
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      spacing: 5.0,
-      children: [
-        // Share button if control in permissions
-        if (accessList.contains('control')) ...[
-          SimpleActionButton(
-            icon: const Icon(Icons.share),
-            childPage: ShareNote(
-              noteUrl: _note.noteUrl,
-              noteOwner: _note.noteOwner,
-              isExternal: _note.isExternalRes,
-              backPage: ListExternalNotesScreen(
-                scaffoldController: _scaffoldController,
-              ),
-              scaffoldController: _scaffoldController,
-            ),
-            scaffoldController: _scaffoldController,
-          ),
-        ],
-        // Open note icon
-        const Icon(Icons.arrow_forward),
-      ],
     );
   }
 }
