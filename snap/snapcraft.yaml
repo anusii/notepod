@@ -1,5 +1,5 @@
 name: notepod
-version: 0.3.7
+version: 0.3.9
 summary: Privacy preserving note taking app using PODs.
 description: |
   Notepod is a note taking app, storing your notes within your Solid

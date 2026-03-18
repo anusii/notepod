@@ -35,6 +35,7 @@ import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
+import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
 /// A [StatefulWidget] that fetches the user's notes in their app data folder
 /// retrieving the note data map containing data and properties of each note
@@ -112,8 +113,12 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ownerListResults.addCallResults(results: extListResults);
     final List<Note> notes = results.notes!;
     final List<SelectedNote> unparseableNotes = results.unparseableNotes!;
+    final List<Note> nonExistentNotes = results.nonExistentNotes!;
 
     if (unparseableNotes.isNotEmpty) {
+      // Show dialog to optionally delete any unparseable notes if found
+      // These are notes that have been incorrectly written and
+      // are unparseable.
       return NotesDelDialog(
         unparseableNotes: unparseableNotes,
         childPage: ListNotes(
@@ -123,7 +128,24 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ),
         scaffoldController: _scaffoldController,
       );
+    } else if (nonExistentNotes.isNotEmpty) {
+      // Show dialog to optionally revoke access to any nonexistent notes if found
+      // These are notes that were shared to the user and then deleted
+      // without revoking access to the user before deleting the note
+      // as such these notes are still in the user's permission log
+      // without a revoke entry. The dialog provides an option to
+      // revoke the user's access to these now non existent notes.
+      return NotesRevokeDialog(
+        nonExistentNotes: nonExistentNotes,
+        childPage: ListNotes(
+          notes: notes,
+          title: '$combinedNotesTitle ($combinedNotesExplanation)',
+          scaffoldController: _scaffoldController,
+        ),
+        scaffoldController: _scaffoldController,
+      );
     } else if (notes.isEmpty) {
+      // If no notes accessible to user, show create new note widget
       return _loadNewNote(scaffoldController);
     } else {
       return ListNotes(
