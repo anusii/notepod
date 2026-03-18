@@ -87,12 +87,13 @@ const adviceStyle = TextStyle(
 
 // Titles for nav widgets to pages
 const String newNoteTitle = 'New Note';
+const String newNoteToolTip = 'Create a new note';
 const String myNotesTitle = 'My Notes';
-const String sharedNotesTitle = 'Shared Notes';
-const String myNotesExplanation = 'created by me';
-const String sharedNotesExplanation = 'created by other people';
+const String myNotesExplanation = 'owned by me';
+const String myNotesToolTip = 'Go to notes owned by me';
 const String combinedNotesTitle = 'Notes';
 const String combinedNotesExplanation = 'accessible to me';
+const String combinedNotesToolTip = 'Go to notes accessible to me';
 
 /// Note list messages
 class NoteListMsg {

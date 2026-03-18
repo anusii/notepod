@@ -88,7 +88,7 @@ class AppHomePageState extends State<AppHomePage> {
           // New Note
           SolidAppBarAction(
             icon: Icons.add_circle,
-            tooltip: 'Navigate to $newNoteTitle',
+            tooltip: newNoteToolTip,
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 NewNote(
@@ -100,7 +100,7 @@ class AppHomePageState extends State<AppHomePage> {
           // All Accessible Notes
           SolidAppBarAction(
             icon: Icons.view_list,
-            tooltip: 'Go to $combinedNotesTitle',
+            tooltip: combinedNotesToolTip,
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListNotesScreen(
@@ -113,7 +113,7 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarAction(
             // More gender neutral icon
             icon: Icons.person_3,
-            tooltip: 'Go to $myNotesTitle',
+            tooltip: myNotesToolTip,
             onPressed: () {
               scaffoldController.navigateToSubpage(
                 ListMyNotesScreen(
@@ -130,7 +130,7 @@ class AppHomePageState extends State<AppHomePage> {
           title: combinedNotesTitle,
           icon: Icons.view_list,
           child: ListNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $combinedNotesTitle',
+          tooltip: combinedNotesToolTip,
         ),
         // My Notes
         SolidMenuItem(
@@ -138,7 +138,7 @@ class AppHomePageState extends State<AppHomePage> {
           // More gender neutral icon
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
-          tooltip: 'Navigate to $myNotesTitle',
+          tooltip: myNotesToolTip,
         ),
         // New Note
         SolidMenuItem(
@@ -147,7 +147,7 @@ class AppHomePageState extends State<AppHomePage> {
           child: NewNote(
             scaffoldController: scaffoldController,
           ),
-          tooltip: 'Navigate to $newNoteTitle',
+          tooltip: newNoteToolTip,
         ),
       ],
       statusBar: SolidStatusBarConfig(
