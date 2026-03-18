@@ -568,9 +568,8 @@ class _ListNotesState extends State<ListNotes> {
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
                           child: ListTile(
-                            // Make all notes have the same selectable icon
-                            // although also stores whether an externally
-                            // owned file is selected
+                            // Select and count selected notes, including whether
+                            // an externally owned note is selected
                             leading: SizedBox(
                               width: NoteIconSize.width,
                               child: Center(

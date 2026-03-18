@@ -26,6 +26,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:markdown_tooltip/markdown_tooltip.dart';
+
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/file_helper.dart';
@@ -130,17 +132,22 @@ class NoteListDelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return (!isExternal)
         ? (isSelectionMode)
-            ? TextButton.icon(
-                icon: const Icon(
-                  Icons.delete,
+            ? MarkdownTooltip(
+                message: isExtFileSelected
+                    ? 'You cannot delete notes owned by someone else. Please remove it from the selection'
+                    : 'Delete selected notes',
+                child: TextButton.icon(
+                  icon: const Icon(
+                    Icons.delete,
+                  ),
+                  label: const Text('Delete'),
+                  onPressed: isExtFileSelected
+                      ? null
+                      : () {
+                          // Show inactive button if external file in the selection
+                          deleteListDialog(context);
+                        },
                 ),
-                label: const Text('Delete'),
-                onPressed: isExtFileSelected
-                    ? null
-                    : () {
-                        // Show inactive button if external file in the selection
-                        deleteListDialog(context);
-                      },
               )
             : ElevatedButton.icon(
                 // Uses Theme elevatedButtonTheme for all properties
