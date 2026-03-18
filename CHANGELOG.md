@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Make delete inactive if external selected and fix icon [0.3.10 20260319 jesscmoore]
 + Remove redundant shared notes list [0.3.9 20260318 jesscmoore]
 + Use common list widget [0.3.8 20260315 jesscmoore]
 + Restore support for listing unreadable notes [0.3.7 20260315 jesscmoore]
