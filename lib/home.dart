@@ -123,19 +123,6 @@ class AppHomePageState extends State<AppHomePage> {
               );
             },
           ),
-          // External Notes (Shared Notes)
-          SolidAppBarAction(
-            // More gender neutral icon
-            icon: Icons.groups_3,
-            tooltip: 'Go to $sharedNotesTitle',
-            onPressed: () {
-              scaffoldController.navigateToSubpage(
-                ListExternalNotesScreen(
-                  scaffoldController: scaffoldController,
-                ),
-              );
-            },
-          ),
         ],
       ),
       menu: [
@@ -153,16 +140,6 @@ class AppHomePageState extends State<AppHomePage> {
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
           tooltip: 'Navigate to $myNotesTitle',
-        ),
-        // Shared Notes
-        SolidMenuItem(
-          title: sharedNotesTitle,
-          // More gender neutral icon
-          icon: Icons.groups_3,
-          child: ListExternalNotesScreen(
-            scaffoldController: scaffoldController,
-          ),
-          tooltip: 'Navigate to $sharedNotesTitle',
         ),
         // New Note
         SolidMenuItem(
