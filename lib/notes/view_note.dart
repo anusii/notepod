@@ -35,7 +35,6 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/edit_note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
-import 'package:notepod/shared_notes/list_external_notes_screen.dart';
 import 'package:notepod/widgets/note_action_button.dart';
 import 'package:notepod/widgets/note_del_button.dart';
 import 'package:notepod/widgets/note_display_markdown.dart';
@@ -207,13 +206,9 @@ class _ViewNoteState extends State<ViewNote> {
                         label: ButtonLabel.back,
                         icon: const Icon(Icons.keyboard_backspace),
                         backgroundColor: ButtonBackgroundColor.back,
-                        childPage: _note.isExternalRes == true
-                            ? ListExternalNotesScreen(
-                                scaffoldController: _scaffoldController,
-                              )
-                            : ListNotesScreen(
-                                scaffoldController: _scaffoldController,
-                              ),
+                        childPage: ListNotesScreen(
+                          scaffoldController: _scaffoldController,
+                        ),
                         scaffoldController: _scaffoldController,
                         isNarrow: isNarrow,
                       ),

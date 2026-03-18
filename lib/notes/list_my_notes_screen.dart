@@ -43,28 +43,23 @@ import 'package:notepod/widgets/note_list_del_dialog.dart';
 /// Parameters:
 ///   [scaffoldController] - Controller for the Solid scaffold.
 
-class ListNotesScreen extends StatefulWidget {
+class ListMyNotesScreen extends StatefulWidget {
   final SolidScaffoldController scaffoldController;
 
-  const ListNotesScreen({
+  const ListMyNotesScreen({
     super.key,
     required this.scaffoldController,
   });
 
   @override
-  State<ListNotesScreen> createState() => _ListNotesScreenState();
+  State<ListMyNotesScreen> createState() => _ListMyNotesScreenState();
 }
 
-class _ListNotesScreenState extends State<ListNotesScreen> {
+class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Future function to retrieve user's notes list
-  // static Future? _fetchOwnNotes;
-  late Future<NotesCallResult> _fetchOwnNotes;
-
-  /// Future function to retrieve externally owned notes list
-  // static Future? _fetchExternalNotes;
-  late Future<NotesCallResult> _fetchExternalNotes;
+  static Future? _asyncDataFetch;
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
@@ -76,12 +71,8 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-
+    _asyncDataFetch = getOwnNoteList();
     _scrollController = ScrollController();
-
-    // Set future functions to fetch owner's notes and external notes
-    _fetchOwnNotes = getOwnNoteList();
-    _fetchExternalNotes = getExternalNoteList();
   }
 
   @override
@@ -95,21 +86,14 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   /// notes.
   ///
   /// Arguments:
-  ///   [ownerListResults] - [NotesCallResult] class containing [notes] of
+  ///   [results] - [NotesCallResult] class containing [notes] of
   /// files found in user's app data folder, and [unparseableNotes]
-  /// list of any unparseable files.
-  ///   [extListResults] - [NotesCallResult] class containing [notes] of
-  /// files shared to user, and [unparseableNotes]
   /// list of any unparseable files.
 
   Widget _loadedNotesScreen(
-    NotesCallResult ownerListResults,
-    NotesCallResult extListResults,
+    NotesCallResult results,
     SolidScaffoldController scaffoldController,
   ) {
-    // Combine the results
-    NotesCallResult results =
-        ownerListResults.addCallResults(results: extListResults);
     final List<Note> notes = results.notes!;
     final List<SelectedNote> unparseableNotes = results.unparseableNotes!;
 
@@ -118,7 +102,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         unparseableNotes: unparseableNotes,
         childPage: ListNotes(
           notes: notes,
-          title: '$combinedNotesTitle ($combinedNotesExplanation)',
+          title: '$myNotesTitle ($myNotesExplanation)',
           scaffoldController: scaffoldController,
         ),
         scaffoldController: _scaffoldController,
@@ -128,7 +112,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     } else {
       return ListNotes(
         notes: notes,
-        title: '$combinedNotesTitle ($combinedNotesExplanation)',
+        title: '$myNotesTitle ($myNotesExplanation)',
         scaffoldController: scaffoldController,
       );
     }
@@ -170,25 +154,8 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
       key: _scaffoldKey,
       body: SafeArea(
         child: FutureBuilder(
-          // future: _asyncFetchOwnNotes,
-          future: Future.wait([
-            // Future result of fetching owner's notes list
-            _fetchOwnNotes,
-            // Future result of fetching externally owned notes list
-            _fetchExternalNotes,
-          ]),
+          future: _asyncDataFetch,
           builder: (context, snapshot) {
-            // if (!snapshot.hasData) {
-            //   return Scaffold(body: loadingScreen(normalLoadingScreenHeight));
-            // }
-            // final PermissionDetails initCurrentPerm =
-            //     snapshot.data![0] as PermissionDetails;
-            // final List<LogRecord> initPermHistoryList =
-            //     snapshot.data![1] as List<LogRecord>;
-            // return initCurrentPerm.permissionMap.isEmpty
-            //     ? _buildPermPage(context)
-            //     : _buildPermPage(context, initCurrentPerm, initPermHistoryList);
-
             switch (snapshot.connectionState) {
               case (ConnectionState.waiting || ConnectionState.active):
                 return loadingScreen(normalLoadingScreenHeight);
@@ -202,14 +169,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
                     'Error: data loading failed',
                   );
                 } else if (snapshot.hasData && snapshot.data != null) {
-                  final NotesCallResult ownerNotesListResult =
-                      snapshot.data![0];
-                  final NotesCallResult extNotesListResult = snapshot.data![1];
                   // Successfully returned NotesCallResult
                   return _loadedNotesScreen(
-                    ownerNotesListResult,
-                    extNotesListResult,
-                    // snapshot.data as NotesCallResult,
+                    snapshot.data as NotesCallResult,
                     _scaffoldController,
                   );
                 } else if (snapshot.data == null ||
