@@ -29,6 +29,10 @@ flutter:
 
   prep      Prep for PR by running tests, checks, docs.
   push      Do a git push and bump the build number if there is one.
+  
+  minor_versions   Increment pubspec.yaml minor version 
+  major_versions   Increment pubspec.yaml major version
+  versions         Copy pubspec.yaml version to snapcraft.yaml
 
   docs	    Run `dart doc` to create documentation.
 
@@ -544,6 +548,25 @@ docs::
 .PHONY: versions
 versions:
 	if [ -d snap ]; then perl -pi -e 's|^version:.*|version: $(VER)|' snap/snapcraft.yaml; fi
+
+
+BUILD_VER=$(shell grep '^version: ' pubspec.yaml | cut -d'+' -f2)
+MAJ_VER=$(shell grep '^version: ' pubspec.yaml | cut -d'+' -f1 | cut -d':' -f2 | cut -d'.' -f1,2)
+MIN_VER=$(shell grep '^version: ' pubspec.yaml | cut -d'+' -f1 | cut -d':' -f2 | cut -d'.' -f3)
+
+# Increment minor version in pubspec.yaml
+.PHONY: minor_versions
+minor_versions:
+	$(eval MIN_VER = $(shell echo $$(($(MIN_VER) + 1))))
+	@echo "Bumping version: $(VER)+$(BUILD_VER) to $(MAJ_VER).$(MIN_VER)+$(BUILD_VER)"
+	perl -pi -e 's|^version:.*|version:$(MAJ_VER).$(MIN_VER)+$(BUILD_VER)|' pubspec.yaml
+	
+# Increment major version in pubspec.yaml
+.PHONY: major_versions
+major_versions:
+	$(eval MAJ_VER = $(shell echo "$(MAJ_VER) + 1.0"  | bc))
+	@echo "Bumping version: $(VER)+$(BUILD_VER) to $(MAJ_VER).$(MIN_VER)+$(BUILD_VER)"
+	perl -pi -e 's|^version:.*|version: $(MAJ_VER).$(MIN_VER)+$(BUILD_VER)|' pubspec.yaml
 
 .PHONY: loc
 loc: lib/*.dart
