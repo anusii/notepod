@@ -88,11 +88,18 @@ class _ListNotesState extends State<ListNotes> {
   // bool _sortPermissionAscending = true;
 
   /// Note selection mode
-  /// true: when one or more notes have been selected, false by defaultl
+  /// true: when one or more notes have been selected, false by default
   bool _isSelectionMode = false;
 
   /// Count of selected notes
   int selectedCount = 0;
+
+  /// Whether selection includes external files
+  /// true: when one or more external notes have been selected, false by default
+  bool _isExtFileSelected = false;
+
+  /// Count of selected external notes
+  int extSelectedCount = 0;
 
   /// Current note sort method
   /// Initialised to sort by title
@@ -294,13 +301,20 @@ class _ListNotesState extends State<ListNotes> {
       if (_foundNotes[index].isSelected) {
         // Decrement selected count
         selectedCount--;
+        if (_foundNotes[index].isExternalRes) {
+          extSelectedCount--;
+        }
+
         // Remove note from selected notes list
         selectedNotes.removeWhere(
           (item) => item.noteFileName == _foundNotes[index].noteFileName,
         );
       } else {
-        // Increment
+        // Increment count
         selectedCount++;
+        if (_foundNotes[index].isExternalRes) {
+          extSelectedCount++;
+        }
         // Add note to selected notes list
         selectedNotes.add(
           SelectedNote(
@@ -324,7 +338,7 @@ class _ListNotesState extends State<ListNotes> {
   void updateSelectionMode(bool selectionMode, int index) {
     setState(() {
       debugPrint(
-        '_isSelectionMode before: $selectionMode, selectedCount: ${selectedCount.toString()}, isSelected: ${_foundNotes[index].isSelected}',
+        '_isSelectionMode before: $selectionMode, selectedCount: ${selectedCount.toString()}, extSelectedCount: ${extSelectedCount.toString()} isSelected: ${_foundNotes[index].isSelected}',
       );
 
       // Turn off selection mode if deselected only selected note
@@ -334,7 +348,19 @@ class _ListNotesState extends State<ListNotes> {
       } else {
         _isSelectionMode = true;
       }
+
+      // Turn on external file selected
+      if (_foundNotes[index].isSelected &&
+          _foundNotes[index].isExternalRes &&
+          extSelectedCount == 1) {
+        // Turn off if the last selected external file has been deselected
+        _isExtFileSelected = false;
+      } else if (_isSelectionMode && _foundNotes[index].isExternalRes) {
+        // Ensure on if any external file is selected
+        _isExtFileSelected = true;
+      }
       debugPrint('_isSelectionMode after: $_isSelectionMode');
+      debugPrint('_isExtFileSelected after: $_isExtFileSelected');
     });
   }
 
@@ -409,7 +435,7 @@ class _ListNotesState extends State<ListNotes> {
                             // Only display multi note delete
                             // button when notes are selected causing
                             // isSelectionMode=true
-                            // Only notes owned by user are selectable
+                            // icon shows as inactive if _isExtFileSelect=true
                             if (_isSelectionMode) ...[
                               // Multi note delete button
                               NoteListDelButton(
@@ -420,7 +446,7 @@ class _ListNotesState extends State<ListNotes> {
                                 ),
                                 scaffoldController: _scaffoldController,
                                 isSelectionMode: _isSelectionMode,
-                                isExternal: false,
+                                isExtFileSelected: _isExtFileSelected,
                               ),
                             ],
                             // Title Sort Label and Button
@@ -542,33 +568,28 @@ class _ListNotesState extends State<ListNotes> {
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
                           child: ListTile(
-                            // Note has selectable icon if owned by user
-                            leading: (_foundNotes[index].isExternalRes)
-                                ? const CircleAvatar(
-                                    radius: 26,
-                                    backgroundColor: Colors.grey,
-                                    child: Icon(Icons.edit_document),
-                                  )
-                                : SizedBox(
-                                    width: NoteIconSize.width,
-                                    child: Center(
-                                      child: Ink(
-                                        decoration: buttonShapeList,
-                                        child: IconButton(
-                                          icon: _foundNotes[index].isSelected
-                                              ? const Icon(Icons.done)
-                                              : const Icon(Icons.edit_document),
-                                          onPressed: () {
-                                            updateSelectionMode(
-                                              _isSelectionMode,
-                                              index,
-                                            );
-                                            updateSelected(index);
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                            // Select and count selected notes, including whether
+                            // an externally owned note is selected
+                            leading: SizedBox(
+                              width: NoteIconSize.width,
+                              child: Center(
+                                child: Ink(
+                                  decoration: buttonShapeList,
+                                  child: IconButton(
+                                    icon: _foundNotes[index].isSelected
+                                        ? const Icon(Icons.done)
+                                        : const Icon(Icons.edit_document),
+                                    onPressed: () {
+                                      updateSelectionMode(
+                                        _isSelectionMode,
+                                        index,
+                                      );
+                                      updateSelected(index);
+                                    },
                                   ),
+                                ),
+                              ),
+                            ),
                             // Note info
                             title: (_foundNotes[index]
                                     .permissionList
