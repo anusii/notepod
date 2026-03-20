@@ -23,15 +23,18 @@ echo "$result"
 
 # Check the version is updated before we can push!
 
-PVER=$(egrep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+PVER=$(grep -E '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 
 if [ -d snap ]; then
-    SVER=$(egrep '^version:' snap/snapcraft.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+    SVER=$(grep -E '^version:' snap/snapcraft.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 
     if [ "${PVER}" != "${SVER}" ]; then
 	printf "\e[31;1m%s\e[0m\n" "Version mismatch pubspec.yaml (${PVER}) and snap/snapcraft.yaml (${SVER})."
 	echo 'Run `make versions` and then commit.'
 	exit 2
+    else 
+    printf "\e[35;1m%s\e[0m\n" "Version match pubspec.yaml (${PVER}) and snap/snapcraft.yaml (${SVER})."
+	echo 'If desired, bump versions with `make minor_versions` or `make major_versions`, and then commit.'
     fi
 fi
 
