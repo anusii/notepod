@@ -103,6 +103,7 @@ class SaveDialog extends StatelessWidget {
         TextButton(
           child: const Text('Don\'t Save'),
           onPressed: () {
+            Navigator.of(context).pop(); // Dismiss the saving note dialog
             scaffoldController.navigateToSubpage(childPage);
           },
         ),
@@ -110,7 +111,7 @@ class SaveDialog extends StatelessWidget {
         TextButton(
           child: const Text('Cancel'),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(); // Dismiss the saving note dialog
           },
         ),
       ],
