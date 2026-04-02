@@ -77,7 +77,6 @@ parts:
       - binutils
       - clang
       - cmake
-      - git
       - libblkid-dev
       - libgtk-3-dev
       - libjsoncpp-dev
