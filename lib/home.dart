@@ -169,6 +169,7 @@ class AppHomePageState extends State<AppHomePage> {
       themeToggle: const SolidThemeToggleConfig(
         enabled: true,
       ),
+      showNotifications: true,
       aboutConfig: const SolidAboutConfig(
         applicationName: longTitle,
         applicationIcon: Icon(Icons.apps, size: 64),

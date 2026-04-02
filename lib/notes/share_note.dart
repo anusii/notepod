@@ -47,6 +47,10 @@ class ShareNote extends StatefulWidget {
   final bool isExternal;
   final SolidScaffoldController scaffoldController;
 
+  /// Human-readable note title shown in the notification sent to recipients.
+
+  final String? noteTitle;
+
   const ShareNote({
     super.key,
     required this.noteUrl,
@@ -54,6 +58,7 @@ class ShareNote extends StatefulWidget {
     required this.backPage,
     required this.scaffoldController,
     this.isExternal = false,
+    this.noteTitle,
   });
 
   @override
@@ -107,6 +112,7 @@ class ShareNoteState extends State<ShareNote> {
                       resourceName: widget.noteUrl,
                       ownerWebId: widget.noteOwner,
                       isExternalRes: widget.isExternal,
+                      resourceDisplayName: widget.noteTitle,
                     ),
                   ),
                 ],
