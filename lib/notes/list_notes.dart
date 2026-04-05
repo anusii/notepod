@@ -407,26 +407,31 @@ class _ListNotesState extends State<ListNotes> {
                       children: [
                         // Count statement
                         // Match color scheme of sorting TextButtons
-                        selectedCount > 0
-                            ? Text(
-                                'Selected: $selectedCount notes',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                ),
-                              )
-                            : _foundNotes.length > 1 || _foundNotes.isEmpty
-                                ? Text(
-                                    'Found ${_foundNotes.length} notes',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                  )
-                                : Text(
-                                    'Found ${_foundNotes.length} note',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
+                        Flexible(
+                          child: selectedCount > 0
+                              ? Text(
+                                  'Selected: $selectedCount notes',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : _foundNotes.length > 1 || _foundNotes.isEmpty
+                                  ? Text(
+                                      'Found ${_foundNotes.length} notes',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  : Text(
+                                      'Found ${_foundNotes.length} note',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           spacing: (!isNarrow) ? 3.0 : 0,
