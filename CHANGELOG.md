@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ IOS build settings for iOS 26.4 UIScene migration [0.3.12 20260406 jesscmoore]
 + Fix closing of save dialog [0.3.11 20260320 jesscmoore]
 + Make delete inactive if external selected and fix icon [0.3.10 20260319 jesscmoore]
 + Remove redundant shared notes list [0.3.9 20260318 jesscmoore]
