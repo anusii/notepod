@@ -139,6 +139,22 @@ targets:
       - name: "ShellScript - embed"
         basedOnDependencyAnalysis: false
         script: "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n"
+        
+    # Generate Runner/Info.plist
+    info:
+      path: Runner/Info.plist
+      properties:
+        LSApplicationCategoryType: 'public.app-category.productivity'
+        CFBundleDisplayName: '$(APP_DISPLAY_NAME)'
+        CFBundleIconFile: ''
+        NSHumanReadableCopyright: '$(PRODUCT_COPYRIGHT)'
+        NSMainNibFile: 'MainMenu'
+        NSPrincipalClass: 'NSApplication'
+        LSMinimumSystemVersion: '$(MACOSX_DEPLOYMENT_TARGET)'
+        CFBundleVersion: '$(FLUTTER_BUILD_NUMBER)'
+        CFBundleShortVersionString: '$(FLUTTER_BUILD_NAME)'
+        # Specify encryption use
+        ITSAppUsesNonExemptEncryption: 'false'
 
     settings:
       base:
@@ -180,7 +196,7 @@ targets:
         GCC_WARN_UNINITIALIZED_AUTOS: "YES_AGGRESSIVE"
         GCC_WARN_UNUSED_FUNCTION: "YES"
         GCC_WARN_UNUSED_VARIABLE: "YES"
-        INFOPLIST_FILE: "Runner/Info.plist"
+        # INFOPLIST_FILE: "Runner/Info.plist"
         LD_RUNPATH_SEARCH_PATHS: [
             "$(inherited)",
             "@executable_path/../Frameworks"
@@ -399,6 +415,61 @@ targets:
         inputFiles:
           - ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
         script: "\"$FLUTTER_ROOT\"/packages/flutter_tools/bin/xcode_backend.sh embed_and_thin\n"
+        
+    # Generate Runner/Info.plist
+    info:
+      path: Runner/Info.plist
+      properties:
+        CADisableMinimumFrameDurationOnPhone: 'true'
+        CFBundleDevelopmentRegion: '$(DEVELOPMENT_LANGUAGE)'
+        CFBundleDisplayName: '$(APP_DISPLAY_NAME)'
+        CFBundleExecutable: '$(EXECUTABLE_NAME)'
+        CFBundleIdentifier: '$(PRODUCT_BUNDLE_IDENTIFIER)'
+        CFBundleInfoDictionaryVersion: '6.0'
+        CFBundleName: '$(APP_DISPLAY_NAME)'
+        CFBundlePackageType: 'APPL'
+        CFBundleShortVersionString: '$(FLUTTER_BUILD_NAME)'
+        CFBundleSignature: '????'
+        CFBundleVersion: '$(FLUTTER_BUILD_NUMBER)'
+        LSApplicationQueriesSchemes: 
+          - 'https'
+          - 'http'
+        LSRequiresIPhoneOS: 'true'
+        NSAppTransportSecurity: 
+          NSAllowsArbitraryLoads: 'true'
+        # 20260406 jesscmoore: Post migration to UIScene lifecycle. 
+        # See https://flutter.dev/to/uiscene-migration
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: 'false'
+          UISceneConfigurations: 
+            UIWindowSceneSessionRoleApplication: 
+              UISceneClassName: 'UIWindowScene'
+              UISceneConfigurationName: 'flutter'
+              UISceneDelegateClassName: 'FlutterSceneDelegate'
+              UISceneStoryboardFile: 'Main'
+        UIApplicationSupportsIndirectInputEvents: 'true'
+        UIApplicationSupportsIndirectInputEvents: 'true'
+        UILaunchStoryboardName: 'LaunchScreen'
+        UIMainStoryboardFile: 'Main'
+        UISupportedInterfaceOrientations:
+          - 'UIInterfaceOrientationPortrait'
+          - 'UIInterfaceOrientationLandscapeLeft'
+          - 'UIInterfaceOrientationLandscapeRight'
+        UISupportedInterfaceOrientations~ipad:
+          - 'UIInterfaceOrientationPortrait'
+          - 'UIInterfaceOrientationPortraitUpsideDown'
+          - 'UIInterfaceOrientationLandscapeLeft'
+          - 'UIInterfaceOrientationLandscapeRight'
+        # 20260406 jesscmoore: pre iOS 26.4 settings       
+        LSApplicationCategoryType: 'public.app-category.productivity'
+        NSHumanReadableCopyright: '$(PRODUCT_COPYRIGHT)'
+        NSMainNibFile: 'MainMenu'
+        NSPrincipalClass: 'NSApplication'
+        LSMinimumSystemVersion: '$(MACOSX_DEPLOYMENT_TARGET)'
+        # Specify encryption use
+        ITSAppUsesNonExemptEncryption: 'false'
+        
+
 
     settings:
       base:
@@ -445,7 +516,7 @@ targets:
         GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
         GCC_WARN_UNUSED_FUNCTION: YES
         GCC_WARN_UNUSED_VARIABLE: YES
-        INFOPLIST_FILE: Runner/Info.plist
+        # INFOPLIST_FILE: Runner/Info.plist
         SDKROOT: iphoneos
         SWIFT_OBJC_BRIDGING_HEADER: 'Runner/Runner-Bridging-Header.h'
         TARGETED_DEVICE_FAMILY: '1,2' # 1=iPhone, 2=iPad
