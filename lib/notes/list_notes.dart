@@ -611,8 +611,7 @@ class _ListNotesState extends State<ListNotes> {
                                     .contains('read'))
                                 ? Text(
                                     _foundNotes[index].content!.noteTitle,
-                                    maxLines:
-                                        (!isVeryNarrow) ? 1 : 3,
+                                    maxLines: (!isVeryNarrow) ? 1 : 3,
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
