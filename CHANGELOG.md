@@ -32,6 +32,8 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Optimise multi file load from different owners [0.3.14 20260415 jesscmoore]
++ Fix appbar preferences overflow [0.3.13 20260406 tonypioneer]
 + IOS build settings for iOS 26.4 UIScene migration [0.3.12 20260406 jesscmoore]
 + Fix closing of save dialog [0.3.11 20260320 jesscmoore]
 + Make delete inactive if external selected and fix icon [0.3.10 20260319 jesscmoore]
