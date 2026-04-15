@@ -320,12 +320,19 @@ Future<NotesCallResult> getExternalNoteList({
 
       // Retrieve note data
       for (int i = 0; i < notes.length; i++) {
+        final url = notes[i].noteUrl;
+        debugPrint(
+          '${i + 1}: $url',
+        );
         if (extNoteWithContentResults[i] ==
             FileCallStatus.fileAccessForbidden) {
           // Files with access forbidden have note with default null content
           // This can occur if they reference an image that was not also shared.
+          debugPrint('accesss forbidden');
+          // Add to unparseable notes
           fullNotes.add(notes[i]);
         } else if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
+          debugPrint('unparseable');
           unparseableNotes.add(
             SelectedNote(
               noteFileName: notes[i].noteFileName,
@@ -335,10 +342,32 @@ Future<NotesCallResult> getExternalNoteList({
           );
         } else if (extNoteWithContentResults[i] ==
             FileCallStatus.fileNotExists) {
+          debugPrint('file not exists');
           nonExistentNotes.add(notes[i]);
         } else if (extNoteWithContentResults[i] != null) {
+          debugPrint('file load successful');
           // Add note content data to note objects list
           fullNotes.add(extNoteWithContentResults[i]);
+        }
+      }
+
+      if (unparseableNotes.isEmpty && nonExistentNotes.isEmpty) {
+        debugPrint(
+          'All ${fullNotes.length.toString()} external files parsed successfully',
+        );
+      } else {
+        debugPrint(
+          '${fullNotes.length.toString()} external files parsed successfully',
+        );
+        if (unparseableNotes.isNotEmpty) {
+          debugPrint(
+            '${unparseableNotes.length.toString()} external files failed to parse.',
+          );
+        }
+        if (nonExistentNotes.isNotEmpty) {
+          debugPrint(
+            '${nonExistentNotes.length.toString()} external files did not exist.',
+          );
         }
       }
     }
