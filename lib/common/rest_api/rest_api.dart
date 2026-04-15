@@ -62,25 +62,48 @@ Future<NotesCallResult> getOwnNoteList() async {
     // Get file list in owner's Pod
     fileList = await NoteFileHelper().scanFileListDirectory();
 
+    if (fileList.isEmpty) {
+      // Return empty result if no files in Pod
+      debugPrint('No files found!');
+    } else {
+      debugPrint('${fileList.length} user owned files in Pod');
+    }
+
     // Create a list of future functions for reading pod and
     // getting fileUrl
+    // Fetch file URLs in parallel (safe — pure URL construction).
     List<Future<String>> futuresFileUrl = [];
-    List<Future<String>> futuresNoteContentResult = [];
     for (final fileName in fileList) {
       futuresFileUrl.add(
         filenameToResourceUrl(
           fileName: fileName,
         ),
       );
-      futuresNoteContentResult.add(
-        readPod(fileName),
-      );
     }
 
     // Read note file content and fetch file Urls
     List<String> fileUrls = await Future.wait(futuresFileUrl);
-    List<String> noteContentResults =
-        await Future.wait(futuresNoteContentResult);
+
+    // Run readPod() to fetch ttl strings of decrypted book records
+    // The first readPod() call populates IndividualKeyManager._indKeyMap and
+    // KeyManager._masterKey. Both use a null-guard that prevents re-loading,
+    // so once the first call completes it is safe to run the rest in parallel.
+    final List<String> noteContentResults = [];
+    // Wait for the first readPod to complete forming the map of
+    // IndividualKeyRecord objects, one for each file
+    noteContentResults.add(await readPod(fileList.first));
+    if (fileList.length > 1) {
+      final futuresOtherNoteContentResults = [
+        for (final fileName in fileList.skip(1)) readPod(fileName),
+      ];
+      // Synchronously call readPod to return decrypted book records
+      // in turtle format
+      noteContentResults
+          .addAll(await Future.wait(futuresOtherNoteContentResults));
+    }
+
+    // List<String> noteContentResults =
+    //     await Future.wait(futuresNoteContentResult);
 
     // Retrieve note data
     for (int i = 0; i < fileList.length; i++) {
@@ -206,7 +229,9 @@ Future<NotesCallResult> getExternalNoteList({
   List<String> unparseableLogRecords = [];
 
   if (externalNotesLog.isNotEmpty) {
+    debugPrint('${externalNotesLog.keys.length} externally owned files in Pod');
     for (final fileUrl in externalNotesLog.keys) {
+      debugPrint(fileUrl);
       // Each log record of an external file
       final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
           externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
@@ -261,25 +286,44 @@ Future<NotesCallResult> getExternalNoteList({
     final List<SelectedNote> unparseableNotes = [];
     final NotesCallResult results;
 
+    // Run readPod() to fetch ttl strings of decrypted book records
+    final List<dynamic> extNoteWithContentResults =
+        List<dynamic>.filled(notes.length, null);
     if (notes.isNotEmpty) {
-      // Create a list of future functions for reading external Pods
-      List<Future<dynamic>> futuresExtNoteContentResult = [];
-      for (final note in notes) {
-        futuresExtNoteContentResult.add(
-          getExternalNoteContent(
-            note: note,
-          ),
-        );
+      // Group note indices by directory URL so that notes sharing a folder
+      // are fetched with the serial-first-then-parallel pattern (the first
+      // fetch populates that folder's IndividualKeyManager key map).
+      // Different directories are processed sequentially to ensure the key
+      // map is fully loaded before parallel reads begin within each group.
+      final Map<String, List<int>> indicesByDir = {};
+      for (int i = 0; i < notes.length; i++) {
+        final url = notes[i].noteUrl;
+        final dir = url.substring(0, url.lastIndexOf('/') + 1);
+        indicesByDir.putIfAbsent(dir, () => []).add(i);
       }
 
-      List<dynamic> extNoteWithContentResults =
-          await Future.wait(futuresExtNoteContentResult);
+      for (final indices in indicesByDir.values) {
+        // Await first note in this directory to load its key map.
+        extNoteWithContentResults[indices.first] =
+            await getExternalNoteContent(note: notes[indices.first]);
+        // Fetch remaining notes in this directory in parallel.
+        if (indices.length > 1) {
+          final remaining = await Future.wait([
+            for (final i in indices.skip(1))
+              getExternalNoteContent(note: notes[i]),
+          ]);
+          for (int j = 0; j < remaining.length; j++) {
+            extNoteWithContentResults[indices[j + 1]] = remaining[j];
+          }
+        }
+      }
 
       // Retrieve note data
       for (int i = 0; i < notes.length; i++) {
         if (extNoteWithContentResults[i] ==
             FileCallStatus.fileAccessForbidden) {
           // Files with access forbidden have note with default null content
+          // This can occur if they reference an image that was not also shared.
           fullNotes.add(notes[i]);
         } else if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
           unparseableNotes.add(
@@ -367,8 +411,11 @@ Future<dynamic> getExternalNoteContent({
     // File does not exist on the POD
     debugPrint('Resource not found: $e');
     return FileCallStatus.fileNotExists;
-  } on Object catch (e) {
-    debugPrint('Exception details: $e');
-    rethrow;
+  } on Exception catch (e) {
+    // Includes notes that cannot be decrypted (e.g. a note with an embedded
+    // image that has not been shared — no encryption key found in either
+    // ind-keys.ttl or shared-keys.ttl).
+    debugPrint('Exception reading external note ${note.noteUrl}: $e');
+    return FileCallStatus.parsingFail;
   }
 }
