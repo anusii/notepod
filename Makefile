@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Saturday 2026-01-03 16:58:59 +1100 Graham Williams>
+# Time-stamp: <Monday 2026-04-13 13:56:46 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -174,7 +174,7 @@ debin:
 # it will hold up the oher non-interactive builds.
 
 .PHONY: ginstall
-ginstall: upload prod apk appbundle debin
+ginstall: upload prod apk appbundle
 
 .PHONY: ginfo
 ginfo:
@@ -188,3 +188,13 @@ ginfo:
 	else \
 		echo "No bump ID found."; \
 	fi
+
+.PHONY: zip
+zip:
+	rm -f ignore/$(APP)_lib.zip
+	zip -r ignore/$(APP)_lib.zip lib pubspec.yaml
+	open ignore/$(APP)_lib.zip
+
+.PHONY: claude
+claude:
+	bash support/meld_zip_from_claude.sh
