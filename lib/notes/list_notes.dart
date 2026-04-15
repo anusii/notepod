@@ -115,8 +115,11 @@ class _ListNotesState extends State<ListNotes> {
   /// cards to display note items
   late double cardAspectRatio = 2.0;
 
-  /// Boolean describing whether window is narrow
+  /// Screen width category flags derived from SolidScaffoldHelpers.
+  late bool isVeryNarrow;
   late bool isNarrow;
+  late bool isWide;
+  late bool isVeryWide;
 
   @override
   void initState() {
@@ -371,8 +374,14 @@ class _ListNotesState extends State<ListNotes> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Derive whether window is narrow
-        isNarrow = WindowSize().isNarrowWindow(constraints);
+        isVeryNarrow = SolidScaffoldHelpers.isVeryNarrowScreen(constraints);
+        isNarrow = SolidScaffoldHelpers.isNarrowScreen(constraints);
+        isWide = SolidScaffoldHelpers.isWideScreen(constraints);
+        isVeryWide = SolidScaffoldHelpers.isVeryWideScreen(constraints);
+        // debugPrint(
+        //   'isVeryNarrow: $isVeryNarrow, isNarrow: $isNarrow, isWide: $isWide, isVeryWide: $isVeryWide',
+        // );
+
         // Calculate the aspect radio for grid cards
         cardAspectRatio = NoteItemSize().calculateCardAspectRatio(constraints);
         return SizedBox(
@@ -407,29 +416,34 @@ class _ListNotesState extends State<ListNotes> {
                       children: [
                         // Count statement
                         // Match color scheme of sorting TextButtons
-                        selectedCount > 0
-                            ? Text(
-                                'Selected: $selectedCount notes',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                ),
-                              )
-                            : _foundNotes.length > 1 || _foundNotes.isEmpty
-                                ? Text(
-                                    'Found ${_foundNotes.length} notes',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                  )
-                                : Text(
-                                    'Found ${_foundNotes.length} note',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
+                        Flexible(
+                          child: selectedCount > 0
+                              ? Text(
+                                  'Selected: $selectedCount notes',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : _foundNotes.length > 1 || _foundNotes.isEmpty
+                                  ? Text(
+                                      'Found ${_foundNotes.length} notes',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  : Text(
+                                      'Found ${_foundNotes.length} note',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          spacing: (!isNarrow) ? 3.0 : 0,
+                          spacing: (!isVeryNarrow) ? 3.0 : 0,
                           children: [
                             // Multiple note delete button
                             // Only display multi note delete
@@ -449,7 +463,7 @@ class _ListNotesState extends State<ListNotes> {
                                 isExtFileSelected: _isExtFileSelected,
                               ),
                             ],
-                            // Title Sort Label and Button
+                            // Title sort — always visible.
                             TextButton.icon(
                               onPressed: () {
                                 _sortByTitle(!_sortTitleAscending);
@@ -464,25 +478,26 @@ class _ListNotesState extends State<ListNotes> {
                               ),
                               iconAlignment: IconAlignment.end,
                             ),
-                            // Date Sort Label and Button
-                            TextButton.icon(
-                              onPressed: () {
-                                _sortByModDate(!_sortModDateAscending);
-                              },
-                              icon: Icon(
-                                _sortModDateAscending
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
+                            // Date sort — hidden on very narrow screens
+                            // to prevent overflow.
+                            if (!isVeryNarrow) ...[
+                              TextButton.icon(
+                                onPressed: () {
+                                  _sortByModDate(!_sortModDateAscending);
+                                },
+                                icon: Icon(
+                                  _sortModDateAscending
+                                      ? Icons.arrow_drop_down
+                                      : Icons.arrow_drop_up,
+                                ),
+                                label: Text(
+                                  isNarrow ? 'Date' : 'Date Modified',
+                                ),
+                                iconAlignment: IconAlignment.end,
                               ),
-                              label: Text(
-                                (!isNarrow) ? 'Date Modified' : 'Date',
-                              ),
-                              iconAlignment: IconAlignment.end,
-                            ),
-                            // Filename Sort Label and Button
-                            // Only display filename sort
-                            // when window is not narrow
-                            if (!isNarrow) ...[
+                            ],
+                            // Filename sort — only on medium or wider screens.
+                            if (!isVeryNarrow && !isNarrow) ...[
                               TextButton.icon(
                                 onPressed: () {
                                   _sortByFilename(!_sortFilenameAscending);
@@ -596,15 +611,14 @@ class _ListNotesState extends State<ListNotes> {
                                     .contains('read'))
                                 ? Text(
                                     _foundNotes[index].content!.noteTitle,
-                                    maxLines:
-                                        (!isNarrow) ? 1 : 3, // Limit lines
+                                    maxLines: (!isVeryNarrow) ? 1 : 3,
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text(''),
                             // Note item subtitle
                             subtitle: NoteItemSubtitle(
                               note: _foundNotes[index],
-                              isNarrow: isNarrow,
+                              isNarrow: isVeryNarrow,
                             ),
                             // Define width to avoid consuming full width
                             trailing: SizedBox(
