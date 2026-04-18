@@ -1,7 +1,7 @@
 name: notepod
 description: 'Privacy preserving note taking app using PODs.'
 publish_to: 'none'
-version: 0.3.14+10
+version: 0.3.15+10
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -38,7 +38,7 @@ dependency_overrides:
     # path: ../solidpod/
     git:
       url: https://github.com/anusii/solidpod.git
-      ref: tony/261_user_profile # jess/633_key_finding # dev
+      ref: tony/261_user_profile # dev
   solidui:
     # path: ../solidui/
     git:
