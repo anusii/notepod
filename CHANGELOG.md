@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Update solidpod to dev for key loading fix [0.3.15 20260418 jesscmoore]
 + Optimise multi file load from different owners [0.3.14 20260415 jesscmoore]
 + Fix appbar preferences overflow [0.3.13 20260406 tonypioneer]
 + IOS build settings for iOS 26.4 UIScene migration [0.3.12 20260406 jesscmoore]
