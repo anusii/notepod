@@ -1,12 +1,12 @@
 /// App-wide constants.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Friday 2026-04-24 05:28:31 +1000 Graham Williams>
+///
+/// Copyright (C) 2023-2026, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0
-//
-// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,6 +22,9 @@
 // this program.  If not, see <https://opensource.org/license/gpl-3-0>.
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
+
+// Add the library directive as we have doc entries above. We publish the above
+// meta doc lines in the docs.
 
 library;
 

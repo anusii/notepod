@@ -1,8 +1,8 @@
 /// NotePod - The application's home page.
 ///
-// Time-stamp: <Thursday 2026-04-23 10:26:07 +1000 Graham Williams>
+// Time-stamp: <Friday 2026-04-24 05:26:11 +1000 Graham Williams>
 ///
-/// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
+/// Copyright (C) 2024-2026, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///

@@ -1,8 +1,8 @@
 /// A stateful widget for sharing a note owned by the user.
 ///
-// Time-stamp: <Thursday 2026-04-23 15:24:30 +1000 Graham Williams>
+// Time-stamp: <Friday 2026-04-24 05:25:27 +1000 Graham Williams>
 ///
-/// Copyright (C) 2023-2025, Software Innovation Institute, ANU
+/// Copyright (C) 2023-2026, Software Innovation Institute, ANU
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
