@@ -1,6 +1,6 @@
 /// NotePod - The application's home page.
 ///
-// Time-stamp: <Friday 2025-08-15 09:14:37 +1000 Graham Williams>
+// Time-stamp: <Thursday 2026-04-23 10:26:07 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
 ///
@@ -32,6 +32,7 @@ import 'package:solidui/solidui.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
+import 'package:notepod/notes/import_export_screen.dart.~1~';
 import 'package:notepod/notes/new_note.dart';
 
 class AppHomePage extends StatefulWidget {
@@ -148,6 +149,13 @@ class AppHomePageState extends State<AppHomePage> {
             scaffoldController: scaffoldController,
           ),
           tooltip: newNoteToolTip,
+        ),
+        // Import / Export
+        SolidMenuItem(
+          title: importExportTitle,
+          icon: Icons.import_export,
+          child: ImportExportScreen(notes: const []),
+          tooltip: importExportToolTip,
         ),
       ],
       statusBar: SolidStatusBarConfig(

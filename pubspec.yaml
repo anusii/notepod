@@ -22,7 +22,10 @@ dependencies:
     sdk: flutter
   flutter_form_builder: ^10.0.1
   form_builder_validators: ^11.1.2
+  file_picker: ^11.0.2
   intl: any
+  pdf: ^3.11.1
+  printing: ^5.13.1
   new_loading_indicator: ^1.0.2
   markdown_toolbar: ^0.5.0
   markdown_tooltip: ^0.0.10

@@ -93,6 +93,10 @@ const String combinedNotesTitle = 'Notes';
 const String combinedNotesExplanation = 'accessible to me';
 const String combinedNotesToolTip = 'Go to notes accessible to me';
 
+const String importExportTitle = 'Import / Export';
+const String importExportToolTip = '**Import / Export**\n\n'
+    'Import notes from a JSON backup, or export your notes to JSON or PDF.';
+
 /// Note list messages
 class NoteListMsg {
   /// Message displayed when corrupt files found
