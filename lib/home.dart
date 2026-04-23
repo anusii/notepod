@@ -183,6 +183,7 @@ class AppHomePageState extends State<AppHomePage> {
         applicationLegalese: appOwner,
         text: aboutText,
       ),
+      enableProfile: true,
       body: widget.childPage,
     );
   }
