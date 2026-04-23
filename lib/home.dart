@@ -30,9 +30,9 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/notes/import_export_screen.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
-import 'package:notepod/notes/import_export_screen.dart.~1~';
 import 'package:notepod/notes/new_note.dart';
 
 class AppHomePage extends StatefulWidget {
@@ -151,10 +151,10 @@ class AppHomePageState extends State<AppHomePage> {
           tooltip: newNoteToolTip,
         ),
         // Import / Export
-        SolidMenuItem(
+        const SolidMenuItem(
           title: importExportTitle,
           icon: Icons.import_export,
-          child: ImportExportScreen(notes: const []),
+          child: ImportExportScreen(),
           tooltip: importExportToolTip,
         ),
       ],
