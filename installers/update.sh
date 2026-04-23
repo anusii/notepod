@@ -107,7 +107,7 @@ if [[ "${status}" == "completed" ]]; then
 	echo  "Archive as installers/ARCHIVE/${fname}"
 	mv -f ${fname} ARCHIVE/
 	echo  "Install locally from installers/ARCHIVE/${fname}"
-	wajig install ARCHIVE/$(APP)_$(VER)_amd64.deb
+	wajig install ARCHIVE/${fname}
     fi
 
     echo ""
@@ -353,6 +353,9 @@ if [[ "${status}" == "completed" ]]; then
     fi
 
     echo ""
+
+    echo '******************** FINISHED.'
+
 
 else
 
