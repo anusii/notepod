@@ -106,6 +106,8 @@ if [[ "${status}" == "completed" ]]; then
 	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${TARGET}"
 	echo  "Archive as installers/ARCHIVE/${fname}"
 	mv -f ${fname} ARCHIVE/
+	echo  "Install locally from installers/ARCHIVE/${fname}"
+	wajig install ARCHIVE/${fname}
     fi
 
     echo ""
@@ -351,6 +353,9 @@ if [[ "${status}" == "completed" ]]; then
     fi
 
     echo ""
+
+    echo '******************** FINISHED.'
+
 
 else
 
