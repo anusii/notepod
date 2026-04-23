@@ -1,6 +1,6 @@
 /// ImportExportScreen — import from JSON and export to JSON / PDF.
 ///
-// Time-stamp: <Thursday 2026-04-23 10:23:29 +1000 Graham Williams>
+// Time-stamp: <2026-04-23>
 ///
 /// Copyright (C) 2026, Togaware Pty Ltd
 ///
@@ -16,16 +16,17 @@ import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:solidui/solidui.dart';
 
-import 'package:notepod/models/note.dart';
-import 'package:notepod/models/note_content.dart';
+import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:notepod/widgets/err_card.dart';
 
-// ── Action card widget ────────────────────────────────────────────────────────
+// ── Action card ───────────────────────────────────────────────────────────────
 
 class _ActionCard extends StatelessWidget {
   final IconData icon;
@@ -107,28 +108,28 @@ class _MessageBanner extends StatelessWidget {
 // ── Main screen ───────────────────────────────────────────────────────────────
 
 class ImportExportScreen extends StatefulWidget {
-  /// All notes available in the app for export.
-  final List<OwnNote> notes;
-
-  /// Called after a successful import so the parent can refresh.
-  final VoidCallback? onImported;
-
-  const ImportExportScreen({
-    super.key,
-    required this.notes,
-    this.onImported,
-  });
+  const ImportExportScreen({super.key});
 
   @override
   State<ImportExportScreen> createState() => _ImportExportScreenState();
 }
 
 class _ImportExportScreenState extends State<ImportExportScreen> {
+  /// Notes loaded from the Pod — populated by [_notesFuture].
+  late final Future<NotesCallResult> _notesFuture;
+  List<OwnNote> _notes = [];
+
   bool _loading = false;
   String? _importMsg;
   bool _importError = false;
   String? _exportMsg;
   bool _exportError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _notesFuture = getOwnNoteList();
+  }
 
   void _setImportMsg(String msg, {bool error = false}) => setState(() {
         _importMsg = msg;
@@ -157,18 +158,18 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       _exportMsg = null;
     });
     try {
-      // Serialise to a simple list of title + content.
-      final data = widget.notes.map((n) {
-        final c = n.content;
-        return {
-          'title': c?.noteTitle ?? n.noteFileName,
-          'created': c?.createdDateTime ?? '',
-          'modified': c?.modifiedDateTime ?? '',
-          'content': c?.noteContent ?? '',
-          'fileName': n.noteFileName,
-          'owner': n.noteOwner,
-        };
-      }).toList();
+      final data = _notes
+          .map(
+            (n) => {
+              'title': n.content?.noteTitle ?? n.noteFileName,
+              'created': n.content?.createdDateTime ?? '',
+              'modified': n.content?.modifiedDateTime ?? '',
+              'content': n.content?.noteContent ?? '',
+              'fileName': n.noteFileName,
+              'owner': n.noteOwner,
+            },
+          )
+          .toList();
       final json = const JsonEncoder.withIndent('  ').convert(data);
       final bytes = utf8.encode(json);
       final fileName = 'notepod_backup_${_ts()}.json';
@@ -191,7 +192,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       debugPrint('[Export JSON] $e\n$st');
       _setExportMsg('Export failed: $e', error: true);
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -221,21 +222,70 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       }
       final List<dynamic> raw = jsonDecode(utf8.decode(bytes));
       _setImportMsg(
-        'Loaded ${raw.length} note${raw.length == 1 ? '' : 's'} from '
+        'Read ${raw.length} note${raw.length == 1 ? '' : 's'} from '
         '"${file.name}".\n\n'
-        'To add these notes to your Pod, paste the content into new notes manually. '
-        'Full automated import into the Pod requires Pod write access during this session.',
+        'To restore notes to your Pod, copy the content into new notes.',
       );
-      widget.onImported?.call();
     } catch (e, st) {
       debugPrint('[Import JSON] $e\n$st');
       _setImportMsg('Import failed: $e', error: true);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  // ── Markdown export ─────────────────────────────────────────────────────────
+
+  Future<void> _exportMarkdown() async {
+    setState(() {
+      _loading = true;
+      _exportMsg = null;
+    });
+    try {
+      final buf = StringBuffer();
+      for (final note in _notes) {
+        final c = note.content;
+        final title = c?.noteTitle ?? note.noteFileName;
+        buf.writeln('# $title');
+        buf.writeln();
+        if (c?.createdDateTime.isNotEmpty == true) {
+          buf.writeln('*Created: ${c!.createdDateTime}*  ');
+        }
+        if (c?.modifiedDateTime.isNotEmpty == true) {
+          buf.writeln('*Modified: ${c!.modifiedDateTime}*');
+        }
+        buf.writeln();
+        buf.writeln(c?.noteContent ?? '');
+        buf.writeln();
+        buf.writeln('---');
+        buf.writeln();
+      }
+      final bytes = utf8.encode(buf.toString());
+      final fileName = 'notepod_notes_${_ts()}.md';
+
+      if (kIsWeb) {
+        _setExportMsg('File export is not supported on web.', error: true);
+        return;
+      }
+      final savePath = await FilePicker.saveFile(
+        dialogTitle: 'Save Markdown file',
+        fileName: fileName,
+        type: FileType.custom,
+        allowedExtensions: ['md'],
+      );
+      if (savePath != null) {
+        await File(savePath).writeAsBytes(bytes);
+        _setExportMsg('Saved to $savePath');
+      }
+    } catch (e, st) {
+      debugPrint('[Export Markdown] $e\n$st');
+      _setExportMsg('Export failed: $e', error: true);
     } finally {
       setState(() => _loading = false);
     }
   }
 
-  // ── PDF export ──────────────────────────────────────────────────────────────
+  // ── PDF export (Markdown-aware) ───────────────────────────────────────────
 
   Future<void> _exportPdf() async {
     setState(() {
@@ -245,18 +295,18 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
     try {
       final now = DateTime.now();
       final dateStr = DateFormat('d MMMM yyyy').format(now);
+      final notes = _notes;
       final doc = pw.Document();
-      final notes = widget.notes;
 
       doc.addPage(
         pw.MultiPage(
           pageFormat: PdfPageFormat.a4,
           margin: const pw.EdgeInsets.all(40),
-          header: (ctx) => pw.Column(
+          header: (_) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Text(
-                'NotePod — Notes Export',
+                'NotePod - Notes Export',
                 style: pw.TextStyle(
                   fontSize: 18,
                   fontWeight: pw.FontWeight.bold,
@@ -274,36 +324,30 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               pw.SizedBox(height: 4),
             ],
           ),
-          build: (ctx) => [
+          build: (_) => [
             for (final note in notes) ...[
-              pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Text(
-                    note.content?.noteTitle ?? note.noteFileName,
-                    style: pw.TextStyle(
-                      fontSize: 13,
-                      fontWeight: pw.FontWeight.bold,
-                    ),
-                  ),
-                  if (note.content?.createdDateTime.isNotEmpty == true)
-                    pw.Text(
-                      'Created: ${note.content!.createdDateTime}',
-                      style: const pw.TextStyle(
-                        fontSize: 9,
-                        color: PdfColors.grey600,
-                      ),
-                    ),
-                  pw.SizedBox(height: 4),
-                  pw.Text(
-                    note.content?.noteContent ?? '',
-                    style: const pw.TextStyle(fontSize: 10),
-                  ),
-                  pw.SizedBox(height: 16),
-                  pw.Divider(color: PdfColors.grey300),
-                  pw.SizedBox(height: 8),
-                ],
+              // Note title header.
+              pw.Text(
+                note.content?.noteTitle ?? note.noteFileName,
+                style: pw.TextStyle(
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
+              if (note.content?.createdDateTime.isNotEmpty == true)
+                pw.Text(
+                  'Created: ${note.content!.createdDateTime}',
+                  style: const pw.TextStyle(
+                    fontSize: 9,
+                    color: PdfColors.grey600,
+                  ),
+                ),
+              pw.SizedBox(height: 6),
+              // Render Markdown body as formatted pw widgets.
+              ..._markdownToPdf(note.content?.noteContent ?? ''),
+              pw.SizedBox(height: 12),
+              pw.Divider(color: PdfColors.grey300),
+              pw.SizedBox(height: 10),
             ],
           ],
         ),
@@ -334,14 +378,283 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       debugPrint('[Export PDF] $e\n$st');
       _setExportMsg('PDF export failed: $e', error: true);
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
   }
 
+  // ── Markdown → pw widget list ─────────────────────────────────────────────
+
+  /// Parses a Markdown string and returns a list of [pw.Widget]s suitable
+  /// for use inside a [pw.MultiPage] build list.
+  List<pw.Widget> _markdownToPdf(String markdown) {
+    // Convert GFM task list syntax to readable ASCII before parsing,
+    // since the basic markdown parser doesn't handle checkboxes.
+    final preprocessed = markdown
+        .replaceAll(RegExp(r'- \[x\]', caseSensitive: false), '- [x]')
+        .replaceAll('- [ ]', '- [ ]');
+    final doc = md.Document(encodeHtml: false);
+    final nodes = doc.parseLines(preprocessed.split('\n'));
+    final widgets = <pw.Widget>[];
+    for (final node in nodes) {
+      widgets.addAll(_nodeToWidgets(node));
+    }
+    return widgets;
+  }
+
+  List<pw.Widget> _nodeToWidgets(md.Node node) {
+    if (node is md.Text) {
+      final text = node.text.trim();
+      if (text.isEmpty) return [];
+      return [
+        pw.Text(text, style: const pw.TextStyle(fontSize: 10)),
+        pw.SizedBox(height: 3),
+      ];
+    }
+
+    if (node is md.Element) {
+      switch (node.tag) {
+        // ── Headings ────────────────────────────────────────────────────
+        case 'h1':
+          return [
+            pw.SizedBox(height: 6),
+            pw.Text(
+              _textContent(node),
+              style: pw.TextStyle(
+                fontSize: 14,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 3),
+          ];
+        case 'h2':
+          return [
+            pw.SizedBox(height: 5),
+            pw.Text(
+              _textContent(node),
+              style: pw.TextStyle(
+                fontSize: 12,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 3),
+          ];
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
+          return [
+            pw.SizedBox(height: 4),
+            pw.Text(
+              _textContent(node),
+              style: pw.TextStyle(
+                fontSize: 10,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 2),
+          ];
+
+        // ── Paragraph ───────────────────────────────────────────────────
+        case 'p':
+          final spans = _inlineSpans(node);
+          return [
+            pw.RichText(
+              text: pw.TextSpan(
+                children: spans,
+                style: const pw.TextStyle(fontSize: 10),
+              ),
+            ),
+            pw.SizedBox(height: 5),
+          ];
+
+        // ── Horizontal rule ─────────────────────────────────────────────
+        case 'hr':
+          return [
+            pw.SizedBox(height: 4),
+            pw.Divider(color: PdfColors.grey400),
+            pw.SizedBox(height: 4),
+          ];
+
+        // ── Blockquote ──────────────────────────────────────────────────
+        case 'blockquote':
+          return [
+            pw.Container(
+              margin: const pw.EdgeInsets.only(left: 12),
+              padding: const pw.EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+              decoration: const pw.BoxDecoration(
+                border: pw.Border(
+                  left: pw.BorderSide(color: PdfColors.grey400, width: 2),
+                ),
+              ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  for (final child in node.children ?? <md.Node>[])
+                    ...(_nodeToWidgets(child)),
+                ],
+              ),
+            ),
+            pw.SizedBox(height: 4),
+          ];
+
+        // ── Code block ──────────────────────────────────────────────────
+        case 'pre':
+          return [
+            pw.Container(
+              padding: const pw.EdgeInsets.all(8),
+              decoration: const pw.BoxDecoration(
+                color: PdfColors.grey100,
+                borderRadius: pw.BorderRadius.all(pw.Radius.circular(4)),
+              ),
+              child: pw.Text(
+                _textContent(node),
+                style: pw.TextStyle(
+                  fontSize: 9,
+                  font: pw.Font.courier(),
+                ),
+              ),
+            ),
+            pw.SizedBox(height: 5),
+          ];
+
+        // ── Lists ────────────────────────────────────────────────────────
+        case 'ul':
+        case 'ol':
+          final isOrdered = node.tag == 'ol';
+          final items = (node.children ?? <md.Node>[])
+              .whereType<md.Element>()
+              .where((e) => e.tag == 'li')
+              .toList();
+          return [
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < items.length; i++) ...[
+                  pw.Row(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.SizedBox(
+                        width: 16,
+                        child: pw.Text(
+                          isOrdered ? '${i + 1}.' : '-',
+                          style: const pw.TextStyle(fontSize: 10),
+                        ),
+                      ),
+                      pw.Expanded(
+                        child: pw.RichText(
+                          text: pw.TextSpan(
+                            children: _inlineSpans(items[i]),
+                            style: const pw.TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  pw.SizedBox(height: 2),
+                ],
+              ],
+            ),
+            pw.SizedBox(height: 4),
+          ];
+
+        default:
+          // Fallback: render children recursively.
+          return [
+            for (final child in node.children ?? <md.Node>[])
+              ...(_nodeToWidgets(child)),
+          ];
+      }
+    }
+    return [];
+  }
+
+  /// Recursively build inline [pw.TextSpan]s for styled text.
+  List<pw.TextSpan> _inlineSpans(md.Node node) {
+    if (node is md.Text) {
+      if (node.text.isEmpty) return [];
+      return [pw.TextSpan(text: node.text)];
+    }
+    if (node is md.Element) {
+      final childSpans = [
+        for (final c in node.children ?? <md.Node>[]) ..._inlineSpans(c),
+      ];
+      switch (node.tag) {
+        case 'strong':
+          return childSpans
+              .map(
+                (s) => pw.TextSpan(
+                  text: s.text,
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                ),
+              )
+              .toList();
+        case 'em':
+          return childSpans
+              .map(
+                (s) => pw.TextSpan(
+                  text: s.text,
+                  style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
+                ),
+              )
+              .toList();
+        case 'code':
+          return childSpans
+              .map(
+                (s) => pw.TextSpan(
+                  text: s.text,
+                  style: pw.TextStyle(
+                    font: pw.Font.courier(),
+                    fontSize: 9,
+                    color: PdfColors.grey800,
+                  ),
+                ),
+              )
+              .toList();
+        default:
+          return childSpans;
+      }
+    }
+    return [];
+  }
+
+  /// Extract all plain text from a node tree.
+  String _textContent(md.Node node) {
+    if (node is md.Text) return node.text;
+    if (node is md.Element) {
+      return (node.children ?? <md.Node>[]).map(_textContent).join();
+    }
+    return '';
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<NotesCallResult>(
+      future: _notesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            snapshot.connectionState == ConnectionState.active) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError || !snapshot.hasData) {
+          return errCard(context, 'Could not load notes.');
+        }
+
+        // Cache notes for export operations.
+        _notes = snapshot.data!.notes ?? [];
+
+        return _buildContent(context);
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final count = widget.notes.length;
+    final count = _notes.length;
 
     return Align(
       alignment: Alignment.topLeft,
@@ -350,7 +663,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Import ──────────────────────────────────────────────────
+            // ── Import ────────────────────────────────────────────────
             Text('Import', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
@@ -370,7 +683,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               onTap: _importJson,
             ),
 
-            // ── Export ──────────────────────────────────────────────────
+            // ── Export ────────────────────────────────────────────────
             const SizedBox(height: 32),
             Text(
               'Export / Backup',
@@ -382,24 +695,34 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
             ],
             const SizedBox(height: 8),
             Text(
-              'Save a timestamped backup of your notes.',
+              'Save a timestamped backup of your $count note'
+              '${count == 1 ? '' : 's'}.',
               style: TextStyle(color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
             _ActionCard(
               icon: Icons.download_outlined,
               title: 'Export to JSON',
-              subtitle:
-                  'Saves all $count note${count == 1 ? '' : 's'} as a JSON backup.',
+              subtitle: 'Saves all $count note${count == 1 ? '' : 's'} '
+                  'as a JSON backup.',
               loading: _loading,
               onTap: _exportJson,
             ),
             const SizedBox(height: 12),
             _ActionCard(
+              icon: Icons.description_outlined,
+              title: 'Export to Markdown',
+              subtitle: 'Save all $count note${count == 1 ? '' : 's'} '
+                  'as a single .md file.',
+              loading: _loading,
+              onTap: _exportMarkdown,
+            ),
+            const SizedBox(height: 12),
+            _ActionCard(
               icon: Icons.picture_as_pdf_outlined,
               title: 'Export to PDF',
-              subtitle:
-                  'Save or print $count note${count == 1 ? '' : 's'} as a PDF.',
+              subtitle: 'Save or print all $count note${count == 1 ? '' : 's'} '
+                  'as a PDF.',
               loading: _loading,
               onTap: _exportPdf,
             ),
