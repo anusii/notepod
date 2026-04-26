@@ -49,27 +49,6 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 class NoteFileHelper with PodOperationsMixin {
   NoteFileHelper();
 
-  /// Scans the note pod directory for note files.
-  ///
-  /// Arguments: none.
-  /// Returns: list of pod owner's files.
-
-  Future<List<String>> scanFileListDirectory() async {
-    try {
-      final dirUrl = await getDirUrl(basePath);
-      final resources = await getResourcesInContainer(dirUrl);
-
-      return resources.files
-          .where((f) => f.startsWith(noteFileNamePrefix) && f.endsWith('.ttl'))
-          .toList();
-    } catch (e) {
-      if (!isFileNotFoundError(e) && !isPermissionError(e)) {
-        // Error scanning directory.
-      }
-      return [];
-    }
-  }
-
   /// Safely deletes a note file
   ///
   /// Arguments:
