@@ -32,7 +32,7 @@ import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/operations.dart';
+import 'package:notepod/services/operations.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
@@ -97,80 +97,6 @@ class NoteFileHelper with PodOperationsMixin {
       }
       debugPrint('Error: $e');
       rethrow;
-    }
-  }
-
-  /// Parses external note file details from latest log map
-  /// entry for note file.
-  ///
-  /// Arguments:
-  /// - [logRecordOfFile] - Log record of the external
-  /// note file shared to user.
-  /// - [fileUrl] - URL of external file shared to user.
-  ///
-  /// Returns: parsed map of details of external note file.
-
-  static Note? extFileDetailsFromLog({
-    required Map logRecordOfFile,
-    required String fileUrl,
-  }) {
-    try {
-      String? sharedTime;
-      String? noteUrl;
-      String? noteFileName;
-      String? noteOwner;
-      String? permissionGranter;
-      String? permissionRecepient;
-      String? permissionType;
-      String? permissionList;
-
-      // Extract external note details information
-
-      noteFileName = fileUrl.split('/').last;
-      // debugPrint('noteFileName: $noteFileName');
-
-      for (final entry in logRecordOfFile.entries) {
-        final predicate = entry.key.toString();
-        final value = entry.value.toString();
-        // debugPrint('predicate: $predicate, value: $value');
-
-        if (predicate.contains(PermissionLogLiteral.logtime.toString())) {
-          sharedTime = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.resource.toString())) {
-          noteUrl = value;
-        } else if (predicate.contains(PermissionLogLiteral.owner.toString())) {
-          noteOwner = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.granter.toString())) {
-          permissionGranter = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.recepient.toString())) {
-          permissionRecepient = value;
-        } else if (predicate.contains(PermissionLogLiteral.type.toString())) {
-          permissionType = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.permissions.toString())) {
-          permissionList = value;
-        }
-      }
-
-      // Create the external note details object
-
-      return Note(
-        noteUrl: noteUrl!,
-        noteFileName: noteFileName,
-        noteOwner: noteOwner!,
-        sharedTime: sharedTime!,
-        permissionGranter: permissionGranter!,
-        permissionRecepient: permissionRecepient!,
-        permissionType: permissionType!,
-        permissionList: permissionList!,
-        isExternalRes: true,
-      );
-    } catch (e) {
-      debugPrint('Error: $e');
-      return null;
     }
   }
 

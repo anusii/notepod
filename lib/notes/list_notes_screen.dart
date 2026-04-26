@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
@@ -81,7 +82,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     _scrollController = ScrollController();
 
     // Set future functions to fetch owner's notes and external notes
-    _fetchOwnNotes = getOwnNoteList();
+    _fetchOwnNotes = NoteService().getOwnNoteList();
     _fetchExternalNotes = getExternalNoteList();
   }
 
