@@ -41,7 +41,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/own_note.dart';
 import 'package:notepod/widgets/err_card.dart';
@@ -148,7 +148,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
   @override
   void initState() {
     super.initState();
-    _notesFuture = getOwnNoteList();
+    _notesFuture = NoteService().getOwnNoteList();
   }
 
   void _setImportMsg(String msg, {bool error = false}) => setState(() {

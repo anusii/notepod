@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
@@ -71,7 +71,7 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-    _asyncDataFetch = getOwnNoteList();
+    _asyncDataFetch = NoteService().getOwnNoteList();
     _scrollController = ScrollController();
   }
 

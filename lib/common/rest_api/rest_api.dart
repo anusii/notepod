@@ -29,174 +29,14 @@ import 'package:flutter/material.dart';
 
 import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/common/rest_api/file_helper.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/call_status.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
+import 'package:notepod/services/pod_service.dart';
 import 'package:notepod/utils/turtle/note_serializer.dart';
-
-/// Get the list of user's note objects.
-///
-/// Example:
-/// - `_asyncDataFetch = getOwnNoteList()`
-/// - used to define async function in future call to get user's notes.
-///
-/// Returns: [NotesCallResult] object comprising:
-/// - [notes] - list of [Note] note objects.
-/// - [unparseableNotes] - list of [SelectedNote] objects of
-/// unparseable notes.
-
-Future<NotesCallResult> getOwnNoteList() async {
-  try {
-    final startTime = DateTime.now();
-
-    final List<String> fileList;
-    final List<Note> notes = [];
-    final List<SelectedNote> unparseableNotes = [];
-
-    // Get note owner
-    final String noteOwner = await getWebId() ?? '';
-
-    // Get file list in owner's Pod
-    fileList = await NoteFileHelper().scanFileListDirectory();
-
-    if (fileList.isEmpty) {
-      // Return empty result if no files in Pod
-      debugPrint('No files found!');
-    } else {
-      debugPrint('${fileList.length} user owned files in Pod');
-    }
-
-    // Create a list of future functions for reading pod and
-    // getting fileUrl
-    // Fetch file URLs in parallel (safe — pure URL construction).
-    List<Future<String>> futuresFileUrl = [];
-    for (final fileName in fileList) {
-      futuresFileUrl.add(
-        filenameToResourceUrl(
-          fileName: fileName,
-        ),
-      );
-    }
-
-    // Read note file content and fetch file Urls
-    List<String> fileUrls = await Future.wait(futuresFileUrl);
-
-    // Run readPod() to fetch ttl strings of decrypted book records
-    // The first readPod() call populates IndividualKeyManager._indKeyMap and
-    // KeyManager._masterKey. Both use a null-guard that prevents re-loading,
-    // so once the first call completes it is safe to run the rest in parallel.
-    final List<String> noteContentResults = [];
-    // Wait for the first readPod to complete forming the map of
-    // IndividualKeyRecord objects, one for each file
-    noteContentResults.add(await readPod(fileList.first));
-    if (fileList.length > 1) {
-      final futuresOtherNoteContentResults = [
-        for (final fileName in fileList.skip(1)) readPod(fileName),
-      ];
-      // Synchronously call readPod to return decrypted book records
-      // in turtle format
-      noteContentResults
-          .addAll(await Future.wait(futuresOtherNoteContentResults));
-    }
-
-    // List<String> noteContentResults =
-    //     await Future.wait(futuresNoteContentResult);
-
-    // Retrieve note data
-    for (int i = 0; i < fileList.length; i++) {
-      // Extract ttl data to content data of notes object
-      if (noteContentResults[i].isNotEmpty) {
-        try {
-          // Extract note from turtle string
-          final NoteContent? content;
-          content = TurtleSerializer.noteFromTurtle(
-            noteContentResults[i],
-          );
-
-          if (content != null) {
-            // Add note content data to note objects list
-            // where user = noteOwner
-            notes.add(
-              Note(
-                noteFileName: fileList[i],
-                noteUrl: fileUrls[i],
-                noteOwner: noteOwner,
-                content: content,
-                permissionList: 'append,read,write,control',
-              ),
-            );
-          } else {
-            // Found unparseable file content
-            // Add note that failed parsing to bad notes list
-            unparseableNotes.add(
-              SelectedNote(
-                noteFileName: fileList[i],
-                noteUrl: fileUrls[i],
-                noteOwner: noteOwner,
-              ),
-            );
-            debugPrint('Found unparseable file: ${fileList[i]}');
-          }
-        } catch (e) {
-          // Error deserializing note content
-          debugPrint(e.toString());
-        }
-      } else {
-        // If empty, add to unparseable file object list
-        unparseableNotes.add(
-          SelectedNote(
-            noteFileName: fileList[i],
-            noteUrl: fileUrls[i],
-            noteOwner: noteOwner,
-          ),
-        );
-        debugPrint('Found empty file: ${fileList[i]}');
-      }
-    }
-
-    if (unparseableNotes.isNotEmpty) {
-      debugPrint('Found ${unparseableNotes.length} unparseable or empty files');
-    } else {
-      debugPrint('All owners files parsed successfully!');
-    }
-
-    // Fetch permission lists of who each note is shared with
-    try {
-      final List<Note> fullNotes;
-      final NotesCallResult results;
-
-      final List<String> fileList =
-          notes.map((note) => note.noteFileName).toList();
-
-      final Map<dynamic, dynamic> permissionMaps = await readPermissionFileList(
-        fileList: fileList,
-      );
-
-      fullNotes = notes.addAuthUserLists(permissionMaps: permissionMaps);
-
-      results = NotesCallResult(
-        notes: fullNotes,
-        unparseableNotes: unparseableNotes,
-      );
-      final endTime = DateTime.now();
-      final duration = endTime.difference(startTime);
-      debugPrint('[getOwnNoteList] Load time: ${duration.inMilliseconds} ms');
-
-      return results;
-    } catch (e) {
-      // Error retrieving permission lists of each note
-      debugPrint(e.toString());
-      rethrow;
-    }
-  } catch (e) {
-    // Error finding files
-    debugPrint(e.toString());
-    rethrow;
-  }
-}
 
 /// Get data object of externally owned notes shared with the user.
 ///
@@ -219,66 +59,14 @@ Future<NotesCallResult> getExternalNoteList({
 }) async {
   final startTime = DateTime.now();
 
-  final List<Note> notes = [];
-  // Build list of external notes shared to user
+  // Scan permission log for note files, filtering by prefix and revoke status.
+  final List<Note> notes = await PodService().scanExternalFileLog<Note>(
+    fileNamePrefix: noteFileNamePrefix,
+    parseLogRecord: PodService.extFileDetailsFromLog,
+    hasCurrentAccess: hasCurrentAccess,
+  );
 
-  final Map<dynamic, dynamic> externalNotesLog;
-
-  externalNotesLog = await NoteFileHelper().scanPermLogFile();
-
-  List<String> unparseableLogRecords = [];
-
-  if (externalNotesLog.isNotEmpty) {
-    debugPrint('${externalNotesLog.keys.length} externally owned files in Pod');
-    for (final fileUrl in externalNotesLog.keys) {
-      debugPrint(fileUrl);
-      // Each log record of an external file
-      final Map<PermissionLogLiteral, dynamic> logRecordOfFile =
-          externalNotesLog[fileUrl] as Map<PermissionLogLiteral, dynamic>;
-
-      // Ignore log records of files where access has been
-      // revoked
-      if (hasCurrentAccess &&
-          logRecordOfFile[PermissionLogLiteral.type] == 'revoke') {
-        continue;
-      }
-
-      // Deserialise external note log record
-      try {
-        final Note? note;
-
-        // Extract log record of each external note
-        // where user currently has access
-        // Applies isExternalRes == true to loaded notes
-        note = NoteFileHelper.extFileDetailsFromLog(
-          logRecordOfFile: logRecordOfFile,
-          fileUrl: fileUrl,
-        );
-
-        if (note != null) {
-          // Add log details of note to ExternalNote objects list
-          notes.add(note);
-        } else {
-          // Found unparseable log record
-          // Add to unparseable notes list
-          unparseableLogRecords.add(fileUrl);
-        }
-      } catch (e) {
-        // Error deserializing external note log record
-        debugPrint(e.toString());
-      }
-    }
-  }
-
-  if (unparseableLogRecords.isNotEmpty) {
-    debugPrint(
-      'Found external files with unparseable log records: $unparseableLogRecords',
-    );
-  } else {
-    debugPrint('All log records of external file parsed successfully!');
-  }
-
-  // Fetch and deserialize external note content
+  // Fetch and deserialize external note file content
   // or count bad files according to error type
   try {
     final List<Note> fullNotes = [];
@@ -286,53 +74,28 @@ Future<NotesCallResult> getExternalNoteList({
     final List<SelectedNote> unparseableNotes = [];
     final NotesCallResult results;
 
-    // Run readPod() to fetch ttl strings of decrypted book records
-    final List<dynamic> extNoteWithContentResults =
-        List<dynamic>.filled(notes.length, null);
     if (notes.isNotEmpty) {
-      // Group note indices by directory URL so that notes sharing a folder
-      // are fetched with the serial-first-then-parallel pattern (the first
-      // fetch populates that folder's IndividualKeyManager key map).
-      // Different directories are processed sequentially to ensure the key
-      // map is fully loaded before parallel reads begin within each group.
-      final Map<String, List<int>> indicesByDir = {};
-      for (int i = 0; i < notes.length; i++) {
-        final url = notes[i].noteUrl;
-        final dir = url.substring(0, url.lastIndexOf('/') + 1);
-        indicesByDir.putIfAbsent(dir, () => []).add(i);
-      }
-
-      for (final indices in indicesByDir.values) {
-        // Await first note in this directory to load its key map.
-        extNoteWithContentResults[indices.first] =
-            await getExternalNoteContent(note: notes[indices.first]);
-        // Fetch remaining notes in this directory in parallel.
-        if (indices.length > 1) {
-          final remaining = await Future.wait([
-            for (final i in indices.skip(1))
-              getExternalNoteContent(note: notes[i]),
-          ]);
-          for (int j = 0; j < remaining.length; j++) {
-            extNoteWithContentResults[indices[j + 1]] = remaining[j];
-          }
-        }
-      }
-
-      // Retrieve note data
-      for (int i = 0; i < notes.length; i++) {
-        final url = notes[i].noteUrl;
-        debugPrint(
-          '${i + 1}: $url',
+      // Create a list of future functions for reading external Pods
+      List<Future<dynamic>> futuresExtNotesContentResult = [];
+      for (final note in notes) {
+        futuresExtNotesContentResult.add(
+          getExternalNoteContent(
+            note: note,
+          ),
         );
-        if (extNoteWithContentResults[i] ==
+      }
+
+      List<dynamic> extNotesWithContentResults =
+          await Future.wait(futuresExtNotesContentResult);
+
+      // Retrieve notes file data
+      for (int i = 0; i < notes.length; i++) {
+        if (extNotesWithContentResults[i] ==
             FileCallStatus.fileAccessForbidden) {
-          // Files with access forbidden have note with default null content
-          // This can occur if they reference an image that was not also shared.
-          debugPrint('accesss forbidden');
-          // Add to unparseable notes
+          // Files with access forbidden have notes file with default null content
           fullNotes.add(notes[i]);
-        } else if (extNoteWithContentResults[i] == FileCallStatus.parsingFail) {
-          debugPrint('unparseable');
+        } else if (extNotesWithContentResults[i] ==
+            FileCallStatus.parsingFail) {
           unparseableNotes.add(
             SelectedNote(
               noteFileName: notes[i].noteFileName,
@@ -340,34 +103,12 @@ Future<NotesCallResult> getExternalNoteList({
               noteOwner: notes[i].noteOwner,
             ),
           );
-        } else if (extNoteWithContentResults[i] ==
+        } else if (extNotesWithContentResults[i] ==
             FileCallStatus.fileNotExists) {
-          debugPrint('file not exists');
           nonExistentNotes.add(notes[i]);
-        } else if (extNoteWithContentResults[i] != null) {
-          debugPrint('file load successful');
-          // Add note content data to note objects list
-          fullNotes.add(extNoteWithContentResults[i]);
-        }
-      }
-
-      if (unparseableNotes.isEmpty && nonExistentNotes.isEmpty) {
-        debugPrint(
-          'All ${fullNotes.length.toString()} external files parsed successfully',
-        );
-      } else {
-        debugPrint(
-          '${fullNotes.length.toString()} external files parsed successfully',
-        );
-        if (unparseableNotes.isNotEmpty) {
-          debugPrint(
-            '${unparseableNotes.length.toString()} external files failed to parse.',
-          );
-        }
-        if (nonExistentNotes.isNotEmpty) {
-          debugPrint(
-            '${nonExistentNotes.length.toString()} external files did not exist.',
-          );
+        } else if (extNotesWithContentResults[i] != null) {
+          // Add notes object content data to notes objects list
+          fullNotes.add(extNotesWithContentResults[i]);
         }
       }
     }
@@ -381,7 +122,7 @@ Future<NotesCallResult> getExternalNoteList({
     final endTime = DateTime.now();
     final duration = endTime.difference(startTime);
     debugPrint(
-      '[getExternalNoteList] Load time: ${duration.inMilliseconds} ms',
+      '[getExternalNotesList] Load time: ${duration.inMilliseconds} ms',
     );
 
     return results;
@@ -440,10 +181,9 @@ Future<dynamic> getExternalNoteContent({
     // File does not exist on the POD
     debugPrint('Resource not found: $e');
     return FileCallStatus.fileNotExists;
-  } on Exception catch (e) {
-    // Includes notes that cannot be decrypted (e.g. a note with an embedded
-    // image that has not been shared — no encryption key found in either
-    // ind-keys.ttl or shared-keys.ttl).
+  } on Object catch (e) {
+    // Catches both Exception and Error subclasses (e.g. ArgumentError from
+    // pointycastle when the private key block type is unsupported).
     debugPrint('Exception reading external note ${note.noteUrl}: $e');
     return FileCallStatus.parsingFail;
   }
