@@ -70,36 +70,6 @@ class NoteFileHelper with PodOperationsMixin {
     }
   }
 
-  /// Safely scans the permission log file to retrieve current log entries of external files shared with the user.
-  ///
-  /// Arguments:
-  /// - [context] - The build context.
-  /// - [childPage] - The child widget to return to.
-  ///
-  /// Returns:
-  /// - map of external files with filename as key and details of permissions.
-
-  Future<Map<dynamic, dynamic>> scanPermLogFile() async {
-    try {
-      // SharedResources() parses log ttl to map
-
-      final latestLogMap = await sharedResources();
-
-      if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
-        // Return empty map if sharedResources() failed login
-        return {};
-      }
-
-      return latestLogMap;
-    } catch (e) {
-      if (!isFileNotFoundError(e) && !isPermissionError(e)) {
-        // Error reading permission log
-      }
-      debugPrint('Error: $e');
-      rethrow;
-    }
-  }
-
   /// Safely deletes a note file
   ///
   /// Arguments:
