@@ -51,11 +51,16 @@ extension NotesCallResultExtension on NotesCallResult {
   /// - [results] - Second notes call results object to add to the first notes call results object.
 
   NotesCallResult addCallResults({required NotesCallResult results}) {
-    // Initialise combined results object as this first note call results object.
+    // Initialise combined results object with mutable copies of the lists.
+    // Supports scenarios where users have own notes, notes shared by others
+    // or only one or both of those conditions.
+    // By adding support for scenario when objects inside NotesCallResult
+    // are initially empty, such as if a user does not have any of their
+    // own notes but does have notes that others have shared to them.
     NotesCallResult combinedResults = NotesCallResult(
-      notes: notes,
-      unparseableNotes: unparseableNotes,
-      nonExistentNotes: nonExistentNotes,
+      notes: List.of(notes ?? []),
+      unparseableNotes: List.of(unparseableNotes ?? []),
+      nonExistentNotes: List.of(nonExistentNotes ?? []),
     );
 
     // Add notes lists
