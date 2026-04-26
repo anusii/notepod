@@ -126,13 +126,6 @@ class AppHomePageState extends State<AppHomePage> {
         ],
       ),
       menu: [
-        // All Accessible Notes
-        SolidMenuItem(
-          title: combinedNotesTitle,
-          icon: Icons.view_list,
-          child: ListNotesScreen(scaffoldController: scaffoldController),
-          tooltip: combinedNotesToolTip,
-        ),
         // My Notes
         SolidMenuItem(
           title: myNotesTitle,
@@ -140,6 +133,13 @@ class AppHomePageState extends State<AppHomePage> {
           icon: Icons.person_3,
           child: ListMyNotesScreen(scaffoldController: scaffoldController),
           tooltip: myNotesToolTip,
+        ),
+        // All Accessible Notes
+        SolidMenuItem(
+          title: combinedNotesTitle,
+          icon: Icons.view_list,
+          child: ListNotesScreen(scaffoldController: scaffoldController),
+          tooltip: combinedNotesToolTip,
         ),
         // New Note
         SolidMenuItem(
