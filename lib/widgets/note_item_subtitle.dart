@@ -86,27 +86,27 @@ class NoteItemSubtitle extends StatelessWidget {
           width: 480,
           child: SingleChildScrollView(
             child: Table(
-            columnWidths: const {
-              0: IntrinsicColumnWidth(),
-              1: FlexColumnWidth(),
-            },
-            children: rows.map((r) {
-              return TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 4, 16, 4),
-                    child: Text(
-                      r.label,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+              columnWidths: const {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: rows.map((r) {
+                return TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 4, 16, 4),
+                      child: Text(
+                        r.label,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(r.value),
-                  ),
-                ],
-              );
-            }).toList(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(r.value),
+                    ),
+                  ],
+                );
+              }).toList(),
             ),
           ),
         ),
