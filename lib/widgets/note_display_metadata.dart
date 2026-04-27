@@ -1,8 +1,8 @@
-/// A widget to display note metadata.
+/// A widget to display note metadata in a collapsible panel.
 ///
 // Time-stamp: <Friday 2025-10-14 14:59:05 +1000 Graham Williams>
 ///
-/// Copyright (C) 2025, Software Innovation Institute, ANU
+/// Copyright (C) 2025-2026, Software Innovation Institute, ANU
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
@@ -88,34 +88,50 @@ class DisplayNoteMetadata extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    // Build the list of metadata children — same content as before.
+    final children = <Widget>[
+      if (showFileName && noteFileName.isNotEmpty)
+        ShowFilenameMetadata(filename: noteFileName),
+      if (showDates &&
+          createdDateTime.isNotEmpty &&
+          modifiedDateTime.isNotEmpty)
+        ShowDateMetadata(
+          createdDateTime: createdDateTime,
+          modifiedDateTime: modifiedDateTime,
+        ),
+      if (showSharing)
+        ShowAccessMetadata(
+          noteOwner: noteOwner,
+          permissionGranter: permissionGranter!,
+          permissionList: permissionList!,
+        ),
+      if (showPathInfo && noteUrl.isNotEmpty)
+        ShowPathMetadata(fileUrl: noteUrl),
+      const SizedBox(height: 8),
+    ];
+
+    if (children.isEmpty) return const SizedBox.shrink();
+
     return Container(
-      color: Theme.of(context).colorScheme.onInverseSurface,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // ShowFileName
-          if (showFileName && noteFileName.isNotEmpty)
-            ShowFilenameMetadata(filename: noteFileName),
-          // ShowDates (created and modified)
-          if (showDates &&
-              createdDateTime.isNotEmpty &&
-              modifiedDateTime.isNotEmpty)
-            ShowDateMetadata(
-              createdDateTime: createdDateTime,
-              modifiedDateTime: modifiedDateTime,
-            ),
-          // Show sharing info (owner, provider, access list)
-          if (showSharing)
-            ShowAccessMetadata(
-              noteOwner: noteOwner,
-              permissionGranter: permissionGranter!,
-              permissionList: permissionList!,
-            ),
-          // Show path info (filename and path)
-          if (showPathInfo && noteUrl != '') ShowPathMetadata(fileUrl: noteUrl),
-          const SizedBox(height: 10),
-        ],
+      color: cs.onInverseSurface,
+      child: ExpansionTile(
+        initiallyExpanded: false,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 15),
+        leading: Icon(
+          Icons.info_outline,
+          size: 18,
+          color: cs.onSurfaceVariant,
+        ),
+        title: Text(
+          'Note details',
+          style: TextStyle(
+            fontSize: 13,
+            color: cs.onSurfaceVariant,
+          ),
+        ),
+        children: children,
       ),
     );
   }

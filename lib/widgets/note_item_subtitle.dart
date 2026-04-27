@@ -24,6 +24,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:markdown_tooltip/markdown_tooltip.dart';
+
 import 'package:notepod/models/note.dart';
 import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/utils/misc.dart';
@@ -48,31 +50,112 @@ class NoteItemSubtitle extends StatelessWidget {
         _isNarrow = isNarrow;
 
   final Note _note;
+
+  // ignore: unused_field
   final bool _isNarrow;
+
+  void _showMetadata(BuildContext context) {
+    final n = _note;
+    final rows = <_Row>[];
+
+    rows.add(_Row('File', n.noteFileName));
+    if (n.content != null) {
+      rows.add(_Row('Created', getDateTimeStr(n.content!.createdDateTime)));
+      rows.add(_Row('Modified', getDateTimeStr(n.content!.modifiedDateTime)));
+    }
+    rows.add(_Row('Owner', getId(n.noteOwner)));
+    if (!n.isExternalRes && n.authUserList != null) {
+      rows.add(
+        _Row('Shared with', getRecipNbrStr(n.authUserList!.keys.length)),
+      );
+    }
+    if (n.isExternalRes) {
+      rows.add(_Row('Shared by', getId(n.permissionGranter ?? 'N/A')));
+    }
+    rows.add(_Row('Permissions', n.permissionList));
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          n.content?.noteTitle ?? n.noteFileName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        content: SizedBox(
+          width: 480,
+          child: SingleChildScrollView(
+            child: Table(
+            columnWidths: const {
+              0: IntrinsicColumnWidth(),
+              1: FlexColumnWidth(),
+            },
+            children: rows.map((r) {
+              return TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 4, 16, 4),
+                    child: Text(
+                      r.label,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text(r.value),
+                  ),
+                ],
+              );
+            }).toList(),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      (!_note.isExternalRes)
-          ? 'Filename: ${_note.noteFileName} \n'
-              'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
-              'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
-              'Owner: ${getId(_note.noteOwner)} \n'
-              'Shared with: ${getRecipNbrStr(_note.authUserList!.keys.length)} \n'
-              'Permissions: ${_note.permissionList}'
-          : (_note.permissionList.contains('read'))
-              ? 'Filename: ${_note.noteFileName} \n'
-                  'Created on: ${getDateTimeStr(_note.content!.createdDateTime)} \n'
-                  'Last modified: ${getDateTimeStr(_note.content!.modifiedDateTime)}\n'
-                  'Owner: ${getId(_note.noteOwner)} \n'
-                  'Shared by: ${getId(_note.permissionGranter ?? 'N/A')} \n'
-                  'Permissions: ${_note.permissionList}'
-              : 'Filename: ${_note.noteFileName} \n'
-                  'Owner: ${getId(_note.noteOwner)} \n'
-                  'Shared by: ${getId(_note.permissionGranter ?? 'N/A')} \n'
-                  'Permissions: ${_note.permissionList}',
-      maxLines: (!_isNarrow) ? 6 : 12, // Limit lines
-      overflow: TextOverflow.ellipsis,
+    final cs = Theme.of(context).colorScheme;
+    final modified = _note.content != null
+        ? getDateTimeStr(_note.content!.modifiedDateTime)
+        : '';
+    return Row(
+      children: [
+        if (modified.isNotEmpty)
+          Expanded(
+            child: Text(
+              modified,
+              style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        MarkdownTooltip(
+          message: '**Note details**\n\nTap to view metadata for this note.',
+          child: IconButton(
+            icon: Icon(
+              Icons.info_outline,
+              size: 16,
+              color: cs.onSurfaceVariant.withValues(alpha: 0.6),
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () => _showMetadata(context),
+          ),
+        ),
+      ],
     );
   }
+}
+
+class _Row {
+  final String label;
+  final String value;
+  const _Row(this.label, this.value);
 }
