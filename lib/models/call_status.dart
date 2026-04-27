@@ -44,6 +44,11 @@ enum FileCallStatus {
   /// When file not exists
   fileNotExists('fileNotExists'),
 
+  /// When file cannot be decrypted (e.g. when a shared file was
+  /// shared with a key that cannot be decrypted because the user's
+  /// pod has been re-initialised)
+  fileNotDecryptable('fileNotDecryptable'),
+
   /// When file parsing to deserialise note fails
   parsingFail('parsingFail');
 

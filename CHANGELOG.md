@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Upgrade concurrent list loading with exception handling [0.3.17 20260426 jesscmoore]
 + Add import/export of json and export to pdf and md [0.3.16 20260423 gjw]
 + Update solidpod to dev for key loading fix [0.3.15 20260418 jesscmoore]
 + Optimise multi file load from different owners [0.3.14 20260415 jesscmoore]
