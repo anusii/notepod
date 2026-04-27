@@ -41,9 +41,9 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'package:notepod/services/note_service.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 
 // ── Action card ───────────────────────────────────────────────────────────────
