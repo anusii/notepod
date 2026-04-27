@@ -32,7 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
-+ Shift metadata to available on click [0.3.20 20260427 gjw]
++ Shift metadata to be available on click [0.3.20 20260427 gjw]
 + JSON import now creates the imported notes [0.3.19 20260427 gjw]
 + Fixes to loading empty notes [0.3.18 20260427 jesscmoore]
 + Upgrade concurrent list loading with exception handling [0.3.17 20260426 jesscmoore]
