@@ -24,11 +24,14 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:markdown_tooltip/markdown_tooltip.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/share_note.dart';
+import 'package:notepod/utils/get_id.dart';
+import 'package:notepod/utils/misc.dart';
 import 'package:notepod/widgets/simple_action_button.dart';
 
 /// A [stateless] widget to show trailing buttons in a note
@@ -49,14 +52,95 @@ class NoteItemTrailingButtons extends StatelessWidget {
   final Note _note;
   final SolidScaffoldController _scaffoldController;
 
+  void _showMetadata(BuildContext context) {
+    final n = _note;
+    final rows = <_Row>[];
+
+    rows.add(_Row('File', n.noteFileName));
+    if (n.content != null) {
+      rows.add(_Row('Created', getDateTimeStr(n.content!.createdDateTime)));
+      rows.add(_Row('Modified', getDateTimeStr(n.content!.modifiedDateTime)));
+    }
+    rows.add(_Row('Owner', getId(n.noteOwner)));
+    if (!n.isExternalRes && n.authUserList != null) {
+      rows.add(
+        _Row('Shared with', getRecipNbrStr(n.authUserList!.keys.length)),
+      );
+    }
+    if (n.isExternalRes) {
+      rows.add(_Row('Shared by', getId(n.permissionGranter ?? 'N/A')));
+    }
+    rows.add(_Row('Permissions', n.permissionList));
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          n.content?.noteTitle ?? n.noteFileName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        content: SizedBox(
+          width: 480,
+          child: SingleChildScrollView(
+            child: Table(
+              columnWidths: const {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: rows.map((r) {
+                return TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 4, 16, 4),
+                      child: Text(
+                        r.label,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(r.value),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     List accessList = _note.permissionList.split(',');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       spacing: 5.0,
       children: [
+        // Info button — leftmost, opens metadata dialog
+        MarkdownTooltip(
+          message: '**Note details**\n\nTap to view metadata for this note.',
+          child: IconButton(
+            icon: Icon(
+              Icons.info_outline,
+              size: 16,
+              color: cs.onSurfaceVariant.withValues(alpha: 0.6),
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () => _showMetadata(context),
+          ),
+        ),
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
           SimpleActionButton(
@@ -78,4 +162,10 @@ class NoteItemTrailingButtons extends StatelessWidget {
       ],
     );
   }
+}
+
+class _Row {
+  final String label;
+  final String value;
+  const _Row(this.label, this.value);
 }
