@@ -23,8 +23,8 @@
 library;
 
 import 'package:flutter/material.dart';
-
 import 'package:markdown_tooltip/markdown_tooltip.dart';
+
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/note.dart';
@@ -120,41 +120,38 @@ class NoteItemTrailingButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     List accessList = _note.permissionList.split(',');
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       spacing: 5.0,
       children: [
         // Info button — leftmost, opens metadata dialog
         MarkdownTooltip(
           message: '**Note details**\n\nTap to view metadata for this note.',
-          child: IconButton(
-            icon: Icon(
-              Icons.info_outline,
-              size: 16,
-              color: cs.onSurfaceVariant.withValues(alpha: 0.6),
-            ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
+          child: SimpleActionButton(
+            icon: const Icon(Icons.info_outline),
             onPressed: () => _showMetadata(context),
           ),
         ),
+
         // Share button if control in permissions
         if (accessList.contains('control')) ...[
-          SimpleActionButton(
-            icon: const Icon(Icons.share),
-            childPage: ShareNote(
-              noteUrl: _note.noteUrl,
-              noteOwner: _note.noteOwner,
-              isExternal: _note.isExternalRes,
-              backPage: ListNotesScreen(
+          MarkdownTooltip(
+            message: '**Share note**\n\nTap to share this note.',
+            child: SimpleActionButton(
+              icon: const Icon(Icons.share),
+              childPage: ShareNote(
+                noteUrl: _note.noteUrl,
+                noteOwner: _note.noteOwner,
+                isExternal: _note.isExternalRes,
+                backPage: ListNotesScreen(
+                  scaffoldController: _scaffoldController,
+                ),
                 scaffoldController: _scaffoldController,
               ),
               scaffoldController: _scaffoldController,
             ),
-            scaffoldController: _scaffoldController,
           ),
         ],
         // Open note icon

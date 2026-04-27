@@ -647,12 +647,9 @@ class _ListNotesState extends State<ListNotes> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 120,
-                                  child: NoteItemTrailingButtons(
-                                    note: _foundNotes[index],
-                                    scaffoldController: _scaffoldController,
-                                  ),
+                                NoteItemTrailingButtons(
+                                  note: _foundNotes[index],
+                                  scaffoldController: _scaffoldController,
                                 ),
                               ],
                             ),
