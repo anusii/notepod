@@ -23,8 +23,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:markdown_tooltip/markdown_tooltip.dart';
 
+import 'package:markdown_tooltip/markdown_tooltip.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/models/note.dart';
