@@ -23,6 +23,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:markdown_tooltip/markdown_tooltip.dart';
 
 import 'package:solidui/solidui.dart';
 
@@ -608,19 +609,23 @@ class _ListNotesState extends State<ListNotes> {
                                 SizedBox(
                                   width: NoteIconSize.width,
                                   child: Center(
-                                    child: Ink(
-                                      decoration: buttonShapeList,
-                                      child: IconButton(
-                                        icon: _foundNotes[index].isSelected
-                                            ? const Icon(Icons.done)
-                                            : const Icon(Icons.edit_document),
-                                        onPressed: () {
-                                          updateSelectionMode(
-                                            _isSelectionMode,
-                                            index,
-                                          );
-                                          updateSelected(index);
-                                        },
+                                    child: MarkdownTooltip(
+                                      message:
+                                          '**Select note**\n\nTap to select this note.',
+                                      child: Ink(
+                                        decoration: buttonShapeList,
+                                        child: IconButton(
+                                          icon: _foundNotes[index].isSelected
+                                              ? const Icon(Icons.done)
+                                              : const Icon(Icons.edit_document),
+                                          onPressed: () {
+                                            updateSelectionMode(
+                                              _isSelectionMode,
+                                              index,
+                                            );
+                                            updateSelected(index);
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
