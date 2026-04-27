@@ -32,6 +32,7 @@ import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
@@ -81,7 +82,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
     _scrollController = ScrollController();
 
     // Set future functions to fetch owner's notes and external notes
-    _fetchOwnNotes = getOwnNoteList();
+    _fetchOwnNotes = NoteService().getOwnNoteList();
     _fetchExternalNotes = getExternalNoteList();
   }
 
@@ -113,7 +114,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ownerListResults.addCallResults(results: extListResults);
     final List<Note> notes = results.notes!;
     final List<SelectedNote> unparseableNotes = results.unparseableNotes!;
-    final List<Note> nonExistentNotes = results.nonExistentNotes!;
+    final List<Note> inaccessibleNotes = results.inaccessibleNotes!;
 
     if (unparseableNotes.isNotEmpty) {
       // Show dialog to optionally delete any unparseable notes if found
@@ -128,15 +129,15 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ),
         scaffoldController: _scaffoldController,
       );
-    } else if (nonExistentNotes.isNotEmpty) {
+    } else if (inaccessibleNotes.isNotEmpty) {
       // Show dialog to optionally revoke access to any nonexistent notes if found
       // These are notes that were shared to the user and then deleted
       // without revoking access to the user before deleting the note
       // as such these notes are still in the user's permission log
       // without a revoke entry. The dialog provides an option to
-      // revoke the user's access to these now non existent notes.
+      // revoke the user's access to these now inaccessible notes.
       return NotesRevokeDialog(
-        nonExistentNotes: nonExistentNotes,
+        inaccessibleNotes: inaccessibleNotes,
         childPage: ListNotes(
           notes: notes,
           title: '$combinedNotesTitle ($combinedNotesExplanation)',

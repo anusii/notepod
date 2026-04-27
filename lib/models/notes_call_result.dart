@@ -28,17 +28,25 @@ library;
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/selected_note.dart';
 
-/// Data model for result of get notes list future call
+/// Data model for result of get notes list future call.
+///
+/// Fields:
+/// - [notes] - successfully loaded notes.
+/// - [unparseableNotes] - notes whose TTL content could not be parsed.
+/// - [inaccessibleNotes] - notes that are registered in the permission log but
+///   cannot be accessed, either because the owner deleted the note without
+///   revoking the user's access first, or because the shared encryption key was
+///   created for an earlier key pair and can no longer be decrypted.
 
 class NotesCallResult {
   List<Note>? notes;
   List<SelectedNote>? unparseableNotes;
-  List<Note>? nonExistentNotes;
+  List<Note>? inaccessibleNotes;
 
   NotesCallResult({
     this.notes = const [],
     this.unparseableNotes = const [],
-    this.nonExistentNotes = const [],
+    this.inaccessibleNotes = const [],
   });
 }
 
@@ -51,11 +59,16 @@ extension NotesCallResultExtension on NotesCallResult {
   /// - [results] - Second notes call results object to add to the first notes call results object.
 
   NotesCallResult addCallResults({required NotesCallResult results}) {
-    // Initialise combined results object as this first note call results object.
+    // Initialise combined results object with mutable copies of the lists.
+    // Supports scenarios where users have own notes, notes shared by others
+    // or only one or both of those conditions.
+    // By adding support for scenario when objects inside NotesCallResult
+    // are initially empty, such as if a user does not have any of their
+    // own notes but does have notes that others have shared to them.
     NotesCallResult combinedResults = NotesCallResult(
-      notes: notes,
-      unparseableNotes: unparseableNotes,
-      nonExistentNotes: nonExistentNotes,
+      notes: List.of(notes ?? []),
+      unparseableNotes: List.of(unparseableNotes ?? []),
+      inaccessibleNotes: List.of(inaccessibleNotes ?? []),
     );
 
     // Add notes lists
@@ -68,9 +81,9 @@ extension NotesCallResultExtension on NotesCallResult {
       combinedResults.unparseableNotes!.addAll(results.unparseableNotes!);
     }
 
-    // Add nonExistentNotes lists
-    if (results.nonExistentNotes!.isNotEmpty) {
-      combinedResults.nonExistentNotes!.addAll(results.nonExistentNotes!);
+    // Add inaccessibleNotes lists
+    if (results.inaccessibleNotes!.isNotEmpty) {
+      combinedResults.inaccessibleNotes!.addAll(results.inaccessibleNotes!);
     }
 
     return combinedResults;
