@@ -25,13 +25,13 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/services/note_service.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
