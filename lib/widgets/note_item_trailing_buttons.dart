@@ -124,7 +124,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      spacing: 5.0,
+      spacing: 8.0,
       children: [
         // Info button — leftmost, opens metadata dialog
         MarkdownTooltip(
