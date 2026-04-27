@@ -50,7 +50,7 @@ import 'package:notepod/utils/turtle/note_serializer.dart';
 /// - [notes] - list of [Note] note objects.
 /// - [unparseableNotes] - list of [SelectedNote] objects of
 /// unparseable notes.
-/// - [nonExistentNotes] - list of non-existent [Note] note
+/// - [inaccessibleNotes] - list of non-existent [Note] note
 /// objects, if external files were deleted by their owner without
 /// first revoking access to the user (and other recipients).
 
@@ -70,7 +70,7 @@ Future<NotesCallResult> getExternalNoteList({
   // or count bad files according to error type
   try {
     final List<Note> fullNotes = [];
-    final List<Note> nonExistentNotes = [];
+    final List<Note> inaccessibleNotes = [];
     final List<SelectedNote> unparseableNotes = [];
     final NotesCallResult results;
 
@@ -104,8 +104,15 @@ Future<NotesCallResult> getExternalNoteList({
             ),
           );
         } else if (extNotesWithContentResults[i] ==
-            FileCallStatus.fileNotExists) {
-          nonExistentNotes.add(notes[i]);
+                FileCallStatus.fileNotExists ||
+            extNotesWithContentResults[i] ==
+                FileCallStatus.fileNotDecryptable) {
+          // Files that cannot be decrypted or do not exist have
+          // notes file with default null content, but are counted
+          // as inaccessible rather than unparseable as they were
+          // previously parseable but have become inaccessible
+          // due to deletion or key mismatch after pod re-initialisation
+          inaccessibleNotes.add(notes[i]);
         } else if (extNotesWithContentResults[i] != null) {
           // Add notes object content data to notes objects list
           fullNotes.add(extNotesWithContentResults[i]);
@@ -115,7 +122,7 @@ Future<NotesCallResult> getExternalNoteList({
 
     results = NotesCallResult(
       notes: fullNotes,
-      nonExistentNotes: nonExistentNotes,
+      inaccessibleNotes: inaccessibleNotes,
       unparseableNotes: unparseableNotes,
     );
 
@@ -177,13 +184,17 @@ Future<dynamic> getExternalNoteContent({
       debugPrint(e.toString());
       return FileCallStatus.parsingFail;
     }
+  } on ResourceNotDecryptableException catch (e) {
+    // Shared key cannot be decrypted — key mismatch after pod re-initialisation.
+    debugPrint('Resource not decryptable: $e');
+
+    return FileCallStatus.fileNotDecryptable;
   } on ResourceNotExistException catch (e) {
     // File does not exist on the POD
     debugPrint('Resource not found: $e');
+
     return FileCallStatus.fileNotExists;
   } on Object catch (e) {
-    // Catches both Exception and Error subclasses (e.g. ArgumentError from
-    // pointycastle when the private key block type is unsupported).
     debugPrint('Exception reading external note ${note.noteUrl}: $e');
     return FileCallStatus.parsingFail;
   }

@@ -114,7 +114,7 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ownerListResults.addCallResults(results: extListResults);
     final List<Note> notes = results.notes!;
     final List<SelectedNote> unparseableNotes = results.unparseableNotes!;
-    final List<Note> nonExistentNotes = results.nonExistentNotes!;
+    final List<Note> inaccessibleNotes = results.inaccessibleNotes!;
 
     if (unparseableNotes.isNotEmpty) {
       // Show dialog to optionally delete any unparseable notes if found
@@ -129,15 +129,15 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
         ),
         scaffoldController: _scaffoldController,
       );
-    } else if (nonExistentNotes.isNotEmpty) {
+    } else if (inaccessibleNotes.isNotEmpty) {
       // Show dialog to optionally revoke access to any nonexistent notes if found
       // These are notes that were shared to the user and then deleted
       // without revoking access to the user before deleting the note
       // as such these notes are still in the user's permission log
       // without a revoke entry. The dialog provides an option to
-      // revoke the user's access to these now non existent notes.
+      // revoke the user's access to these now inaccessible notes.
       return NotesRevokeDialog(
-        nonExistentNotes: nonExistentNotes,
+        inaccessibleNotes: inaccessibleNotes,
         childPage: ListNotes(
           notes: notes,
           title: '$combinedNotesTitle ($combinedNotesExplanation)',
