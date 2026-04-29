@@ -30,6 +30,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart' show SolidInviteOthersConfig;
+
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String appChangeLog =
     'https://github.com/anusii/notepod/blob/dev/CHANGELOG.md';
@@ -180,3 +182,48 @@ const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 /// Button shape decoration for list pages
 ShapeDecoration buttonShapeList =
     const ShapeDecoration(color: Colors.grey, shape: CircleBorder());
+
+/// Public URL where NotePod is hosted. Used by the Invite Others
+/// feature to send a working link to the recipient.
+/// TODO: [20260429 tchen] Replace the example URL below with a real URL.
+
+const String appUrl = 'https://notepod.togaware.com';
+
+/// Application-wide Invite Others configuration shared by the
+/// AppBar share button, the App Info dialogue, and the grant
+/// permissions fallback so that users can invite others to set up
+/// their POD and try NotePod.
+
+const SolidInviteOthersConfig inviteOthersConfig = SolidInviteOthersConfig(
+  applicationName: 'NotePod',
+  appUrl: appUrl,
+  appDescription: 'read, write, and share encrypted notes stored on your '
+      'own personal online data store',
+  messageTemplate: '''
+You might like to try the {appName} app, available online here:
+
+{appUrl}
+
+Signing into {appName} will set up your data vault so you can create and share private, encrypted notes with other Solid users.''',
+  subject: 'Try the NotePod app on your Solid POD',
+  tooltip: '''
+
+  **Invite Others**
+
+  Tap to invite someone else to try NotePod. You can copy the
+  invitation to the clipboard or share it through any messaging app
+  installed on your device.
+
+  ''',
+);
+
+const String inviteOthersTitle = 'Invite Others';
+const String inviteOthersToolTip = '''
+
+**Invite Others**
+
+Tap to invite someone else to set up their own POD and try NotePod.
+Sharing notes with another user only works once they have their own
+data vault, so this is a quick way to get them started.
+
+''';
