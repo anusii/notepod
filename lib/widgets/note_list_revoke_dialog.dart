@@ -35,17 +35,20 @@ import 'package:notepod/utils/get_id.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_list_revoke_button.dart';
 
-/// A page listing external note file records which no longer
-/// exist with button to update permission log with 'revoke'
-/// record for all files in the list.
+/// A page listing inaccessible external notes with a button to update the
+/// permission log with a 'revoke' record for each.
+///
+/// Notes are inaccessible when the owner deleted the file without first
+/// revoking the user's access, or when the shared encryption key was created
+/// for an earlier key pair and can no longer be decrypted.
 ///
 /// Arguments:
-/// - [nonExistentNotes] - note list of non-existent files.
+/// - [inaccessibleNotes] - notes that cannot be accessed.
 /// - [childPage] - child widget to return to.
 /// - [scaffoldController] - Controller for the Solid scaffold.
 
 class NotesRevokeDialog extends StatefulWidget {
-  final List<Note> nonExistentNotes;
+  final List<Note> inaccessibleNotes;
   final Widget childPage;
 
   /// Scaffold controller
@@ -53,7 +56,7 @@ class NotesRevokeDialog extends StatefulWidget {
 
   const NotesRevokeDialog({
     super.key,
-    required this.nonExistentNotes,
+    required this.inaccessibleNotes,
     required this.childPage,
     required this.scaffoldController,
   });
@@ -101,7 +104,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
         return SizedBox(
           child: Column(
             children: [
-              // Title and count of non existent notes
+              // Title and count of inaccessible notes
               Container(
                 padding: const EdgeInsets.fromLTRB(15, 10, 10, 0),
                 child: Column(
@@ -136,7 +139,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          NoteListMsg.nonExistentNotesFound,
+                          NoteListMsg.inaccessibleNotesFound,
                           style: titleStyle,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -150,9 +153,9 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                     ),
                     const SizedBox(height: 30),
                     Text(
-                      widget.nonExistentNotes.length > 1
-                          ? 'Found ${widget.nonExistentNotes.length} non-existent notes'
-                          : 'Found ${widget.nonExistentNotes.length} non-existent note',
+                      widget.inaccessibleNotes.length > 1
+                          ? 'Found ${widget.inaccessibleNotes.length} inaccessible notes'
+                          : 'Found ${widget.inaccessibleNotes.length} inaccessible note',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -160,7 +163,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                   ],
                 ),
               ),
-              // List of non existent notes
+              // List of inaccessible notes
               Expanded(
                 child: Scrollbar(
                   thumbVisibility: true,
@@ -173,7 +176,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                       childAspectRatio: cardAspectRatio,
                     ),
                     padding: const EdgeInsets.all(10),
-                    itemCount: widget.nonExistentNotes.length,
+                    itemCount: widget.inaccessibleNotes.length,
                     itemBuilder: (context, index) => Card(
                       child: Container(
                         decoration: const BoxDecoration(
@@ -181,12 +184,12 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'Note Url: ${widget.nonExistentNotes[index].noteUrl}',
+                            'Note Url: ${widget.inaccessibleNotes[index].noteUrl}',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           subtitle: Text(
-                            'Owner: ${getId(widget.nonExistentNotes[index].noteOwner)} \nShared by: ${getId(widget.nonExistentNotes[index].permissionGranter!)} \nPermissions: ${widget.nonExistentNotes[index].permissionList}',
+                            'Owner: ${getId(widget.inaccessibleNotes[index].noteOwner)} \nShared by: ${getId(widget.inaccessibleNotes[index].permissionGranter!)} \nPermissions: ${widget.inaccessibleNotes[index].permissionList}',
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -205,7 +208,7 @@ class _NotesRevokeDialogState extends State<NotesRevokeDialog> {
                   children: [
                     // Note list revoke button
                     NoteListRevokeButton(
-                      nonExistentNotes: widget.nonExistentNotes,
+                      inaccessibleNotes: widget.inaccessibleNotes,
                       childPage: widget.childPage,
                       scaffoldController: _scaffoldController,
                     ),

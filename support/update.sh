@@ -27,7 +27,7 @@ FILES=(
 # 20260415 gjw Identify packages rather than apps and so they should
 # not have installers.
 
-PKGS="solid_auth solidpod solidui"
+PKGS="markdown_widget_builder solid_auth solidpod solidui"
 
 # 20260217 gjw Handle different licenses for applications (GPL) and
 # packages (MIT).

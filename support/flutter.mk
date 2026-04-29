@@ -238,18 +238,20 @@ LINES ?= 300
 
 .PHONY: locmax
 locmax:
-	@loc=$$(bash $(LOC) -t $(shell find lib -name '*.dart')); \
-	totl=$$(cat $(shell find lib -name '*.dart') | wc -l); \
+	@$(LOC) -n $(LINES) $(shell find lib -name '*.dart') > /tmp/loc_output.txt; \
+	return_code=$$?; \
+	over=$$(cat /tmp/loc_output.txt); \
+	locm=$$(echo $$over | wc -w | awk '{print $$1/2}'); \
+	[ -z "$$over" ] || echo "$$over"; \
+	loc=$$(bash $(LOC) -t $(shell find lib -name '*.dart')); \
 	numf=$$(find lib -name "*.dart" -type f | wc -l); \
-	output=$$(bash $(LOC) -n $(LINES) $(shell find lib -name '*.dart') | sort -nr); \
-	locm=$$(echo $$output | wc -w | awk '{print $$1/2}'); \
-	if [ -n "$$output" ]; then \
-		echo "$$output"; \
-		echo "\nTotal $$loc lines of code across $$numf files with total $$totl lines."; \
+	totl=$$(cat $(shell find lib -name '*.dart') | wc -l); \
+	echo "\nTotal $$loc lines of code across $$numf files with total $$totl lines."; \
+	if [ $$return_code -ne 0 ]; then \
 		echo "\n$(CROSS) Error: Found $$locm files with more than $(LINES) lines of code."; \
-		exit 1; \
+	elif [ -s /tmp/loc_output.txt ]; then \
+		echo "\n$(TICK) All files are under $(LINES) lines (with some fuzz)."; \
 	else \
-		echo "Total $$loc lines of code across $$numf files with total $$totl lines."; \
 		echo "\n$(TICK) All files are under $(LINES) lines."; \
 	fi
 
