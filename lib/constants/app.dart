@@ -107,9 +107,10 @@ class NoteListMsg {
   /// Message displayed when corrupt files found
   static const String badFilesFound = 'Corrupt note files present';
 
-  /// Message displayed when non existent files found
-  static const String nonExistentNotesFound =
-      'Non-existent note files present without \'revoke\' entry in log';
+  /// Message displayed when inaccessible notes are found (deleted without
+  /// revoking access, or encrypted with an earlier key pair)
+  static const String inaccessibleNotesFound =
+      'Inaccessible notes present without \'revoke\' entry in log';
 
   /// Message displayed when no notes found in user's Pod
   static const String noNotes = 'No notes yet!';

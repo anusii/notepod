@@ -40,10 +40,13 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:solidpod/solidpod.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
+import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/own_note.dart';
+import 'package:notepod/services/note_service.dart';
+import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_card.dart';
 
 // ── Action card ───────────────────────────────────────────────────────────────
@@ -148,7 +151,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
   @override
   void initState() {
     super.initState();
-    _notesFuture = getOwnNoteList();
+    _notesFuture = NoteService().getOwnNoteList();
   }
 
   void _setImportMsg(String msg, {bool error = false}) => setState(() {
@@ -241,10 +244,44 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
         return;
       }
       final List<dynamic> raw = jsonDecode(utf8.decode(bytes));
+      if (raw.isEmpty) {
+        _setImportMsg('No notes found in backup.', error: true);
+        setState(() => _loading = false);
+        return;
+      }
+
+      // Write each note to the Pod using its original filename.
+      int saved = 0;
+      int skipped = 0;
+      for (final entry in raw.cast<Map<String, dynamic>>()) {
+        final created = entry['created'] as String? ?? '';
+        final modified = entry['modified'] as String? ?? '';
+        final title = entry['title'] as String? ?? 'Untitled';
+        final content = entry['content'] as String? ?? '';
+        final fileName = entry['fileName'] as String? ?? '';
+        if (fileName.isEmpty) {
+          skipped++;
+          continue;
+        }
+
+        final encContent = encryptVal(
+          plainText: content,
+          encKey: created.isNotEmpty ? created : _ts(),
+        );
+        final ttl = genNoteTTLStr(created, modified, title, encContent);
+
+        try {
+          await writePod(fileName, ttl);
+          saved++;
+        } catch (e) {
+          // File already exists — skip.
+          skipped++;
+        }
+      }
+
       _setImportMsg(
-        'Read ${raw.length} note${raw.length == 1 ? '' : 's'} from '
-        '"${file.name}".\n\n'
-        'To restore notes to your Pod, copy the content into new notes.',
+        'Restored $saved note${saved == 1 ? '' : 's'} to your Pod'
+        '${skipped > 0 ? ' ($skipped skipped — already exist)' : ''}.',
       );
     } catch (e, st) {
       debugPrint('[Import JSON] $e\n$st');
