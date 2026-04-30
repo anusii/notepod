@@ -191,7 +191,7 @@ class NoteEditScrollView extends StatelessWidget {
                           // previous note data
                           FormBuilderTextField(
                             name: noteTitlePred,
-                            initialValue: (isExisting) ? noteTitle : null,
+                            initialValue: noteTitle,
                             // Initial focus in title field
                             autofocus: true,
                             focusNode: _focusTitle,
