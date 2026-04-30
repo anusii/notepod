@@ -1,6 +1,6 @@
 /// App-wide constants.
 ///
-// Time-stamp: <Friday 2026-04-24 05:28:31 +1000 Graham Williams>
+// Time-stamp: <Thursday 2026-04-30 17:22:33 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2026, Software Innovation Institute
 ///
@@ -188,7 +188,7 @@ ShapeDecoration buttonShapeList =
 /// feature to send a working link to the recipient.
 /// TODO: [20260429 tchen] Replace the example URL below with a real URL.
 
-const String appUrl = 'https://notepod.togaware.com';
+const String appUrl = 'https://notepod.solidcommunity.au';
 
 /// Application-wide Invite Others configuration shared by the
 /// AppBar share button, the App Info dialogue, and the grant
