@@ -15,12 +15,11 @@
 
 NotePod is a [solidui](https://github.com/anusii/solidui) based app to
 support the secure and private storage and sharing of personal notes
-on your own encrypted personal online datastore (Pod) hosted in your
-Data Vault on a [Solid Server](https://solidproject.org/about). The
-app was developed by the [ANU Software Innovation
-Institute](https://sii.anu.edu.au) and written by [Anushka
-Vidanage](https://github.com/anushkavidanage), [Graham
-Williams](https://github.com/gjwgit), and [Jessica
+on your own encrypted personal online datastore (Pod) hosted on any
+[Solid Server](https://solidproject.org/about). The app was developed
+by the [ANU Software Innovation Institute](https://sii.anu.edu.au) and
+written by [Anushka Vidanage](https://github.com/anushkavidanage),
+[Graham Williams](https://github.com/gjwgit), and [Jessica
 Moore](https://github.com/jesscmoore).
 
 If you appreciate the app then please show some ❤️ and star the [GitHub
@@ -74,17 +73,13 @@ maintain full control over **your** data, not the app developer
 collecting and hoarding **your** data, nor the host where you store
 **your** data.
 
-This first beta release (version 0.1.0) is functional and usable. Use
-cases include writing quick notes while on the move to come back to
-later on, capturing shopping lists that can be shared with your family
-and called up the next time anyone of the family is at the shops, and
-much more.
+Use cases for NotePod include writing quick notes while on the move to
+come back to later on, capturing shopping lists that can be shared
+with your family and called up the next time anyone of the family is
+at the shops, collecting together notes on a related topic, and much
+more.
 
-The current notepod code base includes a lot of low level code that
-is being migrated to the
-[solidpod](https://github.com/anusii/solidpod) package for
-[Flutter](https://pub.dev/packages/solidpod). Once migrated it will be
-even easier to build your first Pods-based Flutter app.
+The same app runs on all platforms, including desktops and mobile devices.
 
 A simple example of a shopping list, available anywhere, anytime.
 
@@ -222,7 +217,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Friday 2026-01-02 15:59:33 +1100 Graham Williams>*
+*Time-stamp: <Tuesday 2026-04-28 20:45:09 +1000 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
