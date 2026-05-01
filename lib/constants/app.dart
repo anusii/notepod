@@ -186,7 +186,6 @@ ShapeDecoration buttonShapeList =
 
 /// Public URL where NotePod is hosted. Used by the Invite Others
 /// feature to send a working link to the recipient.
-/// TODO: [20260429 tchen] Replace the example URL below with a real URL.
 
 const String appUrl = 'https://notepod.solidcommunity.au';
 
