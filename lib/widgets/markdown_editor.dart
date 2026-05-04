@@ -30,12 +30,15 @@ import 'package:flutter/material.dart';
 import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
+import 'package:notepod/widgets/markdown_theme.dart';
+
 Container markdownEditor(
   BuildContext context,
   TextEditingController textController,
   FocusNode focusContent,
   String markdownData,
 ) {
+  final markdownConfig = markdownConfigForContext(context);
   return Container(
     padding: const EdgeInsets.all(10),
     child: Row(
@@ -68,7 +71,10 @@ Container markdownEditor(
           ),
         ),
         Expanded(
-          child: MarkdownBlock(data: markdownData),
+          child: MarkdownBlock(
+            data: markdownData,
+            config: markdownConfig,
+          ),
         ),
       ],
     ),
