@@ -40,8 +40,7 @@ Container noteDisplayMarkdown(
   String data, {
   BuildContext? context,
 }) {
-  final config =
-      context == null ? null : markdownConfigForContext(context);
+  final config = context == null ? null : markdownConfigForContext(context);
   return Container(
     alignment: Alignment.topLeft,
     padding: const EdgeInsets.all(10),
