@@ -72,18 +72,14 @@ class AppHomePageState extends State<AppHomePage> {
     BuildContext context,
     SolidScaffoldController scaffoldController,
   ) {
-    // Reduce calls to of(context).
-    final theme = Theme.of(context);
     return SolidScaffold(
       controller: scaffoldController,
       appBar: SolidAppBarConfig(
         title: topBarTitle,
-        backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
-        versionConfig: SolidVersionConfig(
+        versionConfig: const SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
-          userTextStyle: TextStyle(color: theme.colorScheme.onSurface),
-          // tooltip: 'Custom version tooltip',
+          userTextStyle: TextStyle(color: Colors.white),
         ),
         actions: [
           // New Note
