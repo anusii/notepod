@@ -130,22 +130,14 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
             ),
           ),
         ),
-        // ── Scrollable content area ───────────────────────────────────────
-        Flexible(
-          fit: FlexFit.loose,
-          child: Scrollbar(
-            thumbVisibility: true,
-            controller: widget._scrollController,
-            child: SingleChildScrollView(
-              controller: widget._scrollController,
-              child: markdownEditor(
-                context,
-                widget._textController!,
-                widget._focusContent,
-                widget.data,
-                preview: _preview,
-              ),
-            ),
+        // ── Content fills all remaining space ──────────────────────────────
+        Expanded(
+          child: markdownEditor(
+            context,
+            widget._textController!,
+            widget._focusContent,
+            widget.data,
+            preview: _preview,
           ),
         ),
         // ── Fixed bottom action bar ───────────────────────────────────────

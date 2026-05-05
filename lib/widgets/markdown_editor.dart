@@ -1,6 +1,6 @@
-/// Markdown editor — single-pane, preview controlled by caller.
+/// Markdown editor — single-pane editor or preview, fills available space.
 ///
-// Time-stamp: <Tuesday 2026-05-06 09:00:00 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2026-05-07 09:00:00 +1000 Graham Williams>
 ///
 /// Copyright (C) 2026, Software Innovation Institute, ANU
 ///
@@ -16,12 +16,6 @@ import 'package:markdown_widget/markdown_widget.dart';
 
 import 'package:notepod/widgets/markdown_theme.dart';
 
-/// Returns the note editing widget.
-///
-/// [preview] is controlled by the caller (see [_EditorWithToggle] in
-/// note_edit_scroll_view.dart).  When `true` a formatted markdown render is
-/// shown; when `false` the [EmacsTextField] editor + toolbar is shown.
-
 Widget markdownEditor(
   BuildContext context,
   TextEditingController textController,
@@ -33,49 +27,61 @@ Widget markdownEditor(
   final markdownConfig = markdownConfigForContext(context);
 
   return Padding(
-    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+    padding: const EdgeInsets.fromLTRB(10, 4, 10, 8),
     child: preview
-        ? ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 300),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(color: cs.outline),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: textController.text.trim().isEmpty
-                  ? Text(
-                      'Nothing to preview.',
-                      style: TextStyle(
-                        color: cs.onSurfaceVariant,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    )
-                  : MarkdownBlock(
-                      data: textController.text,
-                      config: markdownConfig,
-                    ),
+        ? Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(color: cs.outline),
+              borderRadius: BorderRadius.circular(4),
             ),
+            child: textController.text.trim().isEmpty
+                ? Text(
+                    'Nothing to preview.',
+                    style: TextStyle(
+                      color: cs.onSurfaceVariant,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  )
+                : MarkdownBlock(
+                    data: textController.text,
+                    config: markdownConfig,
+                  ),
           )
         : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              EmacsTextField(
-                controller: textController,
-                focusNode: focusContent,
-                minLines: 15,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Write in Markdown…  '
-                      'C-k kill · C-y yank · M-f/b word · C-c d date',
+              Expanded(
+                child: EmacsTextField(
+                  controller: textController,
+                  focusNode: focusContent,
+                  expands: true,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Write in Markdown…  '
+                        'C-k kill · C-y yank · M-f/b word · C-c d date',
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-              MarkdownToolbar(
-                useIncludedTextField: false,
-                controller: textController,
-                focusNode: focusContent,
+              const SizedBox(height: 6),
+              ClipRect(
+                child: SizedBox(
+                  height: 42,
+                  child: OverflowBox(
+                    maxWidth: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    child: Transform.scale(
+                      scale: 0.75,
+                      alignment: Alignment.centerLeft,
+                      child: MarkdownToolbar(
+                        useIncludedTextField: false,
+                        controller: textController,
+                        focusNode: focusContent,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
