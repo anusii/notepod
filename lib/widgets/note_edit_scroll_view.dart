@@ -1,6 +1,6 @@
 /// A widget for creating and editing notes.
 ///
-// Time-stamp: <Wednesday 2025-07-18 16:17:37 +1000 Jess Moore>
+// Time-stamp: <Wednesday 2026-05-06 07:59:16 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
@@ -27,7 +27,6 @@ class NoteEditScrollView extends StatefulWidget {
     super.key,
     required this.formKey,
     required TextEditingController? textController,
-    required ScrollController scrollController,
     required SolidScaffoldController scaffoldController,
     required FocusNode focusTitle,
     required FocusNode focusContent,
@@ -38,14 +37,12 @@ class NoteEditScrollView extends StatefulWidget {
     this.isExisting = false,
     this.noteTitle,
   })  : _textController = textController,
-        _scrollController = scrollController,
         _scaffoldController = scaffoldController,
         _focusTitle = focusTitle,
         _focusContent = focusContent;
 
   final GlobalKey<FormBuilderState> formKey;
   final TextEditingController? _textController;
-  final ScrollController _scrollController;
   final SolidScaffoldController _scaffoldController;
   final FocusNode _focusTitle;
   final FocusNode _focusContent;
@@ -77,7 +74,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
           child: FormBuilder(
             key: widget.formKey,
-            onChanged: () => widget.formKey.currentState!.save(),
+            onChanged: () => widget.formKey.currentState?.save(),
             autovalidateMode: AutovalidateMode.disabled,
             skipDisabled: true,
             child: Column(
@@ -114,9 +111,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
                     TextButton.icon(
                       onPressed: () => setState(() => _preview = !_preview),
                       icon: Icon(
-                        _preview
-                            ? Icons.edit_outlined
-                            : Icons.preview_outlined,
+                        _preview ? Icons.edit_outlined : Icons.preview_outlined,
                         size: 16,
                       ),
                       label: Text(_preview ? 'Edit' : 'Preview'),
