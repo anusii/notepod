@@ -1,7 +1,7 @@
 name: notepod
 description: 'Privacy preserving note taking app using PODs.'
 publish_to: 'none'
-version: 0.3.21+12
+version: 0.3.22+12
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -33,7 +33,7 @@ dependencies:
   markdown_widget: ^2.3.2+8
   rdflib: ^0.2.12
   solidpod: ^0.12.5
-  solidui: ^0.3.24
+  solidui: ^0.3.37
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 
@@ -41,12 +41,6 @@ dev_dependencies:
   build_runner: ^2.4.14
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
-
-dependency_overrides:
-  solidui:
-    git:
-      url: https://github.com/anusii/solidui.git
-      ref: tony/401_changelog_not_readable
 
 flutter:
   assets:
