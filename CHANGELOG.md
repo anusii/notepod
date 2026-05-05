@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Update the layout of new/edit notes [0.3.23 20260506 gjw]
 + SHARE. CHANGELOG and markdown render colour [0.3.22 20260505 gjw]
 + ENTER on SEARCH creates note with SEARCH as TITLE [0.3.21 20260430 gjw]
 + Shift metadata to be available on click [0.3.20 20260427 gjw]
