@@ -153,6 +153,16 @@ class AppHomePageState extends State<AppHomePage> {
           child: ImportExportScreen(),
           tooltip: importExportToolTip,
         ),
+        // Invite Others
+        SolidMenuItem(
+          title: inviteOthersTitle,
+          icon: Icons.share,
+          tooltip: inviteOthersToolTip,
+          onTap: (menuContext) => InviteOthersDialog.show(
+            menuContext,
+            config: inviteOthersConfig,
+          ),
+        ),
       ],
       statusBar: SolidStatusBarConfig(
         serverInfo: SolidServerInfo(
@@ -179,6 +189,7 @@ class AppHomePageState extends State<AppHomePage> {
         applicationLegalese: appOwner,
         text: aboutText,
       ),
+      inviteConfig: inviteOthersConfig,
       enableProfile: true,
       body: widget.childPage,
     );
