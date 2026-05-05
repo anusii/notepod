@@ -60,7 +60,8 @@ Widget markdownEditor(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Write in Markdown…  '
-                        'C-k kill · C-y yank · M-f/b word · C-c d date',
+                        'C-k kill · C-y yank · M-f/b word · C-c d date'
+                        '  · code blocks need a language: ```python',
                   ),
                 ),
               ),
