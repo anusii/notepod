@@ -44,9 +44,11 @@ Widget markdownEditor(
                       fontStyle: FontStyle.italic,
                     ),
                   )
-                : MarkdownBlock(
-                    data: textController.text,
-                    config: markdownConfig,
+                : SingleChildScrollView(
+                    child: MarkdownBlock(
+                      data: textController.text,
+                      config: markdownConfig,
+                    ),
                   ),
           )
         : Column(
