@@ -1,19 +1,27 @@
 #!/bin/bash
 
+# 20260515 gjw Use hard links. Should be github friendly. A littler
+# trickier to see that they are a hard link.
+#
+# 20260512 gjw Why not symlink when the files are identical? Synlinks
+# are not github friendly though, being a text file containg the path
+# to the linked file. But these IDENTICAL files are stored in another
+# repo so let's go with that one copy principle.
+#
 # 20260216 gjw Pairwise compare files and run meld to update.
 
 # set -x
 
 APP=$(basename "$(pwd)")
 
-SCRIPTS=${HOME}/projects/scripts/flutter
+SCRIPTS=${HOME}/projects/scriptsbb/flutter
 FILES=(
+    Makefile ${SCRIPTS}/Makefile.tmpl
     .gitignore ${SCRIPTS}/gitignore
     .pubignore ${SCRIPTS}/pubignore
     .github/workflows/ci.yaml ${SCRIPTS}/github/workflows/ci.yaml
     .github/workflows/installers.yaml ${SCRIPTS}/github/workflows/installers.yaml
     .github/pull_request_template.md ${SCRIPTS}/github/pull_request_template.md
-    Makefile ${SCRIPTS}/Makefile.tmpl
     installers/deb.sh ${SCRIPTS}/installers/deb.sh
     installers/update.sh ${SCRIPTS}/installers/update.sh
     support/modules.mk  ${SCRIPTS}/../support/modules.mk
@@ -24,10 +32,11 @@ FILES=(
     support/update.sh  ${SCRIPTS}/../support/update.sh
 )
 
-# 20260415 gjw Identify packages rather than apps and so they should
-# not have installers.
+# 20260429 gjw Identify if we are working with an application rather
+# than a package. Packages do not have installers.
 
-PKGS="markdown_widget_builder solid_auth solidpod solidui"
+IS_APP=false
+test -f lib/main.dart && IS_APP=true
 
 # 20260217 gjw Handle different licenses for applications (GPL) and
 # packages (MIT).
@@ -57,6 +66,10 @@ for ((i=0; i < length; i+=2)); do
 		meld "$f1" "$f2" 2> /dev/null
 	    fi
 
+	# 20260512 gjw For the common version of this for Makefile
+	# import a local.mk from the new make folder to define REPO,
+	# RLOC, and DWLD
+	#
 	# 20260306 gjw For the Makefile we expect the REPO, RLOC, and
 	# DWLD to differ so ignore those lines.
 
@@ -74,7 +87,7 @@ for ((i=0; i < length; i+=2)); do
 	# 20260324 gjw For the deb installers script we expect the
 	# Name= and Comment= to differ so ignore those lines.
 
-	elif [[ "$f1" == "installers/deb.sh" ]] && ! echo "${PKGS}" | grep -qw "${APP}"; then
+	elif [[ "$f1" == "installers/deb.sh" ]] && $IS_APP; then
 	    if diff <(grep -v '^Name=' "$f1" | grep -v '^Comment=' | sed '/^Description: /,/^EOL$/d') <(grep -v '^Name=' "$f2" | grep -v '^Comment=' | sed '/^Description: /,/^EOL$/d') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
@@ -85,7 +98,7 @@ for ((i=0; i < length; i+=2)); do
         # 20260306 gjw For the installers uploader we expect the HOST
 	# and FLDR to differ so ignore those lines.
 
-	elif [[ "$f1" == "installers/update.sh" ]] && ! echo "${PKGS}" | grep -qw "${APP}"; then
+	elif [[ "$f1" == "installers/update.sh" ]] && $IS_APP; then
 	    if diff <(grep -v '^HOST=' "$f1" | grep -v '^FLDR=') <(grep -v '^HOST=' "$f2" | grep -v '^FLDR=') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
@@ -96,7 +109,7 @@ for ((i=0; i < length; i+=2)); do
 	# 20260220 gjw For the installers workflow we expect the APP
 	# and LINUX_PKGS to differ so ignore those lines.
 
-	elif [[ "$f1" == ".github/workflows/installers.yaml" ]] && ! echo "${PKGS}" | grep -qw "${APP}"; then
+	elif [[ "$f1" == ".github/workflows/installers.yaml" ]] && $IS_APP; then
 	    if diff <(grep -v '^  APP:' "$f1" | grep -v '^  LINUX_PKGS:') <(grep -v '^  APP:' "$f2" | grep -v '^  LINUX_PKGS:') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
@@ -107,7 +120,7 @@ for ((i=0; i < length; i+=2)); do
 	# 20260306 gjw Otherwise do a straightforward comparison.
 
         else
-	    if [[ "$f1" == *install* ]] && echo "${PKGS}" | grep -qw "${APP}"; then
+	    if [[ "$f1" == *install* ]] && [ "$IS_APP" = false ]; then
 		echo "SKIP      $f1 $f2"
 	    else
 		if cmp -s "$f1" "$f2"; then
@@ -119,7 +132,7 @@ for ((i=0; i < length; i+=2)); do
 	    fi
 	fi
     else
-	if [[ "$f1" == *install* ]] && echo "${PKGS}" | grep -qw "${APP}"; then
+	if [[ "$f1" == *install* ]] && [ "$IS_APP" = false ]; then
 	    echo "SKIP      $f1 $f2"
 	else
 	    if [ ! -f "$f1" ] && [ -f "$f2" ]; then
