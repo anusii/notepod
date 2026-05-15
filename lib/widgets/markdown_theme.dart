@@ -1,5 +1,9 @@
 /// Theme-aware Markdown config helper for note rendering.
 ///
+// Time-stamp: <Wednesday 2026-05-06 08:23:17 +1000 Graham Williams>
+///
+/// Copyright (C) 2025, Software Innovation Institute, ANU
+///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0

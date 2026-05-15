@@ -1,27 +1,10 @@
-/// A widget for creating and editing notes in a SingleChildScrollView()
+/// A widget for creating and editing notes.
 ///
-// Time-stamp: <Wednesday 2025-07-18 16:17:37 +1000 Jess Moore>
+// Time-stamp: <Wednesday 2026-05-06 07:59:16 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2025, Software Innovation Institute
 ///
-/// Licensed under the GNU General Public License, Version 3 (the "License");
-///
-/// License: https://opensource.org/license/gpl-3-0
-//
-// This program is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation, either version 3 of the License, or (at your option) any later
-// version.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program.  If not, see <https://opensource.org/license/gpl-3-0>.
-///
-/// Authors: Jess Moore
+/// Licensed under the GNU General Public License, Version 3
 
 library;
 
@@ -39,16 +22,11 @@ import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
 
-/// A [StatelessWidget] widget setup for calling the
-/// SingleChildScrollView() to edit a note, whether a
-/// new note or a pre-existing note, and whether owned
-/// by the user or shared to the user.
-class NoteEditScrollView extends StatelessWidget {
+class NoteEditScrollView extends StatefulWidget {
   const NoteEditScrollView({
     super.key,
     required this.formKey,
     required TextEditingController? textController,
-    required ScrollController scrollController,
     required SolidScaffoldController scaffoldController,
     required FocusNode focusTitle,
     required FocusNode focusContent,
@@ -59,187 +37,142 @@ class NoteEditScrollView extends StatelessWidget {
     this.isExisting = false,
     this.noteTitle,
   })  : _textController = textController,
-        _scrollController = scrollController,
         _scaffoldController = scaffoldController,
         _focusTitle = focusTitle,
         _focusContent = focusContent;
 
   final GlobalKey<FormBuilderState> formKey;
   final TextEditingController? _textController;
-
-  /// Scroll controller for single child scroll view
-  final ScrollController _scrollController;
-
-  /// Scaffold controller
   final SolidScaffoldController _scaffoldController;
-
-  /// Focus node for note title field
   final FocusNode _focusTitle;
-
-  /// Focus node for note contents text field
   final FocusNode _focusContent;
-
-  /// Childpage used by back button
   final Widget childPage;
-
   final String data;
-
-  /// Existing note data is note already exists
   final Note? prevNote;
-
-  /// Boolean describing whether note is shared to pod owner from an
-  /// external source.
   final bool isExternal;
-
-  /// Boolean describing whether note already exists.
   final bool isExisting;
-
-  /// Title of note where note already exists
   final String? noteTitle;
 
   @override
+  State<NoteEditScrollView> createState() => _NoteEditScrollViewState();
+}
+
+class _NoteEditScrollViewState extends State<NoteEditScrollView> {
+  bool _preview = false;
+
+  @override
   Widget build(BuildContext context) {
-    String currDateStr = '';
-
-    if (!isExisting) {
-      // New note: fetch current date for heading
-      currDateStr =
-          DateFormat('dd MMMM yyyy').format(DateTime.now()).toString();
-    }
-
-    Row noteEditActionBar() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        spacing: 5.0,
-        children: (!isExisting)
-            // New Note: save button only
-            ? [
-                NoteSaveButton(
-                  textController: _textController!,
-                  formKey: formKey,
-                  scaffoldController: _scaffoldController,
-                ),
-              ]
-            : [
-                // Edit Note: save and back buttons
-                // Save button
-                NoteSaveButton(
-                  textController: _textController!,
-                  formKey: formKey,
-                  scaffoldController: _scaffoldController,
-                  prevNote: prevNote,
-                  isExisting: true,
-                  isExternal: isExternal,
-                ),
-                // Back button
-                // Nav to view note or view isExternal note
-                NoteBackButton(
-                  childPage: childPage,
-                  textController: _textController,
-                  formKey: formKey,
-                  scaffoldController: _scaffoldController,
-                  prevNote: prevNote,
-                  isExisting: isExisting,
-                  isExternal: isExternal,
-                ),
-              ],
-      );
-    }
+    final currDateStr = widget.isExisting
+        ? ''
+        : DateFormat('dd MMMM yyyy').format(DateTime.now());
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: Scrollbar(
-            thumbVisibility: true,
-            controller: _scrollController,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                spacing: 10.0,
-                children: [
-                  // Add space
-                  const SizedBox(
-                    height: 10,
-                  ),
+        // ── Fixed header: date (new only), title, Preview/Edit button ────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          child: FormBuilder(
+            key: widget.formKey,
+            onChanged: () => widget.formKey.currentState?.save(),
+            autovalidateMode: AutovalidateMode.disabled,
+            skipDisabled: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (!widget.isExisting)
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: FormBuilder(
-                      key: formKey,
-                      onChanged: () {
-                        formKey.currentState!.save();
-                      },
-                      autovalidateMode: AutovalidateMode.disabled,
-                      skipDisabled: true,
-                      child: Column(
-                        spacing: 10.0,
-                        children: [
-                          // New note: show current date
-                          if (!isExisting) ...[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Date: $currDateStr',
-                                  style: titleStyle,
-                                ),
-                              ],
-                            ),
-                          ],
-                          // Edit existing note: populated text field with
-                          // previous note data
-                          FormBuilderTextField(
-                            name: noteTitlePred,
-                            initialValue: noteTitle,
-                            // Initial focus in title field
-                            autofocus: true,
-                            focusNode: _focusTitle,
-                            decoration: const InputDecoration(
-                              labelText: 'Note Title',
-                              labelStyle: TextStyle(
-                                letterSpacing: 1.5,
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              //errorText: 'error',
-                            ),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text('Date: $currDateStr', style: titleStyle),
+                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: FormBuilderTextField(
+                        name: noteTitlePred,
+                        initialValue: widget.noteTitle,
+                        autofocus: true,
+                        focusNode: widget._focusTitle,
+                        decoration: const InputDecoration(
+                          labelText: 'Note Title',
+                          labelStyle: TextStyle(
+                            letterSpacing: 1.5,
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
                       ),
                     ),
-                  ),
-                  markdownEditor(
-                    context,
-                    _textController!,
-                    _focusContent,
-                    data,
-                  ),
-                  // Add space
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
+                    // Preview/Edit toggle — fixed next to title, never moves.
+                    TextButton.icon(
+                      onPressed: () => setState(() => _preview = !_preview),
+                      icon: Icon(
+                        _preview ? Icons.edit_outlined : Icons.preview_outlined,
+                        size: 16,
+                      ),
+                      label: Text(_preview ? 'Edit' : 'Preview'),
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        // Action buttons - always visible
-        Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: noteEditActionBar(),
-            ),
-            // Add space
-            const SizedBox(
-              height: 10,
-            ),
-          ],
+        // ── Content fills all remaining space ──────────────────────────────
+        Expanded(
+          child: markdownEditor(
+            context,
+            widget._textController!,
+            widget._focusContent,
+            widget.data,
+            preview: _preview,
+          ),
         ),
+        // ── Fixed bottom action bar ───────────────────────────────────────
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            spacing: 5.0,
+            children: [
+              ...(!widget.isExisting)
+                  ? [
+                      NoteSaveButton(
+                        textController: widget._textController!,
+                        formKey: widget.formKey,
+                        scaffoldController: widget._scaffoldController,
+                      ),
+                    ]
+                  : [
+                      NoteSaveButton(
+                        textController: widget._textController!,
+                        formKey: widget.formKey,
+                        scaffoldController: widget._scaffoldController,
+                        prevNote: widget.prevNote,
+                        isExisting: true,
+                        isExternal: widget.isExternal,
+                      ),
+                      NoteBackButton(
+                        childPage: widget.childPage,
+                        textController: widget._textController,
+                        formKey: widget.formKey,
+                        scaffoldController: widget._scaffoldController,
+                        prevNote: widget.prevNote,
+                        isExisting: widget.isExisting,
+                        isExternal: widget.isExternal,
+                      ),
+                    ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
       ],
     );
   }
