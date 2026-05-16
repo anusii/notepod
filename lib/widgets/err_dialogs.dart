@@ -27,6 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:notepod/constants/ui.dart';
+
 Future<void> showErrDialog(BuildContext context, String errMsg) async {
   return showDialog<void>(
     context: context,
@@ -49,6 +51,12 @@ Future<void> showErrDialog(BuildContext context, String errMsg) async {
           ),
         ),
         actions: <Widget>[
+          TextButton(
+            child: const Text(ButtonLabel.back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           TextButton(
             child: const Text('OK'),
             onPressed: () {
