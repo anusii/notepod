@@ -26,8 +26,9 @@ test -f lib/main.dart && IS_APP=true
 
 SCRIPTS=${HOME}/projects/scripts/
 FILES=(
-    ${SCRIPTS}support/update.sh support/update.sh
     ${SCRIPTS}support/meld_zip_from_claude.sh support/meld_zip_from_claude.sh
+    ${SCRIPTS}support/flutter.mk support/flutter.mk
+    ${SCRIPTS}support/update.sh support/update.sh
     ${SCRIPTS}flutter/.gitignore .gitignore
 )
 
@@ -169,7 +170,6 @@ FILESBB=(
     installers/deb.sh ${SCRIPTSBB}/installers/deb.sh
     installers/update.sh ${SCRIPTSBB}/installers/update.sh
     support/modules.mk  ${SCRIPTSBB}/../support/modules.mk
-    support/flutter.mk  ${SCRIPTSBB}/../support/flutter.mk
     support/git.mk  ${SCRIPTSBB}/../support/git.mk
     support/loc.sh  ${SCRIPTSBB}/../support/loc.sh
     support/meld_zip_from_claude.sh  ${SCRIPTSBB}/../support/meld_zip_from_claude.sh
