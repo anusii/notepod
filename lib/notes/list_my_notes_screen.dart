@@ -122,29 +122,30 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   ///
   /// Arguments: none.
   Widget _loadNewNote(SolidScaffoldController scaffoldController) {
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: _scrollController,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: <Widget>[
-            // MsgCard style works in light and dark themes
-            // No notes message
-            buildMsgCard(
-              context,
-              Icons.info,
-              Colors.amber,
-              NoteListMsg.noNotes,
-              NoteListMsg.writeFirstNote,
-              isSmall: true,
-            ),
-            NewNote(
-              scaffoldController: scaffoldController,
-            ),
-          ],
+    // The outer SingleChildScrollView used to wrap NewNote here, but NewNote
+    // contains a Column with an Expanded child (the markdown editor), which
+    // cannot be laid out under unbounded vertical constraints. NewNote already
+    // handles its own internal scrolling, so use a plain Column with Expanded
+    // and let the editor fill the remaining height.
+
+    return Column(
+      children: <Widget>[
+        // No-notes message (fixed height at top).
+        buildMsgCard(
+          context,
+          Icons.info,
+          Colors.amber,
+          NoteListMsg.noNotes,
+          NoteListMsg.writeFirstNote,
+          isSmall: true,
         ),
-      ),
+        // Editor fills the remaining space and provides its own scrolling.
+        Expanded(
+          child: NewNote(
+            scaffoldController: scaffoldController,
+          ),
+        ),
+      ],
     );
   }
 
