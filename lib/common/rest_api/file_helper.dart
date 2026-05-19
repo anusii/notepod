@@ -43,7 +43,6 @@ import 'package:notepod/services/operations.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
-import 'package:notepod/widgets/login_required_dialog.dart';
 
 /// Helper class for note file operations.
 
@@ -368,11 +367,15 @@ class NoteFileHelper with PodOperationsMixin {
 
       if (!context.mounted) return;
 
-      // Prompt the user to log in (or cancel back to the note editor),
-      // mirroring the security key cache login prompt in solidui for a
-      // consistent experience.
+      // Prompt the user to log in (or cancel back to the note editor).
+      // Using solidui's shared `SolidLoginRequiredDialog` keeps the
+      // look-and-feel — and the state-preserving login sub-flow —
+      // consistent with the rest of the Solid app suite.
 
-      await LoginRequiredDialog.showAndHandle(context);
+      await SolidLoginRequiredDialog.showAndHandle(
+        context,
+        message: 'Please log in to your POD first before saving the note.',
+      );
     } on Exception catch (e) {
       debugPrint(
         'Exception (encrypting and saving note, and navigating to return page):\n $e',
