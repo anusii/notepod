@@ -369,8 +369,8 @@ class NoteFileHelper with PodOperationsMixin {
 
       // Prompt the user to log in (or cancel back to the note editor).
       // Using solidui's shared `SolidLoginRequiredDialog` keeps the
-      // look-and-feel — and the state-preserving login sub-flow —
-      // consistent with the rest of the Solid app suite.
+      // look-and-feel and the redirect-to-Solid-login-page behaviour
+      // consistent with the rest of the app.
 
       await SolidLoginRequiredDialog.showAndHandle(
         context,

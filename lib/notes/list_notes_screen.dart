@@ -23,6 +23,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart' show isUserLoggedIn;
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/common/rest_api/rest_api.dart';
@@ -35,6 +36,7 @@ import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/not_logged_in_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
 import 'package:notepod/widgets/note_list_revoke_dialog.dart';
 
@@ -60,13 +62,19 @@ class ListNotesScreen extends StatefulWidget {
 class _ListNotesScreenState extends State<ListNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  /// Future function to retrieve user's notes list
-  // static Future? _fetchOwnNotes;
-  late Future<NotesCallResult> _fetchOwnNotes;
+  /// Future function to retrieve user's notes list. Initialised only
+  /// after we confirm the user is logged in (see [_checkLoginAndFetch]).
 
-  /// Future function to retrieve externally owned notes list
-  // static Future? _fetchExternalNotes;
-  late Future<NotesCallResult> _fetchExternalNotes;
+  Future<NotesCallResult>? _fetchOwnNotes;
+
+  /// Future function to retrieve externally owned notes list.
+
+  Future<NotesCallResult>? _fetchExternalNotes;
+
+  /// Tracks the user's login status. `null` while the asynchronous
+  /// check is in flight, then `true`/`false` once known.
+
+  bool? _isLoggedIn;
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
@@ -78,12 +86,30 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-
     _scrollController = ScrollController();
+    _checkLoginAndFetch();
+  }
 
-    // Set future functions to fetch owner's notes and external notes
-    _fetchOwnNotes = NoteService().getOwnNoteList();
-    _fetchExternalNotes = getExternalNoteList();
+  /// Confirms the user is logged in before triggering the POD fetches.
+  ///
+  /// When the user is not logged in we skip the fetches entirely and
+  /// let [build] render the [NotLoggedInCard] placeholder. This avoids
+  /// the cascade of layout exceptions that the fallback "no notes"
+  /// layout otherwise produces on an unauthenticated session.
+
+  Future<void> _checkLoginAndFetch() async {
+    final loggedIn = await isUserLoggedIn();
+    if (!mounted) return;
+    setState(() {
+      _isLoggedIn = loggedIn;
+      if (loggedIn) {
+        _fetchOwnNotes = NoteService().getOwnNoteList();
+        _fetchExternalNotes = getExternalNoteList();
+      } else {
+        _fetchOwnNotes = null;
+        _fetchExternalNotes = null;
+      }
+    });
   }
 
   @override
@@ -189,6 +215,26 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Show the loading screen until the asynchronous login check has
+    // returned. Once we know the user is logged out, render the
+    // friendly `Not logged in` placeholder rather than attempting to
+    // fetch notes from a POD we cannot read.
+
+    if (_isLoggedIn == null) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: SafeArea(child: loadingScreen(normalLoadingScreenHeight)),
+      );
+    }
+    if (_isLoggedIn == false ||
+        _fetchOwnNotes == null ||
+        _fetchExternalNotes == null) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: const SafeArea(child: NotLoggedInCard()),
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -196,9 +242,9 @@ class _ListNotesScreenState extends State<ListNotesScreen> {
           // future: _asyncFetchOwnNotes,
           future: Future.wait([
             // Future result of fetching owner's notes list
-            _fetchOwnNotes,
+            _fetchOwnNotes!,
             // Future result of fetching externally owned notes list
-            _fetchExternalNotes,
+            _fetchExternalNotes!,
           ]),
           builder: (context, snapshot) {
             // if (!snapshot.hasData) {

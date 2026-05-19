@@ -23,6 +23,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart' show isUserLoggedIn;
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
@@ -34,6 +35,7 @@ import 'package:notepod/notes/new_note.dart';
 import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/not_logged_in_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
 
 /// A [StatefulWidget] that fetches the user's notes in their app data folder
@@ -59,7 +61,12 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Future function to retrieve user's notes list
-  static Future? _asyncDataFetch;
+  Future<NotesCallResult>? _asyncDataFetch;
+
+  /// Tracks the user's login status. `null` while the asynchronous
+  /// check is in flight (used to show the loading screen), then
+  /// updated by [_checkLoginAndFetch]
+  bool? _isLoggedIn;
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
@@ -71,8 +78,24 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-    _asyncDataFetch = NoteService().getOwnNoteList();
     _scrollController = ScrollController();
+    _checkLoginAndFetch();
+  }
+
+  /// Confirms the user is logged in before triggering the POD fetch.
+  ///
+  /// When the user is not logged in we skip the fetch entirely and let
+  /// [build] render the [NotLoggedInCard] placeholder. Touching the POD
+  /// APIs without an authenticated session would otherwise produce a
+  /// cascade of rendering exceptions on this screen.
+
+  Future<void> _checkLoginAndFetch() async {
+    final loggedIn = await isUserLoggedIn();
+    if (!mounted) return;
+    setState(() {
+      _isLoggedIn = loggedIn;
+      _asyncDataFetch = loggedIn ? NoteService().getOwnNoteList() : null;
+    });
   }
 
   @override
@@ -150,6 +173,24 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Show the loading screen until the asynchronous login check has
+    // returned. Once we know the user is logged out, render the
+    // friendly `Not logged in` placeholder rather than attempting to
+    // fetch notes from a POD we cannot read.
+
+    if (_isLoggedIn == null) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: SafeArea(child: loadingScreen(normalLoadingScreenHeight)),
+      );
+    }
+    if (_isLoggedIn == false) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: const SafeArea(child: NotLoggedInCard()),
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
