@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Bug fix empty notes cause re-layout for ever [0.3.25 20260519 gjw]
 + Support scrolling of note preview [0.3.24 20260516 gjw]
 + Update the layout of new/edit notes [0.3.23 20260506 gjw]
 + SHARE. CHANGELOG and markdown render colour [0.3.22 20260505 gjw]

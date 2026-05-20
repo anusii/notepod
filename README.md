@@ -72,6 +72,11 @@ maintain full control over **your** data, not the app developer
 collecting and hoarding **your** data, nor the host where you store
 **your** data.
 
+Solid Pods are a new approach to handling your personal data on the
+World Wide Web and is the latest innovation from the inventor of the
+WWW, Sir Tim Berners-Lee. Obtain a Pod for yourself on any Solid
+server and link it to your app.
+
 Use cases for NotePod include writing quick notes while on the move to
 come back to later on, capturing shopping lists that can be shared
 with your family and called up the next time anyone of the family is
@@ -216,7 +221,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Thursday 2026-04-30 16:56:46 +1000 Graham Williams>*
+*Time-stamp: <Sunday 2026-05-17 17:28:12 +1000 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->

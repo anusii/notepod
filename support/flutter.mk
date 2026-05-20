@@ -32,6 +32,7 @@ flutter:
 
   minor_versions   Increment pubspec.yaml minor version
   major_versions   Increment pubspec.yaml major version
+  version	   Report the current app version
   versions         Copy pubspec.yaml version to snapcraft.yaml
 
   docs	    Run `dart doc` to create documentation.
@@ -186,9 +187,16 @@ fix:
 	dart fix --apply
 	@echo $(SEPARATOR)
 
+# 20260518 gjw For the format we should make sure all folders with a
+# pubspec.yaml have updated pacakges. This resolved an issue I was
+# having with `format` complaining `Failed to resolve package URI
+# "package:flutter_lints/flutter.yaml"` This will slow down a `format`
+# but it's prbably a good thing to do.
+
 .PHONY: format
 format:
 	@echo "Dart: FORMAT"
+	@find . -name pubspec.yaml -not -path '*/.*' -execdir flutter pub get \;
 	dart format lib/ $(if $(shell test -d example && echo yes),example/) $(if $(shell test -d test && echo yes),test/) $(if $(shell test -d integration_test && echo yes),integration_test/)
 	@echo $(SEPARATOR)
 
@@ -542,6 +550,11 @@ lychee:
 	@echo "Lychee: CHECK LINKS."
 	-lychee --no-progress --format compact *.md ./**/*.dart $(if $(wildcard ./**/*.md),./**/*.md) $(if $(wildcard ./**/*.html),./**/*.html)
 	@echo $(SEPARATOR)
+
+.PHONY: version
+version:
+	@grep version: pubspec.yaml | sed 's/^version:/pubspec:/'
+	@echo "archive: $(shell ls installers/ARCHIVE/*deb | cut -d_ -f2 | sort -V | tail -n1)"
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP
 
