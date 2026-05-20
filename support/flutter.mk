@@ -551,6 +551,11 @@ lychee:
 	-lychee --no-progress --format compact *.md ./**/*.dart $(if $(wildcard ./**/*.md),./**/*.md) $(if $(wildcard ./**/*.html),./**/*.html)
 	@echo $(SEPARATOR)
 
+.PHONY: version
+version:
+	@grep version: pubspec.yaml | sed 's/^version:/pubspec:/'
+	@echo "archive: $(shell ls installers/ARCHIVE/*deb | cut -d_ -f2 | sort -V | tail -n1)"
+
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP
 
 .PHONY: docs
