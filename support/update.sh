@@ -26,6 +26,7 @@ test -f lib/main.dart && IS_APP=true
 
 SCRIPTS=${HOME}/projects/scripts/
 FILES=(
+    ${SCRIPTS}support/loc.sh support/loc.sh
     ${SCRIPTS}support/meld_zip_from_claude.sh support/meld_zip_from_claude.sh
     ${SCRIPTS}support/flutter.mk support/flutter.mk
     ${SCRIPTS}support/update.sh support/update.sh
@@ -162,7 +163,6 @@ done
 SCRIPTSBB=${HOME}/projects/scriptsbb/flutter
 FILESBB=(
     Makefile ${SCRIPTSBB}/Makefile.tmpl
-    .gitignore ${SCRIPTSBB}/gitignore
     .pubignore ${SCRIPTSBB}/pubignore
     .github/workflows/ci.yaml ${SCRIPTSBB}/github/workflows/ci.yaml
     .github/workflows/installers.yaml ${SCRIPTSBB}/github/workflows/installers.yaml
@@ -171,9 +171,6 @@ FILESBB=(
     installers/update.sh ${SCRIPTSBB}/installers/update.sh
     support/modules.mk  ${SCRIPTSBB}/../support/modules.mk
     support/git.mk  ${SCRIPTSBB}/../support/git.mk
-    support/loc.sh  ${SCRIPTSBB}/../support/loc.sh
-    support/meld_zip_from_claude.sh  ${SCRIPTSBB}/../support/meld_zip_from_claude.sh
-    support/update.sh  ${SCRIPTSBB}/../support/update.sh
 )
 
 # 20260217 gjw Handle different licenses for applications (GPL) and
