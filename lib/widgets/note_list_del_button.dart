@@ -73,11 +73,7 @@ class NoteListDelButton extends StatelessWidget {
       builder: (BuildContext ctx) {
         return AlertDialog(
           title: const Text(Msg.plsConfirm),
-          content: Text(
-            selectedNotes.length > 1
-                ? Msg.confirmDeleteMultiple
-                : Msg.confirmDelete,
-          ),
+          content: _DeleteConfirmContent(selectedNotes: selectedNotes),
           actions: [
             // The "Yes" button
             TextButton(
@@ -170,5 +166,111 @@ class NoteListDelButton extends StatelessWidget {
             context,
             'Deleting external files is not yet supported',
           );
+  }
+}
+
+/// Stateful body for the delete-confirmation dialog.
+
+class _DeleteConfirmContent extends StatefulWidget {
+  final List<SelectedNote> selectedNotes;
+
+  const _DeleteConfirmContent({required this.selectedNotes});
+
+  @override
+  State<_DeleteConfirmContent> createState() => _DeleteConfirmContentState();
+}
+
+class _DeleteConfirmContentState extends State<_DeleteConfirmContent> {
+  late final ScrollController _listScrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _listScrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _listScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mediaQuery = MediaQuery.of(context);
+
+    // Cap the dialog content at a width corresponding to roughly 80-100
+    // characters of body text. On narrow screens fall back to the available
+    // width minus the dialog's default horizontal inset.
+
+    final double contentWidth = mediaQuery.size.width < 560
+        ? mediaQuery.size.width - 80
+        : 720;
+
+    // Cap the file list at a fraction of the viewport so the dialog never
+    // grows past the visible screen and the user can scroll through long
+    // selections.
+
+    final double maxListHeight = mediaQuery.size.height * 0.4;
+
+    return SizedBox(
+      width: contentWidth,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.selectedNotes.length > 1
+                ? Msg.confirmDeleteMultiple
+                : Msg.confirmDelete,
+          ),
+          const SizedBox(height: 12),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxListHeight),
+            child: Scrollbar(
+              controller: _listScrollController,
+              thumbVisibility: true,
+              child: ListView.builder(
+                controller: _listScrollController,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(right: 8),
+                itemCount: widget.selectedNotes.length,
+                itemBuilder: (context, index) {
+                  final note = widget.selectedNotes[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 4,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.insert_drive_file_outlined,
+                          size: 18,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            note.noteFileName,
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 13,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
