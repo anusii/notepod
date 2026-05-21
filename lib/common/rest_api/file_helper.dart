@@ -299,6 +299,11 @@ class NoteFileHelper with PodOperationsMixin {
     bool overwrite = false,
     bool isExternal = false,
   }) async {
+    // Tracks whether the `Saving the note!` animation is still on screen
+    // so we can guarantee it is dismissed exactly once on any code path.
+
+    var loadingDialogShown = true;
+
     try {
       // Encrypt note text using created time as the key
       // av: 20250519 - We need to encrypt the note text because
@@ -340,16 +345,49 @@ class NoteFileHelper with PodOperationsMixin {
 
       Navigator.of(context, rootNavigator: true)
           .pop(); // Dismiss the saving note dialog
+      loadingDialogShown = false;
 
       scaffoldController.navigateToSubpage(childPage);
 
       if (!context.mounted) {
         throw Exception('Context not found');
       }
+    } on NotLoggedInException catch (e) {
+      debugPrint(
+        'NotLoggedInException (encrypting and saving note):\n $e',
+      );
+
+      // Dismiss the in-flight `Saving the note!` animation so the UI
+      // does not appear to hang while we prompt the user to log in.
+
+      if (loadingDialogShown && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        loadingDialogShown = false;
+      }
+
+      if (!context.mounted) return;
+
+      // Prompt the user to log in (or cancel back to the note editor).
+      // Using solidui's shared `SolidLoginRequiredDialog` keeps the
+      // look-and-feel and the redirect-to-Solid-login-page behaviour
+      // consistent with the rest of the app.
+
+      await SolidLoginRequiredDialog.showAndHandle(
+        context,
+        message: 'Please log in to your POD first before saving the note.',
+      );
     } on Exception catch (e) {
       debugPrint(
         'Exception (encrypting and saving note, and navigating to return page):\n $e',
       );
+
+      // Make sure the loading dialog is always dismissed on failure so
+      // the UI never gets stuck on `Saving the note!`.
+
+      if (loadingDialogShown && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        loadingDialogShown = false;
+      }
     }
   }
 }
