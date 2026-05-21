@@ -204,9 +204,8 @@ class _DeleteConfirmContentState extends State<_DeleteConfirmContent> {
     // characters of body text. On narrow screens fall back to the available
     // width minus the dialog's default horizontal inset.
 
-    final double contentWidth = mediaQuery.size.width < 560
-        ? mediaQuery.size.width - 80
-        : 720;
+    final double contentWidth =
+        mediaQuery.size.width < 560 ? mediaQuery.size.width - 80 : 720;
 
     // Cap the file list at a fraction of the viewport so the dialog never
     // grows past the visible screen and the user can scroll through long
