@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Saturday 2026-05-16 13:05:23 +1000 Graham Williams>
+# Time-stamp: <Wednesday 2026-05-20 11:23:09 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -192,7 +192,7 @@ ginfo:
 .PHONY: zip
 zip:
 	rm -f ignore/$(APP)_lib.zip
-	zip -r ignore/$(APP)_lib.zip lib test integration_test pubspec.yaml
+	zip -r ignore/$(APP)_lib.zip lib test integration_test pubspec.yaml README.md
 	open ignore/
 
 .PHONY: claude
