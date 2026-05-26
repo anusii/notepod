@@ -31,6 +31,8 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/notepod.dart';
 import 'package:notepod/utils/is_desktop.dart';
+import 'package:notepod/utils/public_sharing_transform.dart'
+    show registerNotepodPublicSharingHooks;
 
 /// Main entry point for the [NotePod] application.
 
@@ -48,6 +50,14 @@ void main() async {
   // to set the Linux desktop window [title].
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Wire NotePod's per-note inner content (de)encryption into solidpod's
+  // public/auth-user sharing lifecycle so that publicly shared notes are
+  // genuinely readable plaintext at their URL, and so that revocation
+  // restores the at-rest representation.
+
+  registerNotepodPublicSharingHooks();
+
   if (isDesktop) {
     // 20251009 jm: Required to initialize the
     // window_manager plugin. Failure to include
