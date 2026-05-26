@@ -25,12 +25,43 @@
 
 library;
 
-import 'package:rdflib/rdflib.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/utils/turtle/parsing_utils.dart';
+
+/// Pattern that matches the canonical base64 alphabet (with optional
+/// `=` padding). Used as a cheap signal that a `noteContent` literal is
+/// likely the ciphertext produced by [encryptVal], as opposed to plain
+/// note text that has been written back to the server for public
+/// sharing.
+
+final RegExp _base64NoteContentRe = RegExp(r'^[A-Za-z0-9+/]+={0,2}$');
+
+/// Decrypt [value] when it looks like ciphertext produced by
+/// [encryptVal] and a key is available. Otherwise return [value]
+/// unchanged so that a note left in plaintext (e.g. after public-share
+/// decryption) is still treated as a valid, parseable note.
+
+String _decryptIfCiphertext(String value, String? createdDateTime) {
+  if (createdDateTime == null) return value;
+  final looksLikeCiphertext = value.isNotEmpty &&
+      value.length % 4 == 0 &&
+      _base64NoteContentRe.hasMatch(value);
+  if (!looksLikeCiphertext) return value;
+
+  try {
+    return decryptVal(value, createdDateTime);
+  } on Object catch (e) {
+    debugPrint(
+      'noteFromTurtle: noteContent looked like ciphertext but could not '
+      'be decrypted, treating as plaintext instead: $e',
+    );
+    return value;
+  }
+}
 
 /// Handle Notepod to/from Turtle serialization operations.
 
@@ -64,7 +95,10 @@ class TurtleSerializer {
           } else if (predicate.contains(modifiedDateTimePred)) {
             modifiedDateTime = value;
           } else if (predicate.contains(noteContentPred)) {
-            noteContent = decryptVal(value, createdDateTime!);
+            noteContent = _decryptIfCiphertext(
+              value as String,
+              createdDateTime,
+            );
           }
         }
       }
