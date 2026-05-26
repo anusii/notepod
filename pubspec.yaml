@@ -32,7 +32,6 @@ dependencies:
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
   emacs_text_field: ^0.1.0
-  rdflib: ^0.2.12
   solidpod: ^0.12.9
   solidui: ^0.3.55
   universal_io: ^2.2.2
