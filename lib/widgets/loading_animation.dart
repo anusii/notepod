@@ -36,6 +36,21 @@ Future<dynamic> showAnimationDialog(
   String alertMsg,
   bool showPathBackground,
 ) {
+  // Delegates to solidui's showAnimationDialog for consistency and reduces duplicate code.
+  // Using animationIndex 0 (ballScaleRipple) as a reasonable default.
+  return showAnimationDialogSolid(context, 0, alertMsg, showPathBackground, null);
+}
+
+// Alias to avoid name clash with the delegating function.
+Future<void> showAnimationDialogSolid(
+  BuildContext context,
+  int animationIndex,
+  String alertMsg,
+  bool showPathBackground,
+  VoidCallback? updateStateCallback,
+) => solidui.showAnimationDialog(
+      context, animationIndex, alertMsg, showPathBackground, updateStateCallback);
+
   return showDialog(
     barrierDismissible: false,
     context: context,
