@@ -32,6 +32,16 @@ a Pull Request. Thanks.
 
 ## 0.4
 
++ Bug fix empty notes cause re-layout for ever [0.3.25 20260519 gjw]
++ Support scrolling of note preview [0.3.24 20260516 gjw]
++ Update the layout of new/edit notes [0.3.23 20260506 gjw]
++ SHARE. CHANGELOG and markdown render colour [0.3.22 20260505 gjw]
++ ENTER on SEARCH creates note with SEARCH as TITLE [0.3.21 20260430 gjw]
++ Shift metadata to be available on click [0.3.20 20260427 gjw]
++ JSON import now creates the imported notes [0.3.19 20260427 gjw]
++ Fixes to loading empty notes [0.3.18 20260427 jesscmoore]
++ Upgrade concurrent list loading with exception handling [0.3.17 20260426 jesscmoore]
++ Add import/export of json and export to pdf and md [0.3.16 20260423 gjw]
 + Update solidpod to dev for key loading fix [0.3.15 20260418 jesscmoore]
 + Optimise multi file load from different owners [0.3.14 20260415 jesscmoore]
 + Fix appbar preferences overflow [0.3.13 20260406 tonypioneer]

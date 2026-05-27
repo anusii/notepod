@@ -113,11 +113,16 @@ ThemeData lightThemeData() {
     ),
     scaffoldBackgroundColor: backgroundWhite,
     appBarTheme: const AppBarTheme(
-      backgroundColor: darkGreen, // Colors.green[300],
-      //   foregroundColor: Colors.black,
-      //   iconTheme: IconThemeData(
-      //     color: Colors.black,
-      //   ),
+      backgroundColor: darkGreen,
+      foregroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.white),
+      actionsIconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+        fontSize: 18,
+        letterSpacing: -0.3,
+      ),
     ),
     // iconTheme: IconThemeData(
     //   color: Colors.white,
@@ -180,11 +185,16 @@ ThemeData darkThemeData() {
     ),
     scaffoldBackgroundColor: Colors.grey[900],
     appBarTheme: const AppBarTheme(
-      backgroundColor: darkGreen, // Colors.green[900],
-      // foregroundColor: Colors.white,
-      // iconTheme: IconThemeData(
-      //   color: Colors.white,
-      // ),
+      backgroundColor: darkGreen,
+      foregroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.white),
+      actionsIconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+        fontSize: 18,
+        letterSpacing: -0.3,
+      ),
     ),
     // iconTheme: IconThemeData(
     //   color: Colors.black,

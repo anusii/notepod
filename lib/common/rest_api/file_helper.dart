@@ -32,7 +32,6 @@ import 'package:intl/intl.dart';
 import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/operations.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/paths.dart';
 import 'package:notepod/constants/turtle_structures.dart';
@@ -40,6 +39,7 @@ import 'package:notepod/models/note.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/view_note.dart';
+import 'package:notepod/services/operations.dart';
 import 'package:notepod/utils/encryption.dart';
 import 'package:notepod/widgets/err_dialogs.dart';
 import 'package:notepod/widgets/loading_animation.dart' as loading;
@@ -48,131 +48,6 @@ import 'package:notepod/widgets/loading_animation.dart' as loading;
 
 class NoteFileHelper with PodOperationsMixin {
   NoteFileHelper();
-
-  /// Scans the note pod directory for note files.
-  ///
-  /// Arguments: none.
-  /// Returns: list of pod owner's files.
-
-  Future<List<String>> scanFileListDirectory() async {
-    try {
-      final dirUrl = await getDirUrl(basePath);
-      final resources = await getResourcesInContainer(dirUrl);
-
-      return resources.files
-          .where((f) => f.startsWith(noteFileNamePrefix) && f.endsWith('.ttl'))
-          .toList();
-    } catch (e) {
-      if (!isFileNotFoundError(e) && !isPermissionError(e)) {
-        // Error scanning directory.
-      }
-      return [];
-    }
-  }
-
-  /// Safely scans the permission log file to retrieve current log entries of external files shared with the user.
-  ///
-  /// Arguments:
-  /// - [context] - The build context.
-  /// - [childPage] - The child widget to return to.
-  ///
-  /// Returns:
-  /// - map of external files with filename as key and details of permissions.
-
-  Future<Map<dynamic, dynamic>> scanPermLogFile() async {
-    try {
-      // SharedResources() parses log ttl to map
-
-      final latestLogMap = await sharedResources();
-
-      if (latestLogMap == SolidFunctionCallStatus.notLoggedIn) {
-        // Return empty map if sharedResources() failed login
-        return {};
-      }
-
-      return latestLogMap;
-    } catch (e) {
-      if (!isFileNotFoundError(e) && !isPermissionError(e)) {
-        // Error reading permission log
-      }
-      debugPrint('Error: $e');
-      rethrow;
-    }
-  }
-
-  /// Parses external note file details from latest log map
-  /// entry for note file.
-  ///
-  /// Arguments:
-  /// - [logRecordOfFile] - Log record of the external
-  /// note file shared to user.
-  /// - [fileUrl] - URL of external file shared to user.
-  ///
-  /// Returns: parsed map of details of external note file.
-
-  static Note? extFileDetailsFromLog({
-    required Map logRecordOfFile,
-    required String fileUrl,
-  }) {
-    try {
-      String? sharedTime;
-      String? noteUrl;
-      String? noteFileName;
-      String? noteOwner;
-      String? permissionGranter;
-      String? permissionRecepient;
-      String? permissionType;
-      String? permissionList;
-
-      // Extract external note details information
-
-      noteFileName = fileUrl.split('/').last;
-      // debugPrint('noteFileName: $noteFileName');
-
-      for (final entry in logRecordOfFile.entries) {
-        final predicate = entry.key.toString();
-        final value = entry.value.toString();
-        // debugPrint('predicate: $predicate, value: $value');
-
-        if (predicate.contains(PermissionLogLiteral.logtime.toString())) {
-          sharedTime = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.resource.toString())) {
-          noteUrl = value;
-        } else if (predicate.contains(PermissionLogLiteral.owner.toString())) {
-          noteOwner = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.granter.toString())) {
-          permissionGranter = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.recepient.toString())) {
-          permissionRecepient = value;
-        } else if (predicate.contains(PermissionLogLiteral.type.toString())) {
-          permissionType = value;
-        } else if (predicate
-            .contains(PermissionLogLiteral.permissions.toString())) {
-          permissionList = value;
-        }
-      }
-
-      // Create the external note details object
-
-      return Note(
-        noteUrl: noteUrl!,
-        noteFileName: noteFileName,
-        noteOwner: noteOwner!,
-        sharedTime: sharedTime!,
-        permissionGranter: permissionGranter!,
-        permissionRecepient: permissionRecepient!,
-        permissionType: permissionType!,
-        permissionList: permissionList!,
-        isExternalRes: true,
-      );
-    } catch (e) {
-      debugPrint('Error: $e');
-      return null;
-    }
-  }
 
   /// Safely deletes a note file
   ///
@@ -424,6 +299,11 @@ class NoteFileHelper with PodOperationsMixin {
     bool overwrite = false,
     bool isExternal = false,
   }) async {
+    // Tracks whether the `Saving the note!` animation is still on screen
+    // so we can guarantee it is dismissed exactly once on any code path.
+
+    var loadingDialogShown = true;
+
     try {
       // Encrypt note text using created time as the key
       // av: 20250519 - We need to encrypt the note text because
@@ -465,16 +345,49 @@ class NoteFileHelper with PodOperationsMixin {
 
       Navigator.of(context, rootNavigator: true)
           .pop(); // Dismiss the saving note dialog
+      loadingDialogShown = false;
 
       scaffoldController.navigateToSubpage(childPage);
 
       if (!context.mounted) {
         throw Exception('Context not found');
       }
+    } on NotLoggedInException catch (e) {
+      debugPrint(
+        'NotLoggedInException (encrypting and saving note):\n $e',
+      );
+
+      // Dismiss the in-flight `Saving the note!` animation so the UI
+      // does not appear to hang while we prompt the user to log in.
+
+      if (loadingDialogShown && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        loadingDialogShown = false;
+      }
+
+      if (!context.mounted) return;
+
+      // Prompt the user to log in (or cancel back to the note editor).
+      // Using solidui's shared `SolidLoginRequiredDialog` keeps the
+      // look-and-feel and the redirect-to-Solid-login-page behaviour
+      // consistent with the rest of the app.
+
+      await SolidLoginRequiredDialog.showAndHandle(
+        context,
+        message: 'Please log in to your POD first before saving the note.',
+      );
     } on Exception catch (e) {
       debugPrint(
         'Exception (encrypting and saving note, and navigating to return page):\n $e',
       );
+
+      // Make sure the loading dialog is always dismissed on failure so
+      // the UI never gets stuck on `Saving the note!`.
+
+      if (loadingDialogShown && context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        loadingDialogShown = false;
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 name: notepod
 description: 'Privacy preserving note taking app using PODs.'
 publish_to: 'none'
-version: 0.3.15+10
+version: 0.3.25+13
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -22,14 +22,19 @@ dependencies:
     sdk: flutter
   flutter_form_builder: ^10.0.1
   form_builder_validators: ^11.1.2
+  file_picker: ^11.0.2
   intl: any
+  pdf: ^3.11.1
+  printing: ^5.13.1
   new_loading_indicator: ^1.0.2
+  markdown: ^7.2.2
   markdown_toolbar: ^0.5.0
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
+  emacs_text_field: ^0.1.0
   rdflib: ^0.2.12
-  solidpod: ^0.11.0
-  solidui: ^0.2.0
+  solidpod: ^0.12.9
+  solidui: ^0.3.49
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 

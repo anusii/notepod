@@ -36,8 +36,10 @@ import 'package:notepod/constants/colours.dart';
 ///
 /// Arguments:
 /// - [icon] - icon to show on button.
-/// - [childPage] - child page to navigate to.
-/// - [scaffoldController] - Controller for the Solid scaffold.
+/// - [onPressed] - callback to invoke on press. When provided, [childPage]
+///   and [scaffoldController] are not required.
+/// - [childPage] - child page to navigate to (required when [onPressed] is null).
+/// - [scaffoldController] - Controller for the Solid scaffold (required when [onPressed] is null).
 /// - [backgroundColor] - set button background color. (Default: grey [ButtonBackgroundColor.def]).
 /// - [foregroundColor] - set button foreground color. (Default [ButtonForegroundColor.white]).
 
@@ -45,11 +47,14 @@ class SimpleActionButton extends StatelessWidget {
   /// Button icon
   final Icon icon;
 
-  /// Childpage
-  final Widget childPage;
+  /// Optional press callback. When set, overrides childPage navigation.
+  final VoidCallback? onPressed;
 
-  /// Solid Scaffold Controller
-  final SolidScaffoldController scaffoldController;
+  /// Childpage (required when [onPressed] is null)
+  final Widget? childPage;
+
+  /// Solid Scaffold Controller (required when [onPressed] is null)
+  final SolidScaffoldController? scaffoldController;
 
   /// Button background color
   final Color backgroundColor;
@@ -60,13 +65,18 @@ class SimpleActionButton extends StatelessWidget {
   const SimpleActionButton({
     super.key,
     required this.icon,
-    required this.childPage,
-    required this.scaffoldController,
+    this.onPressed,
+    this.childPage,
+    this.scaffoldController,
     this.backgroundColor = ButtonBackgroundColor.def,
     // When SimpleActionButton called independently, default foreground color
     // is ButtonForegroundColor.list
     this.foregroundColor = ButtonForegroundColor.list,
-  });
+  }) : assert(
+          onPressed != null ||
+              (childPage != null && scaffoldController != null),
+          'Provide onPressed, or both childPage and scaffoldController.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +89,10 @@ class SimpleActionButton extends StatelessWidget {
         child: IconButton(
           color: foregroundColor,
           icon: icon,
-          onPressed: () async {
-            // Redirect.
-            scaffoldController.navigateToSubpage(childPage);
-          },
+          onPressed: onPressed ??
+              () async {
+                scaffoldController!.navigateToSubpage(childPage!);
+              },
         ),
       ),
     );

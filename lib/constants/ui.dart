@@ -41,15 +41,13 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  static const double compressedOwnItemHeight =
-      260; // (4 row subtitle) 190; (3 row subtitle)
+  static const double compressedOwnItemHeight = 90;
 
   /// Approximate height of uncompressed item
   /// in user's own notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedOwnItemHeight =
-      138; // (4 row subtitle) 108; (3 row subtitle)
+  static const double uncompressedOwnItemHeight = 72;
 
   /// Approximate height of compressed item
   /// in user's external notes list
@@ -59,14 +57,13 @@ class NoteItemSize {
   /// modified date time are line wrapped to
   /// two lines.)
 
-  // static const double compressedExtItemHeight = 260; // (4 row subtitle)
-  static const double compressedExtItemHeight = 390; // (6 row subtitle)
+  static const double compressedExtItemHeight = 90;
 
   /// Approximate height of uncompressed item
   /// in user's external notes list
   /// when list item text is not line wrapped.
 
-  static const double uncompressedExtItemHeight = 207; // (6 row subtitle)
+  static const double uncompressedExtItemHeight = 72;
 
   /// Calculate card aspect ratio to use for
   /// gridview builder cards using the box
