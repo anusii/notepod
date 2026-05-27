@@ -1,12 +1,12 @@
 /// App-wide constants.
 ///
-/// Copyright (C) 2023, Software Innovation Institute
+// Time-stamp: <Thursday 2026-04-30 17:22:33 +1000 Graham Williams>
+///
+/// Copyright (C) 2023-2026, Software Innovation Institute
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License");
 ///
 /// License: https://opensource.org/license/gpl-3-0
-//
-// Time-stamp: <Wednesday 2023-11-01 08:26:39 +1100 Graham Williams>
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,9 +23,14 @@
 ///
 /// Authors: Anushka Vidanage, Graham Williams, Jess Moore
 
+// Add the library directive as we have doc entries above. We publish the above
+// meta doc lines in the docs.
+
 library;
 
 import 'package:flutter/material.dart';
+
+import 'package:solidui/solidui.dart' show SolidInviteOthersConfig;
 
 const String applicationRepo = 'https://github.com/anusii/notepod';
 const String appChangeLog =
@@ -93,14 +98,19 @@ const String combinedNotesTitle = 'Notes';
 const String combinedNotesExplanation = 'accessible to me';
 const String combinedNotesToolTip = 'Go to notes accessible to me';
 
+const String importExportTitle = 'Import / Export';
+const String importExportToolTip = '**Import / Export**\n\n'
+    'Import notes from a JSON backup, or export your notes to JSON or PDF.';
+
 /// Note list messages
 class NoteListMsg {
   /// Message displayed when corrupt files found
   static const String badFilesFound = 'Corrupt note files present';
 
-  /// Message displayed when non existent files found
-  static const String nonExistentNotesFound =
-      'Non-existent note files present without \'revoke\' entry in log';
+  /// Message displayed when inaccessible notes are found (deleted without
+  /// revoking access, or encrypted with an earlier key pair)
+  static const String inaccessibleNotesFound =
+      'Inaccessible notes present without \'revoke\' entry in log';
 
   /// Message displayed when no notes found in user's Pod
   static const String noNotes = 'No notes yet!';
@@ -173,3 +183,47 @@ const EdgeInsets metadataPadding = EdgeInsets.fromLTRB(15, 5, 10, 0);
 /// Button shape decoration for list pages
 ShapeDecoration buttonShapeList =
     const ShapeDecoration(color: Colors.grey, shape: CircleBorder());
+
+/// Public URL where NotePod is hosted. Used by the Invite Others
+/// feature to send a working link to the recipient.
+
+const String appUrl = 'https://notepod.solidcommunity.au';
+
+/// Application-wide Invite Others configuration shared by the
+/// AppBar share button, the App Info dialogue, and the grant
+/// permissions fallback so that users can invite others to set up
+/// their POD and try NotePod.
+
+const SolidInviteOthersConfig inviteOthersConfig = SolidInviteOthersConfig(
+  applicationName: 'NotePod',
+  appUrl: appUrl,
+  appDescription: 'read, write, and share encrypted notes stored on your '
+      'own personal online data store',
+  messageTemplate: '''
+You might like to try the {appName} app, available online here:
+
+{appUrl}
+
+Signing into {appName} will set up your data vault so you can create and share private, encrypted notes with other Solid users.''',
+  subject: 'Try the NotePod app on your Solid POD',
+  tooltip: '''
+
+  **Invite Others**
+
+  Tap to invite someone else to try NotePod. You can copy the
+  invitation to the clipboard or share it through any messaging app
+  installed on your device.
+
+  ''',
+);
+
+const String inviteOthersTitle = 'Invite Others';
+const String inviteOthersToolTip = '''
+
+**Invite Others**
+
+Tap to invite someone else to set up their own POD and try NotePod.
+Sharing notes with another user only works once they have their own
+data vault, so this is a quick way to get them started.
+
+''';

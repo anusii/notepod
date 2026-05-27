@@ -147,7 +147,6 @@ class EditNoteState extends State<EditNote> {
     return NoteEditScrollView(
       formKey: formKey,
       textController: _textController,
-      scrollController: _scrollController,
       scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,

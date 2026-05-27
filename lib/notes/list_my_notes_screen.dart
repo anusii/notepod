@@ -23,17 +23,19 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidpod/solidpod.dart' show isUserLoggedIn;
 import 'package:solidui/solidui.dart';
 
-import 'package:notepod/common/rest_api/rest_api.dart';
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/models/notes_call_result.dart';
 import 'package:notepod/models/selected_note.dart';
 import 'package:notepod/notes/list_notes.dart';
 import 'package:notepod/notes/new_note.dart';
+import 'package:notepod/services/note_service.dart';
 import 'package:notepod/widgets/err_card.dart';
 import 'package:notepod/widgets/msg_card.dart';
+import 'package:notepod/widgets/not_logged_in_card.dart';
 import 'package:notepod/widgets/note_list_del_dialog.dart';
 
 /// A [StatefulWidget] that fetches the user's notes in their app data folder
@@ -59,7 +61,12 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// Future function to retrieve user's notes list
-  static Future? _asyncDataFetch;
+  Future<NotesCallResult>? _asyncDataFetch;
+
+  /// Tracks the user's login status. `null` while the asynchronous
+  /// check is in flight (used to show the loading screen), then
+  /// updated by [_checkLoginAndFetch]
+  bool? _isLoggedIn;
 
   /// Scroll controller for single child scroll view
   late final ScrollController _scrollController;
@@ -71,8 +78,24 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   void initState() {
     super.initState();
     _scaffoldController = widget.scaffoldController;
-    _asyncDataFetch = getOwnNoteList();
     _scrollController = ScrollController();
+    _checkLoginAndFetch();
+  }
+
+  /// Confirms the user is logged in before triggering the POD fetch.
+  ///
+  /// When the user is not logged in we skip the fetch entirely and let
+  /// [build] render the [NotLoggedInCard] placeholder. Touching the POD
+  /// APIs without an authenticated session would otherwise produce a
+  /// cascade of rendering exceptions on this screen.
+
+  Future<void> _checkLoginAndFetch() async {
+    final loggedIn = await isUserLoggedIn();
+    if (!mounted) return;
+    setState(() {
+      _isLoggedIn = loggedIn;
+      _asyncDataFetch = loggedIn ? NoteService().getOwnNoteList() : null;
+    });
   }
 
   @override
@@ -122,34 +145,53 @@ class _ListMyNotesScreenState extends State<ListMyNotesScreen> {
   ///
   /// Arguments: none.
   Widget _loadNewNote(SolidScaffoldController scaffoldController) {
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: _scrollController,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: <Widget>[
-            // MsgCard style works in light and dark themes
-            // No notes message
-            buildMsgCard(
-              context,
-              Icons.info,
-              Colors.amber,
-              NoteListMsg.noNotes,
-              NoteListMsg.writeFirstNote,
-              isSmall: true,
-            ),
-            NewNote(
-              scaffoldController: scaffoldController,
-            ),
-          ],
+    // The outer SingleChildScrollView used to wrap NewNote here, but NewNote
+    // contains a Column with an Expanded child (the markdown editor), which
+    // cannot be laid out under unbounded vertical constraints. NewNote already
+    // handles its own internal scrolling, so use a plain Column with Expanded
+    // and let the editor fill the remaining height.
+
+    return Column(
+      children: <Widget>[
+        // No-notes message (fixed height at top).
+        buildMsgCard(
+          context,
+          Icons.info,
+          Colors.amber,
+          NoteListMsg.noNotes,
+          NoteListMsg.writeFirstNote,
+          isSmall: true,
         ),
-      ),
+        // Editor fills the remaining space and provides its own scrolling.
+        Expanded(
+          child: NewNote(
+            scaffoldController: scaffoldController,
+          ),
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Show the loading screen until the asynchronous login check has
+    // returned. Once we know the user is logged out, render the
+    // friendly `Not logged in` placeholder rather than attempting to
+    // fetch notes from a POD we cannot read.
+
+    if (_isLoggedIn == null) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: SafeArea(child: loadingScreen(normalLoadingScreenHeight)),
+      );
+    }
+    if (_isLoggedIn == false) {
+      return Scaffold(
+        key: _scaffoldKey,
+        body: const SafeArea(child: NotLoggedInCard()),
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(

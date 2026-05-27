@@ -1,8 +1,8 @@
 /// NotePod - The application's home page.
 ///
-// Time-stamp: <Friday 2025-08-15 09:14:37 +1000 Graham Williams>
+// Time-stamp: <Friday 2026-04-24 05:26:11 +1000 Graham Williams>
 ///
-/// Copyright (C) 2024-2025, Software Innovation Institute, ANU.
+/// Copyright (C) 2024-2026, Software Innovation Institute, ANU.
 ///
 /// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
@@ -30,6 +30,7 @@ import 'package:solidpod/solidpod.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
+import 'package:notepod/notes/import_export_screen.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/notes/list_notes_screen.dart';
 import 'package:notepod/notes/new_note.dart';
@@ -71,13 +72,11 @@ class AppHomePageState extends State<AppHomePage> {
     BuildContext context,
     SolidScaffoldController scaffoldController,
   ) {
-    // Reduce calls to of(context).
-    final theme = Theme.of(context);
     return SolidScaffold(
       controller: scaffoldController,
       appBar: SolidAppBarConfig(
         title: topBarTitle,
-        backgroundColor: theme.appBarTheme.backgroundColor, // lightGreen,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         defaultOverflowActionIds: const {
           'all_notes',
           'my_notes',
@@ -85,11 +84,10 @@ class AppHomePageState extends State<AppHomePage> {
           SolidAppBarActionIds.logout,
           SolidAppBarActionIds.about,
         },
-        versionConfig: SolidVersionConfig(
+        versionConfig: const SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
-          userTextStyle: TextStyle(color: theme.colorScheme.onSurface),
-          // tooltip: 'Custom version tooltip',
+          userTextStyle: TextStyle(color: Colors.white),
         ),
         actions: [
           // New Note
@@ -158,6 +156,23 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           tooltip: newNoteToolTip,
         ),
+        // Import / Export
+        const SolidMenuItem(
+          title: importExportTitle,
+          icon: Icons.import_export,
+          child: ImportExportScreen(),
+          tooltip: importExportToolTip,
+        ),
+        // Invite Others
+        SolidMenuItem(
+          title: inviteOthersTitle,
+          icon: Icons.share,
+          tooltip: inviteOthersToolTip,
+          onTap: (menuContext) => InviteOthersDialog.show(
+            menuContext,
+            config: inviteOthersConfig,
+          ),
+        ),
       ],
       statusBar: SolidStatusBarConfig(
         serverInfo: SolidServerInfo(
@@ -185,6 +200,7 @@ class AppHomePageState extends State<AppHomePage> {
         applicationLegalese: appOwner,
         text: aboutText,
       ),
+      inviteConfig: inviteOthersConfig,
       enableProfile: true,
       body: widget.childPage,
     );

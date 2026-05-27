@@ -29,16 +29,23 @@ import 'package:flutter/material.dart';
 
 import 'package:markdown_widget/markdown_widget.dart';
 
-// Displays note content with MarkdownBlock()
+import 'package:notepod/widgets/markdown_theme.dart';
+
+// Displays note content with MarkdownBlock(). The optional [context] lets
+// the rendered markdown follow the current theme so that fenced code blocks
+// and inline code are legible in dark mode rather than keeping the package
+// default light background.
 // Expanded noteDisplayMarkdown(
 Container noteDisplayMarkdown(
-  String data,
-) {
+  String data, {
+  BuildContext? context,
+}) {
+  final config = context == null ? null : markdownConfigForContext(context);
   return Container(
     alignment: Alignment.topLeft,
     padding: const EdgeInsets.all(10),
     // child: SingleChildScrollView(child: MarkdownBlock(data: data))),
-    child: MarkdownBlock(data: data),
+    child: MarkdownBlock(data: data, config: config),
   );
   // 20250717 jm Alt method retained for reference
   // MarkdownParse(

@@ -42,9 +42,13 @@ import 'package:notepod/widgets/note_edit_scroll_view.dart';
 class NewNote extends StatefulWidget {
   final SolidScaffoldController scaffoldController;
 
+  /// Optional title to pre-fill when creating a note from the search bar.
+  final String? initialTitle;
+
   const NewNote({
     super.key,
     required this.scaffoldController,
+    this.initialTitle,
   });
 
   @override
@@ -137,10 +141,10 @@ class NewNoteState extends State<NewNote> {
     return NoteEditScrollView(
       formKey: formKey,
       textController: _textController,
-      scrollController: _scrollController,
       scaffoldController: _scaffoldController,
       focusTitle: _focusTitle,
       focusContent: _focusContent,
+      noteTitle: widget.initialTitle,
       childPage: ListMyNotesScreen(
         scaffoldController: _scaffoldController,
       ),

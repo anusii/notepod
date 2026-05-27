@@ -135,7 +135,10 @@ class _ViewNoteState extends State<ViewNote> {
                     showPathInfo: true,
                   ),
                   // Display markdown note content
-                  noteDisplayMarkdown(_note.content!.noteContent),
+                  noteDisplayMarkdown(
+                    _note.content!.noteContent,
+                    context: context,
+                  ),
                 ],
               ),
             ),
