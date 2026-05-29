@@ -25,8 +25,6 @@
 
 library;
 
-import 'package:rdflib/rdflib.dart';
-
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/utils/encryption.dart';
