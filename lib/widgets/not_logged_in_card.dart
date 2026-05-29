@@ -93,26 +93,27 @@ class NotLoggedInCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.login),
-                  label: const Text('Log In'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    icon: const Icon(Icons.login),
+                    label: const Text('Log In'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
+                    onPressed: () => {}
+                    // SolidLoginRequiredDialog.showAndHandle(
+                    //   context,
+                    //   message:
+                    //       'Please log in to your POD to view and manage your '
+                    //       'notes.',
+                    // ),
                     ),
-                  ),
-                  onPressed: () => SolidLoginRequiredDialog.showAndHandle(
-                    context,
-                    message:
-                        'Please log in to your POD to view and manage your '
-                        'notes.',
-                  ),
-                ),
               ],
             ),
           ),
