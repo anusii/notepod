@@ -1,9 +1,3 @@
-# 20250609 gjw Extras
-
-app/src/main/kotlin/
-build.gradle.kts
-settings.gradle.kts
-
 gradle-wrapper.jar
 /.gradle
 /captures/
