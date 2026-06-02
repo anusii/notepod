@@ -47,7 +47,7 @@ dependency_overrides:
   solid_auth:
     git:
       url: https://github.com/anusii/solid_auth.git
-      ref: tony/334_file_sharing_error_dialog
+      ref: dev
   solidpod:
     git:
       url: https://github.com/anusii/solidpod.git

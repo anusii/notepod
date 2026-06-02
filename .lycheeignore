@@ -4,9 +4,7 @@
 # Localhost OAuth callbacks used in integration tests
 
 http://localhost:44007/
-
 http://localhost:8000/
-
 http://localhost/
 
 # POD OAuth endpoints that require authentication parameters
@@ -60,3 +58,6 @@ https://api.login.yahoo.com/
 https://graph.facebook.com/
 https://login.microsoftonline.com/
 https://securetoken.google.com/
+
+# URLs in comments
+http://localhost:4400/redirect
