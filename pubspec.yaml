@@ -43,6 +43,20 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
 
+dependency_overrides:
+  solid_auth:
+    git:
+      url: https://github.com/anusii/solid_auth.git
+      ref: tony/334_file_sharing_error_dialog
+  solidpod:
+    git:
+      url: https://github.com/anusii/solidpod.git
+      ref: tony/334_file_sharing_error_dialog
+  solidui:
+    git:
+      url: https://github.com/anusii/solidui.git
+      ref: tony/334_file_sharing_error_dialog
+
 flutter:
   assets:
     - assets/images/
