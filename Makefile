@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Wednesday 2026-05-20 11:23:09 +1000 Graham Williams>
+# Time-stamp: <Monday 2026-05-25 20:36:38 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -30,7 +30,7 @@ DEST=/var/www/html/$(APP)
 
 REPO=solidcommunity.au
 RLOC=/var/www/html/web/installers/
-DWLD=https://$(REPO)/web/installers/
+DWLD=https://$(REPO)/installers/
 
 ########################################################################
 # Supported Makefile modules.
@@ -189,10 +189,19 @@ ginfo:
 		echo "No bump ID found."; \
 	fi
 
+ZFILES := lib test integration_test pubspec.yaml README.md
+
 .PHONY: zip
 zip:
-	rm -f ignore/$(APP)_lib.zip
-	zip -r ignore/$(APP)_lib.zip lib test integration_test pubspec.yaml README.md
+	@mkdir -p ignore
+	@rm -f ignore/$(APP)_lib.zip
+	@to_zip=""
+	@for f in $(ZFILES); do \
+		if [ -e "$$f" ]; then \
+			to_zip="$$to_zip $$f"; \
+		fi; \
+	done; \
+	zip -r ignore/$(APP)_lib.zip $$to_zip
 	open ignore/
 
 .PHONY: claude
