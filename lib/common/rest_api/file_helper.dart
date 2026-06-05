@@ -372,10 +372,10 @@ class NoteFileHelper with PodOperationsMixin {
       // look-and-feel and the redirect-to-Solid-login-page behaviour
       // consistent with the rest of the app.
 
-      await SolidLoginRequiredDialog.showAndHandle(
-        context,
-        message: 'Please log in to your POD first before saving the note.',
-      );
+      // await SolidLoginRequiredDialog.showAndHandle(
+      //   context,
+      //   message: 'Please log in to your POD first before saving the note.',
+      // );
     } on Exception catch (e) {
       debugPrint(
         'Exception (encrypting and saving note, and navigating to return page):\n $e',
