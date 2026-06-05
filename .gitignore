@@ -308,3 +308,11 @@ app.*.symbols
 /linux/runner/main.cc
 /linux/runner/my_application.cc
 /linux/runner/my_application.h
+
+#-----------------------------------------------------------------------
+# Claude related files
+#-----------------------------------------------------------------------
+
+CLAUDE.md
+Claude.md
+.claude/*

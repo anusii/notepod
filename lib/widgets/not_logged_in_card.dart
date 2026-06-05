@@ -106,12 +106,13 @@ class NotLoggedInCard extends StatelessWidget {
                       vertical: 12,
                     ),
                   ),
-                  onPressed: () => SolidLoginRequiredDialog.showAndHandle(
-                    context,
-                    message:
-                        'Please log in to your POD to view and manage your '
-                        'notes.',
-                  ),
+                  onPressed: () => {},
+                  // SolidLoginRequiredDialog.showAndHandle(
+                  //   context,
+                  //   message:
+                  //       'Please log in to your POD to view and manage your '
+                  //       'notes.',
+                  // ),
                 ),
               ],
             ),
