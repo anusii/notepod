@@ -196,7 +196,7 @@ fix:
 .PHONY: format
 format:
 	@echo "Dart: FORMAT"
-	@find . -name pubspec.yaml -not -path '*/.*' -execdir flutter pub get \;
+	@find . -name pubspec.yaml -not -path '*/.*' -execdir flutter pub get > /dev/null \;
 	dart format lib/ $(if $(shell test -d example && echo yes),example/) $(if $(shell test -d test && echo yes),test/) $(if $(shell test -d integration_test && echo yes),integration_test/)
 	@echo $(SEPARATOR)
 
