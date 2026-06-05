@@ -41,16 +41,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
 
-dependency_overrides:
-  solidpod:
-    git:
-      url: https://github.com/anusii/solidpod.git
-      ref: tony/551_public_file_not_decrypted
-  solidui:
-    git:
-      url: https://github.com/anusii/solidui.git
-      ref: tony/551_public_file_not_decrypted
-
 flutter:
   assets:
     - assets/images/
