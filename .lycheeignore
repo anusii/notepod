@@ -4,10 +4,17 @@
 # Localhost OAuth callbacks used in integration tests
 
 http://localhost:44007/
-
 http://localhost:8000/
-
 http://localhost/
+
+# Used by oidc through solid_auth
+
+http://localhost:4400/redirect
+https://your-domain/redirect.html
+
+# Localhost used in comments
+
+http://localhost:3000/
 
 # POD OAuth endpoints that require authentication parameters
 
@@ -60,3 +67,13 @@ https://api.login.yahoo.com/
 https://graph.facebook.com/
 https://login.microsoftonline.com/
 https://securetoken.google.com/
+
+# URL used in comments
+
+file:///home/runner/work/solidui/solidui/lib/src/utils/scheme
+https://pods.example.au/john-doe/profile/card#me
+https://github.com/gjwgit/myapp/blob/main/README.md
+
+# 20260605 gjw Failing solid servers
+
+https://trinpod.eu/>
