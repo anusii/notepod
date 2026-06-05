@@ -1,4 +1,4 @@
-/// DESCRIPTION
+/// Loading animation dialog for NotePod.
 ///
 // Time-stamp: <Friday 2025-06-27 13:53:06 +1000 Graham Williams>
 ///
@@ -27,50 +27,28 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:new_loading_indicator/new_loading_indicator.dart';
+import 'package:solidui/solidui.dart' as solidui;
 
 import 'package:notepod/constants/colours.dart';
 
-Future<dynamic> showAnimationDialog(
+/// Display a NotePod-styled loading animation dialog.
+
+Future<void> showAnimationDialog(
   BuildContext context,
   String alertMsg,
   bool showPathBackground,
 ) {
-  return showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(50),
-        child: Center(
-          child: SizedBox(
-            width: 150,
-            height: 250,
-            child: Column(
-              children: [
-                // Colours work in light and dark themes
-                LoadingIndicator(
-                  indicatorType: Indicator.ballScaleRipple,
-                  colors: defaultNotepodColors,
-                  strokeWidth: 4.0,
-                  pathBackgroundColor: showPathBackground
-                      ? const Color.fromARGB(59, 0, 0, 0)
-                      : null,
-                ),
-                DefaultTextStyle(
-                  style: (const TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  )),
-                  child: Text(
-                    alertMsg,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
+  return solidui.showAnimationDialog(
+    context,
+    0,
+    alertMsg,
+    showPathBackground,
+    null,
+    colors: defaultNotepodColors,
+    strokeWidth: 4.0,
+    width: 150,
+    height: 250,
+    showCancelButton: false,
+    indicatorType: solidui.Indicator.ballScaleRipple,
   );
 }
