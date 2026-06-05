@@ -80,15 +80,22 @@ class NoteListCard extends StatelessWidget {
                   child: Center(
                     child: MarkdownTooltip(
                       message: '**Select note**\n\nTap to select this note.',
-                      child: Ink(
-                        decoration: buttonShapeList,
-                        child: IconButton(
-                          icon: note.isSelected
-                              ? const Icon(Icons.done)
-                              : const Icon(Icons.edit_document),
-                          onPressed: onSelect,
-                        ),
-                      ),
+                      child: note.isSelected
+                          ? Ink(
+                              decoration: buttonShapeList,
+                              child: IconButton(
+                                icon: const Icon(Icons.done),
+                                onPressed: onSelect,
+                              ),
+                            )
+                          : InkWell(
+                              customBorder: const CircleBorder(),
+                              onTap: onSelect,
+                              child: SolidOwnerAvatar(
+                                webId: note.noteOwner,
+                                size: 40,
+                              ),
+                            ),
                     ),
                   ),
                 ),

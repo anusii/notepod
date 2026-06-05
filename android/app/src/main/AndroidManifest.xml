@@ -1,25 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 20251010 gjw With flutter_secure_storage prevent
-         backup-related keystore issue (Android backups data on Google
-         Drive which can cause exception
-         java.security.InvalidKeyException:Failed to unwrap key) by
-         setting allowBackup and fullBackupContent to false as
-         below. See
-         https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
-    -->
     <application
         android:label="notepod"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-	android:allowBackup="false"
-	android:fullBackupContent="false">
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
+            android:launchMode="singleTask"
+        
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -43,7 +34,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
@@ -54,11 +44,5 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
-	<!-- If your app opens https URLs -->
-	<intent>
-          <action android:name="android.intent.action.VIEW" />
-          <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="https" />
-	</intent>
     </queries>
 </manifest>
