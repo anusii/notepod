@@ -67,6 +67,19 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
+        clientId:
+            'https://solidcommunity.au/apps/notepod/client-profile.jsonld',
+        redirectUris: const [
+          'https://solidcommunity.au/apps/notepod/redirect.html',
+          'http://localhost:4400/redirect',
+          'com.example.notepod://redirect',
+        ],
+        postLogoutRedirectUris: const [
+          'https://solidcommunity.au/apps/notepod/redirect.html',
+          'http://localhost:4400/redirect',
+          'com.example.notepod://redirect',
+        ],
+        autoLogin: true,
         child: AppHomePage(
           childPage: ListMyNotesScreen(
             scaffoldController: scaffoldController,
