@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Friday 2025-10-24 11:59:49 +1100 Graham Williams>
+// Time-stamp: <Friday 2026-06-05 13:21:47 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -67,6 +67,13 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
+        clientId:
+            'https://solidcommunity.au/apps/notepod/client-profile.jsonld',
+        redirectUris: const [
+          'https://solidcommunity.au/apps/notepod/redirect.html',
+          'http://localhost:4400/redirect',
+          'com.togaware.notepod://redirect',
+        ],
         child: AppHomePage(
           childPage: ListMyNotesScreen(
             scaffoldController: scaffoldController,

@@ -3,8 +3,8 @@
 Noted here are the high level changes for the NotePod app.
 
 Guide: Each version update is noted here with a short user-oriented
-description of the update. Updates in the 0.3.n series are heading
-toward a 0.4 release. The `[version timestamp user]` string is
+description of the update. Updates in the 1.0.n series are heading
+toward a 1.1 release. The `[version timestamp user]` string is
 utilised by the flutter version_widget package.
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
@@ -29,6 +29,12 @@ Contributions are welcome. Visit
 [github](https://github.com/anusii/notepod) to submit an issue or,
 even better, fork the repository yourself, update the code, and submit
 a Pull Request. Thanks.
+
+## 1.0
+
++ File sharing error dialogue [1.0.2 20260605 tonypioneer]
++ Differentiate notes from different WebIDs [1.0.1 20260605 tonypioneer]
++ Upgrade to latest solid_auth using oidc [1.0.0 20260605 gjw]
 
 ## 0.4
 
