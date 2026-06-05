@@ -33,18 +33,8 @@ dependencies:
   markdown_widget: ^2.3.2+8
   emacs_text_field: ^0.1.0
   rdflib: ^0.2.12
-  # solidpod: ^0.12.9
-  solidpod:
-    # path: ../solidpod # Use a local path whilst solidpod is under development.
-    git:
-      url: https://github.com/anusii/solidpod.git
-      ref: av/40_migrate_oidc_implementation_revert
-  # solidui: ^0.3.49
-  solidui:
-    # path: ../solidui
-    git:
-      url: https://github.com/anusii/solidui.git
-      ref: av/40_migrate_oidc_implementation_revert
+  solidpod: ^1.0.1
+  solidui: ^1.0.2
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 
