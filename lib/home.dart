@@ -178,7 +178,10 @@ class AppHomePageState extends State<AppHomePage> {
           loggedInTooltip: 'Click to log out',
           loggedOutTooltip: 'Click to log in',
         ),
-        showOnNarrowScreens: true,
+        // On narrow screens the webid, login and security key status are
+        // already available in the hamburger menu, so hide the redundant
+        // bottom status bar there. It still shows on wide screens.
+        showOnNarrowScreens: false,
       ),
       themeToggle: const SolidThemeToggleConfig(
         enabled: true,
