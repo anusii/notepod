@@ -26,7 +26,6 @@ dependencies:
   intl: any
   pdf: ^3.11.1
   printing: ^5.13.1
-  new_loading_indicator: ^1.0.2
   markdown: ^7.2.2
   markdown_toolbar: ^0.5.0
   markdown_tooltip: ^0.0.10
