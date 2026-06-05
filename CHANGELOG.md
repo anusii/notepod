@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Differentiate notes from different WebIDs [1.0.1 20260605 gjw]
 + Upgrade to latest solid_auth using oidc [1.0.0 20260605 gjw]
 
 ## 0.4
