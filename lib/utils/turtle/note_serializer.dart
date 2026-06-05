@@ -25,6 +25,8 @@
 
 library;
 
+import 'package:flutter/foundation.dart' show debugPrint;
+
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/note_content.dart';
 import 'package:notepod/utils/encryption.dart';
