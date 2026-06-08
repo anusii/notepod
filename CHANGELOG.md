@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Update oidc and checking if logged in [1.0.3 20260608 gjw]
 + File sharing error dialogue [1.0.2 20260605 tonypioneer]
 + Differentiate notes from different WebIDs [1.0.1 20260605 tonypioneer]
 + Upgrade to latest solid_auth using oidc [1.0.0 20260605 gjw]
