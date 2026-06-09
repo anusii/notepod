@@ -114,7 +114,10 @@ class DisplayNoteMetadata extends StatelessWidget {
 
     if (children.isEmpty) return const SizedBox.shrink();
 
-    return Container(
+    return Material(
+      // Use Material (not Container/ColoredBox) as the coloured wrapper so
+      // the ExpansionTile's internal ListTile paints its background and ink
+      // splashes on a Material ancestor rather than being hidden.
       color: cs.onInverseSurface,
       child: ExpansionTile(
         initiallyExpanded: false,

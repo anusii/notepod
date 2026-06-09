@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Fix a ListTile colour ink bleed issue [1.0.4 20260609 gjw]
 + Update oidc and checking if logged in [1.0.3 20260608 gjw]
 + File sharing error dialogue [1.0.2 20260605 tonypioneer]
 + Differentiate notes from different WebIDs [1.0.1 20260605 tonypioneer]
