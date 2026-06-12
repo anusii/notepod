@@ -146,22 +146,12 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           tooltip: newNoteToolTip,
         ),
-        // Import / Export
+        // Backup
         const SolidMenuItem(
           title: importExportTitle,
-          icon: Icons.import_export,
+          icon: Icons.save_alt,
           child: ImportExportScreen(),
           tooltip: importExportToolTip,
-        ),
-        // Invite Others
-        SolidMenuItem(
-          title: inviteOthersTitle,
-          icon: Icons.share,
-          tooltip: inviteOthersToolTip,
-          onTap: (menuContext) => InviteOthersDialog.show(
-            menuContext,
-            config: inviteOthersConfig,
-          ),
         ),
       ],
       statusBar: SolidStatusBarConfig(

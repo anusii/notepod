@@ -98,9 +98,10 @@ const String combinedNotesTitle = 'Notes';
 const String combinedNotesExplanation = 'accessible to me';
 const String combinedNotesToolTip = 'Go to notes accessible to me';
 
-const String importExportTitle = 'Import / Export';
-const String importExportToolTip = '**Import / Export**\n\n'
-    'Import notes from a JSON backup, or export your notes to JSON or PDF.';
+const String importExportTitle = 'Backup';
+const String importExportToolTip = '**Backup**\n\n'
+    'Back up and restore all notes, view your notes as a PDF, '
+    'or import and export.';
 
 /// Note list messages
 class NoteListMsg {
@@ -216,14 +217,3 @@ Signing into {appName} will set up your data vault so you can create and share p
 
   ''',
 );
-
-const String inviteOthersTitle = 'Invite Others';
-const String inviteOthersToolTip = '''
-
-**Invite Others**
-
-Tap to invite someone else to set up their own POD and try NotePod.
-Sharing notes with another user only works once they have their own
-data vault, so this is a quick way to get them started.
-
-''';
