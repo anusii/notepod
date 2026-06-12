@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ IMPORT/EXPORT -> BACKUP and cleanup [1.0.5 20260612 gjw]
 + Fix a ListTile colour ink bleed issue [1.0.4 20260609 gjw]
 + Update oidc and checking if logged in [1.0.3 20260608 gjw]
 + File sharing error dialogue [1.0.2 20260605 tonypioneer]
