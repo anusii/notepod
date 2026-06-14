@@ -79,7 +79,7 @@ class AppHomePageState extends State<AppHomePage> {
         versionConfig: const SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
-          userTextStyle: TextStyle(color: Colors.white),
+          appBarTextStyle: TextStyle(color: Colors.white),
         ),
         actions: [
           // New Note

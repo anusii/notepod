@@ -32,6 +32,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Updated solidui. Different style version appbar/menu [1.0.6 20260614 gjw]
 + IMPORT/EXPORT -> BACKUP and cleanup [1.0.5 20260612 gjw]
 + Fix a ListTile colour ink bleed issue [1.0.4 20260609 gjw]
 + Update oidc and checking if logged in [1.0.3 20260608 gjw]
