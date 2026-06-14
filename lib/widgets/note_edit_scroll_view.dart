@@ -60,6 +60,47 @@ class NoteEditScrollView extends StatefulWidget {
 class _NoteEditScrollViewState extends State<NoteEditScrollView> {
   bool _preview = false;
 
+  // Original values for change detection. The Save button is enabled only
+  // when the title or content differs from these (for an existing note), or
+  // when either is non-empty (for a new note).
+  late final String _initTitle;
+  late final String _initContent;
+
+  @override
+  void initState() {
+    super.initState();
+    _initTitle = widget.noteTitle ?? '';
+    _initContent = widget._textController?.text ?? '';
+    // Rebuild when the content changes so the Save button updates live.
+    widget._textController?.addListener(_onChanged);
+  }
+
+  @override
+  void dispose() {
+    widget._textController?.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  void _onChanged() => setState(() {});
+
+  /// The current title text from the form field (falls back to the initial).
+  String get _currentTitle {
+    final state = widget.formKey.currentState;
+    final value = state?.fields[noteTitlePred]?.value as String?;
+    return value ?? _initTitle;
+  }
+
+  /// Whether the note has unsaved changes worth enabling Save for.
+  bool get _hasChanges {
+    final content = widget._textController?.text ?? '';
+    if (!widget.isExisting) {
+      // New note: enabled once a title or some content has been entered.
+      return _currentTitle.trim().isNotEmpty || content.trim().isNotEmpty;
+    }
+    // Existing note: enabled when title or content differs from the original.
+    return _currentTitle != _initTitle || content != _initContent;
+  }
+
   @override
   Widget build(BuildContext context) {
     final currDateStr = widget.isExisting
@@ -74,7 +115,11 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
           child: FormBuilder(
             key: widget.formKey,
-            onChanged: () => widget.formKey.currentState?.save(),
+            onChanged: () {
+              widget.formKey.currentState?.save();
+              // Re-evaluate _hasChanges when the title field changes.
+              setState(() {});
+            },
             autovalidateMode: AutovalidateMode.disabled,
             skipDisabled: true,
             child: Column(
@@ -148,6 +193,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
                         textController: widget._textController!,
                         formKey: widget.formKey,
                         scaffoldController: widget._scaffoldController,
+                        enabled: _hasChanges,
                       ),
                     ]
                   : [
@@ -158,6 +204,7 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
                         prevNote: widget.prevNote,
                         isExisting: true,
                         isExternal: widget.isExternal,
+                        enabled: _hasChanges,
                       ),
                       NoteBackButton(
                         childPage: widget.childPage,
