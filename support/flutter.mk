@@ -157,7 +157,7 @@ linux_config:
 	flutter config --enable-linux-desktop
 
 .PHONY: prep
-prep: versions analyze fix import_order_fix format dcm ignore license todo locgo markdown lychee depend bakfind
+prep: versions analyze fix import_order_fix format ignore license todo locgo markdown lychee depend bakfind dcm
 	@echo "ADVISORY: make test qtest docs"
 	@echo $(SEPARATOR)
 
