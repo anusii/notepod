@@ -58,6 +58,7 @@ class NoteSaveButton extends StatelessWidget {
   final Note? prevNote;
   final bool isExisting;
   final bool isExternal;
+  final bool enabled;
 
   const NoteSaveButton({
     super.key,
@@ -67,6 +68,7 @@ class NoteSaveButton extends StatelessWidget {
     this.prevNote,
     this.isExisting = false,
     this.isExternal = false,
+    this.enabled = true,
   });
 
   @override
@@ -77,18 +79,20 @@ class NoteSaveButton extends StatelessWidget {
       icon: const Icon(
         Icons.save,
       ),
-      onPressed: () async {
-        // Save note and redirect to view note page
-        await NoteFileHelper().saveNote(
-          context: context,
-          textController: textController,
-          formKey: formKey,
-          scaffoldController: scaffoldController,
-          prevNote: prevNote,
-          isExisting: isExisting,
-          isExternal: isExternal,
-        );
-      },
+      onPressed: enabled
+          ? () async {
+              // Save note and redirect to view note page
+              await NoteFileHelper().saveNote(
+                context: context,
+                textController: textController,
+                formKey: formKey,
+                scaffoldController: scaffoldController,
+                prevNote: prevNote,
+                isExisting: isExisting,
+                isExternal: isExternal,
+              );
+            }
+          : null,
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor:
                 WidgetStateProperty.all<Color>(ButtonBackgroundColor.save),

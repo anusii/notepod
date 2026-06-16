@@ -1,11 +1,8 @@
 # NotePod Change Log
 
-Noted here are the high level changes for the NotePod app.
-
-Guide: Each version update is noted here with a short user-oriented
-description of the update. Updates in the 1.0.n series are heading
-toward a 1.1 release. The `[version timestamp user]` string is
-utilised by the flutter version_widget package.
+Noted below are the high level changes for the app.  Each update
+includes a short user-oriented description, version number, date, and
+developer.
 
 Run the app online: [**web**](https://notepod.solidcommunity.au).
 
@@ -32,6 +29,11 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Only enable SAVE when note has changed [1.0.7 20260614 gjw]
++ Updated solidui. Different style version appbar/menu [1.0.6 20260614 gjw]
++ IMPORT/EXPORT -> BACKUP and cleanup [1.0.5 20260612 gjw]
++ Fix a ListTile colour ink bleed issue [1.0.4 20260609 gjw]
++ Update oidc and checking if logged in [1.0.3 20260608 gjw]
 + File sharing error dialogue [1.0.2 20260605 tonypioneer]
 + Differentiate notes from different WebIDs [1.0.1 20260605 tonypioneer]
 + Upgrade to latest solid_auth using oidc [1.0.0 20260605 gjw]
