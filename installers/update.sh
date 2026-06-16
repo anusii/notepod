@@ -12,7 +12,7 @@ APP=$(basename "$(dirname "$(pwd)")")
 REP=$(git remote get-url origin | sed -E 's#.*[/:]([^/]+)/[^/]+(\.git)?$#\1#')
 
 HOST=solidcommunity.au
-FLDR=/var/www/html/installers/
+FLDR=/var/www/html/web/installers/
 DEST=${HOST}:${FLDR}
 
 ssh ${HOST} 'if [ ! -d ${FLDR} ]; then mkdir ${FLDR}; chown gjw:gjw ${FLDR}; fi'
