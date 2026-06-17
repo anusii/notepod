@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Friday 2026-06-05 13:21:47 +1000 Graham Williams>
+// Time-stamp: <Wednesday 2026-06-17 16:31:56 +1000 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -50,7 +50,6 @@ class NotePod extends StatelessWidget {
   Widget build(BuildContext context) {
     return SolidThemeApp(
       title: shortTitle,
-      debugShowCheckedModeBanner: false,
       theme: lightThemeData(),
       darkTheme: darkThemeData(),
       home: SolidLogin(
