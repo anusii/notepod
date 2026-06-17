@@ -199,8 +199,8 @@ for ((i=0; i < length; i+=2)); do
 	    if diff <(sed '1d;5d' "$f1") <(sed '1d;5d' "$f2") >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
-		echo "MELD      $f1 $f2"
-		meld "$f1" "$f2" 2> /dev/null
+		echo "MELD      $f2 $f1"
+		meld "$f2" "$f1" 2> /dev/null
 	    fi
 
 	# 20260512 gjw For the common version of this for Makefile
@@ -214,8 +214,8 @@ for ((i=0; i < length; i+=2)); do
 	    if diff <(grep -v '^REPO=' "$f1" | grep -v '^RLOC=' | grep -v '^DWLD=') <(grep -v '^REPO=' "$f2" | grep -v '^RLOC=' | grep -v '^DWLD=') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
-		echo "MELD      $f1 $f2"
-		meld "$f1" "$f2" 2> /dev/null
+		echo "MELD      $f2 $f1"
+		meld "$f2" "$f1" 2> /dev/null
 	    fi
 
 	# 20260415 gjw Now deal with the APPs that require installers
@@ -228,8 +228,8 @@ for ((i=0; i < length; i+=2)); do
 	    if diff <(grep -v '^Name=' "$f1" | grep -v '^Comment=' | sed '/^Description: /,/^EOL$/d') <(grep -v '^Name=' "$f2" | grep -v '^Comment=' | sed '/^Description: /,/^EOL$/d') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
-		echo "MELD      $f1 $f2"
-		meld "$f1" "$f2" 2> /dev/null
+		echo "MELD      $f2 $f1"
+		meld "$f2" "$f1" 2> /dev/null
 	    fi
 
         # 20260306 gjw For the installers uploader we expect the HOST
@@ -239,8 +239,8 @@ for ((i=0; i < length; i+=2)); do
 	    if diff <(grep -v '^HOST=' "$f1" | grep -v '^FLDR=') <(grep -v '^HOST=' "$f2" | grep -v '^FLDR=') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
-		echo "MELD      $f1 $f2"
-		meld "$f1" "$f2" 2> /dev/null
+		echo "MELD      $f2 $f1"
+		meld "$f2" "$f1" 2> /dev/null
 	    fi
 
 	# 20260220 gjw For the installers workflow we expect the APP
@@ -250,8 +250,8 @@ for ((i=0; i < length; i+=2)); do
 	    if diff <(grep -v '^  APP:' "$f1" | grep -v '^  LINUX_PKGS:') <(grep -v '^  APP:' "$f2" | grep -v '^  LINUX_PKGS:') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
-		echo "MELD      $f1 $f2"
-		meld "$f1" "$f2" 2> /dev/null
+		echo "MELD      $f2 $f1"
+		meld "$f2" "$f1" 2> /dev/null
 	    fi
 
 	# 20260306 gjw Otherwise do a straightforward comparison.
@@ -263,8 +263,8 @@ for ((i=0; i < length; i+=2)); do
 		if cmp -s "$f1" "$f2"; then
 		    echo "IDENTICAL $f1 $f2"
 		else
-		    echo "MELD      $f1 $f2"
-		    meld "$f1" "$f2" 2> /dev/null
+		    echo "MELD      $f2 $f1"
+		    meld "$f2" "$f1" 2> /dev/null
 		fi
 	    fi
 	fi
