@@ -145,6 +145,7 @@ class NoteItemTrailingButtons extends StatelessWidget {
                 noteUrl: _note.noteUrl,
                 noteOwner: _note.noteOwner,
                 isExternal: _note.isExternalRes,
+                noteTitle: _note.content?.noteTitle ?? _note.noteFileName,
                 backPage: ListNotesScreen(
                   scaffoldController: _scaffoldController,
                 ),

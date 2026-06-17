@@ -76,6 +76,14 @@ class AppHomePageState extends State<AppHomePage> {
       controller: scaffoldController,
       appBar: SolidAppBarConfig(
         title: topBarTitle,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        defaultOverflowActionIds: const {
+          'all_notes',
+          'my_notes',
+          SolidAppBarActionIds.themeToggle,
+          SolidAppBarActionIds.logout,
+          SolidAppBarActionIds.about,
+        },
         versionConfig: const SolidVersionConfig(
           changelogUrl: appChangeLog,
           showDate: true,
@@ -84,6 +92,7 @@ class AppHomePageState extends State<AppHomePage> {
         actions: [
           // New Note
           SolidAppBarAction(
+            id: 'new_note',
             icon: Icons.add_circle,
             tooltip: newNoteToolTip,
             onPressed: () {
@@ -96,6 +105,7 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           // All Accessible Notes
           SolidAppBarAction(
+            id: 'all_notes',
             icon: Icons.view_list,
             tooltip: combinedNotesToolTip,
             onPressed: () {
@@ -108,7 +118,7 @@ class AppHomePageState extends State<AppHomePage> {
           ),
           // My Notes (Owner's Notes)
           SolidAppBarAction(
-            // More gender neutral icon
+            id: 'my_notes',
             icon: Icons.person_3,
             tooltip: myNotesToolTip,
             onPressed: () {
@@ -176,6 +186,7 @@ class AppHomePageState extends State<AppHomePage> {
       themeToggle: const SolidThemeToggleConfig(
         enabled: true,
       ),
+      showNotifications: true,
       aboutConfig: const SolidAboutConfig(
         applicationName: longTitle,
         applicationIcon: Icon(Icons.apps, size: 64),
