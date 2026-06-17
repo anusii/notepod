@@ -186,10 +186,10 @@ targets:
       # TODO: add flavor setup here
       configs:
         Debug:
-          CODE_SIGN_STYLE: 'Manual'
-          CODE_SIGN_IDENTITY: 'Apple Development: Jessica Moore (N5ML45W92P)'
+          CODE_SIGN_STYLE: 'Automatic'
+          CODE_SIGN_IDENTITY: 'Apple Development'
           CODE_SIGN_ENTITLEMENTS: 'Runner/RunnerDebug.entitlements'
-          PROVISIONING_PROFILE_SPECIFIER: 'Wildcard_Development_Mac_App_Development'
+          PROVISIONING_PROFILE_SPECIFIER: ''
 
           DEBUG_INFORMATION_FORMAT: 'dwarf'
           ENABLE_TESTABILITY: 'YES'
@@ -220,13 +220,13 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: '-Onone'
 
         Debug-dev:
-          CODE_SIGN_STYLE: 'Manual'
-          CODE_SIGN_IDENTITY: 'Apple Development: Jessica Moore (N5ML45W92P)'
+          CODE_SIGN_STYLE: 'Automatic'
+          CODE_SIGN_IDENTITY: 'Apple Development'
           # As this is a signed app
           # Use entitlement file with keychain-access-groups
           # value set to dev team+bundle id
           CODE_SIGN_ENTITLEMENTS: 'Runner/Release.entitlements' # "Runner/RunnerDebug.entitlements"
-          PROVISIONING_PROFILE_SPECIFIER: 'Wildcard_Development_Mac_App_Development'
+          PROVISIONING_PROFILE_SPECIFIER: ''
 
           DEBUG_INFORMATION_FORMAT: 'dwarf'
           ENABLE_TESTABILITY: 'YES'
@@ -284,14 +284,14 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: '-O'
 
         Release-dev:
-          CODE_SIGN_STYLE: 'Manual'
-          CODE_SIGN_IDENTITY: 'Apple Development: Jessica Moore (N5ML45W92P)'
+          CODE_SIGN_STYLE: 'Automatic'
+          CODE_SIGN_IDENTITY: 'Apple Development'
           # For Release
           # Use entitlement file with keychain-access-groups
           # set with DEV Team and Bundle id to match
           # those values in signing certificates
           CODE_SIGN_ENTITLEMENTS: 'Runner/Release.entitlements'
-          PROVISIONING_PROFILE_SPECIFIER: 'Wildcard_Development_Mac_App_Development'
+          PROVISIONING_PROFILE_SPECIFIER: ''
 
           DEBUG_INFORMATION_FORMAT: 'dwarf-with-dsym'
           ENABLE_NS_ASSERTIONS: 'NO'
@@ -343,14 +343,14 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: '-O'
 
         Profile-dev:
-          CODE_SIGN_STYLE: 'Manual'
-          CODE_SIGN_IDENTITY: 'Apple Development: Jessica Moore (N5ML45W92P)'
+          CODE_SIGN_STYLE: 'Automatic'
+          CODE_SIGN_IDENTITY: 'Apple Development'
           # For Profile
           # Use entitlement file with keychain-access-groups
           # set with DEV Team and Bundle id to match
           # those values in signing certificates
           CODE_SIGN_ENTITLEMENTS: 'Runner/Release.entitlements'
-          PROVISIONING_PROFILE_SPECIFIER: 'Wildcard_Development_Mac_App_Development'
+          PROVISIONING_PROFILE_SPECIFIER: ''
 
           DEBUG_INFORMATION_FORMAT: 'dwarf-with-dsym'
           ENABLE_NS_ASSERTIONS: 'NO'
