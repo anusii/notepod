@@ -48,6 +48,10 @@ https://server\.arcgisonline\.com/.*
 https://.*\.basemaps\.cartocdn\.com/.*
 https://.*\.tile-cyclosm\.openstreetmap\.fr/.*
 
+# Geopod
+
+https://raw.githubusercontent.com/gjwgit/geopod/dev/
+
 # Ignore the template index file.
 
 web/**

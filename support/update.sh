@@ -32,6 +32,7 @@ FILES=(
     ${SCRIPTS}support/update.sh support/update.sh
     ${SCRIPTS}flutter/.gitignore .gitignore
     ${SCRIPTS}flutter/.lycheeignore .lycheeignore
+    ${SCRIPTS}flutter/CLAUDE.md CLAUDE.md
     ${SCRIPTS}Makefile Makefile
 )
 

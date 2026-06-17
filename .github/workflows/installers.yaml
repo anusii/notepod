@@ -48,7 +48,7 @@ env:
   MACOS_APP_RELEASE_UNSIGNED_PATH: build/macos/Build/Products/Release-unsigned
   MACOS_APP_RELEASE_STAGING_PATH: build/macos/Build/Products/Release-staging
   MACOS_APP_RELEASE_DEV_PATH: build/macos/Build/Products/Release-dev
-  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_VERSION: "3.44.2"
 
 jobs:
 
@@ -340,7 +340,10 @@ jobs:
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build macos basic')
 
-    runs-on: macos-latest
+    # Later versions of macos (macos-15 and macos-latest) complain:
+    # Error: Xcode failed to resolve Swift Package Manager dependencies
+
+    runs-on: macos-14
 
     steps:
       - name: Display OS Information
@@ -1050,7 +1053,11 @@ jobs:
       contains(github.event.head_commit.message, 'bump version') ||
       contains(github.event.head_commit.message, 'build installers') ||
       contains(github.event.head_commit.message, 'build windows')
-    runs-on: windows-latest # randomly not working (choco fails) with inno 1.2.7
+
+    # The windows-latest was not working for some instances so resort
+    # to windows-2022
+
+    runs-on: windows-2022
 
     steps:
       - name: Clone Repository
