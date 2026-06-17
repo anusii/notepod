@@ -304,10 +304,6 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
-/linux/runner/CMakeLists.txt
-/linux/runner/main.cc
-/linux/runner/my_application.cc
-/linux/runner/my_application.h
 
 #-----------------------------------------------------------------------
 # Claude related files
