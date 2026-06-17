@@ -29,6 +29,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Decrypt public files [1.0.9 20260617 tonypioneer]
 + Support notifications [1.0.8 20260617 tonypioneer]
 + Only enable SAVE when note has changed [1.0.7 20260614 gjw]
 + Updated solidui. Different style version appbar/menu [1.0.6 20260614 gjw]
