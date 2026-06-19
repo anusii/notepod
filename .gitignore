@@ -10,6 +10,7 @@
 ARCHIVE
 ignore
 pubspec.yaml.*
+!templates/solidpod/pubspec.yaml.tmpl
 
 qtest_*.txt
 
