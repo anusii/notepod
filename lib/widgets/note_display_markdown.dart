@@ -45,7 +45,7 @@ Container noteDisplayMarkdown(
     alignment: Alignment.topLeft,
     padding: const EdgeInsets.all(10),
     // child: SingleChildScrollView(child: MarkdownBlock(data: data))),
-    child: MarkdownBlock(data: data, config: config),
+    child: MarkdownBlock(data: data, config: config, selectable: true),
   );
   // 20250717 jm Alt method retained for reference
   // MarkdownParse(

@@ -60,7 +60,7 @@ class ShowDateMetadata extends StatelessWidget {
               Flexible(
                 child: Container(
                   padding: metadataPadding,
-                  child: Text(
+                  child: SelectableText(
                     'Created on: ${getDateTimeStr(createdDateTime)}',
                     style: metadataTextStyle,
                   ),
@@ -74,7 +74,7 @@ class ShowDateMetadata extends StatelessWidget {
               Flexible(
                 child: Container(
                   padding: metadataPadding,
-                  child: Text(
+                  child: SelectableText(
                     'Last modified on: ${getDateTimeStr(modifiedDateTime)}',
                     style: metadataTextStyle,
                   ),
