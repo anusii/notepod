@@ -48,10 +48,6 @@ https://server\.arcgisonline\.com/.*
 https://.*\.basemaps\.cartocdn\.com/.*
 https://.*\.tile-cyclosm\.openstreetmap\.fr/.*
 
-# Geopod
-
-https://raw.githubusercontent.com/gjwgit/geopod/dev/
-
 # Ignore the template index file.
 
 web/**
@@ -88,3 +84,12 @@ https://github.com/gjwgit/myapp/blob/main/README.md
 # 20260605 gjw Failing solid servers
 
 https://trinpod.eu/>
+
+# 20260620 gjw geopod failures
+
+https://raw.githubusercontent.com/gjwgit/geopod/dev/
+https://api.open-meteo.com/v1/forecast
+
+# 20260619 gjw konapod failures
+
+https://blog.kumo.dev/2024/05/22/reverse_engineering_hkg_apps.html
