@@ -109,7 +109,7 @@ class _ViewNoteState extends State<ViewNote> {
                       Flexible(
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(15, 10, 10, 5),
-                          child: Text(
+                          child: SelectableText(
                             _note.content!.noteTitle,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,

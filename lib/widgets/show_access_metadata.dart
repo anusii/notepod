@@ -62,7 +62,7 @@ class ShowAccessMetadata extends StatelessWidget {
               Flexible(
                 child: Container(
                   padding: metadataPadding,
-                  child: Text(
+                  child: SelectableText(
                     'Owner: $noteOwner',
                     style: metadataTextStyle,
                   ),
@@ -76,7 +76,7 @@ class ShowAccessMetadata extends StatelessWidget {
               Flexible(
                 child: Container(
                   padding: metadataPadding,
-                  child: Text(
+                  child: SelectableText(
                     'Shared by: ${permissionGranter ?? 'N/A'}',
                     style: metadataTextStyle,
                   ),
@@ -90,7 +90,7 @@ class ShowAccessMetadata extends StatelessWidget {
               Flexible(
                 child: Container(
                   padding: metadataPadding,
-                  child: Text(
+                  child: SelectableText(
                     'Permissions: $permissionList',
                     style: metadataTextStyle,
                   ),
