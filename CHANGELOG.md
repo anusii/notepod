@@ -29,6 +29,7 @@ a Pull Request. Thanks.
 
 ## 1.0
 
++ Updated ABOUT [1.0.11 20260623 gjw]
 + Make most text selectable [1.0.10 20260622 gjw]
 + Decrypt public files [1.0.9 20260617 tonypioneer]
 + Support notifications [1.0.8 20260617 tonypioneer]

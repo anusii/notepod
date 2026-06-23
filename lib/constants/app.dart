@@ -40,10 +40,33 @@ const String topBarTitle = 'Note Pod';
 const String shortTitle = 'Note Taker';
 const String longTitle = 'NotePod\nPrivate and Shareable Notes';
 
-const String appOwner = '''© 2025 Software Innovation Institute''';
+const String appOwner = '''© 2025 - 2026 Software Innovation Institute''';
 
-const String aboutText =
-    '''The notepod app is an example of a Solid Pods app written in Flutter to read, write, and share encrypted notes stored on your personal online data store (Pod) hosted on a Solid Server.''';
+const String aboutText = '''
+
+          NotePod is a private and shareable notes manager that stores your
+          notes encrypted in your personal Solid Pod, so your data stays
+          under your control. Your Solid Pod can be hosted on any Solid
+          server and being encrypted it is protected against casual access by
+          anyone, including the server administrators.
+
+          ### Key features
+
+          - Create, edit and delete private encrypted notes
+          - Share notes with other Solid Pod owners
+          - Browse all accessible notes or just your own
+          - Full markdown rendering and editing
+          - Selectable text for easy copying
+          - Backup and restore notes as JSON
+          - Security key management for encrypted data
+          - Theme switching (light / dark / system)
+
+          For more information, visit the
+          [NotePod](https://github.com/anusii/notepod) GitHub repository
+          and our [Australian Solid Community](https://solidcommunity.au)
+          web site.
+
+          ''';
 
 const String appDir = 'notepod';
 
