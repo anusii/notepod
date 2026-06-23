@@ -187,11 +187,16 @@ class AppHomePageState extends State<AppHomePage> {
         enabled: true,
       ),
       showNotifications: true,
-      aboutConfig: const SolidAboutConfig(
+      aboutConfig: SolidAboutConfig(
         applicationName: longTitle,
-        applicationIcon: Icon(Icons.apps, size: 64),
+        applicationIcon: Image.asset(
+          'assets/images/notepod.png',
+          width: 64,
+          height: 64,
+        ),
         applicationLegalese: appOwner,
         text: aboutText,
+        readmeUrl: 'https://anusii.github.io/notepod',
       ),
       inviteConfig: inviteOthersConfig,
       enableProfile: true,
