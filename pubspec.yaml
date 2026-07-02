@@ -1,7 +1,7 @@
 name: notepod
 description: 'Privacy preserving note taking app using PODs.'
 publish_to: 'none'
-version: 1.0.11+14
+version: 1.0.11+15
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -31,8 +31,8 @@ dependencies:
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
   emacs_text_field: ^0.1.0
-  solidpod: ^1.0.6
-  solidui: ^1.0.8
+  solidpod: ^1.0.10
+  solidui: ^1.0.14
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 

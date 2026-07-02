@@ -48,6 +48,10 @@ https://server\.arcgisonline\.com/.*
 https://.*\.basemaps\.cartocdn\.com/.*
 https://.*\.tile-cyclosm\.openstreetmap\.fr/.*
 
+# Geopod
+
+https://raw.githubusercontent.com/gjwgit/geopod/dev/
+
 # Ignore the template index file.
 
 web/**
@@ -80,10 +84,18 @@ https://securetoken.google.com/
 file:///home/runner/work/solidui/solidui/lib/src/utils/scheme
 https://pods.example.au/john-doe/profile/card#me
 https://github.com/gjwgit/myapp/blob/main/README.md
+https://server/POD_NAME/APP_NAME/data/FILE_PATH
+https://host/
+https://pods.au/me/app/data
+https://github.com/anusii/mypod/blob/dev/CHANGELOG.md
+https://anusii.github.io/mypod/
+https://anusii.github.io/mypod/client-profile.jsonld
+https://anusii.github.io/mypod/redirect.html
+https://your-solid-server/
 
 # 20260605 gjw Failing solid servers
 
-https://trinpod.eu/>
+https://trinpod.eu/
 
 # 20260620 gjw geopod failures
 
@@ -93,3 +105,13 @@ https://api.open-meteo.com/v1/forecast
 # 20260619 gjw konapod failures
 
 https://blog.kumo.dev/2024/05/22/reverse_engineering_hkg_apps.html
+
+# 20260625 gjw papertrail
+
+https://papertrail.anu.edu.au/
+https://papertrail.anu.edu.au/
+
+# 20260630 gjw rattle
+
+https://www.reddit.com/r/SAI_Rattle/
+https://rdrr.io/rforge/tm/man/stopwords.html
