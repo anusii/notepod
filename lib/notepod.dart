@@ -67,10 +67,10 @@ class NotePod extends StatelessWidget {
               'stored in your POD.',
         ),
         clientId:
-            'https://solidcommunity.au/apps/notepod/client-profile.jsonld',
+            'https://notepod.solidcommunity.au/client-profile.jsonld',
         redirectUris: const [
           'https://notepod.solidcommunity.au/redirect.html',
-          'http://localhost:4400/redirect',
+          'http://localhost:4400/redirect.html',
           'com.togaware.notepod://redirect',
         ],
         child: AppHomePage(
