@@ -69,7 +69,7 @@ class NotePod extends StatelessWidget {
         clientId:
             'https://solidcommunity.au/apps/notepod/client-profile.jsonld',
         redirectUris: const [
-          'https://solidcommunity.au/apps/notepod/redirect.html',
+          'https://notepod.solidcommunity.au/redirect.html',
           'http://localhost:4400/redirect',
           'com.togaware.notepod://redirect',
         ],
