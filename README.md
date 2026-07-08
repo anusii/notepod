@@ -3,13 +3,13 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/anusii/notepod)
-[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://github.com/anusii/notepod?tab=GPL-3.0-1-ov-file)
-[![Flutter Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
-[![Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
-[![GitHub commit activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
+[![Github Docs](https://img.shields.io/badge/GitHub-Pages-green?logo=gitbook)](https://anusii.github.io/notepod)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/anusii/notepod)
+[![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/dev/LICENSE)
+[![Github Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
+[![Github Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
+[![GitHub Commit Activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/rattle/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
-[![Build Installers](https://github.com/anusii/notepod/actions/workflows/installers.yaml/badge.svg)](https://github.com/anusii/notepod/actions/workflows/installers.yaml)
 
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
 
@@ -19,44 +19,54 @@ on your own encrypted personal online datastore (Pod) hosted on any
 [Solid Server](https://solidproject.org/about). The app was developed
 by the [ANU Software Innovation Institute](https://sii.anu.edu.au) and
 written by [Anushka Vidanage](https://github.com/anushkavidanage),
-[Graham Williams](https://github.com/gjwgit), and [Jessica
+[Graham Williams](https://github.com/anusii), and [Jessica
 Moore](https://github.com/jesscmoore).
 
-If you appreciate the app then please show some ❤️ and star the [GitHub
-Repository](https://github.com/anusii/notepod) to support the
-project.  You can install the app from different repositories
-including [SnapCraft](https://snapcraft.io/notepod) for Linux.
+Solid Pods are a new approach to handling your personal data on the
+World Wide Web and is the latest innovation from the inventor of the
+WWW, Sir Tim Berners-Lee. Obtain a Pod for yourself on any Solid
+server and link it to your app.
+
+We make this project available for free so if you appreciate the app
+then please show some ❤️ and tap on the star at
+[GitHub](https://github.com/anusii/notepod) to support our work. See
+the [AU Solid Community](https://solidcommunity.au) **showcase** for
+many more apps using the Solid ecosystem.
 
 The latest version of the app can be run online at
 [notepod.solidcommunity.au](https://notepod.solidcommunity.au) with no
-installation required, or downloaded and installed for your platform
-from the [Solid Community AU](https://solidcommunity.au) repository:
+installation required though requiring a Solid login, or downloaded
+and installed for your platform from the [Solid Community
+AU](https://solidcommunity.au) repository:
 
-<!-- markdownlint-disable MD013 -->
+<!-- markdownlint-disable MD036 -->
 + **Web**
   [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
-  [apk](https://solidcommunity.au/installers/notepod.apk);
+  [apk](https://solidcommunity.au/installers/notepod.apk) or
+  [aab](https://solidcommunity.au/installers/notepod.aab);
+
 + **GNU/Linux**
-  [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
   [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
+  [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
   [zip](https://solidcommunity.au/installers/notepod-linux.zip);
 + **macOS**
-  [dmg staging](https://solidcommunity.au/installers/notepod-macos-staging.dmg) or
-  [dmg unsigned](https://solidcommunity.au/installers/notepod-macos-unsigned.dmg) or
-  [zip unsigned](https://solidcommunity.au/installers/notepod-macos-unsigned.zip);
+  [dmg](https://solidcommunity.au/installers/notepod-macos.dmg) or
+  [zip](https://solidcommunity.au/installers/notepod-macos.zip);
 + **Windows**
-  [zip](https://solidcommunity.au/installers/notepod-windows.zip) or
-  [inno](https://solidcommunity.au/installers/notepod-windows-inno.exe).
-<!-- markdownlint-enable MD013 -->
+  [inno](https://solidcommunity.au/installers/notepod-windows-inno.exe) or
+  [zip](https://solidcommunity.au/installers/notepod-windows.zip).
+
+[Installation
+details](https://github.com/anusii/notepod/blob/dev/installers/README.md)
+are available for all platforms.
 
 Contributions are welcome. Visit
 [github](https://github.com/anusii/notepod) to submit an issue or,
 even better, fork the repository yourself, update the code, and submit
 a Pull Request. The app is implemented in
 [Flutter](https://flutter.dev) using
-[solidpod](https://pub.dev/packages/solidpod) for Flutter to manage
-the Solid Pod interactions. Thank you.
+[solidui](https://pub.dev/packages/solidui). Thanks.
 
 ## Introduction
 
@@ -221,7 +231,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Sunday 2026-05-17 17:28:12 +1000 Graham Williams>*
+*Time-stamp: <Wednesday 2026-07-08 20:26:13 +1000 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->
