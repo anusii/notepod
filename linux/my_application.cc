@@ -47,7 +47,7 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "notepod");
   }
 
-  gtk_window_set_default_size(window, 850, 720);
+  gtk_window_set_default_size(window, 820, 655);
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
