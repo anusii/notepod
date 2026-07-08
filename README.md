@@ -8,7 +8,7 @@
 [![GitHub License](https://img.shields.io/github/license/anusii/notepod)](https://raw.githubusercontent.com/anusii/notepod/dev/LICENSE)
 [![Github Version](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/anusii/notepod/master/pubspec.yaml&query=$.version&label=version)](https://github.com/anusii/notepod/blob/dev/CHANGELOG.md)
 [![Github Last Updated](https://img.shields.io/github/last-commit/anusii/notepod?label=last%20updated)](https://github.com/anusii/notepod/commits/dev/)
-[![GitHub Commit Activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/rattle/commits/dev/)
+[![GitHub Commit Activity (dev)](https://img.shields.io/github/commit-activity/w/anusii/notepod/dev)](https://github.com/anusii/notepod/commits/dev/)
 [![GitHub Issues](https://img.shields.io/github/issues/anusii/notepod)](https://github.com/anusii/notepod/issues)
 
 [![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/notepod)
@@ -176,9 +176,10 @@ name to be uniquely identifiable. E.g. for chrome use:
 flutter run -d chrome
 ```
 
-When you have completed the setup of your platform, you are ready for
-the [NotePod Getting Started](exercises/README.md) exercises where
-you can create a Pod, make and share notes.
+When you have completed the setup of your platform you are ready for
+the [NotePod Getting
+Started](https://github.com/anusii/solidui/blob/dev/exercises)
+exercises where you can create a Pod to then make and share notes.
 
 ### Extra setup for MacOS/iOS
 
@@ -231,7 +232,7 @@ of Pods-based apps with flutter
 [https://notepod.vincenttunru.com/](https://notepod.vincenttunru.com/)
 
 <!-- markdownlint-disable MD036 -->
-*Time-stamp: <Wednesday 2026-07-08 20:26:13 +1000 Graham Williams>*
+*Time-stamp: <Thursday 2026-07-09 08:47:54 +1000 Graham Williams>*
 <!-- markdownlint-enable MD036 -->
 
 <!-- markdownlint-disable MD053 -->

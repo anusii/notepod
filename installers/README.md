@@ -39,11 +39,11 @@ app.
 ## Android
 
 You can side load the latest version of the app by downloading the
-[installer](https://solidcommunity.au/installers/notepodpod.apk)
+[installer](https://solidcommunity.au/installers/notepod.apk)
 through your Android device's browser. This will download the app to
 your Android device. Then visit the Downloads folder (choosing the
 menu option in the browser) where you can click on the
-`todopod.apk` file. Your browser will ask if you would like to
+`notepod.apk` file. Your browser will ask if you would like to
 installing the app locally.
 
 ## Linux
@@ -51,7 +51,7 @@ installing the app locally.
 ### Deb Install for Debian/Ubuntu
 
 Download
-[todopod_amd64.deb](https://solidcommunity.au/installers/notepod_amd64.deb)
+[notepod_amd64.deb](https://solidcommunity.au/installers/notepod_amd64.deb)
 and install:
 
 ```bash
@@ -118,7 +118,7 @@ Alt-F2 and type `notepod` then Enter.
 ### macOS Zip Install
 
 Download
-[todopod-macos.zip](https://solidcommunity.au/installers/notepod-macos.zip).
+[notepod-macos.zip](https://solidcommunity.au/installers/notepod-macos.zip).
 
 Open the downloaded file on your Mac. Then, holding the Control key
 click on the app icon to display a menu. Choose `Open`. Then accept
