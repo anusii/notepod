@@ -30,7 +30,6 @@ Download the latest version:
   [inno](https://solidcommunity.au/installers/notepod-windows-inno.exe) or
   [zip](https://solidcommunity.au/installers/notepod-windows.zip).
 
-
 ## Prerequisite
 
 There are no specific prerequisites for installing and running the
