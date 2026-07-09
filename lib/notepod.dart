@@ -25,6 +25,7 @@
 
 library;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
@@ -66,13 +67,13 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
-        clientId:
-            'https://notepod.solidcommunity.au/client-profile.jsonld',
-        redirectUris: const [
-          'https://notepod.solidcommunity.au/redirect.html',
-          'http://localhost:4400/redirect.html',
-          'com.togaware.notepod://redirect',
-        ],
+        clientId: 'https://dev.empwr.au/notepod/client-profile.jsonld',
+        redirectUris: kIsWeb
+            ? ['${Uri.base.origin}/redirect.html']
+            : const [
+                'com.togaware.notepod://redirect',
+                'http://localhost:4400/redirect.html',
+              ],
         child: AppHomePage(
           childPage: ListMyNotesScreen(
             scaffoldController: scaffoldController,
