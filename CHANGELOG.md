@@ -35,6 +35,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.0
 
++ OIDC update for chrome/web [1.0.13 20260711 tonypioneer]
 + Update solidui/solidpod dependencies [1.0.12 20260703 gjw]
 + Updated ABOUT [1.0.11 20260623 gjw]
 + Make most text selectable [1.0.10 20260622 gjw]
