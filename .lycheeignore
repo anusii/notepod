@@ -82,15 +82,16 @@ https://securetoken.google.com/
 # URL used in comments
 
 file:///home/runner/work/solidui/solidui/lib/src/utils/scheme
+file:///home/runner/work/notepod/notepod/exercises/README.md
 https://pods.example.au/john-doe/profile/card#me
 https://github.com/gjwgit/myapp/blob/main/README.md
 https://server/POD_NAME/APP_NAME/data/FILE_PATH
 https://host/
 https://pods.au/me/app/data
-https://github.com/anusii/mypod/blob/dev/CHANGELOG.md
-https://anusii.github.io/mypod/
-https://anusii.github.io/mypod/client-profile.jsonld
-https://anusii.github.io/mypod/redirect.html
+https://github.com/anusii/notepod/blob/dev/CHANGELOG.md
+https://anusii.github.io/notepod/
+https://anusii.github.io/notepod/client-profile.jsonld
+https://anusii.github.io/notepod/redirect.html
 https://your-solid-server/
 https://dev.empwr.au/mypod/
 https://server/alice/
