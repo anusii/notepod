@@ -67,7 +67,7 @@ class NotePod extends StatelessWidget {
               'to access the markdown note files\n'
               'stored in your POD.',
         ),
-        clientId: 'https://dev.empwr.au/notepod/client-profile.jsonld',
+        clientId: 'https://anusii.github.io/notepod/client-profile.jsonld',
         redirectUris: kIsWeb
             ? ['${Uri.base.origin}/redirect.html']
             : const [
