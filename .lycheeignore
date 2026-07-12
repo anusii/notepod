@@ -3,7 +3,7 @@
 
 # Localhost OAuth callbacks used in integration tests
 
-http://localhost:44007/
+http://localhost:4400/
 http://localhost:8000/
 http://localhost/
 
@@ -15,6 +15,7 @@ https://your-domain/redirect.html
 # Localhost used in comments
 
 http://localhost:3000/
+http://localhost:4400/
 
 # POD OAuth endpoints that require authentication parameters
 
@@ -81,17 +82,16 @@ https://securetoken.google.com/
 
 # URL used in comments
 
-file:///home/runner/work/solidui/solidui/lib/src/utils/scheme
-file:///home/runner/work/notepod/notepod/exercises/README.md
+file:///home/runner/work/
 https://pods.example.au/john-doe/profile/card#me
 https://github.com/gjwgit/myapp/blob/main/README.md
 https://server/POD_NAME/APP_NAME/data/FILE_PATH
 https://host/
 https://pods.au/me/app/data
+https://your-solid-server/
+https://gjwgit.github.io/rolopod/client-profile.jsonld
 https://github.com/anusii/
 https://anusii.github.io/
-https://your-solid-server/
-https://dev.empwr.au/mypod/
 https://server/alice/
 
 # 20260605 gjw Failing solid servers
