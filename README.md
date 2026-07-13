@@ -54,7 +54,7 @@ AU](https://solidcommunity.au) repository:
   [dmg](https://solidcommunity.au/installers/notepod-macos.dmg) or
   [zip](https://solidcommunity.au/installers/notepod-macos.zip);
 + **Windows**
-  [inno](https://solidcommunity.au/installers/notepod-windows-inno.exe) or
+  [exe](https://solidcommunity.au/installers/notepod-windows-inno.exe) or
   [zip](https://solidcommunity.au/installers/notepod-windows.zip).
 
 [Installation
