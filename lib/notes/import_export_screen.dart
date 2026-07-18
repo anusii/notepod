@@ -1,6 +1,6 @@
 /// ImportExportScreen — import from JSON and export to JSON / PDF.
 ///
-// Time-stamp: <Friday 2026-04-24 05:28:38 +1000 Graham Williams>
+// Time-stamp: <Saturday 2026-07-18 20:43:18 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2026, Software Innovation Institute, ANU
 ///
@@ -275,33 +275,35 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BackupSection(
-              title: 'Backup & Restore',
+              title: 'Export & Import',
               description:
                   'Save a complete JSON backup of all your notes, or restore '
-                  'everything from a previously saved backup file.',
+                  'everything from a previously saved JSON file. '
+                  'Also note the encrypted backup option available through '
+                  'your profile menu.',
               message: _backupMsg,
               isError: _backupError,
               child: Row(
                 children: [
                   MarkdownTooltip(
-                    message: '**Export Backup**\n\n'
+                    message: '**Export JSON**\n\n'
                         'Save all $count note$s to a NotePod JSON backup file '
                         'on this device. Keep it somewhere safe so you can '
                         'restore everything later.',
                     child: FilledButton.icon(
                       icon: const Icon(Icons.download),
-                      label: const Text('Export Backup'),
+                      label: const Text('Export JSON'),
                       onPressed: _loading ? null : _exportJson,
                     ),
                   ),
                   const SizedBox(width: 12),
                   MarkdownTooltip(
-                    message: '**Import Backup**\n\n'
+                    message: '**Import JSON**\n\n'
                         'Restore notes from a previously saved NotePod JSON '
                         'backup file.',
                     child: OutlinedButton.icon(
                       icon: const Icon(Icons.upload),
-                      label: const Text('Import Backup'),
+                      label: const Text('Import JSON'),
                       onPressed: _loading ? null : _importJson,
                     ),
                   ),

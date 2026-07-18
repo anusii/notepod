@@ -1,6 +1,6 @@
 /// App-wide constants.
 ///
-// Time-stamp: <Thursday 2026-04-30 17:22:33 +1000 Graham Williams>
+// Time-stamp: <Saturday 2026-07-18 20:44:42 +1000 Graham Williams>
 ///
 /// Copyright (C) 2023-2026, Software Innovation Institute
 ///
@@ -121,10 +121,10 @@ const String combinedNotesTitle = 'Notes';
 const String combinedNotesExplanation = 'accessible to me';
 const String combinedNotesToolTip = 'Go to notes accessible to me';
 
-const String importExportTitle = 'Backup';
-const String importExportToolTip = '**Backup**\n\n'
-    'Back up and restore all notes, view your notes as a PDF, '
-    'or import and export.';
+const String importExportTitle = 'Export/Import';
+const String importExportToolTip = '**Export/Import**\n\n'
+    'Back up and restore all notes as JSON, view your notes as a PDF, '
+    'or export to Markdown.';
 
 /// Note list messages
 class NoteListMsg {
