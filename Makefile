@@ -2,7 +2,7 @@
 #
 # Generic Makefile
 #
-# Time-stamp: <Monday 2026-07-06 16:25:26 +1000 Graham Williams>
+# Time-stamp: <Wednesday 2026-07-29 08:22:37 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -205,7 +205,7 @@ ginfo:
 		echo "No bump ID found."; \
 	fi
 
-ZFILES := lib test integration_test pubspec.yaml README.md CLAUDE.md
+ZFILES := lib test integration_test pubspec.yaml analysis_options.yaml README.md CLAUDE.md
 
 .PHONY: zip
 zip:
