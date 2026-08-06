@@ -97,6 +97,9 @@ class SaveDialog extends StatelessWidget {
               isExisting: isExisting,
               isExternal: isExternal,
             );
+            if (context.mounted) {
+              Navigator.of(context).pop(); // Dismiss the unsaved changes dialog
+            }
           },
         ),
         // Don't save button
