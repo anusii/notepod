@@ -27,47 +27,31 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:solidui/solidui.dart';
-
-import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/models/note.dart';
 
 /// A stylised save button widget which on click saves the note content
 /// Pod. External notes are written to the note owner's Pod. Notes created
 /// by the user are written to the user's Pod.
 ///
 /// Examples
-/// - `NoteSaveButton(textController: _textController!, formKey: formKey, shared: shared, notesMap: notesMap)` save the metadata and content of a new note to user's Pod.
-/// - `NoteSaveButton(textController: _textController!, formKey: formKey, prevNoteData: prevNoteData, shared: shared, notesMap: notesMap)` save the updated metadata and content of an existing note to the owner's Pod (whether that be the user or an external owner).
+/// - `NoteSaveButton(onSave: _save, enabled: _hasChanges)` save the metadata
+/// and content of the note the editor is holding.
 ///
-/// - [textController] - Text controller of the note text content editor.
-/// - [formKey] - Key of the form to edit the note metadata.
-///   [scaffoldController] - Controller for the Solid scaffold.
-/// - [prevNote] - Optional existing note data object. Required for saving existing note. (Default: null).
-/// - [isExternal] - Optional boolean denoting whether note is externally
-/// owned. (Default: false).
-/// - [isExisting] - Optional boolean denoting whether note already
-/// exists. (Default: false).
+/// - [onSave] - Writes the note to the Pod. Supplied by the editor, which
+/// knows whether this is a new or an existing note. Awaited, so that closing
+/// the window can wait for the write rather than killing it mid-flight.
+/// Reports whether the write landed; a failure has already been shown to the
+/// user by the save itself, so there is nothing more to do here.
+/// - [enabled] - Optional boolean denoting whether there is anything worth
+/// saving. (Default: true).
 
 class NoteSaveButton extends StatelessWidget {
-  final TextEditingController textController;
-  final GlobalKey<FormBuilderState> formKey;
-  final SolidScaffoldController scaffoldController;
-  final Note? prevNote;
-  final bool isExisting;
-  final bool isExternal;
+  final Future<bool> Function() onSave;
   final bool enabled;
 
   const NoteSaveButton({
     super.key,
-    required this.textController,
-    required this.formKey,
-    required this.scaffoldController,
-    this.prevNote,
-    this.isExisting = false,
-    this.isExternal = false,
+    required this.onSave,
     this.enabled = true,
   });
 
@@ -82,15 +66,7 @@ class NoteSaveButton extends StatelessWidget {
       onPressed: enabled
           ? () async {
               // Save note and redirect to view note page
-              await NoteFileHelper().saveNote(
-                context: context,
-                textController: textController,
-                formKey: formKey,
-                scaffoldController: scaffoldController,
-                prevNote: prevNote,
-                isExisting: isExisting,
-                isExternal: isExternal,
-              );
+              await onSave();
             }
           : null,
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(

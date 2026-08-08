@@ -189,9 +189,6 @@ class ErrMsg {
   /// Error message when fails to save note file to POD
   static const String saveFailed =
       'Failed to store the note file in your POD. Try again!';
-
-  /// Unsaved changes found
-  static const String unsavedChanges = 'Unsaved changed found!';
 }
 
 class NoteIconSize {

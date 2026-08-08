@@ -27,94 +27,62 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/colours.dart';
-import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note.dart';
-import 'package:notepod/widgets/save_dialog.dart';
 
 /// A stylised back button widget for notes. On click it checks if edited data exists, if found it asks if the user wants to save or not save or cancel the back action. Then it navigates to the provided child page.
 ///
 /// Arguments:
 /// - [childPage] - The child page to navigate back to.
 ///   [scaffoldController] - Controller for the Solid scaffold.
-/// - [textController] - Optional text controller if back is being called from note editor.
-/// - [formKey] - Key of the form to edit note metadata
-/// - [prevNote] - Optional existing user's note data object. Required
-/// for saving existing notes. (Default: null).
-/// - [isExternal] - Optional boolean denoting whether note is externally
-/// owned. (Default: false).
-/// - [isExisting] - Optional boolean denoting whether note already
-/// exists. (Default: false).
+/// - [hasChanges] - Optional boolean denoting whether the editor holds
+/// unsaved edits. (Default: false, for the plain back buttons that sit on
+/// screens with nothing to lose).
+/// - [onSave] - Optional callback writing the note to the Pod, reporting
+/// whether the write landed. Required when [hasChanges] can be
+/// true. (Default: null).
 
 class NoteBackButton extends StatelessWidget {
   const NoteBackButton({
     super.key,
     required this.childPage,
     required this.scaffoldController,
-    this.textController,
-    this.formKey,
-    this.prevNote,
-    this.isExternal = false,
-    this.isExisting = false,
+    this.hasChanges = false,
+    this.onSave,
   });
 
   final Widget childPage;
   final SolidScaffoldController scaffoldController;
-  final TextEditingController? textController;
-  final GlobalKey<FormBuilderState>? formKey;
-  final Note? prevNote;
-  final bool isExternal;
-  final bool isExisting;
+  final bool hasChanges;
+  final Future<bool> Function()? onSave;
 
   @override
   Widget build(BuildContext context) {
-    String? prevNoteTitle;
-    String? prevNoteContent;
     return ElevatedButton.icon(
       // Uses Theme elevatedButtonTheme for all properties
       // except background color
       icon: const Icon(
         Icons.keyboard_backspace,
       ),
-      onPressed: () {
-        if (formKey?.currentState?.saveAndValidate() ?? false) {
-          if (textController != null) {
-            String noteText = textController!.text;
-            Map formData = formKey?.currentState?.value as Map;
-            String noteTitle = formData[noteTitlePred].replaceAll('\n', '');
-
-            if (isExisting) {
-              // Get previous title and content
-              prevNoteTitle = prevNote!.content!.noteTitle;
-              prevNoteContent = prevNote!.content!.noteContent;
-              // Check if title or content changed
-              if (noteTitle != prevNoteTitle || noteText != prevNoteContent) {
-                showDialog<void>(
-                  context: context,
-                  barrierDismissible: false, // user must tap button!
-                  builder: (BuildContext context) {
-                    // Call save/don't save/cancel dialog
-                    return SaveDialog(
-                      childPage: childPage,
-                      scaffoldController: scaffoldController,
-                      textController: textController!,
-                      formKey: formKey!,
-                      prevNote: prevNote,
-                      isExternal: isExternal,
-                    );
-                  },
-                );
-              } else {
-                debugPrint('No unsaved changes found');
-                scaffoldController.navigateToSubpage(childPage);
-              }
-            }
-          }
-        } else {
+      onPressed: () async {
+        if (!hasChanges) {
+          debugPrint('No unsaved changes found');
           scaffoldController.navigateToSubpage(childPage);
+          return;
+        }
+        // The same prompt the desktop window-close guard raises, so leaving
+        // by Back and leaving by closing the window read the same.
+        final action = await showUnsavedChangesDialog(context);
+        if (!context.mounted) return;
+        switch (action) {
+          case UnsavedChangesAction.save:
+            // The save itself navigates on to the saved note.
+            await onSave?.call();
+          case UnsavedChangesAction.discard:
+            scaffoldController.navigateToSubpage(childPage);
+          case UnsavedChangesAction.keepEditing:
+            break;
         }
       },
       style: Theme.of(context).elevatedButtonTheme.style?.copyWith(

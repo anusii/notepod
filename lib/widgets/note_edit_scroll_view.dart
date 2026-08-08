@@ -17,7 +17,6 @@ import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/app.dart';
 import 'package:notepod/constants/turtle_structures.dart';
-import 'package:notepod/models/note.dart';
 import 'package:notepod/widgets/markdown_editor.dart';
 import 'package:notepod/widgets/note_back_button.dart';
 import 'package:notepod/widgets/note_save_button.dart';
@@ -32,8 +31,7 @@ class NoteEditScrollView extends StatefulWidget {
     required FocusNode focusContent,
     required this.childPage,
     required this.data,
-    this.prevNote,
-    this.isExternal = false,
+    required this.onSave,
     this.isExisting = false,
     this.noteTitle,
   })  : _textController = textController,
@@ -48,8 +46,18 @@ class NoteEditScrollView extends StatefulWidget {
   final FocusNode _focusContent;
   final Widget childPage;
   final String data;
-  final Note? prevNote;
-  final bool isExternal;
+
+  /// Writes the note to the Pod. The owning editor supplies this so the
+  /// new-note and existing-note argument lists stay with the editor that
+  /// knows them, and there is a single save path.
+  ///
+  /// Returns whether the note reached the Pod. It MUST be awaitable: closing
+  /// the app window waits on this before quitting, so a fire-and-forget write
+  /// would be killed mid-flight and the note lost. And it must report a
+  /// failure rather than swallow it, or the window closes over the top of a
+  /// note that was never written.
+  final Future<bool> Function() onSave;
+
   final bool isExisting;
   final String? noteTitle;
 
@@ -57,7 +65,8 @@ class NoteEditScrollView extends StatefulWidget {
   State<NoteEditScrollView> createState() => _NoteEditScrollViewState();
 }
 
-class _NoteEditScrollViewState extends State<NoteEditScrollView> {
+class _NoteEditScrollViewState extends State<NoteEditScrollView>
+    with UnsavedChangesMixin {
   bool _preview = false;
 
   // Original values for change detection. The Save button is enabled only
@@ -99,6 +108,40 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
     }
     // Existing note: enabled when title or content differs from the original.
     return _currentTitle != _initTitle || content != _initContent;
+  }
+
+  // The desktop window-close prompt comes from UnsavedChangesMixin, which
+  // needs to know what counts as unsaved, whether it can be saved yet, and
+  // how to save it.
+
+  @override
+  bool get hasUnsavedChanges => _hasChanges;
+
+  /// A note needs a title, and a new note also needs some content, before
+  /// the Pod save will write it. Without this gate choosing Save on the
+  /// window-close prompt would raise a blocking error dialog behind the
+  /// closing window instead of saving.
+
+  @override
+  bool get canSaveUnsavedChanges {
+    if (_currentTitle.trim().isEmpty) return false;
+    return widget.isExisting ||
+        (widget._textController?.text.trim().isNotEmpty ?? false);
+  }
+
+  /// Only `true` once the note is actually on the Pod. The window is destroyed
+  /// the moment this returns `true`, so a failed write has to keep the editor
+  /// open with the note intact instead.
+
+  @override
+  Future<bool> saveUnsavedChanges() async {
+    try {
+      return await widget.onSave();
+    } catch (e) {
+      SolidWriteFailures.report('${ErrMsg.saveFailed}\n\n$e');
+
+      return false;
+    }
   }
 
   @override
@@ -187,35 +230,19 @@ class _NoteEditScrollViewState extends State<NoteEditScrollView> {
             mainAxisAlignment: MainAxisAlignment.end,
             spacing: 5.0,
             children: [
-              ...(!widget.isExisting)
-                  ? [
-                      NoteSaveButton(
-                        textController: widget._textController!,
-                        formKey: widget.formKey,
-                        scaffoldController: widget._scaffoldController,
-                        enabled: _hasChanges,
-                      ),
-                    ]
-                  : [
-                      NoteSaveButton(
-                        textController: widget._textController!,
-                        formKey: widget.formKey,
-                        scaffoldController: widget._scaffoldController,
-                        prevNote: widget.prevNote,
-                        isExisting: true,
-                        isExternal: widget.isExternal,
-                        enabled: _hasChanges,
-                      ),
-                      NoteBackButton(
-                        childPage: widget.childPage,
-                        textController: widget._textController,
-                        formKey: widget.formKey,
-                        scaffoldController: widget._scaffoldController,
-                        prevNote: widget.prevNote,
-                        isExisting: widget.isExisting,
-                        isExternal: widget.isExternal,
-                      ),
-                    ],
+              NoteSaveButton(
+                onSave: widget.onSave,
+                enabled: _hasChanges,
+              ),
+              // Back is only offered for an existing note; a new note is left
+              // with Save alone, as before.
+              if (widget.isExisting)
+                NoteBackButton(
+                  childPage: widget.childPage,
+                  scaffoldController: widget._scaffoldController,
+                  hasChanges: _hasChanges,
+                  onSave: widget.onSave,
+                ),
             ],
           ),
         ),

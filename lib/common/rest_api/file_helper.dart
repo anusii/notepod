@@ -66,7 +66,7 @@ class NoteFileHelper with PodOperationsMixin {
     if (isExternal) {
       try {
         // Delete external file
-        await deleteExternalFile(filename);
+        await SolidPendingWrites.track(deleteExternalFile(filename));
       } catch (e) {
         // Error deleting external file
         debugPrint('Error deleting to external note: $e');
@@ -78,7 +78,7 @@ class NoteFileHelper with PodOperationsMixin {
         // deleteFile, which expects an absolute URL.
 
         final fileUrl = await getFileUrl('$basePath/$filename');
-        await deleteFile(fileUrl: fileUrl);
+        await SolidPendingWrites.track(deleteFile(fileUrl: fileUrl));
       } catch (e) {
         debugPrint('Error deleting user\'s note: $e');
         rethrow;
@@ -104,8 +104,13 @@ class NoteFileHelper with PodOperationsMixin {
   /// owned. (Default: false).
   /// - [isExisting] - Optional boolean denoting whether note already
   /// exists. (Default: false).
+  ///
+  /// Returns whether the note reached the Pod, so the editor can tell a
+  /// successful save from a failed one. A failure must not be swallowed here:
+  /// the window-close guard closes the window on a `true`, so a lost write
+  /// reported as a save loses the note.
 
-  Future<void> saveNote({
+  Future<bool> saveNote({
     required BuildContext context,
     required TextEditingController textController,
     required GlobalKey<FormBuilderState> formKey,
@@ -141,6 +146,11 @@ class NoteFileHelper with PodOperationsMixin {
         // title and content
         if (noteTitle == prevNoteTitle && noteText == prevNoteContent) {
           showErrDialog(context, ErrMsg.noChanges);
+
+          // Nothing differs from what is already stored, so there is no
+          // unsaved work here to lose.
+
+          return true;
         } else {
           // Loading animation
           loading.showAnimationDialog(
@@ -167,7 +177,7 @@ class NoteFileHelper with PodOperationsMixin {
           if (isExternal) {
             // Save external note
             try {
-              if (!context.mounted) return;
+              if (!context.mounted) return false;
 
               debugPrint('save external note:');
               debugPrint('noteUrl: ${prevNote.noteUrl}');
@@ -176,7 +186,7 @@ class NoteFileHelper with PodOperationsMixin {
 
               // External note
               // Encrypt note, create TTL, update file in POD
-              await saveNoteToPod(
+              return await saveNoteToPod(
                 context: context,
                 // Use existing file url
                 noteUrl: prevNote.noteUrl,
@@ -191,15 +201,17 @@ class NoteFileHelper with PodOperationsMixin {
               );
             } on Exception catch (e) {
               debugPrint('Exception (saving existing external note):\n $e');
+
+              return false;
             }
           } else {
             // Save own note
             try {
-              if (!context.mounted) return;
+              if (!context.mounted) return false;
 
               // Edited my note
               // Encrypt note, create TTL, update file in POD
-              await saveNoteToPod(
+              return await saveNoteToPod(
                 context: context,
                 // Use existing filename
                 noteFileName: prevNote.noteFileName,
@@ -213,6 +225,8 @@ class NoteFileHelper with PodOperationsMixin {
               );
             } on Exception catch (e) {
               debugPrint('Exception (saving existing my note):\n $e');
+
+              return false;
             }
           }
         }
@@ -238,9 +252,9 @@ class NoteFileHelper with PodOperationsMixin {
             );
 
             // Encrypt note, create TTL and write to file in POD
-            if (!context.mounted) return;
+            if (!context.mounted) return false;
 
-            await saveNoteToPod(
+            return await saveNoteToPod(
               context: context,
               // Create filename
               noteFileName: '$noteFileNamePrefix$modifiedDateTimeStr.ttl',
@@ -252,10 +266,14 @@ class NoteFileHelper with PodOperationsMixin {
             );
           } on Exception catch (e) {
             debugPrint('Exception (saving new my note):\n $e');
+
+            return false;
           }
         } else {
           // No note content message
           showErrDialog(context, ErrMsg.noContent);
+
+          return false;
         }
       }
     } else {
@@ -263,6 +281,8 @@ class NoteFileHelper with PodOperationsMixin {
         context,
         ErrMsg.invalidName,
       );
+
+      return false;
     }
   }
 
@@ -287,8 +307,12 @@ class NoteFileHelper with PodOperationsMixin {
   /// that are externally owned.
   /// - [overwrite] - Optional boolean defining whether updating an existing owner's note.
   /// - [isExternal] - Optional boolean defining whether writing an external note.
+  ///
+  /// Returns whether the note reached the Pod. The failure is reported here,
+  /// but it is also handed back so the caller can act on it rather than carry
+  /// on as though the note were saved.
 
-  Future<void> saveNoteToPod({
+  Future<bool> saveNoteToPod({
     required BuildContext context,
     required NoteContent data,
     required Widget childPage,
@@ -303,6 +327,11 @@ class NoteFileHelper with PodOperationsMixin {
     // so we can guarantee it is dismissed exactly once on any code path.
 
     var loadingDialogShown = true;
+
+    // Tracks whether the Pod write itself landed, so that a later failure on
+    // the navigation path is not reported to the user as a failed save.
+
+    var noteWritten = false;
 
     try {
       // Encrypt note text using created time as the key
@@ -327,21 +356,29 @@ class NoteFileHelper with PodOperationsMixin {
         debugPrint('noteOwner: $noteOwner');
 
         // createNoteStatus = await writeExternalPod(
-        await writeExternalPod(
-          noteUrl,
-          noteTTLStr,
-          noteOwner,
+        // Tracked so that closing the window waits for the write to land
+        // rather than killing it mid-flight.
+        await SolidPendingWrites.track(
+          writeExternalPod(
+            noteUrl,
+            noteTTLStr,
+            noteOwner,
+          ),
         );
       } else {
         // Write note to POD
-        await writePod(
-          noteFileName,
-          noteTTLStr,
-          overwrite: overwrite,
+        await SolidPendingWrites.track(
+          writePod(
+            noteFileName,
+            noteTTLStr,
+            overwrite: overwrite,
+          ),
         );
       }
 
-      if (!context.mounted) return;
+      noteWritten = true;
+
+      if (!context.mounted) return noteWritten;
 
       Navigator.of(context, rootNavigator: true)
           .pop(); // Dismiss the saving note dialog
@@ -357,6 +394,14 @@ class NoteFileHelper with PodOperationsMixin {
         'NotLoggedInException (encrypting and saving note):\n $e',
       );
 
+      // Shown here rather than left to the caller, which only learns that the
+      // save failed and not why, so the user is not left believing the note
+      // was saved.
+
+      if (!noteWritten) {
+        SolidWriteFailures.report('${ErrMsg.saveFailed}\n\n$e');
+      }
+
       // Dismiss the in-flight `Saving the note!` animation so the UI
       // does not appear to hang while we prompt the user to log in.
 
@@ -365,7 +410,7 @@ class NoteFileHelper with PodOperationsMixin {
         loadingDialogShown = false;
       }
 
-      if (!context.mounted) return;
+      if (!context.mounted) return noteWritten;
 
       // Prompt the user to log in (or cancel back to the note editor).
       // Using solidui's shared `SolidLoginRequiredDialog` keeps the
@@ -381,6 +426,12 @@ class NoteFileHelper with PodOperationsMixin {
         'Exception (encrypting and saving note, and navigating to return page):\n $e',
       );
 
+      // As above: a failed write has nobody to report to, so surface it.
+
+      if (!noteWritten) {
+        SolidWriteFailures.report('${ErrMsg.saveFailed}\n\n$e');
+      }
+
       // Make sure the loading dialog is always dismissed on failure so
       // the UI never gets stuck on `Saving the note!`.
 
@@ -389,5 +440,7 @@ class NoteFileHelper with PodOperationsMixin {
         loadingDialogShown = false;
       }
     }
+
+    return noteWritten;
   }
 }

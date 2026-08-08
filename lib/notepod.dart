@@ -74,9 +74,14 @@ class NotePod extends StatelessWidget {
                 'com.togaware.notepod://redirect',
                 'http://localhost:4400/redirect.html',
               ],
-        child: AppHomePage(
-          childPage: ListMyNotesScreen(
-            scaffoldController: scaffoldController,
+        // Wrapped in [SolidWriteFailureListener] so a Pod write that fails
+        // with nobody awaiting it still raises a modal error rather than
+        // leaving the user believing the note was saved.
+        child: SolidWriteFailureListener(
+          child: AppHomePage(
+            childPage: ListMyNotesScreen(
+              scaffoldController: scaffoldController,
+            ),
           ),
         ),
       ),

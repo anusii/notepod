@@ -14,6 +14,7 @@ library;
 import 'dart:convert';
 
 import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart';
 
 import 'package:notepod/constants/turtle_structures.dart';
 import 'package:notepod/models/own_note.dart';
@@ -75,7 +76,8 @@ Future<RestoreCounts?> restoreNotesFromJson(
     final ttl = genNoteTTLStr(created, modified, title, encContent);
 
     try {
-      await writePod(fileName, ttl);
+      // Tracked so that closing the window waits for a restore in progress.
+      await SolidPendingWrites.track(writePod(fileName, ttl));
       saved++;
     } catch (e) {
       // File already exists — skip.

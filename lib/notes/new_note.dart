@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
+import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/notes/list_my_notes_screen.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
 
@@ -136,6 +137,19 @@ class NewNoteState extends State<NewNote> {
     });
   }
 
+  /// Write the new note to the user's Pod.
+  ///
+  /// Awaited by the editor's Save button and the desktop window-close guard,
+  /// so the write is never left in flight. Returns whether the write landed,
+  /// so the guard does not close the window over a failed save.
+
+  Future<bool> _save() => NoteFileHelper().saveNote(
+        context: context,
+        textController: _textController!,
+        formKey: formKey,
+        scaffoldController: _scaffoldController,
+      );
+
   @override
   Widget build(BuildContext context) {
     return NoteEditScrollView(
@@ -149,6 +163,7 @@ class NewNoteState extends State<NewNote> {
         scaffoldController: _scaffoldController,
       ),
       data: data,
+      onSave: _save,
     );
   }
 }

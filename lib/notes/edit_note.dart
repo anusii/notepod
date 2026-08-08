@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:solidui/solidui.dart';
 
+import 'package:notepod/common/rest_api/file_helper.dart';
 import 'package:notepod/models/note.dart';
 import 'package:notepod/notes/view_note.dart';
 import 'package:notepod/widgets/note_edit_scroll_view.dart';
@@ -142,6 +143,23 @@ class EditNoteState extends State<EditNote> {
     });
   }
 
+  /// Write the edited note back to the Pod it came from.
+  ///
+  /// Awaited by the editor's Save button, its Back button and the desktop
+  /// window-close guard, so the write is never left in flight. Returns whether
+  /// the write landed, so the guard does not close the window over a failed
+  /// save.
+
+  Future<bool> _save() => NoteFileHelper().saveNote(
+        context: context,
+        textController: _textController!,
+        formKey: formKey,
+        scaffoldController: _scaffoldController,
+        prevNote: _note,
+        isExisting: true,
+        isExternal: _note.isExternalRes,
+      );
+
   @override
   Widget build(BuildContext context) {
     return NoteEditScrollView(
@@ -155,10 +173,9 @@ class EditNoteState extends State<EditNote> {
         scaffoldController: _scaffoldController,
       ),
       data: data,
-      prevNote: _note,
+      onSave: _save,
       noteTitle: _note.content!.noteTitle,
       isExisting: true,
-      isExternal: _note.isExternalRes,
     );
   }
 }

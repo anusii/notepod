@@ -27,6 +27,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:solidui/solidui.dart' show SolidWindowCloseGuard;
 import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/notepod.dart';
@@ -63,6 +64,13 @@ void main() async {
     // window_manager plugin. Failure to include
     // causes a build failure on macos
     await windowManager.ensureInitialized();
+
+    // 20260808 gjw Route the title-bar close button through the solidui close
+    // guard instead of quitting immediately, so a note with unsaved changes
+    // can be saved or discarded rather than silently lost. The note editor
+    // registers a resolver with the guard.
+
+    await SolidWindowCloseGuard.enable();
 
     const windowOptions = WindowOptions(
       // Set various desktop window options here, specifically the title.
