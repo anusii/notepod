@@ -20,12 +20,16 @@ endif
 define FLUTTER_HELP
 flutter:
 
-  android   Run with an attached Android device;
-  chrome    Run with the chrome device;
-  emu	    Run with the android emulator;
-  linux     Run with the linux device;
-  qlinux    Run with the linux device and debugPrint() turned off;
-  macos     Run with the macos device;
+  android          Run with an attached Android device;
+  chrome           Run with the chrome device;
+  emu              Run with the android emulator;
+  linux            Run with the linux device;
+  qlinux           Run with the linux device and debugPrint() turned off;
+  macos            Run with the macos device;
+  macos.reconfig   Regenerate Xcode files for the macos build;
+  macos.provision  Refresh/create the Debug config's automatic
+                   Development provisioning profile.
+                   Expires weekly on a free/personal team.
 
   prep      Prep for PR by running tests, checks, docs.
   push      Do a git push and bump the build number if there is one.
@@ -138,6 +142,25 @@ qlinux: pubspec.lock $(BUILD_RUNNER) upgrade
 .PHONY: macos
 macos: $(BUILD_RUNNER) upgrade
 	flutter run --device-id macos
+
+.PHONY: macos.reconfig
+macos.reconfig:
+	bash update_project.sh macos --update
+
+# `flutter run -d macos` invokes xcodebuild without
+# -allowProvisioningUpdates, so it can't create or renew an automatic
+# Development provisioning profile itself — only Xcode's GUI (or
+# xcodebuild with that flag) can. Free/personal-team profiles expire
+# weekly, so this needs re-running periodically, not just once.
+# Builds via the .xcworkspace (not the bare .xcodeproj) since CocoaPods
+# is integrated. Doesn't need to fully succeed to take effect — signing
+# happens near the end of the build, so getting that far is enough even
+# if something later fails running standalone outside `flutter run`.
+
+.PHONY: macos.provision
+macos.provision:
+	cd macos && xcodebuild -workspace Runner.xcworkspace -scheme Runner \
+	    -configuration Debug -allowProvisioningUpdates build
 
 .PHONY: android
 android: $(BUILD_RUNNER) upgrade
