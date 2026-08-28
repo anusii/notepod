@@ -31,11 +31,10 @@ dependencies:
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
   emacs_text_field: ^0.1.0
-  solidpod: ^1.0.13
-  solidui: ^1.0.30
+  solidpod: ^1.0.17
+  solidui: ^1.0.34
   universal_io: ^2.2.2
   window_manager: ^0.5.1
-
 
 dev_dependencies:
   build_runner: ^2.4.14
