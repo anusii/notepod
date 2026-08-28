@@ -42,6 +42,14 @@ else
   DWLD=https://$(REPO)/installers/
 endif
 
+# Set user for ssh to server
+
+ifeq ($(USER),u9904893)
+  IUSER=jmoore
+else
+  IUSER=$(USER)
+endif
+
 ########################################################################
 # Supported Makefile modules.
 
