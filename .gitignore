@@ -82,7 +82,6 @@ integration_test/fixtures/tmdb_api_key.json
 .svn/
 .swiftpm/
 migrate_working_dir/
-/.metadata
 
 #-----------------------------------------------------------------------
 # IntelliJ related
