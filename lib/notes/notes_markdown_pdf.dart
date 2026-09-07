@@ -58,7 +58,9 @@ Future<Uint8List> buildNotesPdf(List<OwnNote> notes) async {
           pw.Text(
             'NotePod - Notes Export',
             style: const pw.TextStyle(
-                fontSize: 18, fontWeight: pw.FontWeight.bold),
+              fontSize: 18,
+              fontWeight: pw.FontWeight.bold,
+            ),
           ),
           pw.Text(
             'Generated $dateStr  ·  '
@@ -74,7 +76,9 @@ Future<Uint8List> buildNotesPdf(List<OwnNote> notes) async {
           pw.Text(
             note.content?.noteTitle ?? note.noteFileName,
             style: const pw.TextStyle(
-                fontSize: 15, fontWeight: pw.FontWeight.bold),
+              fontSize: 15,
+              fontWeight: pw.FontWeight.bold,
+            ),
           ),
           if (note.content?.createdDateTime.isNotEmpty == true)
             pw.Text(
