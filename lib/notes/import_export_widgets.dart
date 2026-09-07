@@ -8,8 +8,6 @@
 
 library;
 
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -65,15 +63,18 @@ Future<String?> saveNotesPdf(List<int> bytes, String defaultName) async {
       );
       return null;
     }
-    final savePath = await FilePicker.saveFile(
+    final savedUri = await FilePicker.saveFile(
       dialogTitle: 'Save PDF',
       fileName: defaultName,
       type: FileType.custom,
       allowedExtensions: ['pdf'],
+      bytes: Uint8List.fromList(bytes),
     );
-    if (savePath == null) return null;
-    await File(savePath).writeAsBytes(bytes);
-    return savePath;
+    if (savedUri == null) return null;
+
+    return savedUri.scheme == 'file'
+        ? savedUri.toFilePath()
+        : savedUri.toString();
   } catch (e, st) {
     debugPrint('[Save PDF] $e\n$st');
     return 'error:Save failed: $e';

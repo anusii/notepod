@@ -57,7 +57,8 @@ Future<Uint8List> buildNotesPdf(List<OwnNote> notes) async {
         children: [
           pw.Text(
             'NotePod - Notes Export',
-            style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+            style: const pw.TextStyle(
+                fontSize: 18, fontWeight: pw.FontWeight.bold),
           ),
           pw.Text(
             'Generated $dateStr  ·  '
@@ -72,7 +73,8 @@ Future<Uint8List> buildNotesPdf(List<OwnNote> notes) async {
         for (final note in sorted) ...[
           pw.Text(
             note.content?.noteTitle ?? note.noteFileName,
-            style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold),
+            style: const pw.TextStyle(
+                fontSize: 15, fontWeight: pw.FontWeight.bold),
           ),
           if (note.content?.createdDateTime.isNotEmpty == true)
             pw.Text(
@@ -126,7 +128,7 @@ List<pw.Widget> nodeToWidgets(md.Node node) {
           pw.SizedBox(height: 6),
           pw.Text(
             textContent(node),
-            style: pw.TextStyle(
+            style: const pw.TextStyle(
               fontSize: 14,
               fontWeight: pw.FontWeight.bold,
             ),
@@ -138,7 +140,7 @@ List<pw.Widget> nodeToWidgets(md.Node node) {
           pw.SizedBox(height: 5),
           pw.Text(
             textContent(node),
-            style: pw.TextStyle(
+            style: const pw.TextStyle(
               fontSize: 12,
               fontWeight: pw.FontWeight.bold,
             ),
@@ -153,7 +155,7 @@ List<pw.Widget> nodeToWidgets(md.Node node) {
           pw.SizedBox(height: 4),
           pw.Text(
             textContent(node),
-            style: pw.TextStyle(
+            style: const pw.TextStyle(
               fontSize: 10,
               fontWeight: pw.FontWeight.bold,
             ),
@@ -294,7 +296,7 @@ List<pw.TextSpan> _inlineSpans(md.Node node) {
             .map(
               (s) => pw.TextSpan(
                 text: s.text,
-                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                style: const pw.TextStyle(fontWeight: pw.FontWeight.bold),
               ),
             )
             .toList();
@@ -303,7 +305,7 @@ List<pw.TextSpan> _inlineSpans(md.Node node) {
             .map(
               (s) => pw.TextSpan(
                 text: s.text,
-                style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
+                style: const pw.TextStyle(fontStyle: pw.FontStyle.italic),
               ),
             )
             .toList();
