@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
   flutter_form_builder: ^10.0.1
   form_builder_validators: ^11.1.2
-  file_picker: ^11.0.2
+  file_picker: ^12.2.0
   intl: any
   pdf: ^3.11.1
   printing: ^5.13.1
@@ -31,8 +31,8 @@ dependencies:
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
   emacs_text_field: ^0.1.0
-  solidpod: ^1.0.17
-  solidui: ^1.0.34
+  solidpod: ^1.0.21
+  solidui: ^1.0.39
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 

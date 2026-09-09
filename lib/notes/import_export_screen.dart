@@ -29,7 +29,6 @@
 library;
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -112,14 +111,17 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
         _setBackupMsg('File export is not supported on web.', error: true);
         return;
       }
-      final savePath = await FilePicker.saveFile(
+      final savedUri = await FilePicker.saveFile(
         dialogTitle: 'Save JSON backup',
         fileName: fileName,
         type: FileType.custom,
         allowedExtensions: ['json'],
+        bytes: bytes,
       );
-      if (savePath != null) {
-        await File(savePath).writeAsBytes(bytes);
+      if (savedUri != null) {
+        final savePath = savedUri.scheme == 'file'
+            ? savedUri.toFilePath()
+            : savedUri.toString();
         _setBackupMsg('Saved to $savePath');
       }
     } catch (e, st) {
@@ -138,21 +140,15 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       _backupMsg = null;
     });
     try {
-      final result = await FilePicker.pickFiles(
+      final file = await FilePicker.pickFile(
         dialogTitle: 'Select NotePod JSON backup',
         type: FileType.any,
-        withData: true,
       );
-      if (result == null || result.files.isEmpty) {
+      if (file == null) {
         setState(() => _loading = false);
         return;
       }
-      final bytes = result.files.first.bytes;
-      if (bytes == null) {
-        _setBackupMsg('Could not read file.', error: true);
-        setState(() => _loading = false);
-        return;
-      }
+      final bytes = await file.readAsBytes();
       final counts = await restoreNotesFromJson(bytes, _ts());
       if (counts == null) {
         _setBackupMsg('No notes found in backup.', error: true);
@@ -187,14 +183,17 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
         _setExportMsg('File export is not supported on web.', error: true);
         return;
       }
-      final savePath = await FilePicker.saveFile(
+      final savedUri = await FilePicker.saveFile(
         dialogTitle: 'Save Markdown file',
         fileName: fileName,
         type: FileType.custom,
         allowedExtensions: ['md'],
+        bytes: bytes,
       );
-      if (savePath != null) {
-        await File(savePath).writeAsBytes(bytes);
+      if (savedUri != null) {
+        final savePath = savedUri.scheme == 'file'
+            ? savedUri.toFilePath()
+            : savedUri.toString();
         _setExportMsg('Saved to $savePath');
       }
     } catch (e, st) {

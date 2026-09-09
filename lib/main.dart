@@ -47,7 +47,7 @@ void main() async {
   //   null;
   // };
 
-  // Ensure Flutter bindings are initialized for async operations, in particular
+  // Ensure Flutter bindings are initialised for async operations, in particular
   // to set the Linux desktop window [title].
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +60,7 @@ void main() async {
   registerNotepodPublicSharingHooks();
 
   if (isDesktop) {
-    // 20251009 jm: Required to initialize the
+    // 20251009 jm: Required to initialise the
     // window_manager plugin. Failure to include
     // causes a build failure on macos
     await windowManager.ensureInitialized();
