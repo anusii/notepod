@@ -9,6 +9,7 @@
 
 ARCHIVE
 ignore
+pubspec_overrides.yaml
 pubspec.yaml.*
 !templates/solidpod/pubspec.yaml.tmpl
 !templates/solidui/pubspec.yaml.tmpl

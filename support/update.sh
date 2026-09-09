@@ -33,6 +33,7 @@ FILES=(
     ${SCRIPTS}flutter/.gitignore .gitignore
     ${SCRIPTS}flutter/.lycheeignore .lycheeignore
     ${SCRIPTS}flutter/CLAUDE.md CLAUDE.md
+    ${SCRIPTS}flutter/dart_dependency_validator.yaml dart_dependency_validator.yaml
     ${SCRIPTS}Makefile Makefile
 )
 
