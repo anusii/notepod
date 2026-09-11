@@ -37,6 +37,22 @@ FILES=(
     ${SCRIPTS}Makefile Makefile
 )
 
+# 20260911 gjw The android build configuration is app independent: the
+# app name only appears in android/app/build.gradle.kts (namespace,
+# applicationId) which stays local. Sharing these keeps the gradle,
+# AGP, and kotlin versions in step across all apps, which is what
+# flutter's build dependency validation warns about. Only add them
+# when the app builds for android.
+
+if [ -d android ]; then
+    FILES+=(
+	${SCRIPTS}flutter/android/build.gradle.kts android/build.gradle.kts
+	${SCRIPTS}flutter/android/settings.gradle.kts android/settings.gradle.kts
+	${SCRIPTS}flutter/android/gradle.properties android/gradle.properties
+	${SCRIPTS}flutter/android/gradle/wrapper/gradle-wrapper.properties android/gradle/wrapper/gradle-wrapper.properties
+    )
+fi
+
 length=${#FILES[@]}
 
 for ((i=0; i < length; i+=2)); do
