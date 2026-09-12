@@ -23,9 +23,12 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // oidcRedirectScheme is required by oidc_android, which declares no
+        // default for it, so the manifest merger fails without it.
         manifestPlaceholders.putAll(mapOf(
-        "appAuthRedirectScheme" to "com.togaware.notepod"
-    ))
+            "appAuthRedirectScheme" to "com.togaware.notepod",
+            "oidcRedirectScheme" to "com.togaware.notepod"
+        ))
     }
 
     buildTypes {
