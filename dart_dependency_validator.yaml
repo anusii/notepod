@@ -1,2 +1,28 @@
+# Configuration for the dependency_validator package, run by `make depend`.
+#
+# This file is shared across projects as a hard link, maintained by
+# support/update.sh, so keep the contents generic. A project needing its
+# own ignores or excludes will show up as a difference on the next
+# update.sh run, to be reconciled through meld.
+#
+# For window-manager as a dev-only dependency that is intentionally
+# declared but not imported directly by some package and are kept in
+# the package for the downstream apps desktop setup.
+
 ignore:
   - cupertino_icons  # An asset repository.
+  - window_manager
+
+# 20260904 gjw An ignore/ directory holds local archived or scratch code.
+# It is gitignored and is never built, but dependency_validator scans
+# every Dart file under the package root and would otherwise report that
+# old code's imports as dev_dependencies we have to keep. Excluding it
+# lets the check reflect the live code only.
+#
+# Similarly for the example folder if it exists. The example pubspec can
+# "interefere" with the package check. By excluding it here we avoid its
+# imports from being attributed to the root package.
+
+exclude:
+  - "ignore/**"
+  - "example/**"
