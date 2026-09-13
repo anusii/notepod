@@ -27,7 +27,8 @@ library;
 
 import 'package:flutter/material.dart';
 
-import 'package:solidui/solidui.dart' show SolidWindowCloseGuard;
+import 'package:solidui/solidui.dart'
+    show SolidWindowCloseGuard, SolidWindowSize;
 import 'package:window_manager/window_manager.dart';
 
 import 'package:notepod/notepod.dart';
@@ -72,7 +73,13 @@ void main() async {
 
     await SolidWindowCloseGuard.enable();
 
-    const windowOptions = WindowOptions(
+    // 20260913 gjw Open at the size the window was last left at, which the
+    // user sets, and turns off remembering, under Settings in the profile
+    // menu. The size is read here rather than through SolidWindowSize.show
+    // so that the window is still left to be shown by the platform runner,
+    // as the commented-out lines below record.
+
+    final windowOptions = WindowOptions(
       // Set various desktop window options here, specifically the title.
 
       // Setting [alwaysOnTop] here will ensure the app starts on top of other
@@ -85,6 +92,8 @@ void main() async {
       // alwaysOnTop: true,
 
       title: 'NotePod - Private and Shareable Notes',
+
+      size: await SolidWindowSize.saved(),
     );
 
     // Once the window manager is ready we reconfigure it a little.
@@ -94,6 +103,10 @@ void main() async {
 //      await windowManager.focus();
 //      await windowManager.setAlwaysOnTop(false);
     });
+
+    // Keep the remembered size up to date as the window is resized.
+
+    SolidWindowSize.watch();
   }
 
   // The runApp() function takes the given Widget and makes it the root of the

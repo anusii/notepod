@@ -35,6 +35,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.0
 
++ Remember the window size between sessions [1.0.19 20260913 gjw]
 + Updated file picker [1.0.18 20260910 tonypioneer]
 + Add automatic Apple Dev signing of macos build [1.0.17 20260828 jesscmoore]
 + Prompt to save unsaved note on window close [1.0.16 20260808 gjw]
