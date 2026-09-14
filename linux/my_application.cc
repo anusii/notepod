@@ -53,6 +53,21 @@ static void my_application_activate(GApplication* application) {
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
 
+  // 20260914 gjw Flutter 3.47 defaults Linux to the Impeller OpenGLES-SDF
+  // renderer, which draws stroked curves with no antialiasing on Mesa/Intel
+  // GPUs -- the busy spinner stair-steps and its stroke renders thinner than
+  // requested. Skia draws it correctly, so fall back to Skia until Impeller is
+  // fixed upstream. Remove once Impeller renders arcs smoothly -- Skia is
+  // slated for removal from the engine.
+  //
+  // This must be set through the embedder API rather than the
+  // FLUTTER_ENGINE_SWITCHES environment variable: the engine only reads those
+  // switches in debug and profile builds, so an env-based override works under
+  // `flutter run` but is silently ignored in the release build that gets
+  // packaged into the deb.
+
+  fl_dart_project_set_enable_impeller(project, FALSE);
+
   FlView* view = fl_view_new(project);
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));

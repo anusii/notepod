@@ -586,10 +586,24 @@ lychee:
 	-lychee --no-progress --format compact *.md ./**/*.dart $(if $(wildcard ./**/*.md),./**/*.md) $(if $(wildcard ./**/*.html),./**/*.html)
 	@echo $(SEPARATOR)
 
+# 20260915 gjw The archive version should be the latest version for
+# which a full `ginstall` ran, not simply the newest deb. A local `make
+# deb` drops a single deb into ARCHIVE, so taking the last deb reported
+# a version that was never actually released. A ginstall lands the
+# whole set (deb, snap, linux/macos/windows zips, dmg, inno exe, apk,
+# aab), so require at least ARCHIVE_MIN files sharing a version before
+# believing it.
+
+ARCHIVE_MIN = 4
+
 .PHONY: version
 version:
 	@grep version: pubspec.yaml | sed 's/^version:/pubspec:/'
-	@echo "archive: $(shell ls installers/ARCHIVE/*deb | cut -d_ -f2 | sort -V | tail -n1)"
+	@echo "archive: $$(ls installers/ARCHIVE/ 2>/dev/null \
+	  | sed 's/^$(APP)[-_]//' \
+	  | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+' \
+	  | sort -V | uniq -c \
+	  | awk '$$1 >= $(ARCHIVE_MIN) { v = $$2 } END { print v }')"
 
 ### TODO THESE SHOULD BE CHECKED AND CLEANED UP
 
