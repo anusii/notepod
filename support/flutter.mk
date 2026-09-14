@@ -17,6 +17,14 @@ ifeq ($(VER),)
   VER = $(if $(wildcard pubspec.yaml),$(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2),)
 endif
 
+# 20260914 gjw The published package name, as the README's installation
+# stanza names it. Taken from the pubspec rather than the directory, which
+# need not match.
+
+ifeq ($(PKG),)
+  PKG = $(if $(wildcard pubspec.yaml),$(shell egrep '^name:' pubspec.yaml | cut -d' ' -f2),)
+endif
+
 define FLUTTER_HELP
 flutter:
 
@@ -37,7 +45,7 @@ flutter:
   minor_versions   Increment pubspec.yaml minor version
   major_versions   Increment pubspec.yaml major version
   version	   Report the current app version
-  versions         Copy pubspec.yaml version to snapcraft.yaml
+  versions         Copy pubspec.yaml version to snapcraft.yaml, README.md
 
   docs	    Run `dart doc` to create documentation.
 
@@ -54,6 +62,8 @@ flutter:
   depend	  Run `dart run dependency_validator`.
   ignore          Look for usage of ignore directives.
   license	  Look for missing top license in source code.
+  markdown        Lint check the markdown files
+  lychee          Look for broken links
 
   test	    	  Run flutter testing.
   itest	    	  Run flutter interation testing.
@@ -587,9 +597,29 @@ version:
 docs::
 	rsync -avzh doc/api/ root@solidcommunity.au:/var/www/html/web/docs/$(APP)/
 
+# 20260914 gjw The README quotes the version twice over — the
+# installation stanza pins `<pkg>: ^x.y.z` and the usage examples pass
+# `version: 'x.y.z'` — and both go stale silently, telling readers to
+# install a release we are well past. Bring them into step with the
+# pubspec here, then list what was set so it can be eyeballed, staying
+# quiet for a README that never names a version. Version strings inside
+# the CHANGELOG format section are left alone: they are illustrating the
+# format, not naming this release.
+
 .PHONY: versions
 versions:
-	if [ -d snap ]; then perl -pi -e 's|^version:.*|version: $(VER)|' snap/snapcraft.yaml; fi
+	@if [ -f snap/snapcraft.yaml ]; then \
+	  perl -pi -e 's|^version:.*|version: $(VER)|' snap/snapcraft.yaml; \
+	  echo "Updated version in snap/snapcraft.yaml to $(VER)"; \
+	fi
+	@if [ -f README.md ] && [ -n "$(PKG)" ]; then \
+	  perl -pi -e 's|^(\s*$(PKG): \^)\d+\.\d+\.\d+|$${1}$(VER)|' README.md; \
+	  perl -pi -e 's|^(\s*version: \x27)\d+\.\d+\.\d+(\x27)|$${1}$(VER)$${2}|' README.md; \
+	  if grep -q -E "^ *($(PKG): \^|version: ')[0-9]" README.md; then \
+	    echo "Updated versions in README.md to $(VER)"; \
+	    grep -n -E "^ *($(PKG): \^|version: ')[0-9]" README.md; \
+	  fi; \
+	fi
 
 
 BUILD_VER=$(shell grep '^version: ' pubspec.yaml | grep '+' | cut -d'+' -f2)

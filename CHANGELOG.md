@@ -35,6 +35,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.0
 
++ Update to solidui 1.0.43 [1.0.21 20260914 gjw]
 + Update to solidpod 1.0.22 and solidui 1.0.41 [1.0.20 20260914 gjw]
 + Remember the window size between sessions [1.0.19 20260913 gjw]
 + Updated file picker [1.0.18 20260910 tonypioneer]
