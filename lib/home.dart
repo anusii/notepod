@@ -1,6 +1,6 @@
 /// NotePod - The application's home page.
 ///
-// Time-stamp: <Friday 2026-04-24 05:26:11 +1000 Graham Williams>
+// Time-stamp: <Thursday 2026-09-24 20:17:51 +1000 Graham Williams>
 ///
 /// Copyright (C) 2024-2026, Software Innovation Institute, ANU.
 ///
@@ -196,7 +196,7 @@ class AppHomePageState extends State<AppHomePage> {
         ),
         applicationLegalese: appOwner,
         text: aboutText,
-        readmeUrl: 'https://anusii.github.io/notepod',
+        docsUrl: 'https://anusii.github.io/notepod',
       ),
       inviteConfig: inviteOthersConfig,
       enableProfile: true,

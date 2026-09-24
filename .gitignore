@@ -25,6 +25,14 @@ installers/*-linux.zip
 installers/*-macos.zip
 installers/*-windows.zip
 
+# 20260923 gjw The zip a CI run downloads to. The three patterns above name
+# the per-platform zips and so did not match it, and 17.7 MB of it reached a
+# public history before anyone noticed. Matched by name rather than by
+# widening the rules to installers/*.zip, which would also have swallowed
+# anything deliberately kept here.
+
+installers/artifact.zip
+
 .Rhistory
 
 # Puppeteer browser cache used in testing solidui apps
@@ -165,6 +173,9 @@ unlinked_spec.ds
 # If you're building an application, you may want to check-in the
 # pubspec.lock. Libraries should not include pubspec.lock, per
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
+#
+# Our generic .gitignore ignores the file and an app will override it
+# with a `git add -f`. This seems the simplest approach.
 
 /pubspec.lock
 
@@ -257,7 +268,16 @@ ios/project-*.yml
 # ios/macos generated project files
 macos/Runner.xcodeproj/
 macos/Runner.xcworkspace/
-macos/Runner/Info.plist
+
+# 20260923 gjw macos/Runner/Info.plist is NOT ignored for RadioPod, unlike
+# the other apps in the suite. It carries NSAppTransportSecurity, without
+# which macOS blocks the plain http:// streams that a large share of radio
+# stations still use, and playback fails with AVFoundation error -11800.
+#
+# The build regenerates the macOS project with `flutter create`, which
+# CREATES a missing Info.plist but leaves an existing one alone (verified).
+# So the file has to be in the repository: while it was ignored, every CI
+# clone started without it and got Apple's default, with ATS enforced.
 
 # Backups of ios/macos project config yml and Podfile
 macos/Podfile-*
@@ -270,11 +290,20 @@ macos/project-*.yml
 /macos/Runner.xcworkspace/
 /macos/RunnerTests/
 /macos/Runner/AppDelegate.swift
-/macos/Runner/Info.plist
 /macos/Runner/MainFlutterWindow.swift
-/macos/Runner/Assets.xcassets/
 /macos/Runner/Base.lproj/
 /macos/Runner/Configs/
+
+# 20260923 gjw macos/Runner/Assets.xcassets/ is NOT ignored, for the same
+# reason as Info.plist above: it holds the app ICON. `dart run
+# flutter_launcher_icons` writes it here from assets/images/app_icon.png,
+# but while it was ignored those icons never reached the repository, so
+# every CI clone regenerated the macOS project with `flutter create` and
+# shipped Flutter's default blue logo instead. macOS was the only platform
+# with this gap — android, ios, web, windows and snap all track their icons.
+#
+# Re-run `dart run flutter_launcher_icons` and commit the result whenever
+# assets/images/app_icon.png changes.
 
 #-----------------------------------------------------------------------
 # Windows

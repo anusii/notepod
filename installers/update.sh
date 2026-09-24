@@ -161,10 +161,44 @@ if [[ "${status}" == "completed" ]]; then
 
     echo ""
 
-    echo '******************** UPLOAD MACOS ZIP ORIGINAL'
+    echo '******************** UPLOAD MACOS DMG NOTARIZED'
+
+    # 20260920 gjw Because I now have various targets that finish with 
+    # -macos-dmg I renamed the endswith to be -notarized-macos-dmg and same for
+    # zip. This will be the default installer so it is called
+    # <app>-macos.dmg on the installer repository, noting the renaming
+    # of the file to remove the -notarized as below for notarized-dmg
+    # and notarize-zip.
 
     artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
-		    --jq '.artifacts[] | select(.name | endswith("-macos-zip")) | .id' | head -n 1)
+		    --jq '.artifacts[] | select(.name | endswith("-notarized-macos-dmg")) | .id' | head -n 1)
+
+    if [[ -z "${artifactId}" ]]; then
+	echo "No artifact found."
+    else
+        echo "artifact id: $artifactId"
+        gh api -H "Accept: application/vnd.github+json" \
+	   repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip \
+	   > artifact.zip
+        unzip artifact.zip
+	fname=$(unzip -l artifact.zip | awk 'NR==4 {print $4}')
+	mv ${fname} "${fname//-notarized/}"
+	fname="${fname//-notarized/}"
+	touch ${fname} # Timestamp with current date/time
+	rm -f artifact.zip
+	echo  "Installing as ${DEST}${fname}"
+	rsync -avzh ${fname} ${DEST}
+	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${fname}"
+	echo  "Archive as installers/ARCHIVE/${APP}_${version}_notarized_macos.dmg"
+	mv ${fname} ARCHIVE/${APP}_${version}_notarized_macos.dmg
+    fi
+
+    echo ""
+
+    echo '******************** UPLOAD MACOS ZIP NOTARIZED'
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-notarized-macos-zip")) | .id' | head -n 1)
 
     if [[ -z "${artifactId}" ]]; then
 	echo "No artifact found."
@@ -173,21 +207,23 @@ if [[ "${status}" == "completed" ]]; then
 	gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
 	unzip artifact.zip
 	fname=$(unzip -l artifact.zip | awk 'NR==4 {print $4}')
+	mv ${fname} "${fname//-notarized/}"
+	fname="${fname//-notarized/}"
 	touch ${fname} # Timestamp with current date/time
 	rm -f artifact.zip
-	echo  "Installing as ${DEST}${APP}-macos.zip"
-	rsync -avzh ${APP}-macos.zip ${DEST}
-	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${APP}-macos.zip"
-	echo  "Archive as installers/ARCHIVE/${APP}_${version}_macos.zip"
-	mv ${APP}-macos.zip ARCHIVE/${APP}_${version}_macos.zip
+	echo  "Installing as ${DEST}${fname}"
+	rsync -avzh ${fname} ${DEST}
+	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${fname}"
+	echo  "Archive as installers/ARCHIVE/${APP}_${version}_notarized_macos.zip"
+	mv ${fname} ARCHIVE/${APP}_${version}_notarized_macos.zip
     fi
 
     echo ""
 
-    echo '******************** UPLOAD MACOS DMG ORIGINAL'
+    echo '******************** UPLOAD MACOS DMG AD HOC'
 
     artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
-		    --jq '.artifacts[] | select(.name | endswith("-macos-dmg")) | .id' | head -n 1)
+		    --jq '.artifacts[] | select(.name | endswith("-adhoc-macos-dmg")) | .id' | head -n 1)
 
     if [[ -z "${artifactId}" ]]; then
 	echo "No artifact found."
@@ -209,11 +245,36 @@ if [[ "${status}" == "completed" ]]; then
 
     echo ""
 
-    # 20251222 gjw
+    echo '******************** UPLOAD MACOS ZIP AD HOC'
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-adhoc-macos-zip")) | .id' | head -n 1)
+
+    if [[ -z "${artifactId}" ]]; then
+	echo "No artifact found."
+    else
+	echo "artifact id: $artifactId"
+	gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
+	unzip artifact.zip
+	fname=$(unzip -l artifact.zip | awk 'NR==4 {print $4}')
+	touch ${fname} # Timestamp with current date/time
+	rm -f artifact.zip
+	echo  "Installing as ${DEST}${fname}"
+	rsync -avzh ${fname} ${DEST}
+	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${fname}"
+	echo  "Archive as installers/ARCHIVE/${APP}_${version}_macos.zip"
+	mv ${fname} ARCHIVE/${APP}_${version}_macos.zip
+    fi
+
+    echo ""
+
+    # 20251222 gjw The macOS and iOS signed/certified builds are under
+    # development with the notepod app. Once it is working there we
+    # can migrate all other apps.
     #
-    #    The macOS and iOS signed/certified builds are under
-    #    development with the notepod app. Once it is working there we
-    #    can migrate all other apps.
+    # 20260921 gjw The above targets are the most recent work with
+    # todopod to get a working macOS installer. The final solution
+    # will be some combination of the below and the above.
 
     echo '******************** UPLOAD MACOS ZIP UNSIGNED'
 
