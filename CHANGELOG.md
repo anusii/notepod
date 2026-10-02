@@ -35,6 +35,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.0
 
++ Update to solidpod 1.1.0 and solidui 1.3.1 [1.0.23 20261002 gjw]
 + Update to solidui 1.1.3 [1.0.22 20260915 gjw]
 + Update to solidui 1.0.43 [1.0.21 20260914 gjw]
 + Update to solidpod 1.0.22 and solidui 1.0.41 [1.0.20 20260914 gjw]

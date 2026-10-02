@@ -26,6 +26,8 @@ test -f lib/main.dart && IS_APP=true
 
 SCRIPTS=${HOME}/projects/scripts/
 FILES=(
+    ${SCRIPTS}github/ISSUE_TEMPLATE/bug_report.md .github/ISSUE_TEMPLATE/bug_report.md
+    ${SCRIPTS}github/ISSUE_TEMPLATE/feature_request.md .github/ISSUE_TEMPLATE/feature_request.md
     ${SCRIPTS}support/loc.sh support/loc.sh
     ${SCRIPTS}support/meld_zip_from_claude.sh support/meld_zip_from_claude.sh
     ${SCRIPTS}support/flutter.mk support/flutter.mk

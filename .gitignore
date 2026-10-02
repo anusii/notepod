@@ -245,10 +245,55 @@ android/app/.cxx/
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 # ios/macos generated project files
+
 ios/Flutter/
-ios/Runner.xcodeproj/
-ios/Runner.xcworkspace/
-ios/Runner/
+
+# 20261002 gjw The Xcode project and workspace are HAND-MAINTAINED,
+# not generated, and must be committable. project.pbxproj carries the
+# signing configuration, the build phases and the path to the
+# entitlements file.
+#
+# Previously we included `ios/Runner.xcodeproj/` and
+# `ios/Runner.xcworkspace/` as whole directories. Files inside were
+# force-added once and so stayed tracked, but every later change
+# needed `git add -f`, and nothing showed in a plain `git
+# status`. That resulted in a pull request flipping the Release
+# configuration from manual distribution signing to automatic without
+# seeing it: the archive then failed on a CI runner with "No Accounts:
+# Add a new account in Accounts settings" while it was still building
+# okay on a developer Mac, which has an Apple account for automatic
+# signing to ask.
+#
+# Only the per-user state is ignored now, as Flutter's own template
+  does.
+
+ios/Runner.xcodeproj/xcuserdata/
+ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+ios/Runner.xcworkspace/xcuserdata/
+
+# 20261002 gjw Exclude the CONTENTS of ios/Runner, not the DIRECTORY,
+# so the hand-written sources below can be re-included.
+#
+# This was `ios/Runner/` which excludes the directory itself and
+# git will not descend into an excluded directory, so a negation under
+# it has no effect whatsoever. Adding `!ios/Runner/*.swift` to the old
+# rule looks like a fix and changes nothing.
+
+# That allowed the CarPlay pull request's Runner.entitlements and
+# CarPlaySceneDelegate.swift to be dropped on commit while the
+# project.pbxproj referencing them went through and so the iOS build
+# failed on files nobody could see were missing.
+#
+# The last line matters: without it `!ios/Runner/*.swift` would
+# re-include a Swift GeneratedPluginRegistrant in any project that has
+# one.
+
+ios/Runner/**
+!ios/Runner/*.swift
+!ios/Runner/*.entitlements
+!ios/Runner/Info.plist
+ios/Runner/GeneratedPluginRegistrant.*
+
 ios/RunnerTests/
 
 # Backups of ios/macos project config yml and Podfile
@@ -360,6 +405,19 @@ app.*.map.json
 # Claude related files
 #-----------------------------------------------------------------------
 
+# Widget Preview related
+.widget_preview/
+
+# Generated files
+/macos/Podfile
+/macos/Podfile.lock
 CLAUDE.md
 Claude.md
 .claude/*
+
+# 20261001 gjw Gradle writes android/build/, which `/build/` above does not
+# match — that pattern is anchored to the top of the repository. Every
+# Flutter project here has the same directory, so it belongs in this shared
+# file rather than in one project's android/.gitignore.
+
+android/build/

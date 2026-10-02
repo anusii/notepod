@@ -11,6 +11,16 @@
 
 ignore:
   - cupertino_icons  # An asset repository.
+
+  # Bundles the native video libraries media_kit loads at runtime. It is
+  # never imported, so the validator cannot see that dropping it would stop
+  # video playback on every platform.
+
+  - media_kit_libs_video
+
+  # Reserved for the integration tests which may not always be written.
+
+  - integration_test
   - window_manager
 
 # 20260904 gjw An ignore/ directory holds local archived or scratch code.

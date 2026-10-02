@@ -793,11 +793,23 @@ jobs:
   ########################################################################
   # IOS
 
+  # 20260928 gjw Triggered like the other platforms. These steps had never
+  # executed — neither here nor in todopod, which carries the same job
+  # disabled behind a `bump version x` that matches nothing — so expect the
+  # first few runs to need attention rather than to be green. Two faults were
+  # already found and fixed without running it: the ExportOptions plist it
+  # names did not exist, and the keychain was created with an undefined
+  # password variable.
+  #
+  # A failure here does not hold up the other installers, which are separate
+  # jobs. Narrow this back to `build ios` alone if it becomes a nuisance.
+
   package-ios-ipa:
     if: |
-      contains(github.event.head_commit.message, 'bump version x') ||
-      contains(github.event.head_commit.message, 'build installers x') ||
-      contains(github.event.head_commit.message, 'build ios')
+      contains(github.event.head_commit.message, 'bump version') ||
+      contains(github.event.head_commit.message, 'build installers') ||
+      contains(github.event.head_commit.message, 'build ios') ||
+      contains(github.event.head_commit.message, 'upload ios')
     runs-on: macos-latest
     env:
       IOS_APP_RELEASE_PATH: build/ios/ipa
@@ -847,9 +859,15 @@ jobs:
           echo -n "$IOS_PROVISION_PROFILE" | base64 --decode -o $PP_PATH
 
           echo "Create temporary keychain"
-          security create-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+          # 20260928 gjw $KEYCHAIN_PASSWORD, not $MACOS_KEYCHAIN_PWD. Only
+          # the former is defined in the env block above; the latter is the
+          # name of the SECRET, which is not in scope here. Creating and
+          # unlocking with an empty string and then handing the real password
+          # to set-key-partition-list below fails on the mismatch. The macOS
+          # job, which does work, uses $KEYCHAIN_PASSWORD throughout.
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$MACOS_KEYCHAIN_PWD" $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
           echo "Import certificate to keychain"
           security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
@@ -881,6 +899,12 @@ jobs:
         # run: flutter build ipa
         # Option for manual signing
         # Use --verbose to debug build and signing issues
+        #
+        # 20260928 gjw The build number comes from pubspec's `+N`, which
+        # `make minor_versions` now increments with every release. App Store
+        # Connect refuses a number it has seen before, so that increment is
+        # what makes a second upload possible. Nothing is passed here: one
+        # source of truth, and `flutter build` already reads it.
         run: flutter build ipa --export-options-plist=ios/GithubActionsExportOptions.plist
 
       - name: Note the xcarchive created
@@ -922,7 +946,48 @@ jobs:
           name: ${{ env.APP }}-ipa
           path: ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa
 
-      # # Important! Cleanup: remove the certificate and provisioning profile from the runner!
+      # 20260928 gjw Uploads the IPA straight to App Store Connect, saving a
+      # Transporter round trip. The AC_API_* secrets are already set — the
+      # macOS job uses the same three for notarisation.
+      #
+      # GATED ON `upload ios` IN THE COMMIT MESSAGE, and that gate is the
+      # point. The job itself runs on every `bump version`, and a build
+      # cannot be deleted from App Store Connect once uploaded, only
+      # expired, so an ungated step would fill the history with builds
+      # nobody asked for. Say `upload ios` when you mean it.
+      #
+      # An App Store Connect app record for com.togaware.radiopod has to
+      # exist first (appstoreconnect.apple.com → Apps → +), or the upload is
+      # rejected with no such app — which reads like a signing failure and
+      # is not one.
+      #
+      # The build number comes from pubspec's `+N`. App Store Connect
+      # refuses a number it has seen before, so a second upload needs
+      # another `make minor_versions` first.
+      #
+      # altool wants the key at a path it searches by name, hence the
+      # AuthKey_<id>.p8 filename rather than somewhere in RUNNER_TEMP.
+
+      - name: Upload the IPA to App Store Connect
+        if: contains(github.event.head_commit.message, 'upload ios')
+        env:
+          AC_API_KEY: ${{ secrets.AC_API_KEY }}
+          AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}
+          AC_API_ISSUER_ID: ${{ secrets.AC_API_ISSUER_ID }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo -n "$AC_API_KEY" | base64 --decode \
+            -o ~/.appstoreconnect/private_keys/AuthKey_$AC_API_KEY_ID.p8
+
+          xcrun altool --upload-app \
+            --type ios \
+            --file ${{ env.IOS_APP_RELEASE_PATH }}/${{ env.APP }}.ipa \
+            --apiKey "$AC_API_KEY_ID" \
+            --apiIssuer "$AC_API_ISSUER_ID"
+
+          rm -f ~/.appstoreconnect/private_keys/AuthKey_$AC_API_KEY_ID.p8
+
+      # Important! Cleanup: remove the certificate and provisioning profile from the runner!
       # - name: Clean up keychain and provisioning profile
       #   if: ${{ always() }}
       #   run: |

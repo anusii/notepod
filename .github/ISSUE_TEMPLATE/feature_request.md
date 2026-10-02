@@ -18,9 +18,9 @@ So that as a user I can [clear and concise benefit].
 
 Checklist for closing the issue:
 
-- [ ] No errors from `make prep`
-- [ ] All tests pass `make qtest`
 - [ ] [Issue specific requirements.]
+- [ ] No errors from `make prep`
+- [ ] All tests pass `make test`
 
 ## Alternatives
 

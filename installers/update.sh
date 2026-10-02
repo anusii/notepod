@@ -163,7 +163,7 @@ if [[ "${status}" == "completed" ]]; then
 
     echo '******************** UPLOAD MACOS DMG NOTARIZED'
 
-    # 20260920 gjw Because I now have various targets that finish with 
+    # 20260920 gjw Because I now have various targets that finish with
     # -macos-dmg I renamed the endswith to be -notarized-macos-dmg and same for
     # zip. This will be the default installer so it is called
     # <app>-macos.dmg on the installer repository, noting the renaming
@@ -364,6 +364,29 @@ if [[ "${status}" == "completed" ]]; then
 	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${fname}"
 	echo  "Archive as installers/ARCHIVE/${APP}_${version}_macos_dev.dmg"
 	mv ${fname} ARCHIVE/${APP}_${version}_macos_dev.dmg
+    fi
+
+    echo ""
+
+    echo '******************** UPLOAD iOS IPA'
+
+    artifactId=$(gh api -H "Accept: application/vnd.github+json" /repos/${REP}/${APP}/actions/artifacts \
+		    --jq '.artifacts[] | select(.name | endswith("-ipa")) | .id' | head -n 1)
+
+    if [[ -z "${artifactId}" ]]; then
+	echo "No artifact found."
+    else
+	echo "artifact id: $artifactId"
+	gh api -H "Accept: application/vnd.github+json" repos/${REP}/${APP}/actions/artifacts/${artifactId}/zip > artifact.zip
+	unzip artifact.zip
+	fname=$(unzip -l artifact.zip | awk 'NR==4 {print $4}')
+	touch ${fname} # Timestamp with current date/time
+	rm -f artifact.zip
+	echo  "Installing as ${DEST}${fname}"
+	rsync -avzh ${fname} ${DEST}
+	ssh ${HOST} "cd ${FLDR}; chmod 0644 ${fname}"
+	echo  "Archive as installers/ARCHIVE/${APP}_${version}.ipa"
+	mv ${fname} ARCHIVE/${APP}_${version}.ipa
     fi
 
     echo ""
