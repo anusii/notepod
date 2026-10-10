@@ -89,6 +89,7 @@ $(APP):
   local	     Install to $(HOME)/.local/share/$(APP)
     tgz	     Upload the installer to $(REPO)
   apk	     Upload the installer to $(REPO)
+  snapstore  Publish the $(VER) snap to the Snap Store stable channel
 
 endef
 export HELP
@@ -162,6 +163,22 @@ sinstall:
 	wget $(DWLD)$(APP)_amd64.snap -O $(APP)_amd64.snap
 	sudo snap install --dangerous $(APP)_amd64.snap
 	rm -f $(APP)_amd64.snap
+
+# 20261008 gjw Publish the current version's snap to the Snap Store on
+# the stable channel. The snap is the one built by the github workflow
+# and archived by `make ginstall`, so run that first. Requires a prior
+# `snapcraft login`.
+
+SNAP_FILE = installers/ARCHIVE/$(APP)_$(VER)_amd64.snap
+
+.PHONY: snapstore
+snapstore:
+	@if [ ! -f $(SNAP_FILE) ]; then \
+	  echo "Error: $(SNAP_FILE) not found. Run 'make ginstall' first."; \
+	  exit 1; \
+	fi
+	snapcraft upload --release=stable $(SNAP_FILE)
+	@echo ''
 
 # 20250110 gjw A ginstall of the github built bundles, and the locally
 # built apk installed to the repository and moved into ARCHIVE.

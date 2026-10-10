@@ -1,6 +1,6 @@
 /// NotePod - The primary [MaterialApp] widget.
 ///
-// Time-stamp: <Wednesday 2026-06-17 16:31:56 +1000 Graham Williams>
+// Time-stamp: <Saturday 2026-10-10 21:45:10 +1100 Graham Williams>
 ///
 /// Copyright (C) 2025, Software Innovation Institute, ANU.
 ///
@@ -60,7 +60,6 @@ class NotePod extends StatelessWidget {
         logo: logoImg,
         link: applicationRepo,
         webID: defWebID,
-        required: false,
         loginButtonStyle: const LoginButtonStyle(
           background: Colors.lightGreenAccent,
           tooltip: 'You need to connect to your Solid account\n'
