@@ -35,6 +35,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.0
 
++ Snap update for libx11 [1.0.25 20261016 gjw]
 + Update solidui 1.5.3 [1.0.24 20261010 gjw]
 + Update to solidpod 1.1.0 and solidui 1.3.1 [1.0.23 20261002 gjw]
 + Update to solidui 1.1.3 [1.0.22 20260915 gjw]
