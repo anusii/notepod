@@ -168,9 +168,13 @@ deb:
 
 # 20261020 gjw A Flatpak, built locally for now. For radiopod the Flutter
 # bundle is built on the host with the scrambled Podcast Index pair, as
-# deb.sh does, and flatpak/com.togaware.radiopod.yml wraps it with a libmpv
-# built from source. Needs `flatpak install --user flathub
+# deb.sh does, and installers/flatpak/com.togaware.radiopod.yml wraps it
+# with a libmpv built from source. Needs `flatpak install --user flathub
 # org.flatpak.Builder org.gnome.Sdk//49`.
+#
+# 20261102 gjw The manifest moved from flatpak/ to installers/flatpak/,
+# beside the other installer files, so its paths to the bundle, the
+# pubspec and the icon start from ../../.
 
 FLATPAK_ID = com.togaware.$(APP)
 FLATPAK_BUILDER = flatpak run org.flatpak.Builder
@@ -191,7 +195,7 @@ flatpak:
 	flutter build linux --release $(DART_DEFINES) $(OBFUSCATE)
 	$(FLATPAK_BUILDER) --user --install --force-clean --disable-rofiles-fuse \
 	  --state-dir=$(FLATPAK_DIR)/state --repo=$(FLATPAK_DIR)/repo \
-	  $(FLATPAK_DIR)/build flatpak/$(FLATPAK_ID).yml
+	  $(FLATPAK_DIR)/build installers/flatpak/$(FLATPAK_ID).yml
 	flatpak build-bundle $(FLATPAK_DIR)/repo \
 	  installers/$(APP)-$(VER).flatpak $(FLATPAK_ID)
 	@echo "Run with: flatpak run $(FLATPAK_ID)"
