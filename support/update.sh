@@ -54,6 +54,17 @@ if [ -d android ]; then
     )
 fi
 
+# 20261030 gjw The installers workflow is now one file for all apps: the
+# app name comes from the repository name, LINUX_PKGS is the union of
+# what the apps need, and the snap and flatpak steps skip an app without
+# snap/ or flatpak/. Packages have no installers.
+
+if $IS_APP; then
+    FILES+=(
+	${SCRIPTS}github/workflows/installers.yaml .github/workflows/installers.yaml
+    )
+fi
+
 length=${#FILES[@]}
 
 for ((i=0; i < length; i+=2)); do
@@ -150,7 +161,6 @@ SCRIPTSBB=${HOME}/projects/scriptsbb/flutter
 FILESBB=(
     .pubignore ${SCRIPTSBB}/pubignore
     .github/workflows/ci.yaml ${SCRIPTSBB}/github/workflows/ci.yaml
-    .github/workflows/installers.yaml ${SCRIPTSBB}/github/workflows/installers.yaml
     .github/pull_request_template.md ${SCRIPTSBB}/github/pull_request_template.md
     installers/deb.sh ${SCRIPTSBB}/installers/deb.sh
     installers/update.sh ${SCRIPTSBB}/installers/update.sh
@@ -220,17 +230,6 @@ for ((i=0; i < length; i+=2)); do
 
 	elif [[ "$f1" == "installers/update.sh" ]] && $IS_APP; then
 	    if diff <(grep -v '^HOST=' "$f1" | grep -v '^FLDR=') <(grep -v '^HOST=' "$f2" | grep -v '^FLDR=') >/dev/null; then
-		echo "IDENTICAL $f1 $f2"
-	    else
-		echo "MELD      $f2 $f1"
-		meld "$f2" "$f1" 2> /dev/null
-	    fi
-
-	# 20260220 gjw For the installers workflow we expect the APP
-	# and LINUX_PKGS to differ so ignore those lines.
-
-	elif [[ "$f1" == ".github/workflows/installers.yaml" ]] && $IS_APP; then
-	    if diff <(grep -v '^  APP:' "$f1" | grep -v '^  LINUX_PKGS:') <(grep -v '^  APP:' "$f2" | grep -v '^  LINUX_PKGS:') >/dev/null; then
 		echo "IDENTICAL $f1 $f2"
 	    else
 		echo "MELD      $f2 $f1"

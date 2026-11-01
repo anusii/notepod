@@ -17,6 +17,21 @@ ifeq ($(VER),)
   VER = $(if $(wildcard pubspec.yaml),$(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2),)
 endif
 
+# 20261016 gjw Build-time keys an app must not commit, such as RadioPod's
+# Podcast Index key and secret, live in a gitignored JSON file named by
+# DEFINES_FILE. Passed to every run and build when the file exists, and
+# nothing at all when it does not, so apps without one are unaffected.
+
+DEFINES_FILE ?= dart_defines.json
+DART_DEFINES = $(if $(wildcard $(DEFINES_FILE)),--dart-define-from-file=$(DEFINES_FILE),)
+
+# 20261016 gjw Release builds may be obfuscated by an app that sets
+# OBFUSCATE before including this file, as RadioPod does to make its
+# scrambled Podcast Index secret harder to dig out. Empty, and so nothing,
+# for every other app. Symbols go to build/symbols to decode stack traces.
+
+OBFUSCATE ?=
+
 # 20260914 gjw The published package name, as the README's installation
 # stanza names it. Taken from the pubspec rather than the directory, which
 # need not match.
@@ -116,7 +131,7 @@ LOC := $(shell if [ -f support/loc.sh ]; then echo support/loc.sh; \
 
 .PHONY: chrome
 chrome:
-	flutter run -d chrome --release --web-port=4400
+	flutter run $(DART_DEFINES) -d chrome --release --web-port=4400
 
 # 20220503 gjw The following fails if the target files already exist -
 # just needs to be run once.
@@ -141,17 +156,17 @@ upgrade:
 
 .PHONY: linux
 linux: pubspec.lock $(BUILD_RUNNER) upgrade
-	flutter run --device-id linux
+	flutter run $(DART_DEFINES) --device-id linux
 
 # Turn off debugPrint() output.
 
 .PHONY: qlinux
 qlinux: pubspec.lock $(BUILD_RUNNER) upgrade
-	flutter run --dart-define DEBUG_PRINT="FALSE" --device-id linux
+	flutter run $(DART_DEFINES) --dart-define DEBUG_PRINT="FALSE" --device-id linux
 
 .PHONY: macos
 macos: $(BUILD_RUNNER) upgrade
-	flutter run --device-id macos
+	flutter run $(DART_DEFINES) --device-id macos
 
 .PHONY: macos.reconfig
 macos.reconfig:
@@ -174,12 +189,12 @@ macos.provision:
 
 .PHONY: android
 android: $(BUILD_RUNNER) upgrade
-	flutter run --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ') --release
+	flutter run $(DART_DEFINES) --device-id $(shell flutter devices | grep android | tr '•' '|' | tr -s '|' | tr -s ' ' | cut -d'|' -f2 | tr -d ' ') --release
 
 .PHONY: emu
 emu:
 	@if [ -n "$(shell flutter devices | grep emulator | cut -d" " -f 6)" ]; then \
-	  flutter run --device-id $(shell flutter devices | grep emulator | cut -d" " -f 6); \
+	  flutter run $(DART_DEFINES) --device-id $(shell flutter devices | grep emulator | cut -d" " -f 6); \
 	else \
 	  flutter emulators --launch Pixel_3a_API_30; \
 	  echo "Emulator has been started. Rerun `make emu` to build the app."; \
@@ -482,21 +497,21 @@ tgz:: $(APP)-$(VER)-linux-x86_64.tar.gz
 $(APP)-$(VER)-linux-x86_64.tar.gz: clean
 	mkdir -p installers
 	rm -rf build/linux/x64/release
-	flutter build linux --release
+	flutter build linux $(DART_DEFINES) $(OBFUSCATE) --release
 	tar --transform 's|^build/linux/x64/release/bundle|$(APP)|' -czvf $@ build/linux/x64/release/bundle
 	cp $@ installers/
 	mv $@ installers/$(APP).tar.gz
 
 apk::
 	@echo '******************** BUILD ANDROID APK'
-	flutter build apk --release
+	flutter build apk $(DART_DEFINES) $(OBFUSCATE) --release
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP).apk
 	cp build/app/outputs/flutter-apk/app-release.apk installers/$(APP)-$(VER).apk
 
 appbundle::
 	@echo '******************** BUILD ANDROID AAB'
 	flutter clean
-	flutter build appbundle --release
+	flutter build appbundle $(DART_DEFINES) $(OBFUSCATE) --release
 	cp build/app/outputs/bundle/release/app-release.aab installers/$(APP).aab
 	cp build/app/outputs/bundle/release/app-release.aab installers/$(APP)-$(VER).aab
 
@@ -509,21 +524,21 @@ realclean::
 
 dmg-unsigned::
 	flutter clean
-	flutter build macos --release --flavor unsigned
+	flutter build macos $(DART_DEFINES) $(OBFUSCATE) --release --flavor unsigned
 
 # Build macos app signed with development certificate for testing
 # by App Developer Program togaware registered devices
 
 dmg-dev::
 	flutter clean
-	flutter build macos --release --flavor dev
+	flutter build macos $(DART_DEFINES) $(OBFUSCATE) --release --flavor dev
 
 # Build macos app signed with app store distribution for testing
 # on Testflight or publishing
 
 dmg-staging:
 	flutter clean
-	flutter build macos --release --flavor staging
+	flutter build macos $(DART_DEFINES) $(OBFUSCATE) --release --flavor staging
 
 # For the `dev` branch only, update the version sequence number prior
 # to a push (relies on the git.mk being loaded after this
