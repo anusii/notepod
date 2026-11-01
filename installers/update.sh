@@ -21,6 +21,11 @@ DEST=${HOST}:${FLDR}
 
 ssh ${HOST} 'if [ ! -d ${FLDR} ]; then mkdir ${FLDR}; chown gjw:gjw ${FLDR}; fi'
 
+# 20261101 gjw ARCHIVE is git ignored, so a fresh clone has none until
+# something makes it. Everything fetched below is archived there.
+
+mkdir -p ARCHIVE
+
 # From the recent 'Build Installers' workflows, identify the 'Bump
 # version' pushes to the repository and get the latest one as the one
 # we want to download the artefacts.

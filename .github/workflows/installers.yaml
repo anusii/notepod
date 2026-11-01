@@ -18,7 +18,7 @@ on:
 
 jobs:
   installers:
-    uses: gjwgit/fluttertmpl/.github/workflows/installers.yaml@v0.8.2
+    uses: gjwgit/fluttertmpl/.github/workflows/installers.yaml@v0.8.4
 
     # The signing secrets each job skips without, and DART_SECRETS, the
     # app's build.secrets from .copier-answers.yml as a JSON object for

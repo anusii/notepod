@@ -16,26 +16,10 @@ fi
 echo "$result"
 printf "\e[32;1m%s\e[0m\n" 'Finished running dart format.'
 
-# Get the commit message.
-
-COMMIT_MSG=$(git log -1 --pretty=%B)
-
-# 20260123 gjw Check if the commit message starts with 'Bump version'
-# If it does then run `make versions` to update the version in any
-# files that require updating, based on the version from pubspec.yaml.
-# Then add any updated files to the commit. I add specific files
-# rather than using `.` just to avoid possibly adding things I was not
-# planning to. This way we always update, for example, the snap
-# version when we 'Bump version', avoiding missing this step, so the
-# installer builds that 'Bump version' triggers will get the correct
-# versions.
-
-if [[ $COMMIT_MSG == Bump\ version* ]]; then
-    printf "\e[33;1m%s\e[0m\n" 'Update versions.'
-
-    make versions
-    git add snap/snapcraft.yaml
-
-    printf "\e[32;1m%s\e[0m\n" 'Finished updating versions.'
-
-fi
+# 20261101 gjw No longer runs `make versions` on a 'Bump version'
+# commit. It read the message with `git log -1`, which before the commit
+# is made is the previous commit's message, so it ran on the commit after
+# a bump and missed the bump itself. Nor is it needed: the snapcraft.yaml
+# from the fluttertmpl Copier template reads its version from
+# pubspec.yaml at build time, and `make bump` still runs `make versions`
+# through `make prep` for the README of a package.
