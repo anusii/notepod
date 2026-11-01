@@ -1,7 +1,7 @@
 name: notepod
 description: 'Privacy preserving note taking app using PODs.'
 publish_to: 'none'
-version: 1.1.0+18
+version: 1.1.1+19
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -16,7 +16,7 @@ environment:
 
 dependencies:
   crypto: ^3.0.3
-  cupertino_icons: ^1.0.2 # An asset repository.
+  cupertino_icons: ^2.0.0 # An asset repository.
   encrypter_plus: ^5.1.0
   flutter:
     sdk: flutter
@@ -30,9 +30,9 @@ dependencies:
   markdown_toolbar: ^0.5.0
   markdown_tooltip: ^0.0.10
   markdown_widget: ^2.3.2+8
-  emacs_text_field: ^0.1.0
+  emacs_text_field: ^1.0.0
   solidpod: ^1.1.2
-  solidui: ^1.5.7
+  solidui: ^1.5.15
   universal_io: ^2.2.2
   window_manager: ^0.5.1
 

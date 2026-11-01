@@ -20,6 +20,7 @@ then please show some ❤️ and tap on the star at
 
 ## 1.1 Migrate to using Copier for Templates
 
++ Drop saveFile options deprecated in file_picker 13.3 [1.1.1 20261101 gjw]
 + Move to copier [1.1.0 20261101 gjw]
 
 ## 1.0

@@ -66,8 +66,6 @@ Future<String?> saveNotesPdf(List<int> bytes, String defaultName) async {
     final savedUri = await FilePicker.saveFile(
       dialogTitle: 'Save PDF',
       fileName: defaultName,
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
       bytes: Uint8List.fromList(bytes),
     );
     if (savedUri == null) return null;

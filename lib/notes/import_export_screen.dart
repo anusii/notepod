@@ -114,8 +114,6 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       final savedUri = await FilePicker.saveFile(
         dialogTitle: 'Save JSON backup',
         fileName: fileName,
-        type: FileType.custom,
-        allowedExtensions: ['json'],
         bytes: bytes,
       );
       if (savedUri != null) {
@@ -186,8 +184,6 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
       final savedUri = await FilePicker.saveFile(
         dialogTitle: 'Save Markdown file',
         fileName: fileName,
-        type: FileType.custom,
-        allowedExtensions: ['md'],
         bytes: bytes,
       );
       if (savedUri != null) {
