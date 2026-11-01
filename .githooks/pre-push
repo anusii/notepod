@@ -23,14 +23,14 @@ echo "$result"
 
 # Check the version is updated before we can push!
 
-PVER=$(egrep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+PVER=$(grep -E '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 
 # 20261030 gjw Only when snapcraft.yaml still carries a version. The
 # fluttertmpl snapcraft.yaml has none: the snap reads it from
 # pubspec.yaml at build time, so there is nothing to keep in step.
 
 if [ -f snap/snapcraft.yaml ] && grep -q '^version:' snap/snapcraft.yaml; then
-    SVER=$(egrep '^version:' snap/snapcraft.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+    SVER=$(grep -E '^version:' snap/snapcraft.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 
     if [ "${PVER}" != "${SVER}" ]; then
 	printf "\e[31;1m%s\e[0m\n" "Version mismatch pubspec.yaml (${PVER}) and snap/snapcraft.yaml (${SVER})."

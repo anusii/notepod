@@ -18,7 +18,7 @@
 #   Trivial update or bug fix
 
 APP=$(shell pwd | xargs basename)
-VER = $(shell egrep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+VER = $(shell grep -E '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
 DATE=$(shell date +%Y-%m-%d)
 
 # Identify a destination used by install.mk
