@@ -1,73 +1,97 @@
 #!/bin/bash
 
-APP=$(pwd | rev | cut -d'/' -f2 | rev)
+# Build the Debian package for NotePod.
+#
+# From the gjwgit/fluttertmpl Copier template, with the package details
+# from .copier-answers.yml. Local edits are kept by `copier update`.
+#
+# 20261030 gjw One script for the local `make deb` and the installers
+# workflow. Locally it builds the Flutter Linux release first. With
+# --bundle it packages the bundle already in build/linux/x64/release, as
+# the workflow's build-linux job leaves it, so every Linux installer
+# carries the same binary.
+#
+# Run from the installers folder. Leaves notepod_<version>_amd64.deb
+# here.
 
-VER=$(egrep '^version:' ../pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+set -e
 
-# Build the release.
+APP=notepod
 
-(cd ..; flutter build linux --release)
+VER=$(grep '^version:' ../pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+
+if [ "$1" != "--bundle" ]; then
+  (cd ..; flutter build linux --release)
+fi
+
+ROOT=${APP}_${VER}_amd64
 
 # Create debian package structure.
 
-mkdir -p ${APP}_${VER}_amd64/DEBIAN
-mkdir -p ${APP}_${VER}_amd64/usr/bin
-mkdir -p ${APP}_${VER}_amd64/usr/lib/${APP}
-mkdir -p ${APP}_${VER}_amd64/usr/share/applications
-mkdir -p ${APP}_${VER}_amd64/usr/share/icons/hicolor/512x512/apps
+mkdir -p ${ROOT}/DEBIAN
+mkdir -p ${ROOT}/usr/bin
+mkdir -p ${ROOT}/usr/lib/${APP}
+mkdir -p ${ROOT}/usr/share/applications
+mkdir -p ${ROOT}/usr/share/icons/hicolor/512x512/apps
 
-# Create control file.
+# Create control file. The heredocs are quoted so the description is
+# written as it is.
 
-cat > ${APP}_${VER}_amd64/DEBIAN/control << EOL
-Package: ${APP}
-Version: ${VER}
+cat > ${ROOT}/DEBIAN/control << 'EOL'
+Package: notepod
 Section: utils
 Priority: optional
 Architecture: amd64
 Depends: libgtk-3-0, libblkid1, liblzma5
 Maintainer: Graham Williams <graham.williams@togaware.com>
-Description: Your notes collected privately
- With Notepod your notes are stored, encrypted, in your Pod.
- The app is provided as a template for other SOlid Pods based apps.
+Description: Privacy preserving note taking app using PODs
+ Notepod is a note taking app, storing your notes within your Solid
+ Pod. Make notes anywhere, anytime, on any device and review them
+ later on. Great for that bush walk where you've suddenly come up
+ with a great idea you don't want to lose, or sharing the shopping
+ list with the family so whoever is next at the shops has it at their
+ finger tips.
 EOL
+echo "Version: ${VER}" >> ${ROOT}/DEBIAN/control
 
 # Create desktop entry.
 
-cat > ${APP}_${VER}_amd64/usr/share/applications/com.togaware.${APP}.desktop << EOL
+cat > ${ROOT}/usr/share/applications/com.togaware.${APP}.desktop << 'EOL'
 [Desktop Entry]
-Name=Notepod
-Comment=Note taking with notes stored in Pods
-Exec=/usr/bin/${APP}
-Icon=${APP}
+Name=NotePod
+Comment=Simple, Private, Secure Flutter Notepad
+Exec=/usr/bin/notepod
+Icon=notepod
 Terminal=false
 Type=Application
-Categories=Utility;
+Categories=Utility;TextEditor;
+Keywords=notes;notepad;markdown;solid;pod;
 EOL
 
 # Copy the built flutter application.
 
-cp -r ../build/linux/x64/release/bundle/* ${APP}_${VER}_amd64/usr/lib/${APP}/
+cp -r ../build/linux/x64/release/bundle/* ${ROOT}/usr/lib/${APP}/
 
 # Ensure /usr/bin/${APP} points to the actual executable.
 
-(cd ${APP}_${VER}_amd64/usr/bin; ln -s ../lib/${APP}/${APP} ${APP})
+(cd ${ROOT}/usr/bin; ln -s ../lib/${APP}/${APP} ${APP})
 
-# Copy the app icon which is assumed to be named ${APP}.png in the
-# installers folder.
+# The app icon.
 
-cp ../assets/images/app_icon.png ${APP}_${VER}_amd64/usr/share/icons/hicolor/512x512/apps/${APP}.png
+cp ../assets/images/app_icon.png ${ROOT}/usr/share/icons/hicolor/512x512/apps/${APP}.png
 
 # Set correct permissions.
 
-chmod -R 755 ${APP}_${VER}_amd64/DEBIAN
-find ${APP}_${VER}_amd64/usr -type d -exec chmod 755 {} \;
-find ${APP}_${VER}_amd64/usr -type f -exec chmod 644 {} \;
-chmod 755 ${APP}_${VER}_amd64/usr/lib/${APP}/${APP}
+chmod 755 ${ROOT}
+chmod -R 755 ${ROOT}/DEBIAN
+find ${ROOT}/usr -type d -exec chmod 755 {} \;
+find ${ROOT}/usr -type f -exec chmod 644 {} \;
+chmod 755 ${ROOT}/usr/lib/${APP}/${APP}
 
 # Build the debian package.
 
-dpkg-deb --build --root-owner-group ${APP}_${VER}_amd64
+dpkg-deb --build --root-owner-group ${ROOT}
 
 # Cleanup.
 
-rm -rf ${APP}_${VER}_amd64
+rm -rf ${ROOT}

@@ -1,5 +1,8 @@
+# From the gjwgit/fluttertmpl Copier template. Values come from
+# .copier-answers.yml. Local edits are kept by `copier update`, which
+# merges template changes in.
+
 name: notepod
-version: 1.0.25
 summary: Privacy preserving note taking app using PODs.
 description: |
   Notepod is a note taking app, storing your notes within your Solid
@@ -9,16 +12,22 @@ description: |
   list with the family so whoever is next at the shops has it at their
   finger tips.
 
-base: core22
+# 20260924 gjw Named explicitly rather than relying on snapcraft finding
+# snap/gui/icon.png by convention. This is the icon the Snap Store shows
+# beside the listing, and the store limits it to 256kB.
+
+icon: snap/gui/icon.png
+
+base: core24
 grade: stable
 confinement: strict
 
-# 20251013 gjw Plugins that may be needed include the following, but are
-# not required for every app:
-#
-#      - audio-playback
-#      - pulseaudio
-#      - screen-inhibit-control
+# 20261030 gjw The version is read from pubspec.yaml by the
+# override-build below rather than repeated here, so it cannot drift.
+# The part dumps the prebuilt bundle, which holds no pubspec, so it is
+# read from the project folder.
+
+adopt-info: notepod
 
 apps:
   notepod:
@@ -29,63 +38,49 @@ apps:
       - desktop-legacy
       - home
       - network
-      - network-bind
-      - password-manager-service
       - opengl
+
+      # 20260924 gjw solidpod keeps the security key through
+      # flutter_secure_storage, which on GNU/Linux is libsecret talking to
+      # gnome-keyring over the org.freedesktop.Secret.Service D-Bus name.
+      # Without this plug AppArmor blocks that call and login stops at
+      # "Cannot access secure storage ... An AppArmor policy prevents this
+      # sender from sending this message to this recipient".
+      #
+      # NOT AUTO-CONNECTED. Unlike the other plugs here this one needs
+      # either a snap declaration granted by the store reviewers or, for a
+      # locally installed snap, an explicit
+      #
+      #     snap connect notepod:password-manager-service
+      #
+      # so declaring it is necessary but on its own not sufficient.
+
+      - password-manager-service
       - wayland
       - x11
 
-# 20251013 gjw The `flutter_secure_storage` package (and maybe
+# 20260921 gjw The `flutter_secure_storage` package (and maybe
 # `vault_storage`) is used by `solidpod/solidui` to save secrets
 # locally, if the app provides this option to the user to do so. Thus
-# `libsecret-1-dev` and `libjsoncpp-dev` are required to build the
-# installer and `libsecret-1-0` and `libjsoncpp1` to run the
-# application. See
+# `libsecret-1-0` and `libjsoncpp` are required to run the application.
+# See
 #
 # https://github.com/juliansteenbakker/flutter_secure_storage/blob/develop/README.md
 # https://pub.dev/packages/vault_storage/versions/2.2.0#platform-setup
 #
-#    build-packages:
-#      - libsecret-1-dev
-#      - libjsoncpp-dev
-#
-#    stage-packages:
-#      - libsecret-1-0
-#      - libjsoncpp-dev
-#
-# 20251013 gjw If using the `audioplayers` package for flutter then
-# the gstreamer packages are required for bulding the installer
-# running the app.
-#
-#    build-packages:
-#      - libgstreamer1.0-dev
-#      - libgstreamer-plugins-base1.0-dev
-#      - libgstreamer-plugins-good1.0-dev
-#    stage-packages:
-#      - libgstreamer1.0-0
-#      - libgstreamer-plugins-base1.0-0
-#      - libgstreamer-plugins-good1.0-0
-#      - gstreamer1.0-plugins-good
-#      - gstreamer1.0-plugins-base
+# 20261029 gjw The app is NOT built here. The installers workflow builds
+# the Flutter Linux release once for the deb, zip, snap and flatpak
+# alike, and this part dumps that bundle, so only the stage packages are
+# needed. To pack a snap locally, `flutter build linux --release` first,
+# with $(DART_DEFINES) and $(OBFUSCATE) as `make flatpak` does.
 
 parts:
   notepod:
-    source: .
-    plugin: flutter
-    flutter-target: lib/main.dart
-    build-packages:
-      - binutils
-      - clang
-      - cmake
-      - libblkid-dev
-      - libgtk-3-dev
-      - libjsoncpp-dev
-      - liblzma-dev
-      - libsecret-1-dev
-      - libssl-dev
-      - lld
-      - llvm
-      - ninja-build
+    source: build/linux/x64/release/bundle
+    plugin: dump
+    override-build: |
+      craftctl default
+      craftctl set version="$(grep '^version:' $CRAFT_PROJECT_DIR/pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)"
     stage-packages:
       - libgtk-3-0
       - libjsoncpp-dev

@@ -1,10 +1,10 @@
-/// NotePod - A note taking app with notes shared through private PODs.
+/// Privacy preserving note taking app using PODs
 ///
-// Time-stamp: <Monday 2026-09-21 17:03:18 +1000 Graham Williams>
+// Time-stamp: <>
 ///
 /// Copyright (C) 2025-2026, Software Innovation Institute ANU
 ///
-/// Licensed under the GNU General Public License, Version 3 (the "License")
+/// Licensed under the GNU General Public License, Version 3 (the "License").
 ///
 /// License: https://opensource.org/license/gpl-3-0
 //

@@ -1,6 +1,3 @@
-help:
-	echo "deb or ginstall"
-
 deb:
 	bash deb.sh
 

@@ -43,8 +43,7 @@ AU](https://solidcommunity.au) repository:
 + **Web**
   [solidcommunity](https://notepod.solidcommunity.au/);
 + **Android**
-  [apk](https://solidcommunity.au/installers/notepod.apk) or
-  [aab](https://solidcommunity.au/installers/notepod.aab);
+  [apk](https://solidcommunity.au/installers/notepod.apk);
 
 + **GNU/Linux**
   [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or

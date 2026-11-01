@@ -1,0 +1,43 @@
+# Changes here will be overwritten by Copier. Change a value with
+# `copier update --data key=value` or by editing it here and running
+# `copier update`.
+_commit: v0.8.1
+_src_path: gh:gjwgit/fluttertmpl
+kind: app
+android: true
+app: notepod
+owner: anusii
+copyright: 2025-2026, Software Innovation Institute ANU
+publisher: Software Innovation Institute ANU
+name: NotePod
+summary: Privacy preserving note taking app using PODs
+comment: Simple, Private, Secure Flutter Notepad
+categories:
+- Utility
+- TextEditor
+keywords:
+- notes
+- notepad
+- markdown
+- solid
+- pod
+build: {}
+deb: {}
+snap: {}
+windows:
+  appid: 6B5EF861-CA64-4E55-91B0-1ED4544ABF98
+  winget: Togaware
+install:
+  folder: /var/www/html/web/installers/
+  host: solidcommunity.au
+  prod: true
+  url: https://solidcommunity.au/installers/
+stores: {}
+flatpak: null
+description: |
+  Notepod is a note taking app, storing your notes within your Solid
+  Pod. Make notes anywhere, anytime, on any device and review them
+  later on. Great for that bush walk where you've suddenly come up
+  with a great idea you don't want to lose, or sharing the shopping
+  list with the family so whoever is next at the shops has it at their
+  finger tips.

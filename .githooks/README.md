@@ -1,5 +1,3 @@
-# README
-
 The git hooks are located in a non-standard place (other than
 .git/hooks) so that they can be added to github. Seems like files in
 .git can not be added to github.

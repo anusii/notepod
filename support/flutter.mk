@@ -657,9 +657,12 @@ docs::
 # format section are left alone as they are illustrating the format
 # and not naming this release.
 
+# 20261030 gjw The fluttertmpl snapcraft.yaml has no version line, the
+# snap reading it from pubspec.yaml, so only touch one that has.
+
 .PHONY: versions
 versions:
-	@if [ -f snap/snapcraft.yaml ]; then \
+	@if [ -f snap/snapcraft.yaml ] && grep -q '^version:' snap/snapcraft.yaml; then \
 	  perl -pi -e 's|^version:.*|version: $(VER)|' snap/snapcraft.yaml; \
 	  echo "Updated version in snap/snapcraft.yaml to $(VER)"; \
 	fi

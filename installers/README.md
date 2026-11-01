@@ -17,8 +17,8 @@ Run the app online: [**web**](https://notepod.solidcommunity.au).
 Download the latest version:
 
 + **Android**
-  [apk](https://solidcommunity.au/installers/notepod.apk) or
-  [aab](https://solidcommunity.au/installers/notepod.aab);
+  [apk](https://solidcommunity.au/installers/notepod.apk);
+
 + **GNU/Linux**
   [deb](https://solidcommunity.au/installers/notepod_amd64.deb) or
   [snap](https://solidcommunity.au/installers/notepod_amd64.snap) or
@@ -71,7 +71,8 @@ sudo snap install --dangerous notepod_amd64.snap
 
 ### Linux Zip Install
 
-Download [notepod-linux.zip](https://solidcommunity.au/installers/notepod-linux.zip)
+Download
+[notepod-linux.zip](https://solidcommunity.au/installers/notepod-linux.zip)
 
 To try it out:
 
@@ -127,7 +128,7 @@ app. The app should run without the warning next time.
 ## Web -- No Installation Required
 
 No installer is required for a browser based experience of
-Notepod. Simply visit
+NotePod. Simply visit
 [https://notepod.solidcommunity.au](https://notepod.solidcommunity.au).
 
 Also, your Web browser will provide an option in its menus to install

@@ -27,20 +27,13 @@ DEST=/var/www/html/$(APP)
 
 # The host for the repository of packages, the path on the server to
 # the download folder, and the URL to the downloads.
+#
+# 20261030 gjw From install in .copier-answers.yml, rendered by the
+# gjwgit/fluttertmpl Copier template, rather than tested here by app name.
 
-# Directory basename (e.g., rattle)
-
-DIRBASE := $(notdir $(CURDIR))
-
-ifeq ($(DIRBASE),rattle)
-  REPO=togaware.com
-  RLOC=apps/access/
-  DWLD=https://access.togaware.com/
-else
-  REPO=solidcommunity.au
-  RLOC=/var/www/html/web/installers/
-  DWLD=https://$(REPO)/installers/
-endif
+REPO=solidcommunity.au
+RLOC=/var/www/html/web/installers/
+DWLD=https://solidcommunity.au/installers/
 
 # Set user for ssh to server
 
@@ -62,10 +55,8 @@ INC_BASE=support
 # 20261016 gjw Obfuscate release builds, so for example, the
 # scrambled Podcast Index secret in radiopod is harder to find in
 # the binary. Read by support/flutter.mk to optionally obfuscate.
-
-ifeq ($(APP),radiopod)
-  OBFUSCATE = --obfuscate --split-debug-info=build/symbols
-endif
+#
+# 20261030 gjw For any app with build.secrets in .copier-answers.yml.
 
 # Specific Makefiles will be loaded if they are found in
 # INC_BASE. Sometimes the INC_BASE is shared by multiple local
@@ -101,6 +92,7 @@ $(APP):
   upload_android  Build the $(VER) bundle and send it to Play internal testing
   winget     Write the $(VER) winget manifests to installers/winget/
   flatpak    Build installers/$(APP)-$(VER).flatpak and install it for this user
+  update     Bring in the gjwgit/fluttertmpl template's changes
 
 endef
 export HELP
@@ -145,9 +137,10 @@ apk::
 	rm -f installers/$(APP).apk
 	@echo ''
 
+# 20261031 gjw The aab is for the Play Store only, so it is archived
+# but not uploaded for download.
+
 appbundle::
-	rsync -avzh installers/$(APP).aab $(REPO):$(RLOC)
-	ssh $(REPO) chmod a+r $(RLOC)$(APP).aab
 	mv -f installers/$(APP)-*.aab installers/ARCHIVE/
 	rm -f installers/$(APP).aab
 	@echo ''
@@ -290,11 +283,10 @@ debin:
 # at the end as it requires interaction (sudo password) and if earlier
 # it will hold up the oher non-interactive builds.
 
-ifeq ($(DIRBASE),rattle)
-GINSTALLS := upload
-else
+# 20261030 gjw install.prod in .copier-answers.yml says whether the app
+# is also installed to the web (rattle is not).
+
 GINSTALLS := upload prod
-endif
 
 .PHONY: ginstall
 ginstall: $(GINSTALLS)
@@ -330,6 +322,16 @@ zip:
 .PHONY: claude
 claude:
 	bash support/meld_zip_from_claude.sh
+
+# 20261030 gjw Bring in the changes to the shared files from the
+# gjwgit/fluttertmpl Copier template, rendered with this app's values from
+# .copier-answers.yml, merged with any local edits. Replaces
+# support/update.sh and its hard links. Copier refuses a dirty git tree,
+# so commit first.
+
+.PHONY: update
+update:
+	copier update --defaults
 
 .PHONY: bump
 bump:

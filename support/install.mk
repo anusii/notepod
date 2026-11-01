@@ -2,7 +2,7 @@
 #
 # Makefile template for Installations
 #
-# Time-stamp: <Saturday 2026-01-03 16:51:56 +1100 Graham Williams>
+# Time-stamp: <Tuesday 2026-07-07 14:48:07 +1000 Graham Williams>
 #
 # Copyright (c) Graham.Williams@togaware.com
 #
@@ -13,7 +13,7 @@
 # Define PROD and MINE if not already defined.
 
 PROD ?= $(DEST)
-MINE ?= $(DEST:$(APP)=$(IUSER))
+MINE ?= $(DEST:$(APP)=$(USER))
 
 # Only allow prod if in main branch.
 
@@ -44,12 +44,12 @@ help::
 # into the appname folder on the server. Otherwise the developer's
 # username is used as the install destination.
 
-install: $(IUSER).install
+install: $(USER).install
 
 ifeq ($(BRANCH),dev)
 prod: $(APP).install
 else
-prod: $(IUSER).install
+prod: $(USER).install
 endif
 
 # Build and install a flutter app on $(APP).host.com
@@ -78,9 +78,9 @@ endif
 	@echo '******************** BUILD AND INSTALL FOR WEB'
 	cp web/index.html web/index.html.bak
 	perl -pi -e 's|^  <base href=.*$$|  <base href="/$*/">|' web/index.html
-	flutter build web --release --no-wasm-dry-run
+	flutter build web $(DART_DEFINES) --release --no-wasm-dry-run
 	mv web/index.html.bak web/index.html
-	ssh $(IUSER)@solidcommunity.au 'if [ ! -e $(DEST:$(APP)=$*) ]; then echo mkdir /$(DEST:$(APP)=$*) && sudo chown $(IUSER) $(DEST:$(APP)=$*); fi'
-	rsync -azvh build/web/ $(IUSER)@solidcommunity.au:$(DEST:$(APP)=$*) --exclude '*~' --exclude '*.bak'
-	ssh $(IUSER)@solidcommunity.au sudo chmod -R a+rX $(DEST:$(APP)=$*)
+	ssh solidcommunity.au 'if [ ! -e $(DEST:$(APP)=$*) ]; then echo mkdir /$(DEST:$(APP)=$*); fi'
+	rsync -azvh build/web/ solidcommunity.au:$(DEST:$(APP)=$*) --exclude '*~' --exclude '*.bak'
+	ssh solidcommunity.au sudo chmod -R a+rX $(DEST:$(APP)=$*)
 	@echo ''
