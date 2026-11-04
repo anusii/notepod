@@ -1,7 +1,7 @@
 # Changes here will be overwritten by Copier. Change a value with
 # `copier update --data key=value` or by editing it here and running
 # `copier update`.
-_commit: v0.8.6
+_commit: v0.8.7
 _src_path: gh:gjwgit/fluttertmpl
 kind: app
 android: true

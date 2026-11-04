@@ -246,8 +246,11 @@ android/app/.cxx/
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 # ios/macos generated project files
-
-ios/Flutter/
+#
+# 20261104 gjw Not ios/Flutter/ as a whole: AppFrameworkInfo.plist and
+# the Debug and Release xcconfigs there are part of the project and are
+# committed. What Flutter generates in it is ignored by name above, and
+# by ios/.gitignore.
 
 # 20261002 gjw The Xcode project and workspace are HAND-MAINTAINED,
 # not generated, and must be committable. project.pbxproj carries the
@@ -266,7 +269,7 @@ ios/Flutter/
 # signing to ask.
 #
 # Only the per-user state is ignored now, as Flutter's own template
-  does.
+# does.
 
 ios/Runner.xcodeproj/xcuserdata/
 ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
@@ -288,14 +291,25 @@ ios/Runner.xcworkspace/xcuserdata/
 # The last line matters: without it `!ios/Runner/*.swift` would
 # re-include a Swift GeneratedPluginRegistrant in any project that has
 # one.
+#
+# 20261104 gjw The rest of what `flutter create` made is re-included
+# too: the bridging header, the icons and launch image, the storyboards,
+# and RunnerTests. project.pbxproj names every one of them, and the iOS
+# build, unlike the macOS build, does not run `flutter create` to make
+# what is missing, so leaving them out failed the build the same way.
+# A directory is re-included before its contents, since git does not
+# descend into an excluded directory.
 
 ios/Runner/**
 !ios/Runner/*.swift
+!ios/Runner/*.h
 !ios/Runner/*.entitlements
 !ios/Runner/Info.plist
+!ios/Runner/Assets.xcassets/
+!ios/Runner/Assets.xcassets/**
+!ios/Runner/Base.lproj/
+!ios/Runner/Base.lproj/**
 ios/Runner/GeneratedPluginRegistrant.*
-
-ios/RunnerTests/
 
 # Backups of ios/macos project config yml and Podfile
 ios/Podfile-*
